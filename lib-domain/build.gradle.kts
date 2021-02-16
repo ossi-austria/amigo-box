@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("kapt")
     id("de.mannodermaus.android-junit5")
 }
 
@@ -29,6 +30,27 @@ android {
 }
 
 dependencies {
+
+    implementation(Libs.roomRuntime)
+    kapt(Libs.roomCompiler)
+    implementation(Libs.roomKtx)
+
     implementation(Libs.appcompat)
     implementation(Libs.Compose.material)
+
+    testImplementation(Libs.Test.jupiterApi)
+    testImplementation(Libs.Test.jupiterEngine)
+    testImplementation(Libs.Test.jupiterParams)
+
+    testImplementation(Libs.Test.test)
+    testImplementation(Libs.Test.testExt)
+    testImplementation(Libs.roomTesting)
+    testImplementation(Libs.Test.coroutinesTest)
+    testImplementation(Libs.Test.mockk)
+    testImplementation(Libs.Test.mockkAndroid)
+
+    androidTestImplementation(Libs.Test.espressoCore)
+    androidTestImplementation(Libs.Test.espressoContrib)
+    androidTestImplementation(Libs.Test.barista)
+
 }

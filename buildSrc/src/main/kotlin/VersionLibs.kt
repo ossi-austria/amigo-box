@@ -1,7 +1,7 @@
 //import Versions.compose_version
 
 object AndroidVersion {
-    val compileSdk = 30
+    const val compileSdk = 30
     val buildTools = "29.0.3"
     val minSdk = 23
     val targetSdk = 30
@@ -79,8 +79,10 @@ object Libs {
     // Room for Persistence
     val room_version = "2.2.6"
     val roomRuntime = "androidx.room:room-runtime:$room_version"
+    val roomCompiler = "androidx.room:room-compiler:$room_version"
     val roomCommon = "androidx.room:room-common:$room_version"
     val roomKtx = "androidx.room:room-ktx:$room_version"
+    val roomTesting = "androidx.room:room-testing:$room_version"
 
     // Dropbox Store4 for building Repositories with Room and Retrofit
     val store4_version = "4.0.0"
@@ -88,7 +90,7 @@ object Libs {
 
     object Test {
         val xtest_version = "1.3.0"
-        val test = "androidx.test:$xtest_version"
+        val test = "androidx.test:core:$xtest_version"
         val testExt = "androidx.test.ext:junit:1.1.2"
 
         const val espresso_version = "3.3.0"
@@ -99,6 +101,9 @@ object Libs {
         val jupiterApi = "org.junit.jupiter:junit-jupiter-api:$junit5_version"
         val jupiterEngine = "org.junit.jupiter:junit-jupiter-engine:$junit5_version"
         val jupiterParams = "org.junit.jupiter:junit-jupiter-params:$junit5_version"
+
+//        val junit4_version = "4.12"
+//        val junit = "junit:junit:$junit4_version"
 
         const val mockk_Version = "1.10.6"
         val mockk = "io.mockk:mockk:${mockk_Version}"
