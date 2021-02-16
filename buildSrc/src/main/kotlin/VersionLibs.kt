@@ -53,19 +53,23 @@ object Libs {
         val viewmodelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha01"
         val lifecycleCompiler = "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
         val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+
         // optional - helpers for implementing LifecycleOwner in a Service
         val lifecycleService = "androidx.lifecycle:lifecycle-service:$lifecycle_version"
         val coreTesting = "androidx.arch.core:core-testing:$arch_version"
     }
 
+    val material_version = "1.3.0"
+    val material = "com.google.android.material:material:$material_version"
+
     // Navigation
-    val navigation_version ="2.3.3"
+    val navigation_version = "2.3.3"
     val navigationRuntime = "androidx.navigation:navigation-runtime:$navigation_version"
-    val navigationFragment =  "androidx.navigation:navigation-fragment:$navigation_version"
-    val navigationUi =  "androidx.navigation:navigation-ui:$navigation_version"
+    val navigationFragment = "androidx.navigation:navigation-fragment:$navigation_version"
+    val navigationUi = "androidx.navigation:navigation-ui:$navigation_version"
     val navigationRuntimeKtx = "androidx.navigation:navigation-runtime-ktx:$navigation_version"
-    val navigationFragmentKtx =  "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    val navigationUiKtx =  "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
     // Retrofit for HTTP and Json wrapping
     const val retrofit_version = "2.9.0"
