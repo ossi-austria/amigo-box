@@ -1,2 +1,3 @@
+include ':lib-domain'
 include ':app-amigobox'
-rootProject.name = "OSSI AmigoBox"
+rootProject.name = "Amigo"

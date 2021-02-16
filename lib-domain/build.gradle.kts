@@ -5,12 +5,10 @@ plugins {
 }
 
 android {
-
     compileSdkVersion(AndroidVersion.compileSdk)
     buildToolsVersion = AndroidVersion.buildTools
 
     defaultConfig {
-        applicationId = "org.ossiaustria.amigobox"
         minSdkVersion(AndroidVersion.minSdk)
         targetSdkVersion(AndroidVersion.targetSdk)
         versionCode = 1
