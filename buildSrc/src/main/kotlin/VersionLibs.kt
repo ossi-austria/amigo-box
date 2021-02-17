@@ -76,6 +76,11 @@ object Libs {
     val retrofit = "com.squareup.retrofit2:retrofit:$retrofit_version"
     val retrofitJson = "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
+    const val okhttp_version = "4.9.0"
+
+    //    val mockwebserver = "com.squareup.okhttp3:mockwebserver:$okhttp_version"
+    val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
     // Room for Persistence
     val room_version = "2.2.6"
     val roomRuntime = "androidx.room:room-runtime:$room_version"
@@ -87,6 +92,9 @@ object Libs {
     // Dropbox Store4 for building Repositories with Room and Retrofit
     val store4_version = "4.0.0"
     val store4 = "com.dropbox.mobile.store:store4:${store4_version}"
+
+    const val timber_version = "4.7.1"
+    val timber = "com.jakewharton.timber:timber:$timber_version"
 
     object Test {
         val xtest_version = "1.3.0"

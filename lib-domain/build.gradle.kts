@@ -31,23 +31,33 @@ android {
 
 dependencies {
 
+    // Room
     implementation(Libs.roomRuntime)
     kapt(Libs.roomCompiler)
     implementation(Libs.roomKtx)
+    testImplementation(Libs.roomTesting)
 
+    // Android, material & friends
+    implementation(Libs.timber)
     implementation(Libs.appcompat)
     implementation(Libs.Compose.material)
 
+    // retrofit & web
+    implementation(Libs.retrofit)
+    implementation(Libs.retrofitJson)
+    testImplementation(Libs.loggingInterceptor)
+
+    // Testing
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterEngine)
     testImplementation(Libs.Test.jupiterParams)
 
     testImplementation(Libs.Test.test)
     testImplementation(Libs.Test.testExt)
-    testImplementation(Libs.roomTesting)
     testImplementation(Libs.Test.coroutinesTest)
     testImplementation(Libs.Test.mockk)
     testImplementation(Libs.Test.mockkAndroid)
+//    testImplementation(Libs.mockwebserver)
 
     androidTestImplementation(Libs.Test.espressoCore)
     androidTestImplementation(Libs.Test.espressoContrib)

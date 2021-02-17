@@ -7,7 +7,6 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith
-import java.io.IOException
 
 
 @RunWith(AndroidJUnit4ClassRunner::class)
@@ -22,7 +21,6 @@ abstract class AbstractDaoTest {
     }
 
     @After
-    @Throws(IOException::class)
     fun closeDb() {
         db.close()
     }

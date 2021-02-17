@@ -10,6 +10,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.ossiaustria.lib.domain.example.models.Author
 
+/**
+ * Example Test for Daos. Needs instrumentation (must run on device or emulator)
+ *
+ */
 @RunWith(AndroidJUnit4ClassRunner::class)
 class AuthorDaoTest : AbstractDaoTest() {
     private lateinit var authorDao: AuthorDao
