@@ -1,6 +1,6 @@
-package org.ossiaustria.lib.domain.example.api
+package org.ossiaustria.lib.domain.api
 
-import org.ossiaustria.lib.domain.example.models.Post
+import org.ossiaustria.lib.domain.models.Post
 import retrofit2.http.GET
 import retrofit2.http.Path
 

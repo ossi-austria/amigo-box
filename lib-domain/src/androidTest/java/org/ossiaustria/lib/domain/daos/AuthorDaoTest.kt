@@ -1,6 +1,6 @@
 @file:Suppress("IllegalIdentifier")
 
-package org.ossiaustria.lib.domain.example.daos
+package org.ossiaustria.lib.domain.daos
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import kotlinx.coroutines.runBlocking
@@ -8,7 +8,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.ossiaustria.lib.domain.example.models.Author
+import org.ossiaustria.lib.domain.models.Author
 
 /**
  * Example Test for Daos. Needs instrumentation (must run on device or emulator)

@@ -1,4 +1,4 @@
-package org.ossiaustria.lib.domain.example.models
+package org.ossiaustria.lib.domain.models
 
 import androidx.room.Embedded
 import androidx.room.Entity

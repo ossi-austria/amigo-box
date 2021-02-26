@@ -1,8 +1,8 @@
-package org.ossiaustria.lib.domain.example.daos
+package org.ossiaustria.lib.domain.daos
 
 import androidx.room.*
-import org.ossiaustria.lib.domain.example.models.Post
-import org.ossiaustria.lib.domain.example.models.PostWithComments
+import org.ossiaustria.lib.domain.models.Post
+import org.ossiaustria.lib.domain.models.PostWithComments
 
 @Dao
 interface PostDao {

@@ -1,4 +1,4 @@
-package org.ossiaustria.lib.domain.example.api
+package org.ossiaustria.lib.domain.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

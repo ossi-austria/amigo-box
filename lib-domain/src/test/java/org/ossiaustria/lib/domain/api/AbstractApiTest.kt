@@ -1,10 +1,12 @@
-package org.ossiaustria.lib.domain.example.api
+package org.ossiaustria.lib.domain.api
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Before
 import org.junit.runner.RunWith
 import org.junit.runners.BlockJUnit4ClassRunner
+import org.ossiaustria.lib.domain.api.DebugMockInterceptor
+import org.ossiaustria.lib.domain.api.MockResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

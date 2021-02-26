@@ -1,8 +1,8 @@
-package org.ossiaustria.lib.domain.example.api
+package org.ossiaustria.lib.domain.api
 
 import okhttp3.*
 import org.ossiaustria.lib.domain.BuildConfig
-import org.ossiaustria.lib.domain.example.api.DebugMockInterceptor.Companion.DELAY_DEFAULT
+import org.ossiaustria.lib.domain.api.DebugMockInterceptor.Companion.DELAY_DEFAULT
 import timber.log.Timber
 
 

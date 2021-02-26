@@ -35,6 +35,9 @@ object Libs {
     val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
+    val dropbox_store_version = "4.0.0"
+    val dropboxStore = "com.dropbox.mobile.store:store4:${dropbox_store_version}"
+
     // Koin for DI (better: IoC or Service Locator)
     val koin_version = "2.2.2"
     val koin = "org.koin:koin-android:$koin_version"

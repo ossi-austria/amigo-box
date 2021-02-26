@@ -1,10 +1,10 @@
-package org.ossiaustria.lib.domain.example.daos
+package org.ossiaustria.lib.domain.daos
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import org.ossiaustria.lib.domain.example.models.Author
-import org.ossiaustria.lib.domain.example.models.Comment
-import org.ossiaustria.lib.domain.example.models.Post
+import org.ossiaustria.lib.domain.models.Author
+import org.ossiaustria.lib.domain.models.Comment
+import org.ossiaustria.lib.domain.models.Post
 
 @Database(
     entities = [Author::class, Post::class, Comment::class],

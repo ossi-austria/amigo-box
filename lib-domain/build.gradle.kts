@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -31,7 +33,8 @@ android {
 
 dependencies {
 
-    // Room
+    // Room & Persistance
+    implementation(Libs.dropboxStore)
     implementation(Libs.roomRuntime)
     kapt(Libs.roomCompiler)
     implementation(Libs.roomKtx)
@@ -63,4 +66,9 @@ dependencies {
     androidTestImplementation(Libs.Test.espressoContrib)
     androidTestImplementation(Libs.Test.barista)
 
+}
+
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    freeCompilerArgs = listOf("-XXLanguage:+InlineClasses")
 }

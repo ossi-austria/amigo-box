@@ -1,8 +1,9 @@
-package org.ossiaustria.lib.domain.example.api
+package org.ossiaustria.lib.domain.api
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNotNull
 import org.junit.Test
+import org.ossiaustria.lib.domain.api.MockResponse
 
 class PostApiTest : AbstractApiTest<PostApi>(PostApi::class.java) {
 
@@ -21,7 +22,8 @@ class PostApiTest : AbstractApiTest<PostApi>(PostApi::class.java) {
 
     override fun setupMockingMap(): Map<String, MockResponse> = mapOf(
         "posts/1" to MockResponse(
-            """{"id":2,
+            """{
+                "id":2,
                 "authorId":1,
                 "title":"title",
                 "text":"text"

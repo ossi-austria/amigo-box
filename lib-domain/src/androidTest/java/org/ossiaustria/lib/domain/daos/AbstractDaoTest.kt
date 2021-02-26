@@ -1,4 +1,4 @@
-package org.ossiaustria.lib.domain.example.daos
+package org.ossiaustria.lib.domain.daos
 
 import android.content.Context
 import androidx.room.Room

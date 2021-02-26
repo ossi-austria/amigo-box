@@ -1,10 +1,10 @@
-package org.ossiaustria.lib.domain.example.daos
+package org.ossiaustria.lib.domain.daos
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import org.ossiaustria.lib.domain.example.models.Comment
+import org.ossiaustria.lib.domain.models.Comment
 
 @Dao
 interface CommentDao {
