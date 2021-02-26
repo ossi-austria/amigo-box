@@ -1,10 +1,7 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    id("de.mannodermaus.android-junit5")
 }
 
 android {
@@ -22,12 +19,33 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude("META-INF/AL2.0")
+        exclude("META-INF/LGPL2.1")
+    }
+
+    useLibrary("android.test.runner")
+    useLibrary("android.test.base")
+    useLibrary("android.test.mock")
+
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 }
 
@@ -57,18 +75,21 @@ dependencies {
 
     testImplementation(Libs.Test.test)
     testImplementation(Libs.Test.testExt)
-    testImplementation(Libs.Test.coroutinesTest)
+    implementation(Libs.Test.coroutinesTest)
     testImplementation(Libs.Test.mockk)
     testImplementation(Libs.Test.mockkAndroid)
+    androidTestImplementation(Libs.Test.mockk)
+    androidTestImplementation(Libs.Test.mockkAndroid)
 //    testImplementation(Libs.mockwebserver)
 
     androidTestImplementation(Libs.Test.espressoCore)
     androidTestImplementation(Libs.Test.espressoContrib)
     androidTestImplementation(Libs.Test.barista)
-
+    androidTestImplementation(Libs.Test.testRunner)
+    androidTestImplementation(Libs.Test.testExt)
+    androidTestImplementation(Libs.Test.testRules)
+    // Required for instrumented tests
 }
 
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    freeCompilerArgs = listOf("-XXLanguage:+InlineClasses")
-}
+
+

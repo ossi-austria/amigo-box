@@ -103,6 +103,9 @@ object Libs {
         val xtest_version = "1.3.0"
         val test = "androidx.test:core:$xtest_version"
         val testExt = "androidx.test.ext:junit:1.1.2"
+        val testRunner = "androidx.test:runner:1.1.2"
+        val testRules = "androidx.test:runner:1.1.2"
+        val orchestrator = "androidx.test:orchestrator:$xtest_version"
 
         const val espresso_version = "3.3.0"
         val espressoCore = "androidx.test.espresso:espresso-core:$espresso_version"
@@ -116,7 +119,7 @@ object Libs {
 //        val junit4_version = "4.12"
 //        val junit = "junit:junit:$junit4_version"
 
-        const val mockk_Version = "1.10.6"
+        const val mockk_Version = "1.9.3"
         val mockk = "io.mockk:mockk:${mockk_Version}"
         val mockkAndroid = "io.mockk:mockk-android:${mockk_Version}"
 
@@ -124,5 +127,6 @@ object Libs {
         val barista = "com.schibsted.spain:barista:$barista_version"
 
         val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+
     }
 }

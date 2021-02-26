@@ -6,7 +6,7 @@ import org.ossiaustria.lib.domain.models.Author
 
 @Dao
 interface AuthorDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<Author>)
 
     @Insert
@@ -25,14 +25,9 @@ interface AuthorDao {
     suspend fun delete(item: Author)
 
     @Query("DELETE FROM authors WHERE id = :id")
-    suspend fun delete(id:Long)
+    suspend fun delete(id: Long)
 
     @Query("DELETE FROM authors")
     suspend fun deleteAll()
-
-
-    @Delete
-    suspend fun clear()
-
 
 }

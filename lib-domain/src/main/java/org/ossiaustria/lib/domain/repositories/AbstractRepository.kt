@@ -8,10 +8,10 @@ import org.ossiaustria.lib.domain.common.Outcome
 import timber.log.Timber
 
 open class DispatcherProvider {
-    fun default(): CoroutineDispatcher = Dispatchers.Default
-    fun io(): CoroutineDispatcher = Dispatchers.IO
-    fun main(): CoroutineDispatcher = Dispatchers.Main
-    fun unconfined(): CoroutineDispatcher = Dispatchers.Unconfined
+    open fun default(): CoroutineDispatcher = Dispatchers.Default
+    open fun io(): CoroutineDispatcher = Dispatchers.IO
+    open fun main(): CoroutineDispatcher = Dispatchers.Main
+    open fun unconfined(): CoroutineDispatcher = Dispatchers.Unconfined
 }
 
 abstract class AbstractRepository {
