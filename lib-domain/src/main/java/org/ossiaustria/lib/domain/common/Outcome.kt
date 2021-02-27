@@ -1,6 +1,6 @@
 package org.ossiaustria.lib.domain.common
 
-public sealed class Outcome<out T> private constructor(
+sealed class Outcome<out T>(
     val value: T?
 ) {
 
@@ -20,7 +20,7 @@ public sealed class Outcome<out T> private constructor(
     fun getOrNull(): T? =
         when {
             isFailure -> null
-            else -> value as T?
+            else -> value
         }
 
     /**
@@ -59,7 +59,7 @@ public sealed class Outcome<out T> private constructor(
          */
         @Suppress("INAPPLICABLE_JVM_NAME")
         @JvmName("success")
-        public fun <T> success(value: T): Outcome<T> = Success(value)
+        fun <T> success(value: T): Outcome<T> = Success(value)
 
 
         @Suppress("INAPPLICABLE_JVM_NAME")
@@ -112,7 +112,8 @@ internal fun Outcome<*>.throwOnFailure() {
  * catching any [Throwable] exception that was thrown from the [block] function execution and encapsulating it as a failure.
  */
 
-public inline fun <R> runCatching(block: () -> R): Outcome<R> {
+@Suppress("unused")
+inline fun <R> runCatching(block: () -> R): Outcome<R> {
     return try {
         Outcome.success(block())
     } catch (e: Throwable) {
@@ -125,7 +126,8 @@ public inline fun <R> runCatching(block: () -> R): Outcome<R> {
  * catching any [Throwable] exception that was thrown from the [block] function execution and encapsulating it as a failure.
  */
 
-public inline fun <T, R> T.runCatching(block: T.() -> R): Outcome<R> {
+@Suppress("unused")
+inline fun <T, R> T.runCatching(block: T.() -> R): Outcome<R> {
     return try {
         Outcome.success(block())
     } catch (e: Throwable) {
@@ -142,7 +144,7 @@ public inline fun <T, R> T.runCatching(block: T.() -> R): Outcome<R> {
  * This function is a shorthand for `getOrElse { throw it }` (see [getOrElse]).
  */
 
-public inline fun <T> Outcome<T>.getOrThrow(): T? {
+fun <T> Outcome<T>.getOrThrow(): T? {
     throwOnFailure()
     return value
 }

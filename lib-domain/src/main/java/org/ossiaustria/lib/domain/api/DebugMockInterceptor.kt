@@ -1,6 +1,10 @@
 package org.ossiaustria.lib.domain.api
 
-import okhttp3.*
+import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.Protocol
+import okhttp3.Response
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.ossiaustria.lib.domain.BuildConfig
 import org.ossiaustria.lib.domain.api.DebugMockInterceptor.Companion.DELAY_DEFAULT
 import timber.log.Timber
@@ -26,7 +30,7 @@ class DebugMockInterceptor(private val requestContentMap: Map<String, MockRespon
 
     override fun intercept(chain: Interceptor.Chain): Response {
         if (BuildConfig.DEBUG) {
-            val uri = chain.request().url().uri().toString()
+            val uri = chain.request().url.toUri().toString()
 
             val matchedKeys = requestContentMap.keys.filter { uri.endsWith(it) }
             if (matchedKeys.isEmpty()) throw IllegalStateException("No key found for url: uri")
@@ -46,10 +50,8 @@ class DebugMockInterceptor(private val requestContentMap: Map<String, MockRespon
                 .protocol(Protocol.HTTP_2)
                 .message(mockResponse.content)
                 .body(
-                    ResponseBody.create(
-                        MediaType.parse(mockResponse.contentType),
-                        mockResponse.content.toByteArray()
-                    )
+                    mockResponse.content.toByteArray()
+                        .toResponseBody(mockResponse.contentType.toMediaTypeOrNull())
                 )
                 .addHeader("content-type", mockResponse.contentType)
                 .build()
