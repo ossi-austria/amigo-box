@@ -47,6 +47,10 @@ android {
     testOptions {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
+
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -66,7 +70,20 @@ dependencies {
     // retrofit & web
     implementation(Libs.retrofit)
     implementation(Libs.retrofitJson)
-    testImplementation(Libs.loggingInterceptor)
+    implementation(Libs.loggingInterceptor)
+
+    // hilt & dagger
+//    implementation(Libs.dagger)
+    implementation(Libs.hiltAndroid)
+    implementation(Libs.hiltCommon)
+    implementation(Libs.hiltLifecycle)
+//    kapt(Libs.daggerCompiler)
+    kapt(Libs.hiltAndroidCompiler)
+    kapt(Libs.hiltCompiler)
+
+    testImplementation(Libs.hiltAndroidTesting)
+    kaptTest(Libs.hiltAndroidCompiler)
+    kaptTest(Libs.hiltCompiler)
 
     // Testing
     testImplementation(Libs.Test.jupiterApi)

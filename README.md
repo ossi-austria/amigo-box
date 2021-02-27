@@ -18,3 +18,11 @@ Read the following for catching up:
 - https://developer.android.com/training/data-storage/room/relationships?authuser=1
 - https://square.github.io/retrofit/
 
+## Navigation and Fragments
+
+We use a single-activity-architecture
+
+ONE MainActivity connects all Fragments and viewModels
+
+- https://oozou.com/blog/reasons-to-use-android-single-activity-architecture-with-navigation-component-36
+- https://developer.android.com/guide/fragments/communicate#kotlin

@@ -38,6 +38,21 @@ object Libs {
     val dropbox_store_version = "4.0.0"
     val dropboxStore = "com.dropbox.mobile.store:store4:${dropbox_store_version}"
 
+
+    // hilt & dagger
+    val dagger_version = "2.33"
+    val hilt_version = "1.0.0-alpha03"
+    val hilt_android_version = "2.33-beta"
+    val dagger = "com.google.dagger:dagger:$dagger_version"
+    val hiltAndroid = "com.google.dagger:hilt-android:$hilt_android_version"
+    val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:$hilt_android_version"
+    val hiltAndroidTesting = "com.google.dagger:hilt-android-testing:$hilt_android_version"
+    val hiltCommon = "androidx.hilt:hilt-common:$hilt_version"
+    val hiltLifecycle = "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_version"
+    val daggerCompiler = "com.google.dagger:dagger-compiler:$dagger_version"
+    val hiltCompiler = "androidx.hilt:hilt-compiler:$hilt_version"
+
+
     // Koin for DI (better: IoC or Service Locator)
     val koin_version = "2.2.2"
     val koin = "org.koin:koin-android:$koin_version"
@@ -52,7 +67,8 @@ object Libs {
         val viewmodelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
         val livedata = "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
         val livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-        val viewmodeSavedstate = "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+        val viewmodeSavedstate =
+            "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
         val viewmodelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha01"
         val lifecycleCompiler = "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
         val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
@@ -67,12 +83,12 @@ object Libs {
 
     // Navigation
     val navigation_version = "2.3.3"
-    val navigationRuntime = "androidx.navigation:navigation-runtime:$navigation_version"
-    val navigationFragment = "androidx.navigation:navigation-fragment:$navigation_version"
-    val navigationUi = "androidx.navigation:navigation-ui:$navigation_version"
+    val navigationDynamicFeatures =
+        "androidx.navigation:navigation-dynamic-features-fragment:$navigation_version"
     val navigationRuntimeKtx = "androidx.navigation:navigation-runtime-ktx:$navigation_version"
     val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    val navigationTest = "androidx.navigation:navigation-testing:$navigation_version"
 
     // Retrofit for HTTP and Json wrapping
     const val retrofit_version = "2.9.0"

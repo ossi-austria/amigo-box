@@ -2,6 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent.*
 
 buildscript {
+    val kotlin_version by extra("1.3.72")
     repositories {
         google()
         jcenter()
@@ -10,6 +11,8 @@ buildscript {
         classpath("com.android.tools.build:gradle:${Versions.gradle}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
         classpath("de.mannodermaus.gradle.plugins:android-junit5:1.6.2.0")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.33-beta")
+
     }
 }
 

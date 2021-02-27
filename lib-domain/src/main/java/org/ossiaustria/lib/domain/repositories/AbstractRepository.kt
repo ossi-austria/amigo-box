@@ -1,18 +1,9 @@
 package org.ossiaustria.lib.domain.repositories
 
 import com.dropbox.android.external.store4.StoreResponse
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.FlowCollector
 import org.ossiaustria.lib.domain.common.Outcome
 import timber.log.Timber
-
-open class DispatcherProvider {
-    open fun default(): CoroutineDispatcher = Dispatchers.Default
-    open fun io(): CoroutineDispatcher = Dispatchers.IO
-    open fun main(): CoroutineDispatcher = Dispatchers.Main
-    open fun unconfined(): CoroutineDispatcher = Dispatchers.Unconfined
-}
 
 abstract class AbstractRepository {
     protected suspend fun <T> FlowCollector<Outcome<T>>.transformResponseToOutcome(
