@@ -4,6 +4,7 @@ plugins {
     kotlin("kapt")
     id("de.mannodermaus.android-junit5")
     id("dagger.hilt.android.plugin")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -37,17 +38,16 @@ android {
 
 dependencies {
 
-
     project(":lib-domain")
     implementation(Libs.appcompat)
     implementation(Libs.Compose.material)
     implementation(Libs.material)
 
-    implementation(Libs.dagger)
+//    implementation(Libs.dagger)
     implementation(Libs.hiltAndroid)
     implementation(Libs.hiltCommon)
     implementation(Libs.hiltLifecycle)
-    kapt(Libs.daggerCompiler)
+//    kapt(Libs.daggerCompiler)
     kapt(Libs.hiltAndroidCompiler)
     kapt(Libs.hiltCompiler)
 
@@ -56,9 +56,8 @@ dependencies {
     implementation(Libs.navigationUiKtx)
     implementation(Libs.navigationDynamicFeatures)
     androidTestImplementation(Libs.navigationTest)
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${rootProject.extra["kotlin_version"]}")
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0")
+//    implementation("androidx.appcompat:appcompat:1.2.0")
+//    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+//    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.0")
+//    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0")
 }
