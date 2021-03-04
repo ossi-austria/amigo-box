@@ -5,6 +5,7 @@ plugins {
     id("de.mannodermaus.android-junit5")
     id("dagger.hilt.android.plugin")
     id("androidx.navigation.safeargs.kotlin")
+    jacoco
 }
 
 android {
@@ -34,6 +35,28 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude("META-INF/AL2.0")
+        exclude("META-INF/LGPL2.1")
+    }
+
+    useLibrary("android.test.runner")
+    useLibrary("android.test.base")
+    useLibrary("android.test.mock")
+
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+    }
+
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -61,3 +84,4 @@ dependencies {
 //    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.0")
 //    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0")
 }
+
