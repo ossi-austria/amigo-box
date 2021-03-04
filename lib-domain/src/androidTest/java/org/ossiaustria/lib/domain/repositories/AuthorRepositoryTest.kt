@@ -33,7 +33,7 @@ class AuthorRepositoryTest {
 
 
     val dispatcher = TestCoroutineDispatcher()
-    private val testDispatcherProvider = object : DispatcherProvider() {
+    private val testDispatcherProvider = object : DispatcherProvider {
         override fun default(): CoroutineDispatcher = dispatcher
         override fun io(): CoroutineDispatcher = dispatcher
         override fun main(): CoroutineDispatcher = dispatcher

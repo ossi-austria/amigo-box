@@ -136,7 +136,6 @@ object Libs {
 //        val junit = "junit:junit:$junit4_version"
 
         const val mockk_Version = "1.9.3"
-        val mockk = "io.mockk:mockk:${mockk_Version}"
         val mockkAndroid = "io.mockk:mockk-android:${mockk_Version}"
 
         const val barista_version = "3.7.0"

@@ -73,7 +73,7 @@ configure(subprojects) {
 
         reports.junitXml.destination = file("${rootProject.buildDir}/test-results/${project.name}")
 
-        finalizedBy("jacocoTestReport")
+//        finalizedBy("jacocoTestReport")
     }
     val testCoverage by tasks.registering {
         group = "verification"

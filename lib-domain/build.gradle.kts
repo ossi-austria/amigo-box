@@ -94,9 +94,7 @@ dependencies {
     testImplementation(Libs.Test.test)
     testImplementation(Libs.Test.testExt)
     implementation(Libs.Test.coroutinesTest)
-    testImplementation(Libs.Test.mockk)
     testImplementation(Libs.Test.mockkAndroid)
-    androidTestImplementation(Libs.Test.mockk)
     androidTestImplementation(Libs.Test.mockkAndroid)
 //    testImplementation(Libs.mockwebserver)
 

@@ -16,7 +16,7 @@ cache:
 build:
   stage: build
   script:
-    - ./gradlew assembleDebug compileDebugUnitTestSources assembleAndroidTest
+    - ./gradlew assembleDebug compileDebugUnitTestSources
     - cp app-amigobox/build/outputs/apk/*.apk .
   artifacts:
     paths:
@@ -37,7 +37,9 @@ unitTest:
 
 instrumentationTest:
   stage: test
+  allow_failure: true
   script:
+    - ./gradlew assembleAndroidTest
     - echo y | android-sdk-linux/tools/bin/sdkmanager  "emulator" >/dev/null
     - echo y | android-sdk-linux/tools/bin/sdkmanager "system-images;android-${ANDROID_COMPILE_SDK};google_apis;x86"
     - echo y | android-sdk-linux/tools/bin/avdmanager create avd -f -n testAVD -k "system-images;android-${ANDROID_COMPILE_SDK};google_apis;x86"
