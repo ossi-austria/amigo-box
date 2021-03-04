@@ -2,6 +2,7 @@ image: jangrewe/gitlab-ci-android
 
 stages:
   - build
+  - test
 
 before_script:
   - export GRADLE_USER_HOME=$(pwd)/.gradle
@@ -24,6 +25,7 @@ build:
 
 
 unitTest:
+  stage: test
   script:
     - ./gradlew --info -Pci --console=plain testDebug
     - ./gradlew -Pci --console=plain lintDebug -PbuildDir=lint
@@ -34,6 +36,7 @@ unitTest:
 
 
 instrumentationTest:
+  stage: test
   script:
     - echo y | android-sdk-linux/tools/bin/sdkmanager  "emulator" >/dev/null
     - echo y | android-sdk-linux/tools/bin/sdkmanager "system-images;android-${ANDROID_COMPILE_SDK};google_apis;x86"
