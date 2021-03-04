@@ -1,0 +1,46 @@
+image: jangrewe/gitlab-ci-android
+
+stages:
+  - build
+  - test
+
+before_script:
+  - export GRADLE_USER_HOME=$(pwd)/.gradle
+  - chmod +x ./gradlew
+
+cache:
+  key: ${CI_PROJECT_ID}
+  paths:
+    - .gradle/
+
+build:
+  stage: build
+  script:
+    - ./gradlew assembleDebug
+  artifacts:
+    paths:
+      - "*.apk"
+      - "*/build"
+
+
+unitTest:
+  stage: test
+  script:
+    - ./gradlew --info -Pci --console=plain testDebug
+    - ./gradlew -Pci --console=plain lintDebug -PbuildDir=lint
+  artifacts:
+    when: always
+    reports:
+      junit: "*/build/test-results/test/**/TEST-*.xml"
+
+
+instrumentationTest:
+  stage: test
+  allow_failure: true
+  script:
+    - ./gradlew compileDebugUnitTestSources assembleAndroidTest
+    - echo y | android-sdk-linux/tools/bin/sdkmanager  "emulator" >/dev/null
+    - echo y | android-sdk-linux/tools/bin/sdkmanager "system-images;android-${ANDROID_COMPILE_SDK};google_apis;x86"
+    - echo y | android-sdk-linux/tools/bin/avdmanager create avd -f -n testAVD -k "system-images;android-${ANDROID_COMPILE_SDK};google_apis;x86"
+    - android-sdk-linux/emulator/emulator -avd testAVD -no-audio -no-window &
+    - ./gradlew connectedAndroidTest

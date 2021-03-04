@@ -1,2 +1,4 @@
+include ':lib-domain'
+include ':lib-nfc'
 include ':app-amigobox'
-rootProject.name = "OSSI AmigoBox"
+rootProject.name = "Amigo"
