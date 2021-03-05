@@ -58,10 +58,6 @@ android {
         execution "ANDROIDX_TEST_ORCHESTRATOR"
         reportDir "$rootDir/test-reports"
         resultsDir "$rootDir/test-results"
-
-        junitPlatform {
-            instrumentationTests.integrityCheckEnabled = true
-        }
     }
     kapt {
         correctErrorTypes true
@@ -97,7 +93,7 @@ dependencies {
     // Testing
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterParams)
-    testRuntimeOnly(Libs.Test.jupiterEngine)
+//    testRuntimeOnly(Libs.Test.jupiterEngine) Junit5 still broken
     testRuntimeOnly(Libs.Test.jupiterVintageEngine)
 
     androidTestImplementation(Libs.Test.testRunner)

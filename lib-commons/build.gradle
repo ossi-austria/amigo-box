@@ -82,11 +82,10 @@ dependencies {
     kapt(Libs.hiltAndroidCompiler)
     kapt(Libs.hiltCompiler)
 
-
     // Testing
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterParams)
-    testRuntimeOnly(Libs.Test.jupiterEngine)
+//    testRuntimeOnly(Libs.Test.jupiterEngine)
     testRuntimeOnly(Libs.Test.jupiterVintageEngine)
 
     androidTestImplementation(Libs.Test.testRunner)

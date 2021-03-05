@@ -26,7 +26,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val button = view.findViewById<Button>(R.id.button)
         button.setOnClickListener {
-//            view.findNavController().navigate(HomeFragmentDirect }
+
         }
     }
 

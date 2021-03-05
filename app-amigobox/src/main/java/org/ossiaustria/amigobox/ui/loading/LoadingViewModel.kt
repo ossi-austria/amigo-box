@@ -21,5 +21,4 @@ class LoadingViewModel @Inject constructor(dispatcherProvider: DispatcherProvide
             liveUserLogin.postValue("user logged in!")
         }
 
-
 }

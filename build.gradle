@@ -40,7 +40,7 @@ subprojects {
 configure(subprojects) {
 
     tasks.withType(Test) {
-        useJUnitPlatform()
+//        useJUnitPlatform()
 //        testLogging.events.addAll([TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED])
         testLogging {
             afterSuite { desc, result ->

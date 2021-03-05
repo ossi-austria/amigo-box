@@ -8,6 +8,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
+import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.ossiaustria.amigobox.R
 
@@ -30,19 +32,17 @@ class LoadingFragment : Fragment() {
         val button = view.findViewById<Button>(R.id.button)
         message = view.findViewById(R.id.message)
 
-        button.setOnClickListener {
-            viewModel.doFancyHeavyStuffOnBackground()
-//            view.findNavController()
-//                .navigate(LoadingFragmentDirections.actionLoadingFragmentToLoginFragment())
-        }
-
         // observer
         viewModel.liveUserLogin.observe(viewLifecycleOwner) { user: String ->
             message.text = user
+            view.findNavController()
+                .navigate(LoadingFragmentDirections.actionLoadingFragmentToLoginFragment())
         }
 
         // init logic
-
+        button.setOnClickListener {
+            viewModel.doFancyHeavyStuffOnBackground()
+        }
     }
 
 }

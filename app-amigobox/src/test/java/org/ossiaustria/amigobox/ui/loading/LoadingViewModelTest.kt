@@ -14,6 +14,13 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.rules.TestRule
 import org.ossiaustria.lib.commons.TestDispatcherProvider
 
+/**
+ * Example test for Viewmodel
+ *
+ * 1. use a InstantTaskExecutorRule when using LiveData!
+ * 2. use a fakre main (see setupBeforeEach())
+ * 3. use runBlockingTest for coroutines which wait a long time
+ */
 @FlowPreview
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
@@ -41,13 +48,11 @@ class LoadingViewModelTest {
         mainThreadSurrogate.close()
     }
 
-    //    @ExperimentalCoroutinesApi
     @Test
     fun `doFancyHeavyStuffOnBackground should login my user `() = runBlockingTest {
         subject.doFancyHeavyStuffOnBackground()
 
         advanceTimeBy(5_000)
-//        Thread.sleep(5000)
         val value = subject.liveUserLogin.value
 
         assertEquals("user logged in!", value)
