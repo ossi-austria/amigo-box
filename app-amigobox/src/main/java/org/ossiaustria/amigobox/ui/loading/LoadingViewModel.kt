@@ -1,12 +1,12 @@
 package org.ossiaustria.amigobox.ui.loading
 
-import DispatcherProvider
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.ossiaustria.lib.commons.DispatcherProvider
 import javax.inject.Inject
 
 @HiltViewModel

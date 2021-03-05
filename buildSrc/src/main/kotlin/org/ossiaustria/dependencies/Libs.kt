@@ -10,7 +10,7 @@ object Libs {
 
     // Using Compose (still alpha) for declarative GUI components
     object Compose {
-        const val compose_version = "1.0.0-alpha12"
+        const val compose_version = "1.0.0-beta01"
         const val animation = "androidx.compose.animation:animation:$compose_version"
         const val compiler = "androidx.compose.compiler:compiler:$compose_version"
         const val foundation = "androidx.compose.foundation:foundation:$compose_version"
@@ -120,7 +120,7 @@ object Libs {
         const val espressoCore = "androidx.test.espresso:espresso-core:$espresso_version"
         const val espressoContrib = "androidx.test.espresso:espresso-contrib:$espresso_version"
 
-        const val junit5_version = "5.7.1"
+        const val junit5_version = "5.3.1"
         const val manno_junit5_version = "1.0.0"
         const val mannodermausAndroidTestCore =
             "de.mannodermaus.junit5:android-test-core:$manno_junit5_version"

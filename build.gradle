@@ -1,0 +1,61 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:4.0.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.30")
+        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.33-beta")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.3")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+tasks.register("clean") {
+    delete(rootProject.buildDir)
+}
+
+subprojects {
+    apply {
+        plugin("jacoco")
+    }
+
+//    tasks.withType(JacocoReport) {
+//        reports {
+//            html.isEnabled = true
+//            xml.isEnabled = true
+//            csv.isEnabled = true
+//        }
+//    }
+}
+
+configure(subprojects) {
+
+    tasks.withType(Test) {
+        useJUnitPlatform()
+//        testLogging.events.addAll([TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED])
+        testLogging {
+            afterSuite { desc, result ->
+                if (!desc.parent) { // group the results in one
+                    def output = "Results: ${result.resultType} (" +
+                            "${result.testCount} tests, " +
+                            "${result.successfulTestCount} successes, " +
+                            "${result.failedTestCount} failures, " +
+                            "${result.skippedTestCount} skipped)"
+                    def startItem = '|  ', endItem = '  |'
+                    def repeatLength = startItem.length() + output.length() + endItem.length()
+                    println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
+                }
+            }
+        }
+        reports.junitXml.destination = file("${rootProject.buildDir}/test-results/${project.name}")
+    }
+}

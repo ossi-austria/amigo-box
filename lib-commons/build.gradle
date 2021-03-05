@@ -55,10 +55,6 @@ android {
 
     testOptions {
         execution "ANDROIDX_TEST_ORCHESTRATOR"
-        unitTests {
-            includeAndroidResources = true
-            returnDefaultValues true
-        }
         reportDir "$rootDir/test-reports"
         resultsDir "$rootDir/test-results"
 
@@ -74,13 +70,6 @@ android {
     }
 }
 
-sourceSets {
-    main.java.srcDirs += 'src'
-    main.resources.srcDirs += 'src'
-    test.java.srcDirs += 'test'
-    test.resources.srcDirs += 'test'
-}
-
 dependencies {
 
     implementation(Libs.appcompat)
@@ -92,7 +81,7 @@ dependencies {
     implementation(Libs.hiltLifecycle)
     kapt(Libs.hiltAndroidCompiler)
     kapt(Libs.hiltCompiler)
-    
+
 
     // Testing
     testImplementation(Libs.Test.jupiterApi)

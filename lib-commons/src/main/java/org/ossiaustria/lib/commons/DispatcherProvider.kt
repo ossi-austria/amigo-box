@@ -1,23 +1,26 @@
+package org.ossiaustria.lib.commons
+
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlin.coroutines.CoroutineContext
 
 interface DispatcherProvider {
-    fun io(): CoroutineContext
-    fun main(): CoroutineContext
-    fun default(): CoroutineContext
+    fun default(): CoroutineDispatcher
+    fun io(): CoroutineDispatcher
+    fun main(): CoroutineDispatcher
+    fun unconfined(): CoroutineDispatcher
 }
 
-class DispatcherProviderImpl : DispatcherProvider {
-    override fun io(): CoroutineContext = Dispatchers.IO
-    override fun main(): CoroutineContext = Dispatchers.Main
-    override fun default(): CoroutineContext = Dispatchers.Default
+class DefaultDispatcherProvider : DispatcherProvider {
+    override fun default(): CoroutineDispatcher = Dispatchers.Default
+    override fun io(): CoroutineDispatcher = Dispatchers.IO
+    override fun main(): CoroutineDispatcher = Dispatchers.Main
+    override fun unconfined(): CoroutineDispatcher = Dispatchers.Unconfined
 }
 
-class TestDispatcherProviderImpl(
-    private val context: CoroutineContext
-) :
-    DispatcherProvider {
-    override fun io(): CoroutineContext = context
-    override fun main(): CoroutineContext = context
-    override fun default(): CoroutineContext = context
+class TestDispatcherProvider(private val dispatcher: CoroutineDispatcher) : DispatcherProvider {
+    override fun io(): CoroutineDispatcher = dispatcher
+    override fun main(): CoroutineDispatcher = dispatcher
+    override fun default(): CoroutineDispatcher = dispatcher
+    override fun unconfined(): CoroutineDispatcher = dispatcher
+
 }

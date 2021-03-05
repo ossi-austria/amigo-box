@@ -1,7 +1,7 @@
 import org.ossiaustria.dependencies.Libs
 import org.ossiaustria.dependencies.AndroidVersion
 
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'de.mannodermaus.android-junit5'
@@ -15,7 +15,6 @@ android {
     buildToolsVersion AndroidVersion.buildTools
 
     defaultConfig {
-        applicationId "org.ossiaustria.amigobox"
         minSdkVersion AndroidVersion.minSdk
         targetSdkVersion AndroidVersion.targetSdk
         versionCode 1
@@ -71,28 +70,37 @@ android {
     }
 }
 
-
 dependencies {
-    implementation project(":lib-commons")
-    implementation project(":lib-domain")
+
+    api project(":lib-commons")
+
+    // Room & Persistance
+    implementation(Libs.dropboxStore)
+    implementation(Libs.roomRuntime)
+    kapt(Libs.roomCompiler)
+    implementation(Libs.roomKtx)
+    testImplementation(Libs.roomTesting)
+
+    // Android, material & friends
+    implementation(Libs.timber)
     implementation(Libs.appcompat)
     implementation(Libs.Compose.material)
-    implementation(Libs.material)
 
+    // retrofit & web
+    api(Libs.retrofit)
+    implementation(Libs.retrofitJson)
+    implementation(Libs.loggingInterceptor)
+
+    // hilt & dagger
     implementation(Libs.hiltAndroid)
     implementation(Libs.hiltCommon)
     implementation(Libs.hiltLifecycle)
     kapt(Libs.hiltAndroidCompiler)
     kapt(Libs.hiltCompiler)
 
-    implementation(Libs.coroutinesAndroid)
-    implementation(Libs.coroutinesCore)
-
-    implementation(Libs.navigationRuntimeKtx)
-    implementation(Libs.navigationFragmentKtx)
-    implementation(Libs.navigationUiKtx)
-    implementation(Libs.navigationDynamicFeatures)
-    androidTestImplementation(Libs.navigationTest)
+    testImplementation(Libs.hiltAndroidTesting)
+    kaptTest(Libs.hiltAndroidCompiler)
+    kaptTest(Libs.hiltCompiler)
 
     // Testing
     testImplementation(Libs.Test.jupiterApi)
@@ -117,5 +125,4 @@ dependencies {
     androidTestImplementation(Libs.Test.testRunner)
     androidTestImplementation(Libs.Test.testExt)
     androidTestImplementation(Libs.Test.testRules)
-
 }
