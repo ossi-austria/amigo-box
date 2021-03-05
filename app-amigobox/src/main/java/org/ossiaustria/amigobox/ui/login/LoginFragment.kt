@@ -10,11 +10,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.ossiaustria.amigobox.R
+import org.ossiaustria.amigobox.ui.loading.LoadingViewModel
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
-    private val viewModel by viewModels<LoginViewModel>()
+    private val viewModel by viewModels<LoadingViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +31,8 @@ class LoginFragment : Fragment() {
             view.findNavController()
                 .navigate(LoginFragmentDirections.actionLoginFragmentToWelcomeFragment())
         }
+
+        viewModel.doFancyHeavyStuffOnBackground()
     }
 
 }

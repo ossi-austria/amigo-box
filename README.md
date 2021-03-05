@@ -2,6 +2,8 @@
 
 * Install Android Studio 4.1.2
 * For Windows: install Putty + Putty Keygen
+* create a new key (with passphrase) and add to gitlab.com/-/profile/keys
+
 
 # Tutorials
 
@@ -31,3 +33,4 @@ ONE MainActivity connects all Fragments and viewModels
 
 - https://oozou.com/blog/reasons-to-use-android-single-activity-architecture-with-navigation-component-36
 - https://developer.android.com/guide/fragments/communicate#kotlin
+- viewModels

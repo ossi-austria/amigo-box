@@ -9,7 +9,7 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:${Versions.gradle}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
-        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.6.2.0")
+        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1")
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.33-beta")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Libs.navigation_version}")
     }
@@ -72,16 +72,6 @@ configure(subprojects) {
         useJUnitPlatform()
 
         reports.junitXml.destination = file("${rootProject.buildDir}/test-results/${project.name}")
-
-//        finalizedBy("jacocoTestReport")
-    }
-    val testCoverage by tasks.registering {
-        group = "verification"
-        description = "Runs the unit tests with coverage"
-
-        dependsOn(":test", ":jacocoTestReport")
-
-        tasks["jacocoTestReport"].mustRunAfter(tasks["test"])
     }
 }
 

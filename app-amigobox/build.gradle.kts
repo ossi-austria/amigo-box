@@ -20,6 +20,10 @@ android {
         versionCode = 1
         versionName = "0.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArgument(
+            "runnerBuilder",
+            "de.mannodermaus.junit5.AndroidJUnit5Builder"
+        )
     }
 
     buildTypes {
@@ -44,6 +48,7 @@ android {
     packagingOptions {
         exclude("META-INF/AL2.0")
         exclude("META-INF/LGPL2.1")
+        exclude("META-INF/LICENSE*")
     }
 
     useLibrary("android.test.runner")
@@ -57,10 +62,19 @@ android {
     kapt {
         correctErrorTypes = true
     }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+test {
+    useJUnitPlatform()
 }
 
 dependencies {
 
+    testImplementation("junit:junit:4.12")
     project(":lib-domain")
     implementation(Libs.appcompat)
     implementation(Libs.Compose.material)
@@ -79,9 +93,32 @@ dependencies {
     implementation(Libs.navigationUiKtx)
     implementation(Libs.navigationDynamicFeatures)
     androidTestImplementation(Libs.navigationTest)
-//    implementation("androidx.appcompat:appcompat:1.2.0")
-//    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-//    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.0")
-//    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0")
+
+    // Testing
+    testImplementation(Libs.Test.jupiterApi)
+    testImplementation(Libs.Test.jupiterParams)
+    testRuntimeOnly(Libs.Test.jupiterEngine)
+//    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
+
+    androidTestImplementation(Libs.Test.testRunner)
+    androidTestImplementation(Libs.Test.jupiterApi)
+    androidTestImplementation(Libs.Test.mannodermausAndroidTestCore)
+    androidTestRuntimeOnly(Libs.Test.mannodermausAndroidTestRunner)
+
+    testImplementation(Libs.Test.test)
+    testImplementation(Libs.Test.testExt)
+    implementation(Libs.Test.coroutinesTest)
+    testImplementation(Libs.Test.mockkAndroid)
+    androidTestImplementation(Libs.Test.mockkAndroid)
+//    testImplementation(Libs.mockwebserver)
+
+    androidTestImplementation(Libs.Test.espressoCore)
+    androidTestImplementation(Libs.Test.espressoContrib)
+    androidTestImplementation(Libs.Test.barista)
+    androidTestImplementation(Libs.Test.testRunner)
+    androidTestImplementation(Libs.Test.testExt)
+    androidTestImplementation(Libs.Test.testRules)
+
+
 }
 

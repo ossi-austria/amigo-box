@@ -9,7 +9,7 @@ object AndroidVersion {
 
 object Versions {
     val gradle = "4.1.1"
-    val kotlin = "1.4.20"
+    val kotlin = "1.4.30"
 }
 
 object Libs {
@@ -127,9 +127,16 @@ object Libs {
         val espressoCore = "androidx.test.espresso:espresso-core:$espresso_version"
         val espressoContrib = "androidx.test.espresso:espresso-contrib:$espresso_version"
 
-        const val junit5_version = "5.3.2"
+        const val junit5_version = "5.4.1"
+        const val manno_junit5_version = "1.0.0"
+        val mannodermausAndroidTestCore =
+            "de.mannodermaus.junit5:android-test-core:$manno_junit5_version"
+        val mannodermausAndroidTestRunner =
+            "de.mannodermaus.junit5:android-test-runner:$manno_junit5_version"
+
         val jupiterApi = "org.junit.jupiter:junit-jupiter-api:$junit5_version"
         val jupiterEngine = "org.junit.jupiter:junit-jupiter-engine:$junit5_version"
+        val jupiterVintageEngine = "org.junit.jupiter:junit-vintage-engine:$junit5_version"
         val jupiterParams = "org.junit.jupiter:junit-jupiter-params:$junit5_version"
 
 //        val junit4_version = "4.12"
