@@ -1,0 +1,142 @@
+import org.ossiaustria.dependencies.Libs
+import org.ossiaustria.dependencies.AndroidVersion
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'de.mannodermaus.android-junit5'
+apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'jacoco'
+
+
+android {
+
+    compileSdkVersion AndroidVersion.compileSdk
+    buildToolsVersion AndroidVersion.buildTools
+
+    defaultConfig {
+        applicationId "org.ossiaustria.amigobox"
+        minSdkVersion AndroidVersion.minSdk
+        targetSdkVersion AndroidVersion.targetSdk
+        versionCode 1
+        versionName "0.0.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments runnerBuilder: "de.mannodermaus.junit5.AndroidJUnit5Builder"
+
+    }
+
+//    buildTypes {
+//        debug {
+//            minifyEnabled false
+//        }
+//        release {
+//            isMinifyEnabled true
+//            proguardFiles(
+//                    getDefaultProguardFile("proguard-android-optimize.txt"),
+//                    "proguard-rules.pro"
+//            )
+//        }
+//    }
+
+//    kotlinOptions {
+//        jvmTarget "1.8"
+//    }
+
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+//
+//    packagingOptions {
+//        exclude("META-INF/AL2.0")
+//        exclude("META-INF/LGPL2.1")
+//        exclude("META-INF/LICENSE*")
+//    }
+//
+////    useLibrary("android.test.runner")
+////    useLibrary("android.test.base")
+////    useLibrary("android.test.mock")
+//
+//
+//    lintOptions {
+//        checkReleaseBuilds true
+//        abortOnError true
+//        checkAllWarnings true
+//        explainIssues true
+//        ignoreWarnings false
+//        quiet false
+//    }
+//
+//    testOptions {
+//        execution "ANDROIDX_TEST_ORCHESTRATOR"
+//        unitTests {
+//            includeAndroidResources = true
+//            returnDefaultValues true
+//        }
+//        reportDir "$rootDir/test-reports"
+//        resultsDir "$rootDir/test-results"
+////        useJUnitPlatform()
+//    }
+
+//    kapt {
+//        correctErrorTypes true
+//    }
+}
+
+//test { useJUnitPlatform() }
+
+sourceSets {
+
+    main.java.srcDirs += 'src'
+    main.resources.srcDirs += 'src'
+    test.java.srcDirs += 'test'
+    test.resources.srcDirs += 'test'
+}
+
+dependencies {
+
+    project(":lib-domain")
+    implementation(Libs.appcompat)
+    implementation(Libs.Compose.material)
+    implementation(Libs.material)
+
+    implementation(Libs.hiltAndroid)
+    implementation(Libs.hiltCommon)
+    implementation(Libs.hiltLifecycle)
+    kapt(Libs.hiltAndroidCompiler)
+    kapt(Libs.hiltCompiler)
+
+    implementation(Libs.navigationRuntimeKtx)
+    implementation(Libs.navigationFragmentKtx)
+    implementation(Libs.navigationUiKtx)
+    implementation(Libs.navigationDynamicFeatures)
+    androidTestImplementation(Libs.navigationTest)
+
+    // Testing
+    testImplementation(Libs.Test.jupiterApi)
+    testImplementation(Libs.Test.jupiterParams)
+    testRuntimeOnly(Libs.Test.jupiterEngine)
+
+    androidTestImplementation(Libs.Test.testRunner)
+    androidTestImplementation(Libs.Test.jupiterApi)
+    androidTestImplementation(Libs.Test.mannodermausAndroidTestCore)
+    androidTestRuntimeOnly(Libs.Test.mannodermausAndroidTestRunner)
+
+    testImplementation(Libs.Test.test)
+    testImplementation(Libs.Test.testExt)
+    implementation(Libs.Test.coroutinesTest)
+    testImplementation(Libs.Test.mockkAndroid)
+    androidTestImplementation(Libs.Test.mockkAndroid)
+
+
+    androidTestImplementation(Libs.Test.espressoCore)
+    androidTestImplementation(Libs.Test.espressoContrib)
+    androidTestImplementation(Libs.Test.barista)
+    androidTestImplementation(Libs.Test.testRunner)
+    androidTestImplementation(Libs.Test.testExt)
+    androidTestImplementation(Libs.Test.testRules)
+
+
+}
+

@@ -7,11 +7,11 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:${Versions.gradle}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
+        classpath("com.android.tools.build:gradle:4.1.1")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.30")
         classpath("de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1")
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.33-beta")
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Libs.navigation_version}")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.3")
     }
 }
 
@@ -70,6 +70,7 @@ configure(subprojects) {
             }
         })
         useJUnitPlatform()
+
 
         reports.junitXml.destination = file("${rootProject.buildDir}/test-results/${project.name}")
     }

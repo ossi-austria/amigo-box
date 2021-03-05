@@ -63,28 +63,54 @@ android {
         correctErrorTypes = true
     }
 
-    test {
-        useJUnitPlatform()
-    }
+
 }
 
-test {
+tasks.withType<Test>().configureEach {
+    testLogging {
+        // set options for log level LIFECYCLE
+        events = setOf(
+            org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT
+        )
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+
+        info {
+            events = debug.events
+            exceptionFormat = debug.exceptionFormat
+        }
+    }
+
     useJUnitPlatform()
+
+    reports.junitXml.destination = file("${rootProject.buildDir}/test-results/${project.name}")
+}
+
+tasks.test { useJUnitPlatform() }
+
+sourceSets {
+
+    main.java.srcDirs += 'src'
+    main.resources.srcDirs += 'src'
+    test.java.srcDirs += 'test'
+    test.resources.srcDirs += 'test'
 }
 
 dependencies {
 
-    testImplementation("junit:junit:4.12")
     project(":lib-domain")
     implementation(Libs.appcompat)
     implementation(Libs.Compose.material)
     implementation(Libs.material)
 
-//    implementation(Libs.dagger)
     implementation(Libs.hiltAndroid)
     implementation(Libs.hiltCommon)
     implementation(Libs.hiltLifecycle)
-//    kapt(Libs.daggerCompiler)
     kapt(Libs.hiltAndroidCompiler)
     kapt(Libs.hiltCompiler)
 
@@ -98,7 +124,6 @@ dependencies {
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterParams)
     testRuntimeOnly(Libs.Test.jupiterEngine)
-//    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
 
     androidTestImplementation(Libs.Test.testRunner)
     androidTestImplementation(Libs.Test.jupiterApi)
@@ -110,7 +135,7 @@ dependencies {
     implementation(Libs.Test.coroutinesTest)
     testImplementation(Libs.Test.mockkAndroid)
     androidTestImplementation(Libs.Test.mockkAndroid)
-//    testImplementation(Libs.mockwebserver)
+    test.
 
     androidTestImplementation(Libs.Test.espressoCore)
     androidTestImplementation(Libs.Test.espressoContrib)

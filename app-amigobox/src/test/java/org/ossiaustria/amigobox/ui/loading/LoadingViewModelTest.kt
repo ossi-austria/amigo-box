@@ -15,29 +15,9 @@ class LoadingViewModelTest {
 
     @Test
     fun `doFancyHeavyStuffOnBackground should login my user `() {
-
-        //given
-
-        // test
         subject.doFancyHeavyStuffOnBackground()
-
-        // check
         val value = subject.liveUserLogin.value
         assertEquals("user logged in!", value)
     }
 
-    @Test
-    fun `doFancyHeavyStuffOnBackground should fail when network is unavailable `() {
-
-        //given
-        //
-        // network = broken
-
-        // test
-        subject.doFancyHeavyStuffOnBackground()
-
-        // check
-        val value = subject.liveUserLogin.value
-        assertEquals("error!", value)
-    }
 }

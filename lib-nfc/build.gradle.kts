@@ -1,3 +1,6 @@
+import org.ossiaustria.dependencies.AndroidVersion
+import org.ossiaustria.dependencies.Libs
+
 plugins {
     id("com.android.application")
     kotlin("android")

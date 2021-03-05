@@ -1,16 +1,6 @@
 //import Versions.compose_version
+package org.ossiaustria.dependencies
 
-object AndroidVersion {
-    const val compileSdk = 30
-    val buildTools = "29.0.3"
-    val minSdk = 23
-    val targetSdk = 30
-}
-
-object Versions {
-    val gradle = "4.1.1"
-    val kotlin = "1.4.30"
-}
 
 object Libs {
 

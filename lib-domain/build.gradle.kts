@@ -1,3 +1,6 @@
+import org.ossiaustria.dependencies.AndroidVersion
+import org.ossiaustria.dependencies.Libs
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -6,7 +9,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion(AndroidVersion.compileSdk)
+    compileSdkVersion = "" + AndroidVersion.compileSdk
     buildToolsVersion = AndroidVersion.buildTools
 
     defaultConfig {
