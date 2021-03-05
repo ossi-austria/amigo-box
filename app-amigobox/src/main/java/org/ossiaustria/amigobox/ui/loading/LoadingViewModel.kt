@@ -1,25 +1,26 @@
 package org.ossiaustria.amigobox.ui.loading
 
+import DispatcherProvider
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoadingViewModel @Inject constructor(
-
-
-) : ViewModel() {
+class LoadingViewModel @Inject constructor(dispatcherProvider: DispatcherProvider) :
+    ViewModel() {
 
     val liveUserLogin = MutableLiveData<String>()
 
+    private val ioScope = dispatcherProvider.io()
+
     // void doFancyHeavyStuffOnBackground()
     fun doFancyHeavyStuffOnBackground() {
-        GlobalScope.launch(Dispatchers.IO) {
-            Thread.sleep(5000)
+        GlobalScope.launch(ioScope) {
+            delay(5000)
             liveUserLogin.postValue("user logged in!")
         }
     }

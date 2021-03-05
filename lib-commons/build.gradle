@@ -1,7 +1,7 @@
 import org.ossiaustria.dependencies.Libs
 import org.ossiaustria.dependencies.AndroidVersion
 
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'de.mannodermaus.android-junit5'
@@ -15,7 +15,6 @@ android {
     buildToolsVersion AndroidVersion.buildTools
 
     defaultConfig {
-        applicationId "org.ossiaustria.amigobox"
         minSdkVersion AndroidVersion.minSdk
         targetSdkVersion AndroidVersion.targetSdk
         versionCode 1
@@ -83,8 +82,7 @@ sourceSets {
 }
 
 dependencies {
-    implementation project(":lib-commons")
-    implementation project(":lib-domain")
+
     implementation(Libs.appcompat)
     implementation(Libs.Compose.material)
     implementation(Libs.material)
@@ -94,12 +92,7 @@ dependencies {
     implementation(Libs.hiltLifecycle)
     kapt(Libs.hiltAndroidCompiler)
     kapt(Libs.hiltCompiler)
-
-    implementation(Libs.navigationRuntimeKtx)
-    implementation(Libs.navigationFragmentKtx)
-    implementation(Libs.navigationUiKtx)
-    implementation(Libs.navigationDynamicFeatures)
-    androidTestImplementation(Libs.navigationTest)
+    
 
     // Testing
     testImplementation(Libs.Test.jupiterApi)
