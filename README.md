@@ -1,3 +1,8 @@
+# Setup
+
+* Install Android Studio 4.1.2
+* For Windows: install Putty + Putty Keygen
+
 # Tutorials
 
 ## Domain Data & Persistance
