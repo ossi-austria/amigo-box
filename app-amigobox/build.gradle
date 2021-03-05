@@ -108,6 +108,8 @@ dependencies {
     testImplementation(Libs.Test.test)
     testImplementation(Libs.Test.testExt)
     implementation(Libs.Test.coroutinesTest)
+    testImplementation(Libs.Test.coroutinesTest)
+    testImplementation(Libs.Lifecycle.coreTesting)
     testImplementation(Libs.Test.mockkAndroid)
     androidTestImplementation(Libs.Test.mockkAndroid)
 
