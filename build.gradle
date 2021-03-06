@@ -9,6 +9,7 @@ buildscript {
         classpath("de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1")
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.33-beta")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.3")
+//        classpath "org.jacoco:org.jacoco.core:0.8.5"
     }
 }
 
@@ -24,25 +25,16 @@ tasks.register("clean") {
 }
 
 subprojects {
-    apply {
-        plugin("jacoco")
-    }
-
-//    tasks.withType(JacocoReport) {
-//        reports {
-//            html.isEnabled = true
-//            xml.isEnabled = true
-//            csv.isEnabled = true
-//        }
-//    }
-}
-
-configure(subprojects) {
-
     tasks.withType(Test) {
-//        useJUnitPlatform()
-//        testLogging.events.addAll([TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED])
+        useJUnitPlatform()
         testLogging {
+            events 'PASSED', 'FAILED', 'SKIPPED'
+            debug {
+                events 'PASSED', 'FAILED', 'SKIPPED', 'STANDARD_ERROR'
+                exceptionFormat 'FULL'
+            }
+            info.events = debug.events
+            info.exceptionFormat = debug.exceptionFormat
             afterSuite { desc, result ->
                 if (!desc.parent) { // group the results in one
                     def output = "Results: ${result.resultType} (" +

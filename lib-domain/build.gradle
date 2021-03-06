@@ -1,13 +1,15 @@
 import org.ossiaustria.dependencies.Libs
 import org.ossiaustria.dependencies.AndroidVersion
 
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'de.mannodermaus.android-junit5'
-apply plugin: 'dagger.hilt.android.plugin'
-apply plugin: 'androidx.navigation.safeargs.kotlin'
-apply plugin: 'jacoco'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'de.mannodermaus.android-junit5'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
+}
+
 
 android {
 
@@ -64,6 +66,26 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+//    test {
+//        useJUnitPlatform()
+//        jacoco {
+//            destinationFile = file("${buildDir}/jacoco/test.exec")
+//        }
+//    }
+
+//    jacoco {
+//        // You may modify the Jacoco version here
+//        toolVersion = "0.8.2"
+//    }
+
+//    jacocoTestReport {
+//        // Adjust the output of the test report
+//        reports {
+//            xml.enabled true
+//            csv.enabled false
+//        }
+//    }
 }
 
 dependencies {
@@ -123,3 +145,4 @@ dependencies {
     androidTestImplementation(Libs.Test.testExt)
     androidTestImplementation(Libs.Test.testRules)
 }
+
