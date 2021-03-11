@@ -51,3 +51,9 @@ subprojects {
         reports.junitXml.destination = file("${rootProject.buildDir}/test-results/${project.name}")
     }
 }
+
+//task testReport(type: TestReport) {
+//    destinationDir = file("${rootProject.buildDir}/test-reports")
+//    // Include the results from the `test` task in all subprojects
+//    reportOn subprojects*.test
+//}

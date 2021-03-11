@@ -57,8 +57,12 @@ android {
 
     testOptions {
         execution "ANDROIDX_TEST_ORCHESTRATOR"
-        reportDir "$rootDir/test-reports"
-        resultsDir "$rootDir/test-results"
+        reportDir "${rootProject.buildDir}/test-reports"
+        resultsDir "${rootProject.buildDir}/test-results"
+
+        junitPlatform {
+            instrumentationTests.integrityCheckEnabled = true
+        }
     }
     kapt {
         correctErrorTypes true
