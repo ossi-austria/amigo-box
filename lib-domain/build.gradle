@@ -1,15 +1,16 @@
 import org.ossiaustria.dependencies.Libs
 import org.ossiaustria.dependencies.AndroidVersion
 
-plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'de.mannodermaus.android-junit5'
-    id 'dagger.hilt.android.plugin'
-    id 'androidx.navigation.safeargs.kotlin'
-}
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'de.mannodermaus.android-junit5'
+apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'jacoco'
 
+reporting.baseDir = "${rootProject.buildDir}/reports"
+testResultsDirName = "${rootProject.buildDir}/test-results"
 
 android {
 
@@ -55,41 +56,12 @@ android {
         quiet false
     }
 
-    testOptions {
-        execution "ANDROIDX_TEST_ORCHESTRATOR"
-        reportDir "${rootProject.buildDir}/test-reports"
-        resultsDir "${rootProject.buildDir}/test-results"
-
-        junitPlatform {
-            instrumentationTests.integrityCheckEnabled = true
-        }
-    }
     kapt {
         correctErrorTypes true
     }
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-//    test {
-//        useJUnitPlatform()
-//        jacoco {
-//            destinationFile = file("${buildDir}/jacoco/test.exec")
-//        }
-//    }
-
-//    jacoco {
-//        // You may modify the Jacoco version here
-//        toolVersion = "0.8.2"
-//    }
-
-//    jacocoTestReport {
-//        // Adjust the output of the test report
-//        reports {
-//            xml.enabled true
-//            csv.enabled false
-//        }
-//    }
 }
 
 dependencies {

@@ -33,7 +33,7 @@ class AuthorApiTest : AbstractApiTest<AuthorApi>(AuthorApi::class.java) {
         "authors/1" to MockResponse(
             """{
                 "id":2,
-                "name":"name",
+                "name":"name"
                 }""".trimIndent()
         )
     )

@@ -27,6 +27,7 @@ tasks.register("clean") {
 subprojects {
     tasks.withType(Test) {
         useJUnitPlatform()
+
         testLogging {
             events 'PASSED', 'FAILED', 'SKIPPED'
             debug {
@@ -50,6 +51,12 @@ subprojects {
         }
         reports.junitXml.destination = file("${rootProject.buildDir}/test-results/${project.name}")
     }
+    task showDirs {
+        doLast {
+            logger.quiet(rootDir.toPath().relativize(project.reportsDir.toPath()).toString())
+            logger.quiet(rootDir.toPath().relativize(project.testResultsDir.toPath()).toString())
+        }
+    }
 }
 
 //task testReport(type: TestReport) {
@@ -57,3 +64,4 @@ subprojects {
 //    // Include the results from the `test` task in all subprojects
 //    reportOn subprojects*.test
 //}
+

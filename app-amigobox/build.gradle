@@ -9,6 +9,9 @@ apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'jacoco'
 
+reporting.baseDir = "${rootProject.buildDir}/reports"
+testResultsDirName = "${rootProject.buildDir}/test-results"
+
 android {
 
     compileSdkVersion AndroidVersion.compileSdk
@@ -56,15 +59,6 @@ android {
         quiet false
     }
 
-    testOptions {
-        execution "ANDROIDX_TEST_ORCHESTRATOR"
-        reportDir "${rootProject.buildDir}/test-reports"
-        resultsDir "${rootProject.buildDir}/test-results"
-
-        junitPlatform {
-            instrumentationTests.integrityCheckEnabled = true
-        }
-    }
     kapt {
         correctErrorTypes true
     }

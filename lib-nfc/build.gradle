@@ -15,16 +15,16 @@ testResultsDirName = "${rootProject.buildDir}/test-results"
 android {
 
     compileSdkVersion AndroidVersion.compileSdk
-    buildToolsVersion AndroidVersion.buildTools
+            buildToolsVersion AndroidVersion.buildTools
 
-    defaultConfig {
-        minSdkVersion AndroidVersion.minSdk
-        targetSdkVersion AndroidVersion.targetSdk
-        versionCode 1
-        versionName "0.0.1"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
-    }
+            defaultConfig {
+                minSdkVersion AndroidVersion.minSdk
+                        targetSdkVersion AndroidVersion.targetSdk
+                        versionCode 1
+                versionName "0.0.1"
+                testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+                testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
+            }
 
     buildTypes {
         debug {
@@ -38,7 +38,7 @@ android {
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+                targetCompatibility JavaVersion.VERSION_1_8
     }
 
     packagingOptions {
@@ -56,6 +56,15 @@ android {
         quiet false
     }
 
+    testOptions {
+        execution "ANDROIDX_TEST_ORCHESTRATOR"
+        reportDir "${rootProject.buildDir}/test-reports"
+        resultsDir "${rootProject.buildDir}/test-results"
+
+        junitPlatform {
+            instrumentationTests.integrityCheckEnabled = true
+        }
+    }
     kapt {
         correctErrorTypes true
     }
