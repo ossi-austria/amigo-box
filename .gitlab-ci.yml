@@ -12,8 +12,8 @@ cache:
   paths:
     - .gradle/
 
-build:
-  stage: build & test
+build & test:
+  stage: build
   script:
     - ./gradlew assembleDebug assembleDebugUnitTest
     - ./gradlew --info -Pci -PbuildDir=lint --console=plain testDebug lintDebug jacocoTestReportDebug
