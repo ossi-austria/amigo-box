@@ -16,12 +16,12 @@ build:
   stage: build
   script:
     - ./gradlew assembleDebug
-    - ./gradlew --info -Pci --console=plain testDebug
-    - ./gradlew -Pci --console=plain lintDebug -PbuildDir=lint
+    - ./gradlew --info -Pci --console=plain testDebug lintDebug jacocoTestReportDebug-PbuildDir=lint
   artifacts:
     paths:
-      - "*.apk"
-      - "*/build"
+      - "*/build/outputs/"
+      - "*/build/reports/"
+      - "*/build/test-results/"
     when: always
     reports:
       junit:
