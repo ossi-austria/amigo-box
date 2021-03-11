@@ -24,4 +24,9 @@ build:
       - "*/build"
     when: always
     reports:
-      junit: "build/test-results/test*/**/TEST-*.xml"
+      junit:
+        - "build/test-results/tests/**/TEST-*.xml"
+        - "app-amigobox/build/test-results/**/TEST-*.xml"
+        - "lib-commons/build/test-results/**/TEST-*.xml"
+        - "lib-domain/build/test-results/**/TEST-*.xml"
+        - "lib-nfc/build/test-results/**/TEST-*.xml"

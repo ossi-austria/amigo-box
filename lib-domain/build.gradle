@@ -9,9 +9,6 @@ apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'jacoco'
 
-reporting.baseDir = "${rootProject.buildDir}/reports"
-testResultsDirName = "${rootProject.buildDir}/test-results"
-
 android {
 
     compileSdkVersion AndroidVersion.compileSdk
