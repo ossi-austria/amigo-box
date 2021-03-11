@@ -17,7 +17,7 @@ build & test:
   script:
     - ./gradlew --console=plain assembleDebug assembleDebugUnitTest
     - ./gradlew --info -Pci --console=plain testDebug
-    - ./gradlew --console=plain lintDebug jacocoTestReportDebug
+    - ./gradlew --console=plain lintDebug :app-amigobox:jacocoTestReportDebug
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
   artifacts:
     paths:
