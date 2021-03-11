@@ -13,6 +13,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.ossiaustria.lib.commons.TestDispatcherProvider
 import org.ossiaustria.lib.domain.api.AuthorApi
 import org.ossiaustria.lib.domain.common.Outcome
 import org.ossiaustria.lib.domain.database.AppDatabase
@@ -33,12 +34,7 @@ class AuthorRepositoryTest {
 
 
     val dispatcher = TestCoroutineDispatcher()
-    private val testDispatcherProvider = object : DispatcherProvider {
-        override fun default(): CoroutineDispatcher = dispatcher
-        override fun io(): CoroutineDispatcher = dispatcher
-        override fun main(): CoroutineDispatcher = dispatcher
-        override fun unconfined(): CoroutineDispatcher = dispatcher
-    }
+    private val testDispatcherProvider = TestDispatcherProvider(dispatcher)
 
     @RelaxedMockK
     lateinit var mockAuthorApi: AuthorApi

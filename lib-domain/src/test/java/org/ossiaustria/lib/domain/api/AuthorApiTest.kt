@@ -14,30 +14,26 @@ import org.junit.rules.TestRule
  *  2. Apply TestRule
  *  3. mock the server response
  */
-class PostApiTest : AbstractApiTest<PostApi>(PostApi::class.java) {
+class AuthorApiTest : AbstractApiTest<AuthorApi>(AuthorApi::class.java) {
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
     @Test
-    fun `PostApi get must retrieve on Post `() {
-        val post = runBlocking {
+    fun `AuthorApi get must retrieve on Post `() {
+        val author = runBlocking {
             subject.get(1)
         }
-        assertNotNull(post)
-        assertNotNull(post.authorId)
-        assertNotNull(post.text)
-        assertNotNull(post.id)
-        assertNotNull(post.title)
+        assertNotNull(author)
+        assertNotNull(author.name)
+        assertNotNull(author.id)
     }
 
     override fun setupMockingMap(): Map<String, MockResponse> = mapOf(
-        "posts/1" to MockResponse(
+        "authors/1" to MockResponse(
             """{
                 "id":2,
-                "authorId":1,
-                "title":"title",
-                "text":"text"
+                "name":"name"
                 }""".trimIndent()
         )
     )

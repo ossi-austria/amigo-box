@@ -1,0 +1,119 @@
+import org.ossiaustria.dependencies.AndroidVersion
+import org.ossiaustria.dependencies.Libs
+
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'de.mannodermaus.android-junit5'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'jacoco'
+    id 'org.barfuin.gradle.jacocolog' version '1.2.4'
+}
+
+android {
+
+    compileSdkVersion AndroidVersion.compileSdk
+    buildToolsVersion AndroidVersion.buildTools
+
+    defaultConfig {
+        applicationId "org.ossiaustria.amigobox"
+        minSdkVersion AndroidVersion.minSdk
+        targetSdkVersion AndroidVersion.targetSdk
+        versionCode 1
+        versionName "0.0.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            minifyEnabled false
+            testCoverageEnabled true
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude "META-INF/AL2.0"
+        exclude "META-INF/LGPL2.1"
+        exclude "META-INF/LICENSE*"
+    }
+
+    lintOptions {
+        checkReleaseBuilds true
+        abortOnError true
+        checkAllWarnings true
+        explainIssues true
+        ignoreWarnings false
+        quiet false
+    }
+
+    kapt {
+        correctErrorTypes true
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+
+dependencies {
+    implementation project(":lib-commons")
+    implementation project(":lib-domain")
+    implementation(Libs.appcompat)
+    implementation(Libs.Compose.material)
+    implementation(Libs.material)
+
+    implementation(Libs.hiltAndroid)
+    implementation(Libs.hiltCommon)
+    implementation(Libs.hiltLifecycle)
+    kapt(Libs.hiltAndroidCompiler)
+    kapt(Libs.hiltCompiler)
+
+    implementation(Libs.coroutinesAndroid)
+    implementation(Libs.coroutinesCore)
+
+    implementation(Libs.navigationRuntimeKtx)
+    implementation(Libs.navigationFragmentKtx)
+    implementation(Libs.navigationUiKtx)
+    implementation(Libs.navigationDynamicFeatures)
+    androidTestImplementation(Libs.navigationTest)
+
+    // Testing
+    testImplementation(Libs.Test.jupiterApi)
+    testImplementation(Libs.Test.jupiterParams)
+//    testRuntimeOnly(Libs.Test.jupiterEngine) Junit5 still broken
+    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
+
+    androidTestImplementation(Libs.Test.testRunner)
+    androidTestImplementation(Libs.Test.jupiterApi)
+    androidTestImplementation(Libs.Test.mannodermausAndroidTestCore)
+    androidTestRuntimeOnly(Libs.Test.mannodermausAndroidTestRunner)
+
+    testImplementation(Libs.Test.test)
+    testImplementation(Libs.Test.testExt)
+    implementation(Libs.Test.coroutinesTest)
+    testImplementation(Libs.Test.coroutinesTest)
+    testImplementation(Libs.Lifecycle.coreTesting)
+    testImplementation(Libs.Test.mockkAndroid)
+    androidTestImplementation(Libs.Test.mockkAndroid)
+
+    androidTestImplementation(Libs.Test.espressoCore)
+    androidTestImplementation(Libs.Test.espressoContrib)
+    androidTestImplementation(Libs.Test.barista)
+    androidTestImplementation(Libs.Test.testRunner)
+    androidTestImplementation(Libs.Test.testExt)
+    androidTestImplementation(Libs.Test.testRules)
+
+}
