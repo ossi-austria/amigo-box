@@ -15,8 +15,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.ossiaustria.lib.domain.api.AuthorApi
 import org.ossiaustria.lib.domain.common.Outcome
-import org.ossiaustria.lib.domain.daos.AppDatabase
-import org.ossiaustria.lib.domain.daos.AuthorDao
+import org.ossiaustria.lib.domain.database.AppDatabase
+import org.ossiaustria.lib.domain.database.AuthorDao
 import org.ossiaustria.lib.domain.models.Author
 import java.util.concurrent.CountDownLatch
 

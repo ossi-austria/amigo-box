@@ -1,6 +1,6 @@
 @file:Suppress("IllegalIdentifier")
 
-package org.ossiaustria.lib.domain.daos
+package org.ossiaustria.lib.domain.database
 
 import androidx.test.filters.SmallTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner

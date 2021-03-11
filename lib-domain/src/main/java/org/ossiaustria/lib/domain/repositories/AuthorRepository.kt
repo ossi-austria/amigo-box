@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.ossiaustria.lib.domain.api.AuthorApi
 import org.ossiaustria.lib.domain.common.Outcome
-import org.ossiaustria.lib.domain.daos.AuthorDao
+import org.ossiaustria.lib.domain.database.AuthorDao
 import org.ossiaustria.lib.domain.models.Author
 
 

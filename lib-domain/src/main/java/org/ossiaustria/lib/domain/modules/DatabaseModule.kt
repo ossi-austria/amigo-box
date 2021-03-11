@@ -7,8 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import org.ossiaustria.lib.domain.daos.AppDatabase
-import org.ossiaustria.lib.domain.daos.AuthorDao
+import org.ossiaustria.lib.domain.database.AppDatabase
+import org.ossiaustria.lib.domain.database.AuthorDao
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

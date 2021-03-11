@@ -6,7 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import org.ossiaustria.lib.domain.api.AuthorApi
-import org.ossiaustria.lib.domain.daos.AuthorDao
+import org.ossiaustria.lib.domain.database.AuthorDao
 import org.ossiaustria.lib.domain.repositories.AuthorRepository
 import org.ossiaustria.lib.domain.repositories.AuthorRepositoryImpl
 import org.ossiaustria.lib.domain.repositories.DefaultDispatcherProvider
