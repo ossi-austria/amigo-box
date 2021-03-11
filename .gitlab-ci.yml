@@ -15,14 +15,14 @@ cache:
 build & test:
   stage: build
   script:
-    - ./gradlew assembleDebug assembleDebugUnitTest
-    - ./gradlew --info -Pci -PbuildDir=lint --console=plain testDebug lintDebug jacocoTestReportDebug
+    - ./gradlew --console=plain assembleDebug assembleDebugUnitTest
+    - ./gradlew --info -Pci --console=plain testDebug
+    - ./gradlew --console=plain lintDebug jacocoTestReportDebug
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
   artifacts:
     paths:
-      - "*/build/outputs"
-      - "*/build/reports"
-      - "*/build/test-results/**"
+      - "*.apk"
+      - "*/build"
     when: always
     reports:
       junit:
