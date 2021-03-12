@@ -1,3 +1,4 @@
+include ':lib-commons'
 include ':lib-domain'
 include ':lib-nfc'
 include ':app-amigobox'

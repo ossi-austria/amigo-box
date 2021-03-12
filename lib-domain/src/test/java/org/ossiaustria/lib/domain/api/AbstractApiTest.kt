@@ -3,20 +3,19 @@ package org.ossiaustria.lib.domain.api
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Before
-import org.junit.runner.RunWith
-import org.junit.runners.BlockJUnit4ClassRunner
-import org.ossiaustria.lib.domain.api.DebugMockInterceptor
-import org.ossiaustria.lib.domain.api.MockResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
-@RunWith(BlockJUnit4ClassRunner::class)
+/**
+ *  AbstractApiTest: mock responses and test Apis
+ *
+ * use the setupMockingMap() method to describe the responses to use in test
+ */
 abstract class AbstractApiTest<T : Api>(private val clazz: Class<T>) {
 
     protected lateinit var subject: T
 
-    protected lateinit var mockingInterceptor: DebugMockInterceptor
+    private lateinit var mockingInterceptor: DebugMockInterceptor
 
     @Before
     fun createRetrofit() {
@@ -28,6 +27,7 @@ abstract class AbstractApiTest<T : Api>(private val clazz: Class<T>) {
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 
+        // inject a fake response server into the httpClient
         val client = OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .addInterceptor(mockingInterceptor)
