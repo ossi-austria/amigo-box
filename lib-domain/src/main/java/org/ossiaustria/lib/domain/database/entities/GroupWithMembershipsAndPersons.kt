@@ -8,11 +8,11 @@ import org.ossiaustria.lib.domain.models.Group
 internal data class GroupWithMembershipsAndPersons(
     @Embedded val group: GroupEntity,
     @Relation(
-        entity = MembershipEntity::class,
+        entity = PersonEntity::class,
         parentColumn = "groupId",
         entityColumn = "membershipId",
     )
-    val members: List<MembershipsWithPerson>
+    val members: List<PersonWithMembership>
 )
 
 internal fun GroupWithMembershipsAndPersons.toGroup(): Group {

@@ -1,16 +1,23 @@
 package org.ossiaustria.lib.domain.database.entities
 
 import androidx.room.Embedded
-import androidx.room.Junction
 import androidx.room.Relation
 
-internal data class MembershipsWithPerson(
-    @Embedded val membershipEntity: MembershipEntity,
+//internal data class MembershipsWithPerson(
+//    @Embedded val membershipEntity: MembershipEntity,
+//    @Relation(
+//        parentColumn = "membershipId",
+//        entityColumn = "personId",
+//    )
+//    val personEntity: PersonEntity
+//)
+
+internal data class PersonWithMembership(
+    @Embedded val personEntity: PersonEntity,
     @Relation(
-        parentColumn = "membershipId",
-        entityColumn = "personId",
-        associateBy = Junction(MembershipPersonRef::class)
+        parentColumn = "personId",
+        entityColumn = "memberId",
     )
-    val personEntity: PersonEntity
+    val membershipEntity: MembershipEntity
 )
 

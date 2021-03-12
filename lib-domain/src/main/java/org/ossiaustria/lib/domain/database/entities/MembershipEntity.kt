@@ -10,6 +10,7 @@ internal data class MembershipEntity(
     val membershipId: UUID,
 
     val groupId: UUID,
+    val memberId: UUID,
     val type: MembershipType
 )
 

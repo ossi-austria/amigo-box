@@ -37,4 +37,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun postDao(): PostDao
     abstract fun commentDao(): CommentDao
     internal abstract fun groupDao(): GroupDao
+    internal abstract fun personDao(): PersonDao
 }
