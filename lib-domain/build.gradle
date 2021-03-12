@@ -55,15 +55,7 @@ android {
         ignoreWarnings false
         quiet false
     }
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
-        execution "ANDROIDX_TEST_ORCHESTRATOR"
-        junitPlatform {
-            instrumentationTests.integrityCheckEnabled = true
-        }
-    }
+
     kapt {
         correctErrorTypes true
     }

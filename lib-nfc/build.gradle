@@ -57,10 +57,10 @@ android {
     }
 
     testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
         execution "ANDROIDX_TEST_ORCHESTRATOR"
+        reportDir "${rootProject.buildDir}/test-reports"
+        resultsDir "${rootProject.buildDir}/test-results"
+
         junitPlatform {
             instrumentationTests.integrityCheckEnabled = true
         }
