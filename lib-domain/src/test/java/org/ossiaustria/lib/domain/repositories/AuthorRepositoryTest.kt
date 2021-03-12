@@ -1,7 +1,6 @@
 package org.ossiaustria.lib.domain.repositories
 
 import androidx.room.Room
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -19,12 +18,13 @@ import org.ossiaustria.lib.domain.common.Outcome
 import org.ossiaustria.lib.domain.database.AppDatabase
 import org.ossiaustria.lib.domain.database.AuthorDao
 import org.ossiaustria.lib.domain.models.Author
+import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.CountDownLatch
 
 @FlowPreview
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4ClassRunner::class)
+@RunWith(RobolectricTestRunner::class)
 class AuthorRepositoryTest {
 
 
@@ -52,7 +52,7 @@ class AuthorRepositoryTest {
 
     @InternalCoroutinesApi
     @Test
-    fun test_1() {
+    fun should_use_database_and_fetcher() {
 
         runBlocking {
             val remoteList = listOf(

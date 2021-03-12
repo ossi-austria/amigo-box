@@ -2,12 +2,9 @@
 
 package org.ossiaustria.lib.domain.database
 
-import androidx.test.filters.SmallTest
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.DisplayName
 import org.junit.runner.RunWith
@@ -15,15 +12,15 @@ import org.ossiaustria.lib.domain.database.entities.GroupEntity
 import org.ossiaustria.lib.domain.database.entities.MemberEntity
 import org.ossiaustria.lib.domain.database.entities.MembershipType
 import org.ossiaustria.lib.domain.database.entities.toGroup
+import org.robolectric.RobolectricTestRunner
 import java.util.*
 
 /**
  * Example Test for Daos. Needs instrumentation (must run on device or emulator)
  *
  */
-@RunWith(AndroidJUnit4ClassRunner::class)
-@SmallTest
-class GroupDaoTest : AbstractDaoTest() {
+@RunWith(RobolectricTestRunner::class)
+class GroupDaoTest : RobolectricDaoTest() {
     private lateinit var groupDao: GroupDao
     private lateinit var personDao: PersonDao
 
@@ -32,13 +29,6 @@ class GroupDaoTest : AbstractDaoTest() {
         personDao = db.personDao()
     }
 
-    @Before
-    fun before() {
-        runBlocking {
-            groupDao.deleteAll()
-            personDao.deleteAll()
-        }
-    }
 
     @DisplayName("insert should persist all items")
     @Test

@@ -2,8 +2,6 @@
 
 package org.ossiaustria.lib.domain.database
 
-import androidx.test.filters.SmallTest
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.equalTo
@@ -11,14 +9,14 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.ossiaustria.lib.domain.models.Author
+import org.robolectric.RobolectricTestRunner
 
 /**
  * Example Test for Daos. Needs instrumentation (must run on device or emulator)
  *
  */
-@RunWith(AndroidJUnit4ClassRunner::class)
-@SmallTest
-class AuthorDaoTest : AbstractDaoTest() {
+@RunWith(RobolectricTestRunner::class)
+class AuthorDaoTest : RobolectricDaoTest() {
     private lateinit var authorDao: AuthorDao
 
     override fun init() {

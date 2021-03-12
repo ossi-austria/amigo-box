@@ -3,19 +3,20 @@ package org.ossiaustria.lib.domain.database
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
 
-@RunWith(AndroidJUnit4ClassRunner::class)
-abstract class AbstractDaoTest {
+@RunWith(RobolectricTestRunner::class)
+abstract class RobolectricDaoTest {
     protected lateinit var db: AppDatabase
 
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
+
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         init()
     }

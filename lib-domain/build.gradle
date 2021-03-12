@@ -55,7 +55,15 @@ android {
         ignoreWarnings false
         quiet false
     }
-
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+        execution "ANDROIDX_TEST_ORCHESTRATOR"
+        junitPlatform {
+            instrumentationTests.integrityCheckEnabled = true
+        }
+    }
     kapt {
         correctErrorTypes true
     }
@@ -109,9 +117,10 @@ dependencies {
 
     testImplementation(Libs.Test.test)
     testImplementation(Libs.Test.testExt)
+    testImplementation(Libs.Test.robolectric)
     implementation(Libs.Test.coroutinesTest)
     testImplementation(Libs.Lifecycle.coreTesting)
-    testImplementation(Libs.Test.mockkAndroid)
+    testImplementation(Libs.Test.mockk)
     androidTestImplementation(Libs.Test.mockkAndroid)
 
     androidTestImplementation(Libs.Test.espressoCore)
