@@ -1,0 +1,28 @@
+package org.ossiaustria.lib.domain.database
+
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import org.ossiaustria.lib.domain.database.entities.AbstractEntity
+import java.util.*
+
+internal abstract class AbstractEntityDao<T> where  T : AbstractEntity {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    abstract suspend fun insertAll(items: List<@JvmSuppressWildcards T>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insert(item: T)
+
+    @Delete
+    abstract suspend fun delete(item: T)
+
+    // must be overridden!
+    abstract suspend fun deleteAll()
+
+    // must be overridden!
+    abstract suspend fun findAll(): List<@JvmSuppressWildcards T>
+
+    // must be overridden!
+    abstract suspend fun findById(id: UUID): T
+
+}

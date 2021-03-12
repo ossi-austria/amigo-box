@@ -9,9 +9,9 @@ import org.junit.Test
 import org.junit.jupiter.api.DisplayName
 import org.junit.runner.RunWith
 import org.ossiaustria.lib.domain.database.entities.GroupEntity
-import org.ossiaustria.lib.domain.database.entities.MemberEntity
-import org.ossiaustria.lib.domain.database.entities.MembershipType
+import org.ossiaustria.lib.domain.database.entities.PersonEntity
 import org.ossiaustria.lib.domain.database.entities.toGroup
+import org.ossiaustria.lib.domain.models.enums.MembershipType
 import org.robolectric.RobolectricTestRunner
 import java.util.*
 
@@ -32,7 +32,7 @@ class GroupDaoTest : RobolectricDaoTest() {
 
     @DisplayName("insert should persist all items")
     @Test
-    fun insert_should_persist_the_items() {
+    fun `insert should persist the item`() {
         val id = UUID.randomUUID()
         val group = GroupEntity(id, "Firstname Lastname")
 
@@ -47,7 +47,7 @@ class GroupDaoTest : RobolectricDaoTest() {
     }
 
     @Test
-    fun insert_should_persist_all_items() {
+    fun `insertAll should persist all items`() {
         val id1 = UUID.randomUUID()
         val id2 = UUID.randomUUID()
         val group1 = GroupEntity(id1, "Firstname Lastname")
@@ -64,7 +64,7 @@ class GroupDaoTest : RobolectricDaoTest() {
     }
 
     @Test
-    fun insertAll_should_not_overwrite_items() {
+    fun `insertAll should not overwrite items`() {
         val id1 = UUID.randomUUID()
         val id2 = UUID.randomUUID()
         val group1 = GroupEntity(id1, "1")
@@ -86,7 +86,7 @@ class GroupDaoTest : RobolectricDaoTest() {
     }
 
     @Test
-    fun insert_should_overwrite_items() {
+    fun `insert should overwrite items`() {
         val id1 = UUID.randomUUID()
         val id2 = UUID.randomUUID()
         val group1 = GroupEntity(id1, "1")
@@ -107,7 +107,7 @@ class GroupDaoTest : RobolectricDaoTest() {
     }
 
     @Test
-    fun findAll_should_load_group() {
+    fun `findAll should load group`() {
         createGroupAndMembers()
 
         val findAll = runBlocking { groupDao.findAll() }
@@ -119,7 +119,7 @@ class GroupDaoTest : RobolectricDaoTest() {
     }
 
     @Test
-    fun findAll_should_load_members() {
+    fun `findAll should load members`() {
         createGroupAndMembers()
 
         val findAll = runBlocking { groupDao.findAll() }
@@ -130,14 +130,14 @@ class GroupDaoTest : RobolectricDaoTest() {
         assertThat(subject.members[0], not(nullValue()))
         assertThat(subject.members[0].email, not(nullValue()))
         assertThat(subject.members[0].groupId, not(nullValue()))
-        assertThat(subject.members[0].memberId, not(nullValue()))
+        assertThat(subject.members[0].personId, not(nullValue()))
         assertThat(subject.members[0].memberType, not(nullValue()))
         assertThat(subject.members[0].name, not(nullValue()))
 
     }
 
     @Test
-    fun find_should_load_members() {
+    fun `find should load members`() {
         val group = createGroupAndMembers()
 
         val subject = runBlocking { groupDao.findById(group.groupId) }
@@ -147,14 +147,14 @@ class GroupDaoTest : RobolectricDaoTest() {
         assertThat(subject.members[0], not(nullValue()))
         assertThat(subject.members[0].email, not(nullValue()))
         assertThat(subject.members[0].groupId, not(nullValue()))
-        assertThat(subject.members[0].memberId, not(nullValue()))
+        assertThat(subject.members[0].personId, not(nullValue()))
         assertThat(subject.members[0].memberType, not(nullValue()))
         assertThat(subject.members[0].name, not(nullValue()))
 
     }
 
     @Test
-    fun mapping_should_contain_person_fields() {
+    fun `mapping should contain person fields`() {
         createGroupAndMembers()
 
         val findAll = runBlocking { groupDao.findAll() }
@@ -169,7 +169,7 @@ class GroupDaoTest : RobolectricDaoTest() {
     }
 
     @Test
-    fun mapping_should_map_admin_type() {
+    fun `mapping should map admin type`() {
         createGroupAndMembers()
 
         val findAll = runBlocking { groupDao.findAll() }
@@ -181,13 +181,13 @@ class GroupDaoTest : RobolectricDaoTest() {
         subject.admins.forEach {
             assertThat(
                 it.memberType,
-                equalTo(org.ossiaustria.lib.domain.models.MembershipType.ADMIN)
+                equalTo(MembershipType.ADMIN)
             )
         }
     }
 
     @Test
-    fun mapping_should_count_all_members() {
+    fun `mapping should count all members`() {
         createGroupAndMembers()
 
         val findAll = runBlocking { groupDao.findAll() }
@@ -198,7 +198,7 @@ class GroupDaoTest : RobolectricDaoTest() {
     }
 
     @Test
-    fun mapping_should_map_centerPerson_type() {
+    fun `mapping should map centerPerson type`() {
         createGroupAndMembers()
 
         val findAll = runBlocking { groupDao.findAll() }
@@ -209,7 +209,7 @@ class GroupDaoTest : RobolectricDaoTest() {
         subject.centerPerson.let {
             assertThat(
                 it!!.memberType,
-                equalTo(org.ossiaustria.lib.domain.models.MembershipType.CENTER)
+                equalTo(MembershipType.CENTER)
             )
         }
     }
@@ -221,9 +221,9 @@ class GroupDaoTest : RobolectricDaoTest() {
         val adminId = UUID.randomUUID()
         val group1 = GroupEntity(groupId, "group")
         val centerPerson =
-            MemberEntity(centerPersonId, "center", "email", groupId, MembershipType.CENTER)
-        val member = MemberEntity(memberId, "member", "email", groupId, MembershipType.MEMBER)
-        val admin = MemberEntity(adminId, "admin", "email", groupId, MembershipType.ADMIN)
+            PersonEntity(centerPersonId, "center", "email", groupId, MembershipType.CENTER)
+        val member = PersonEntity(memberId, "member", "email", groupId, MembershipType.MEMBER)
+        val admin = PersonEntity(adminId, "admin", "email", groupId, MembershipType.ADMIN)
 
         runBlocking {
             groupDao.insert(group1)

@@ -3,10 +3,8 @@ package org.ossiaustria.lib.domain.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import org.ossiaustria.lib.domain.database.converters.MembershipTypeConverter
-import org.ossiaustria.lib.domain.database.converters.UUIDConverter
-import org.ossiaustria.lib.domain.database.entities.GroupEntity
-import org.ossiaustria.lib.domain.database.entities.MemberEntity
+import org.ossiaustria.lib.domain.database.converters.*
+import org.ossiaustria.lib.domain.database.entities.*
 import org.ossiaustria.lib.domain.models.Author
 import org.ossiaustria.lib.domain.models.Comment
 import org.ossiaustria.lib.domain.models.Post
@@ -17,7 +15,10 @@ import org.ossiaustria.lib.domain.models.Post
         Post::class,
         Comment::class,
         GroupEntity::class,
-        MemberEntity::class,
+        PersonEntity::class,
+        CallEntity::class,
+        MessageEntity::class,
+        MultimediaEntity::class,
     ],
     version = 1,
     exportSchema = false
@@ -25,7 +26,11 @@ import org.ossiaustria.lib.domain.models.Post
 @TypeConverters(
     value = [
         UUIDConverter::class,
+        // EnumConverters
+        CallTypeConverter::class,
+        NFCTagTypeConverter::class,
         MembershipTypeConverter::class,
+        MultimediaTypeConverter::class,
     ]
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -34,4 +39,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun commentDao(): CommentDao
     internal abstract fun groupDao(): GroupDao
     internal abstract fun personDao(): PersonDao
+    internal abstract fun callDao(): CallDao
+    internal abstract fun messageDao(): MessageDao
+    internal abstract fun multimediaDao(): MultimediaDao
 }

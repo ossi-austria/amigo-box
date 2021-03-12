@@ -1,20 +1,23 @@
 package org.ossiaustria.lib.domain.database
 
-import androidx.room.*
-import org.ossiaustria.lib.domain.database.entities.MemberEntity
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Transaction
+import org.ossiaustria.lib.domain.database.entities.PersonEntity
+import java.util.*
 
 @Dao
-internal interface PersonDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(items: List<MemberEntity>)
+internal abstract class PersonDao : AbstractEntityDao<PersonEntity>() {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(item: MemberEntity)
+    @Query("DELETE FROM calls")
+    abstract override suspend fun deleteAll()
 
-    @Delete
-    suspend fun delete(item: MemberEntity)
+    @Transaction
+    @Query("SELECT * FROM persons ORDER BY name ASC")
+    abstract override suspend fun findAll(): List<PersonEntity>
 
-    @Query("DELETE FROM members")
-    suspend fun deleteAll()
+    @Transaction
+    @Query("SELECT * FROM persons where personId = :id")
+    abstract override suspend fun findById(id: UUID): PersonEntity
 
 }

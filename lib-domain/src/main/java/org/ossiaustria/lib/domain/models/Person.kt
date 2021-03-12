@@ -1,13 +1,12 @@
 package org.ossiaustria.lib.domain.models
 
+import org.ossiaustria.lib.domain.models.enums.MembershipType
 import java.util.*
 
-enum class MembershipType {
-    MEMBER,
-    ADMIN,
-    CENTER
-}
-
+/**
+ * Domain class for Person.
+ * Uses MemberEntity and GroupEntity for data mapping
+ */
 data class Person(
     val id: UUID,
     val name: String,

@@ -52,7 +52,7 @@ class AuthorRepositoryTest {
 
     @InternalCoroutinesApi
     @Test
-    fun should_use_database_and_fetcher() {
+    fun `should use database and fetcher`() {
 
         runBlocking {
             val remoteList = listOf(
