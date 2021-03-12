@@ -2,7 +2,6 @@ image: jangrewe/gitlab-ci-android
 
 stages:
   - build
-  - test
 
 before_script:
   - export GRADLE_USER_HOME=$(pwd)/.gradle
@@ -13,34 +12,22 @@ cache:
   paths:
     - .gradle/
 
-build:
+build & test:
   stage: build
   script:
-    - ./gradlew assembleDebug
+    - ./gradlew --console=plain assembleDebug assembleDebugUnitTest
+    - ./gradlew --info -Pci --console=plain testDebug
+    - ./gradlew --console=plain lintDebug :app-amigobox:jacocoTestReportDebug
+  coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
   artifacts:
     paths:
       - "*.apk"
       - "*/build"
-
-
-unitTest:
-  stage: test
-  script:
-    - ./gradlew --info -Pci --console=plain testDebug
-    - ./gradlew -Pci --console=plain lintDebug -PbuildDir=lint
-  artifacts:
     when: always
     reports:
-      junit: "*/build/test-results/test/**/TEST-*.xml"
-
-
-instrumentationTest:
-  stage: test
-  allow_failure: true
-  script:
-    - ./gradlew compileDebugUnitTestSources assembleAndroidTest
-    - echo y | android-sdk-linux/tools/bin/sdkmanager  "emulator" >/dev/null
-    - echo y | android-sdk-linux/tools/bin/sdkmanager "system-images;android-${ANDROID_COMPILE_SDK};google_apis;x86"
-    - echo y | android-sdk-linux/tools/bin/avdmanager create avd -f -n testAVD -k "system-images;android-${ANDROID_COMPILE_SDK};google_apis;x86"
-    - android-sdk-linux/emulator/emulator -avd testAVD -no-audio -no-window &
-    - ./gradlew connectedAndroidTest
+      junit:
+        - "build/test-results/tests/**/TEST-*.xml"
+        - "app-amigobox/build/test-results/**/TEST-*.xml"
+        - "lib-commons/build/test-results/**/TEST-*.xml"
+        - "lib-domain/build/test-results/**/TEST-*.xml"
+        - "lib-nfc/build/test-results/**/TEST-*.xml"

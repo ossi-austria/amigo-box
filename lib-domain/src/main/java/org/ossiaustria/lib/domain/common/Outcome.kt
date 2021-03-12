@@ -1,5 +1,10 @@
 package org.ossiaustria.lib.domain.common
 
+/**
+ * This class represents a Result, which holds data.
+ *
+ * It can be loading, success or failure
+ */
 sealed class Outcome<out T>(
     val value: T?
 ) {

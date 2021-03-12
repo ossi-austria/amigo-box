@@ -1,0 +1,124 @@
+import org.ossiaustria.dependencies.Libs
+import org.ossiaustria.dependencies.AndroidVersion
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'de.mannodermaus.android-junit5'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'jacoco'
+    id 'org.barfuin.gradle.jacocolog' version '1.2.4'
+}
+
+android {
+
+    compileSdkVersion AndroidVersion.compileSdk
+    buildToolsVersion AndroidVersion.buildTools
+
+    defaultConfig {
+        minSdkVersion AndroidVersion.minSdk
+        targetSdkVersion AndroidVersion.targetSdk
+        versionCode 1
+        versionName "0.0.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude "META-INF/AL2.0"
+        exclude "META-INF/LGPL2.1"
+        exclude "META-INF/LICENSE*"
+    }
+
+    lintOptions {
+        checkReleaseBuilds true
+        abortOnError true
+        checkAllWarnings true
+        explainIssues true
+        ignoreWarnings false
+        quiet false
+    }
+
+    kapt {
+        correctErrorTypes true
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    api project(":lib-commons")
+
+    // Room & Persistance
+    implementation(Libs.dropboxStore)
+    implementation(Libs.roomRuntime)
+    kapt(Libs.roomCompiler)
+    implementation(Libs.roomKtx)
+    testImplementation(Libs.roomTesting)
+
+    // Android, material & friends
+    implementation(Libs.timber)
+    implementation(Libs.appcompat)
+    implementation(Libs.Compose.material)
+
+    // retrofit & web
+    api(Libs.retrofit)
+    implementation(Libs.retrofitJson)
+    implementation(Libs.loggingInterceptor)
+
+    // hilt & dagger
+    implementation(Libs.hiltAndroid)
+    implementation(Libs.hiltCommon)
+    implementation(Libs.hiltLifecycle)
+    kapt(Libs.hiltAndroidCompiler)
+    kapt(Libs.hiltCompiler)
+
+    testImplementation(Libs.hiltAndroidTesting)
+    kaptTest(Libs.hiltAndroidCompiler)
+    kaptTest(Libs.hiltCompiler)
+
+    // Testing
+    testImplementation(Libs.Test.jupiterApi)
+    testImplementation(Libs.Test.jupiterParams)
+//    testRuntimeOnly(Libs.Test.jupiterEngine) Junit5 still broken
+    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
+
+    androidTestImplementation(Libs.Test.testRunner)
+    androidTestImplementation(Libs.Test.jupiterApi)
+    androidTestImplementation(Libs.Test.mannodermausAndroidTestCore)
+    androidTestRuntimeOnly(Libs.Test.mannodermausAndroidTestRunner)
+
+    testImplementation(Libs.Test.test)
+    testImplementation(Libs.Test.testExt)
+    implementation(Libs.Test.coroutinesTest)
+    testImplementation(Libs.Lifecycle.coreTesting)
+    testImplementation(Libs.Test.mockkAndroid)
+    androidTestImplementation(Libs.Test.mockkAndroid)
+
+    androidTestImplementation(Libs.Test.espressoCore)
+    androidTestImplementation(Libs.Test.espressoContrib)
+    androidTestImplementation(Libs.Test.barista)
+    androidTestImplementation(Libs.Test.testRunner)
+    androidTestImplementation(Libs.Test.testExt)
+    androidTestImplementation(Libs.Test.testRules)
+}
+
