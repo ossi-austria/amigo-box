@@ -1,7 +1,9 @@
 package org.ossiaustria.lib.domain.database
 
 import androidx.room.*
-import org.ossiaustria.lib.domain.database.entities.*
+import org.ossiaustria.lib.domain.database.entities.GroupEntity
+import org.ossiaustria.lib.domain.database.entities.GroupWithMembers
+import java.util.*
 
 @Dao
 internal interface GroupDao {
@@ -11,20 +13,18 @@ internal interface GroupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: GroupEntity)
 
-    @Insert
-    suspend fun insert(item: MembershipEntity)
-
-    @Insert
-    suspend fun insert(item: MembershipPersonRef)
-
     @Delete
     suspend fun delete(item: GroupEntity)
 
-    @Transaction
-    @Query("SELECT * FROM groups")
-    suspend fun findAll(): List<GroupWithMembershipsAndPersons>
+    @Query("DELETE FROM groups")
+    suspend fun deleteAll()
 
     @Transaction
-    @Query("SELECT * FROM persons")
-    suspend fun findPersonsWithMembership(): List<PersonWithMembership>
+    @Query("SELECT * FROM groups")
+    suspend fun findAll(): List<GroupWithMembers>
+
+    @Transaction
+    @Query("SELECT * FROM groups where groupId = :id")
+    suspend fun findById(id: UUID): GroupWithMembers
+
 }

@@ -5,20 +5,25 @@ import androidx.room.PrimaryKey
 import org.ossiaustria.lib.domain.models.Person
 import java.util.*
 
-@Entity(tableName = "persons")
-internal data class PersonEntity(
+@Entity(tableName = "members")
+internal data class MemberEntity(
     @PrimaryKey
-    val personId: UUID,
+    val memberId: UUID,
 
     val name: String,
     val email: String,
+
+    val groupId: UUID,
+    val memberType: MembershipType
 )
 
-internal fun PersonEntity.toPerson(): Person {
+internal fun MemberEntity.toPerson(): Person {
 
     return Person(
-        id = this.personId,
+        id = this.memberId,
         email = this.email,
-        name = this.name
+        name = this.name,
+        memberType = this.memberType.toEnum()
     )
 }
+

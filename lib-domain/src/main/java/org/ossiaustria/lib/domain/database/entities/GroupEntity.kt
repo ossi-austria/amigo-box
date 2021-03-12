@@ -9,6 +9,5 @@ internal data class GroupEntity(
     @PrimaryKey
     val groupId: UUID,
     val name: String,
-    val centerPersonId: UUID?,
 )
 

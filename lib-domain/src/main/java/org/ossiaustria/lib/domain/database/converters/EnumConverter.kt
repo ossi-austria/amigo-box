@@ -12,4 +12,5 @@ open class EnumConverter<T>(val converter: (String) -> T) {
     fun toUUID(value: String?): T? = if (value == null) null else converter(value)
 }
 
-class MembershipTypeConverter : EnumConverter<MembershipType>({ MembershipType.valueOf(it) })
+internal class MembershipTypeConverter :
+    EnumConverter<MembershipType>({ MembershipType.valueOf(it) })

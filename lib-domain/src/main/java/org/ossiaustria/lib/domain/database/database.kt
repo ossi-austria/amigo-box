@@ -6,9 +6,7 @@ import androidx.room.TypeConverters
 import org.ossiaustria.lib.domain.database.converters.MembershipTypeConverter
 import org.ossiaustria.lib.domain.database.converters.UUIDConverter
 import org.ossiaustria.lib.domain.database.entities.GroupEntity
-import org.ossiaustria.lib.domain.database.entities.MembershipEntity
-import org.ossiaustria.lib.domain.database.entities.MembershipPersonRef
-import org.ossiaustria.lib.domain.database.entities.PersonEntity
+import org.ossiaustria.lib.domain.database.entities.MemberEntity
 import org.ossiaustria.lib.domain.models.Author
 import org.ossiaustria.lib.domain.models.Comment
 import org.ossiaustria.lib.domain.models.Post
@@ -19,9 +17,7 @@ import org.ossiaustria.lib.domain.models.Post
         Post::class,
         Comment::class,
         GroupEntity::class,
-        MembershipEntity::class,
-        PersonEntity::class,
-        MembershipPersonRef::class,
+        MemberEntity::class,
     ],
     version = 1,
     exportSchema = false
