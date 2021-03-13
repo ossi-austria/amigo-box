@@ -22,10 +22,21 @@ internal class MultimediaDaoTest : SendableDaoTest<MultimediaEntity, MultimediaD
             createdAt = 1, sendAt = 2, retrievedAt = 3,
             senderId = UUID.randomUUID(), receiverId = UUID.randomUUID(),
             type = MultimediaType.VIDEO,
-            collectionId = null,
+            albumId = null,
             localUrl = "localurl",
             remoteUrl = "remoteUrl",
             ownerId = UUID.randomUUID()
         )
     }
+
+//    @Test
+//    fun `findAll should load group`() {
+//
+//        val findAll = runBlocking { dao.findAll() }
+//
+//        val subject = findAll[0]
+//        MatcherAssert.assertThat(subject.group, CoreMatchers.not(CoreMatchers.nullValue()))
+//        MatcherAssert.assertThat(subject.group.groupId, CoreMatchers.not(CoreMatchers.nullValue()))
+//        MatcherAssert.assertThat(subject.group.name, CoreMatchers.not(CoreMatchers.nullValue()))
+//    }
 }

@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import org.ossiaustria.lib.domain.database.entities.AbstractEntity
 import java.util.*
 
-internal abstract class AbstractEntityDao<T> where  T : AbstractEntity {
+internal abstract class AbstractEntityDao<T, X> where  T : AbstractEntity {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract suspend fun insertAll(items: List<@JvmSuppressWildcards T>)
 
@@ -20,9 +20,9 @@ internal abstract class AbstractEntityDao<T> where  T : AbstractEntity {
     abstract suspend fun deleteAll()
 
     // must be overridden!
-    abstract suspend fun findAll(): List<@JvmSuppressWildcards T>
+    abstract suspend fun findAll(): List<@JvmSuppressWildcards X>
 
     // must be overridden!
-    abstract suspend fun findById(id: UUID): T
+    abstract suspend fun findById(id: UUID): X
 
 }

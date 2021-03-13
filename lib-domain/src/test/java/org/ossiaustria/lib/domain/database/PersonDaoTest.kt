@@ -11,7 +11,7 @@ import java.util.*
 
 
 @RunWith(RobolectricTestRunner::class)
-internal class PersonDaoTest : AbstractEntityDaoTest<PersonEntity, PersonDao>() {
+internal class PersonDaoTest : SimpleEntityDaoTest<PersonEntity, PersonDao>() {
 
     override fun init() {
         dao = db.personDao()

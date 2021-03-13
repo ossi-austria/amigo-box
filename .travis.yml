@@ -2,16 +2,16 @@ language: android
 dist: trusty
 android:
   components:
-    - build-tools-28.0.1
+    - build-tools-29.0.3
     - android-30
     - extra
 
 script:
   - echo yes | sdkmanager "build-tools;29.0.3"
-  - echo yes | sdkmanager "android;30"
+  - echo yes | sdkmanager "platforms;android-30"
   - ./gradlew --console=plain assembleDebug assembleDebugUnitTest
   - ./gradlew --info -Pci --console=plain testDebug
-  - ./gradlew --console=plain lintDebug :app-amigobox:jacocoTestReportDebug
+  - ./gradlew --console=plain lintDebug jacocoTestReportDebug
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

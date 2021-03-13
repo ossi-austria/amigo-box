@@ -2,10 +2,11 @@ package org.ossiaustria.lib.domain.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import org.ossiaustria.lib.domain.models.Message
 import java.util.*
 
 @Entity(tableName = "messages")
-data class MessageEntity(
+internal data class MessageEntity(
     @PrimaryKey
     override val id: UUID,
     override val createdAt: Long,
@@ -16,3 +17,16 @@ data class MessageEntity(
 
     val text: String,
 ) : SendableEntity
+
+internal fun MessageEntity.toMessage(): Message {
+
+    return Message(
+        id = this.id,
+        createdAt = this.createdAt,
+        sendAt = this.sendAt,
+        retrievedAt = this.retrievedAt,
+        senderId = this.senderId,
+        receiverId = this.receiverId,
+        text = this.text
+    )
+}

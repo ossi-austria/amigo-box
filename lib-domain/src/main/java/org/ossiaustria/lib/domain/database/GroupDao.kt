@@ -2,7 +2,7 @@ package org.ossiaustria.lib.domain.database
 
 import androidx.room.*
 import org.ossiaustria.lib.domain.database.entities.GroupEntity
-import org.ossiaustria.lib.domain.database.entities.GroupWithMembers
+import org.ossiaustria.lib.domain.database.entities.GroupEntityWithMembers
 import java.util.*
 
 @Dao
@@ -21,10 +21,10 @@ internal interface GroupDao {
 
     @Transaction
     @Query("SELECT * FROM groups")
-    suspend fun findAll(): List<GroupWithMembers>
+    suspend fun findAll(): List<GroupEntityWithMembers>
 
     @Transaction
     @Query("SELECT * FROM groups where groupId = :id")
-    suspend fun findById(id: UUID): GroupWithMembers
+    suspend fun findById(id: UUID): GroupEntityWithMembers
 
 }

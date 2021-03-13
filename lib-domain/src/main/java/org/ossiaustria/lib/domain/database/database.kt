@@ -19,6 +19,8 @@ import org.ossiaustria.lib.domain.models.Post
         CallEntity::class,
         MessageEntity::class,
         MultimediaEntity::class,
+        AlbumShareEntity::class,
+        AlbumEntity::class,
     ],
     version = 1,
     exportSchema = false
@@ -42,4 +44,6 @@ abstract class AppDatabase : RoomDatabase() {
     internal abstract fun callDao(): CallDao
     internal abstract fun messageDao(): MessageDao
     internal abstract fun multimediaDao(): MultimediaDao
+    internal abstract fun albumDao(): AlbumDao
+    internal abstract fun albumShareDao(): AlbumShareDao
 }

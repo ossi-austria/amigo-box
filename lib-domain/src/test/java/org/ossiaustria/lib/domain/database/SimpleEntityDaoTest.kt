@@ -17,13 +17,13 @@ import java.util.*
  *
  */
 @RunWith(RobolectricTestRunner::class)
-internal abstract class AbstractEntityDaoTest<T : AbstractEntity, DAO : AbstractEntityDao<T>> :
+internal abstract class SimpleEntityDaoTest<ENTITY : AbstractEntity, DAO : AbstractEntityDao<ENTITY, ENTITY>> :
     RobolectricDaoTest() {
     protected lateinit var dao: DAO
 
-    abstract fun createEntity(id: UUID = UUID.randomUUID()): T
-    abstract fun permutateEntity(entity: T): T
-    abstract fun findBy(entity: T): T
+    abstract fun createEntity(id: UUID = UUID.randomUUID()): ENTITY
+    abstract fun permutateEntity(entity: ENTITY): ENTITY
+    abstract fun findBy(entity: ENTITY): ENTITY
 
     @DisplayName("insert should persist all items")
     @Test
@@ -107,7 +107,7 @@ internal abstract class AbstractEntityDaoTest<T : AbstractEntity, DAO : Abstract
     /**
      * Helper method to generate some entities
      */
-    private fun createEntityAndMembers(size: Int = 5): List<T> {
+    private fun createEntityAndMembers(size: Int = 5): List<ENTITY> {
         val list = (1..size).map { createEntity() }
         runBlocking {
             list.forEach { dao.insert(it) }

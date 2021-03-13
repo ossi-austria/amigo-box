@@ -7,7 +7,7 @@ import org.ossiaustria.lib.domain.database.entities.PersonEntity
 import java.util.*
 
 @Dao
-internal abstract class PersonDao : AbstractEntityDao<PersonEntity>() {
+internal abstract class PersonDao : AbstractEntityDao<PersonEntity, PersonEntity>() {
 
     @Query("DELETE FROM calls")
     abstract override suspend fun deleteAll()
