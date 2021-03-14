@@ -11,5 +11,6 @@ data class Person(
     val id: UUID,
     val name: String,
     val email: String,
-    val memberType: MembershipType
+    val memberType: MembershipType,
+    val groupId: UUID?
 )

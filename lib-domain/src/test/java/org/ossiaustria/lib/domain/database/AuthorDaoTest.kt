@@ -16,7 +16,7 @@ import org.robolectric.RobolectricTestRunner
  *
  */
 @RunWith(RobolectricTestRunner::class)
-class AuthorDaoTest : RobolectricDaoTest() {
+internal class AuthorDaoTest : RobolectricDaoTest() {
     private lateinit var authorDao: AuthorDao
 
     override fun init() {

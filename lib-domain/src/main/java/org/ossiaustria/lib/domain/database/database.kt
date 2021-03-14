@@ -38,7 +38,7 @@ internal interface AppDatabase {
         AlbumShareEntity::class,
         AlbumEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(
@@ -51,7 +51,7 @@ internal interface AppDatabase {
         MultimediaTypeConverter::class,
     ]
 )
-abstract class AppDatabaseImpl : RoomDatabase(), AppDatabase {
+internal abstract class AppDatabaseImpl : RoomDatabase(), AppDatabase {
     abstract override fun authorDao(): AuthorDao
     abstract override fun postDao(): PostDao
     abstract override fun commentDao(): CommentDao

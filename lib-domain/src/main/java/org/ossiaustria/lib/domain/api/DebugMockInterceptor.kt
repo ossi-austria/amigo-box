@@ -21,7 +21,10 @@ data class MockResponse(
  * This will help us to test our networking code while a particular API is not implemented
  * yet on Backend side.
  */
-class DebugMockInterceptor(private val requestContentMap: Map<String, MockResponse>) : Interceptor {
+class DebugMockInterceptor(
+    private val requestContentMap: Map<String, MockResponse>,
+    private val debugMockInterceptorAdapter: DebugMockInterceptorAdapter? = null
+) : Interceptor {
 
     companion object {
         const val DELAY_DEFAULT = 100L
@@ -31,20 +34,24 @@ class DebugMockInterceptor(private val requestContentMap: Map<String, MockRespon
     override fun intercept(chain: Interceptor.Chain): Response {
         if (BuildConfig.DEBUG) {
             val uri = chain.request().url.toUri().toString()
+            val mockLiveResponse = debugMockInterceptorAdapter?.requestUrl(uri)
 
-            val matchedKeys = requestContentMap.keys.filter { uri.endsWith(it) }
-            if (matchedKeys.isEmpty()) throw IllegalStateException("No key found for url: uri")
-            if (matchedKeys.size > 1) Timber.w("More than one mocking candidate found: $matchedKeys")
+            val mockResponse = if (mockLiveResponse == null) {
+                val matchedKeys = requestContentMap.keys.filter { uri.endsWith(it) }
+                if (matchedKeys.isEmpty()) throw IllegalStateException("No key found for url: uri")
+                if (matchedKeys.size > 1) Timber.w("More than one mocking candidate found: $matchedKeys")
+                val matchedKey = matchedKeys.first()
 
-            val matchedKey = matchedKeys.first()
-            val mockResponse = requestContentMap[matchedKey] ?: error("No key found for url: uri")
+                requestContentMap[matchedKey] ?: error("No key found for url: uri")
+            } else {
+                mockLiveResponse
+            }
 
             if (mockResponse.delay < DELAY_MAX) {
                 Timber.d("Imitating blocking request for ${mockResponse.delay} ms")
                 Thread.sleep(mockResponse.delay)
             }
             return Response.Builder().request(chain.request())
-//            return chain.proceed(chain.request()).newBuilder()
 
                 .code(mockResponse.status)
                 .protocol(Protocol.HTTP_2)

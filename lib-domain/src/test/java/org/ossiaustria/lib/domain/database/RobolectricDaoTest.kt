@@ -10,7 +10,7 @@ import org.robolectric.RobolectricTestRunner
 
 
 @RunWith(RobolectricTestRunner::class)
-abstract class RobolectricDaoTest {
+internal abstract class RobolectricDaoTest {
     protected lateinit var db: AppDatabaseImpl
 
     @Before

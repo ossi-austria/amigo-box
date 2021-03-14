@@ -25,7 +25,7 @@ interface AuthorRepository {
     suspend fun getAuthor(id: Long): Flow<Outcome<Author>>
 }
 
-class AuthorRepositoryImpl(
+internal class AuthorRepositoryImpl(
     private val api: AuthorApi,
     private val dao: AuthorDao,
     private val dispatcher: DispatcherProvider

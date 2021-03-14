@@ -14,7 +14,7 @@ data class PersonEntity(
     val name: String,
     val email: String,
 
-    val groupId: UUID,
+    val groupId: UUID?,
     val memberType: MembershipType
 ) : AbstractEntity
 
@@ -24,7 +24,19 @@ internal fun PersonEntity.toPerson(): Person {
         id = this.personId,
         email = this.email,
         name = this.name,
-        memberType = this.memberType
+        memberType = this.memberType,
+        groupId = this.groupId,
+    )
+}
+
+internal fun Person.toPersonEntity(): PersonEntity {
+
+    return PersonEntity(
+        personId = this.id,
+        email = this.email,
+        name = this.name,
+        memberType = this.memberType,
+        groupId = this.groupId,
     )
 }
 

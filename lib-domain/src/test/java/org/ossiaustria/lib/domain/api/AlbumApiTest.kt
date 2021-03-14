@@ -61,34 +61,11 @@ class AlbumApiTest : AbstractApiTest<AlbumApi>(AlbumApi::class.java) {
     }
 
     override fun setupMockingMap(): Map<String, MockResponse> = mapOf(
-
         "albums/$idExisting" to MockResponse(
-            """{
-                "id":"$idExisting",
-                "createdAt":100,
-                "updatedAt":100,
-                "name":"name",
-                "owner": {
-                    "id":"$idExisting",
-                    "name":"name",
-                    "email":"email",
-                    "memberType":"MEMBER"
-                },
-                "items":[{
-                    "id":"$idExisting",
-                    "createdAt":100,
-                    "sendAt":100,
-                    "retrievedAt":100,
-                    "senderId":"$idExisting",
-                    "receiverId":"$idExisting",
-                    "ownerId":"$idExisting",
-                    "remoteUrl":"remoteUrl",
-                    "localUrl":"localUrl",
-                    "type":"IMAGE",
-                    "size":3,
-                    "albumId":"$idExisting"
-                }]
-                }""".trimIndent()
+            JsonMocker.album(
+                id = idExisting,
+                multimediaMock = listOf(JsonMocker.multimedia(albumId = idExisting),)
+            )
         )
     )
 

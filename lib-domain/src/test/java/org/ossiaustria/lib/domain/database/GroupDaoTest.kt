@@ -20,7 +20,7 @@ import java.util.*
  *
  */
 @RunWith(RobolectricTestRunner::class)
-class GroupDaoTest : RobolectricDaoTest() {
+internal class GroupDaoTest : RobolectricDaoTest() {
     private lateinit var groupDao: GroupDao
     private lateinit var personDao: PersonDao
 

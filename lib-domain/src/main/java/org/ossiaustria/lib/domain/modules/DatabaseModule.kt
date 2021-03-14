@@ -18,18 +18,18 @@ object DatabaseModule {
     @Provides
     @Singleton
     internal fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
-        return Room.databaseBuilder(appContext, AppDatabaseImpl::class.java, "AmigoBoxDatabase")
+        return Room
+            .databaseBuilder(appContext, AppDatabaseImpl::class.java, "AmigoBoxDatabase")
+            .fallbackToDestructiveMigration()
             .build()
     }
 
     @PublishedApi
     @Provides
-    internal
-    fun provideAuthorDao(appDatabase: AppDatabase): AuthorDao {
+    internal fun provideAuthorDao(appDatabase: AppDatabase): AuthorDao {
         return appDatabase.authorDao()
     }
 
-    @PublishedApi
     @Provides
     internal fun albumDao(appDatabase: AppDatabase): AlbumDao {
         return appDatabase.albumDao()
@@ -39,5 +39,11 @@ object DatabaseModule {
     @Provides
     internal fun multimediaDao(appDatabase: AppDatabase): MultimediaDao {
         return appDatabase.multimediaDao()
+    }
+
+    @PublishedApi
+    @Provides
+    internal fun personDao(appDatabase: AppDatabase): PersonDao {
+        return appDatabase.personDao()
     }
 }

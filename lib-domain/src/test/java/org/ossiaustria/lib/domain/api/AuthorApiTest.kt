@@ -14,7 +14,7 @@ import org.junit.rules.TestRule
  *  2. Apply TestRule
  *  3. mock the server response
  */
-class AuthorApiTest : AbstractApiTest<AuthorApi>(AuthorApi::class.java) {
+internal class AuthorApiTest : AbstractApiTest<AuthorApi>(AuthorApi::class.java) {
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()

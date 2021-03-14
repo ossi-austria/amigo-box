@@ -32,6 +32,9 @@ abstract class AbstractRepository {
                 // either use an empty list, fetch from dao, or just signify "still loading" here
                 emit(onNewData.invoke())
             }
+            else -> {
+                throw IllegalStateException("State lost.")
+            }
         }
     }
 }

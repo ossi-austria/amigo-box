@@ -25,7 +25,7 @@ import java.util.concurrent.CountDownLatch
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
-class AuthorRepositoryTest {
+internal class AuthorRepositoryTest {
 
 
     lateinit var subject: AuthorRepository
