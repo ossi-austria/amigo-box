@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import org.ossiaustria.lib.domain.database.entities.SendableEntity
 import java.util.*
 
-internal abstract class SendableDao<T> where  T : SendableEntity {
+abstract class SendableDao<T> where  T : SendableEntity {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract suspend fun insertAll(items: List<@JvmSuppressWildcards T>)
 

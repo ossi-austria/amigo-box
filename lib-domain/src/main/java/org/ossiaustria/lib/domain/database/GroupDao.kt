@@ -6,7 +6,7 @@ import org.ossiaustria.lib.domain.database.entities.GroupEntityWithMembers
 import java.util.*
 
 @Dao
-internal interface GroupDao {
+interface GroupDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(items: List<GroupEntity>)
 

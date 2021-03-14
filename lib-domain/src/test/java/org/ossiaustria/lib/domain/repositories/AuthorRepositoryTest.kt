@@ -15,7 +15,7 @@ import org.junit.runner.RunWith
 import org.ossiaustria.lib.commons.TestDispatcherProvider
 import org.ossiaustria.lib.domain.api.AuthorApi
 import org.ossiaustria.lib.domain.common.Outcome
-import org.ossiaustria.lib.domain.database.AppDatabase
+import org.ossiaustria.lib.domain.database.AppDatabaseImpl
 import org.ossiaustria.lib.domain.database.AuthorDao
 import org.ossiaustria.lib.domain.models.Author
 import org.robolectric.RobolectricTestRunner
@@ -30,7 +30,7 @@ class AuthorRepositoryTest {
 
     lateinit var subject: AuthorRepository
     lateinit var dao: AuthorDao
-    lateinit var db: AppDatabase
+    lateinit var db: AppDatabaseImpl
 
 
     val dispatcher = TestCoroutineDispatcher()
@@ -43,7 +43,7 @@ class AuthorRepositoryTest {
     fun before() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-        db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        db = Room.inMemoryDatabaseBuilder(context, AppDatabaseImpl::class.java).build()
         dao = db.authorDao()
         MockKAnnotations.init(this, relaxUnitFun = true)
 

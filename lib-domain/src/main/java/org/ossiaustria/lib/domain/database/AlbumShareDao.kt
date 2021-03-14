@@ -8,7 +8,7 @@ import org.ossiaustria.lib.domain.database.entities.AlbumShareEntityWithData
 import java.util.*
 
 @Dao
-internal abstract class AlbumShareDao : SendableDao<AlbumShareEntity>() {
+abstract class AlbumShareDao : SendableDao<AlbumShareEntity>() {
 
     @Query("DELETE FROM album_shares")
     abstract override suspend fun deleteAll()

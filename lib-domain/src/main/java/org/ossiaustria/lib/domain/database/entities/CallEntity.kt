@@ -7,7 +7,7 @@ import org.ossiaustria.lib.domain.models.enums.CallType
 import java.util.*
 
 @Entity(tableName = "calls")
-internal data class CallEntity(
+data class CallEntity(
     @PrimaryKey
     override val id: UUID,
     override val createdAt: Long,
@@ -21,7 +21,7 @@ internal data class CallEntity(
     val finishedAt: Long,
 ) : SendableEntity
 
-internal fun CallEntity.toCall(): Call {
+fun CallEntity.toCall(): Call {
 
     return Call(
         id = this.id,

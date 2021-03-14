@@ -6,7 +6,7 @@ import org.ossiaustria.lib.domain.models.Message
 import java.util.*
 
 @Entity(tableName = "messages")
-internal data class MessageEntity(
+data class MessageEntity(
     @PrimaryKey
     override val id: UUID,
     override val createdAt: Long,

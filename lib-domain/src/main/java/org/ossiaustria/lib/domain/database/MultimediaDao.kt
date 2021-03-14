@@ -7,7 +7,7 @@ import org.ossiaustria.lib.domain.database.entities.MultimediaEntity
 import java.util.*
 
 @Dao
-internal abstract class MultimediaDao : SendableDao<MultimediaEntity>() {
+abstract class MultimediaDao : SendableDao<MultimediaEntity>() {
 
     @Query("DELETE FROM multimedias")
     abstract override suspend fun deleteAll()

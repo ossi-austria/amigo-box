@@ -2,6 +2,8 @@
 
 package org.ossiaustria.lib.domain.database
 
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.equalTo
@@ -53,7 +55,8 @@ internal class AlbumDaoTest : DoubleEntityDaoTest<AlbumEntity, AlbumEntityWithDa
                 )
             )
         }
-        val findAll = runBlocking { dao.findAll() }
+        // ".take(1).first()" collects the Flow
+        val findAll = runBlocking { dao.findAll().take(1).first() }
         val subject = findAll[0].toAlbum()
         assertThat(subject.owner, CoreMatchers.not(CoreMatchers.nullValue()))
     }
@@ -73,7 +76,7 @@ internal class AlbumDaoTest : DoubleEntityDaoTest<AlbumEntity, AlbumEntityWithDa
     }
 
     override fun findBy(entity: AlbumEntity): AlbumEntityWithData {
-        return runBlocking { dao.findById(entity.albumId) }
+        return runBlocking { dao.findById(entity.albumId).take(1).first() }
     }
 
     override fun checkEqual(wrapper: AlbumEntityWithData, entity: AlbumEntity) {

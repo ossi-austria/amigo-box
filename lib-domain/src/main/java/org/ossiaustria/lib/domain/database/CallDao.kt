@@ -7,7 +7,7 @@ import org.ossiaustria.lib.domain.database.entities.CallEntity
 import java.util.*
 
 @Dao
-internal abstract class CallDao : SendableDao<CallEntity>() {
+abstract class CallDao : SendableDao<CallEntity>() {
 
     @Query("DELETE FROM calls")
     abstract override suspend fun deleteAll()

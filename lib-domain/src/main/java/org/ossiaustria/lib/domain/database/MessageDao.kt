@@ -7,7 +7,7 @@ import org.ossiaustria.lib.domain.database.entities.MessageEntity
 import java.util.*
 
 @Dao
-internal abstract class MessageDao : SendableDao<MessageEntity>() {
+abstract class MessageDao : SendableDao<MessageEntity>() {
 
     @Query("DELETE FROM messages")
     abstract override suspend fun deleteAll()

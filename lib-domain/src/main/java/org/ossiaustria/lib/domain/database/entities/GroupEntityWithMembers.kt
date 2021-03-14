@@ -5,7 +5,7 @@ import androidx.room.Relation
 import org.ossiaustria.lib.domain.models.Group
 import org.ossiaustria.lib.domain.models.enums.MembershipType
 
-internal data class GroupEntityWithMembers(
+data class GroupEntityWithMembers(
 
     @Embedded
     val group: GroupEntity,
@@ -18,19 +18,19 @@ internal data class GroupEntityWithMembers(
     val members: List<PersonEntity>
 )
 
-internal fun GroupEntityWithMembers.toGroup(): Group {
+ fun GroupEntityWithMembers.toGroup(): Group {
 
-    val members = this.members
-    return Group(
-        id = this.group.groupId,
-        name = this.group.name,
-        members = members.map { it.toPerson() },
-        centerPerson = members.filter { it.memberType == MembershipType.CENTER }
-            .map(PersonEntity::toPerson)
-            .firstOrNull(),
-        admins = members.filter { it.memberType == MembershipType.ADMIN }
-            .map(PersonEntity::toPerson)
-    )
-}
+     val members = this.members
+     return Group(
+         id = this.group.groupId,
+         name = this.group.name,
+         members = members.map { it.toPerson() },
+         centerPerson = members.filter { it.memberType == MembershipType.CENTER }
+             .map(PersonEntity::toPerson)
+             .firstOrNull(),
+         admins = members.filter { it.memberType == MembershipType.ADMIN }
+             .map(PersonEntity::toPerson)
+     )
+ }
 
 

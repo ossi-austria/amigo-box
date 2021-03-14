@@ -3,10 +3,11 @@ package org.ossiaustria.lib.domain.database
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import kotlinx.coroutines.flow.Flow
 import org.ossiaustria.lib.domain.database.entities.AbstractEntity
 import java.util.*
 
-internal abstract class AbstractEntityDao<T, X> where  T : AbstractEntity {
+ abstract class AbstractEntityDao<T, X> where  T : AbstractEntity {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract suspend fun insertAll(items: List<@JvmSuppressWildcards T>)
 
@@ -17,12 +18,15 @@ internal abstract class AbstractEntityDao<T, X> where  T : AbstractEntity {
     abstract suspend fun delete(item: T)
 
     // must be overridden!
+    abstract suspend fun deleteById(id: UUID)
+
+    // must be overridden!
     abstract suspend fun deleteAll()
 
     // must be overridden!
-    abstract suspend fun findAll(): List<@JvmSuppressWildcards X>
+    abstract fun findAll(): Flow<List<@JvmSuppressWildcards X>>
 
     // must be overridden!
-    abstract suspend fun findById(id: UUID): X
+    abstract fun findById(id: UUID): Flow<X>
 
 }

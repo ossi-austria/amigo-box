@@ -9,6 +9,22 @@ import org.ossiaustria.lib.domain.models.Author
 import org.ossiaustria.lib.domain.models.Comment
 import org.ossiaustria.lib.domain.models.Post
 
+
+internal interface AppDatabase {
+    fun authorDao(): AuthorDao
+    fun postDao(): PostDao
+    fun commentDao(): CommentDao
+    fun groupDao(): GroupDao
+    fun personDao(): PersonDao
+    fun callDao(): CallDao
+    fun messageDao(): MessageDao
+    fun multimediaDao(): MultimediaDao
+
+    fun albumDao(): AlbumDao
+
+    fun albumShareDao(): AlbumShareDao
+}
+
 @Database(
     entities = [
         Author::class,
@@ -35,15 +51,17 @@ import org.ossiaustria.lib.domain.models.Post
         MultimediaTypeConverter::class,
     ]
 )
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun authorDao(): AuthorDao
-    abstract fun postDao(): PostDao
-    abstract fun commentDao(): CommentDao
-    internal abstract fun groupDao(): GroupDao
-    internal abstract fun personDao(): PersonDao
-    internal abstract fun callDao(): CallDao
-    internal abstract fun messageDao(): MessageDao
-    internal abstract fun multimediaDao(): MultimediaDao
-    internal abstract fun albumDao(): AlbumDao
-    internal abstract fun albumShareDao(): AlbumShareDao
+abstract class AppDatabaseImpl : RoomDatabase(), AppDatabase {
+    abstract override fun authorDao(): AuthorDao
+    abstract override fun postDao(): PostDao
+    abstract override fun commentDao(): CommentDao
+    abstract override fun groupDao(): GroupDao
+    abstract override fun personDao(): PersonDao
+    abstract override fun callDao(): CallDao
+    abstract override fun messageDao(): MessageDao
+    abstract override fun multimediaDao(): MultimediaDao
+
+    abstract override fun albumDao(): AlbumDao
+
+    abstract override fun albumShareDao(): AlbumShareDao
 }

@@ -7,7 +7,7 @@ import org.ossiaustria.lib.domain.models.enums.MultimediaType
 import java.util.*
 
 @Entity(tableName = "multimedias")
-internal data class MultimediaEntity(
+data class MultimediaEntity(
     @PrimaryKey
     override val id: UUID,
     override val createdAt: Long,
@@ -27,6 +27,25 @@ internal data class MultimediaEntity(
 internal fun MultimediaEntity.toMultimedia(): Multimedia {
 
     return Multimedia(
+        id = this.id,
+        createdAt = this.createdAt,
+        sendAt = this.sendAt,
+        retrievedAt = this.retrievedAt,
+        senderId = this.senderId,
+        receiverId = this.receiverId,
+
+        ownerId = this.ownerId,
+        remoteUrl = this.remoteUrl,
+        localUrl = this.localUrl,
+        type = this.type,
+        size = this.size,
+        albumId = this.albumId,
+    )
+}
+
+internal fun Multimedia.toMultimediaEntity(): MultimediaEntity {
+
+    return MultimediaEntity(
         id = this.id,
         createdAt = this.createdAt,
         sendAt = this.sendAt,

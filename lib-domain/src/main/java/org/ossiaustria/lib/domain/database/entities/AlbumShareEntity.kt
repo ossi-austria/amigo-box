@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "album_shares")
-internal data class AlbumShareEntity(
+data class AlbumShareEntity(
     @PrimaryKey
     override val id: UUID,
     override val createdAt: Long = System.currentTimeMillis(),

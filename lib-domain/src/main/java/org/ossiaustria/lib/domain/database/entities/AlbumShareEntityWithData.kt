@@ -4,27 +4,27 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import org.ossiaustria.lib.domain.models.AlbumShare
 
-internal data class AlbumShareEntityWithData(
+ data class AlbumShareEntityWithData(
 
-    @Embedded
-    val albumShare: AlbumShareEntity,
+     @Embedded
+     val albumShare: AlbumShareEntity,
 
-    @Relation(
-        entity = PersonEntity::class,
-        parentColumn = "senderId",
-        entityColumn = "personId",
-    )
-    val sender: PersonEntity,
+     @Relation(
+         entity = PersonEntity::class,
+         parentColumn = "senderId",
+         entityColumn = "personId",
+     )
+     val sender: PersonEntity,
 
-    @Relation(
-        entity = PersonEntity::class,
-        parentColumn = "receiverId",
-        entityColumn = "personId",
-    )
-    val receiver: PersonEntity,
+     @Relation(
+         entity = PersonEntity::class,
+         parentColumn = "receiverId",
+         entityColumn = "personId",
+     )
+     val receiver: PersonEntity,
 
-    @Relation(
-        entity = AlbumEntity::class,
+     @Relation(
+         entity = AlbumEntity::class,
         parentColumn = "albumId",
         entityColumn = "albumId",
     )

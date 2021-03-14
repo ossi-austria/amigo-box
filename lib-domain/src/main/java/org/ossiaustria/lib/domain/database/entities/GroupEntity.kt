@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "groups")
-internal data class GroupEntity(
+data class GroupEntity(
     @PrimaryKey
     val groupId: UUID,
     val name: String,

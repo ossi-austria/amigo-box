@@ -7,7 +7,7 @@ import org.ossiaustria.lib.domain.models.enums.MembershipType
 import java.util.*
 
 @Entity(tableName = "persons")
-internal data class PersonEntity(
+data class PersonEntity(
     @PrimaryKey
     val personId: UUID,
 

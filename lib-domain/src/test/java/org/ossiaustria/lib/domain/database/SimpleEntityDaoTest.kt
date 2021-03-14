@@ -2,6 +2,8 @@
 
 package org.ossiaustria.lib.domain.database
 
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -32,7 +34,7 @@ internal abstract class SimpleEntityDaoTest<ENTITY : AbstractEntity, DAO : Abstr
 
         runBlocking { dao.insert(entity) }
 
-        val findAll = runBlocking { dao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
 
         assertThat(findAll, not(equalTo(listOf())))
         assertThat(findAll.size, equalTo(1))
@@ -46,7 +48,7 @@ internal abstract class SimpleEntityDaoTest<ENTITY : AbstractEntity, DAO : Abstr
 
         runBlocking { dao.insertAll(listOf(entity1, entity2)) }
 
-        val findAll = runBlocking { dao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
 
         assertThat(findAll, not(equalTo(listOf())))
         assertThat(findAll.size, equalTo(2))
@@ -65,7 +67,7 @@ internal abstract class SimpleEntityDaoTest<ENTITY : AbstractEntity, DAO : Abstr
         val entity3 = createEntity()
         runBlocking { dao.insertAll(listOf(entity1b, entity3)) }
 
-        val findAll = runBlocking { dao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
 
         assertThat(findAll, not(equalTo(listOf())))
         assertThat(findAll.size, equalTo(3))
@@ -84,7 +86,7 @@ internal abstract class SimpleEntityDaoTest<ENTITY : AbstractEntity, DAO : Abstr
         val entity1b = permutateEntity(entity1)
         runBlocking { dao.insert(entity1b) }
 
-        val findAll = runBlocking { dao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
 
         assertThat(findAll, not(equalTo(listOf())))
         assertThat(findAll.size, equalTo(2))
@@ -97,7 +99,7 @@ internal abstract class SimpleEntityDaoTest<ENTITY : AbstractEntity, DAO : Abstr
     fun `findAll should load entity`() {
         createEntityAndMembers()
 
-        val findAll = runBlocking { dao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
 
         val subject = findAll[0]
         assertThat(subject, not(nullValue()))

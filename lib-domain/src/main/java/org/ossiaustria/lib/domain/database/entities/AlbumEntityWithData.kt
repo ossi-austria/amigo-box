@@ -3,8 +3,9 @@ package org.ossiaustria.lib.domain.database.entities
 import androidx.room.Embedded
 import androidx.room.Relation
 import org.ossiaustria.lib.domain.models.Album
+import org.ossiaustria.lib.domain.models.Multimedia
 
-internal data class AlbumEntityWithData(
+data class AlbumEntityWithData(
 
     @Embedded
     val album: AlbumEntity,
@@ -24,7 +25,7 @@ internal data class AlbumEntityWithData(
     val items: List<MultimediaEntity>
 ) : AbstractEntity
 
-internal fun AlbumEntityWithData.toAlbum(): Album {
+fun AlbumEntityWithData.toAlbum(): Album {
 
     return Album(
         id = this.album.albumId,
@@ -36,3 +37,17 @@ internal fun AlbumEntityWithData.toAlbum(): Album {
     )
 }
 
+fun List<AlbumEntityWithData>.toAlbumList(): List<Album> {
+    return this.map { it.toAlbum() }
+}
+
+fun Album.toAlbumEntity() = AlbumEntity(
+    albumId = this.id,
+    name = this.name,
+    ownerId = this.owner.id,
+    createdAt = this.createdAt,
+    updatedAt = this.updatedAt,
+)
+
+fun Album.toMultimediaEntityList(): List<MultimediaEntity> =
+    this.items.map(Multimedia::toMultimediaEntity)

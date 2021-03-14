@@ -6,7 +6,7 @@ import org.ossiaustria.lib.domain.models.enums.NfcTagType
 import java.util.*
 
 @Entity(tableName = "albums")
-internal data class NfcTagEntity(
+data class NfcTagEntity(
     @PrimaryKey
     val nfcTagId: UUID,
     val creatorId: UUID,

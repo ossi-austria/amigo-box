@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "albums")
-internal data class AlbumEntity(
+data class AlbumEntity(
     @PrimaryKey
     val albumId: UUID,
     val ownerId: UUID,

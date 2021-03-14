@@ -2,6 +2,8 @@
 
 package org.ossiaustria.lib.domain.database
 
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import org.junit.runner.RunWith
 import org.ossiaustria.lib.domain.database.entities.PersonEntity
@@ -35,6 +37,6 @@ internal class PersonDaoTest : SimpleEntityDaoTest<PersonEntity, PersonDao>() {
     }
 
     override fun findBy(entity: PersonEntity): PersonEntity {
-        return runBlocking { dao.findById(entity.personId) }
+        return runBlocking { dao.findById(entity.personId).take(1).first() }
     }
 }

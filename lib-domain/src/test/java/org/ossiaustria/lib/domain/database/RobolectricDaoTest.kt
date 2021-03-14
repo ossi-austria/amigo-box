@@ -11,13 +11,13 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 abstract class RobolectricDaoTest {
-    protected lateinit var db: AppDatabase
+    protected lateinit var db: AppDatabaseImpl
 
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
 
-        db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        db = Room.inMemoryDatabaseBuilder(context, AppDatabaseImpl::class.java).build()
         init()
     }
 

@@ -6,34 +6,22 @@ package org.ossiaustria.lib.domain.common
  * It can be loading, success or failure
  */
 sealed class Outcome<out T>(
+    private val status: Int,
     val value: T?
 ) {
 
-    open val isSuccess: Boolean get() = false
-    open val isLoading: Boolean get() = false
-    open val isFailure: Boolean get() = false
+    val isSuccess: Boolean get() = status == STATUS_SUCCESS
+    val isLoading: Boolean get() = status == STATUS_LOADING
+    val isFailure: Boolean get() = status == STATUS_ERROR
 
     // value & exception retrieval
 
-    /**
-     * Returns the encapsulated value if this instance represents [success][Outcome.isSuccess] or `null`
-     * if it is [failure][Outcome.isFailure].
-     *
-     * This function is a shorthand for `getOrElse { null }` (see [getOrElse]) or
-     * `fold(onSuccess = { it }, onFailure = { null })` (see [fold]).
-     */
     fun getOrNull(): T? =
         when {
             isFailure -> null
             else -> value
         }
 
-    /**
-     * Returns the encapsulated [Throwable] exception if this instance represents [failure][isFailure] or `null`
-     * if it is [success][isSuccess].
-     *
-     * This function is a shorthand for `fold(onSuccess = { null }, onFailure = { it })` (see [fold]).
-     */
     fun exceptionOrNull(): Throwable? =
         when (this) {
             is Failure<*> -> throwable
@@ -52,13 +40,12 @@ sealed class Outcome<out T>(
             is Success -> "Success(${value})"
         }
 
-    // companion with constructors
-
-    /**
-     * Companion object for [Outcome] class that contains its constructor functions
-     * [success] and [failure].
-     */
     companion object {
+
+        private const val STATUS_LOADING = 0
+        private const val STATUS_SUCCESS = 1
+        private const val STATUS_ERROR = -1
+
         /**
          * Returns an instance that encapsulates the given [value] as successful value.
          */
@@ -84,20 +71,11 @@ sealed class Outcome<out T>(
     }
 
 
-    class Success<out T> internal constructor(value: T) : Outcome<T>(value) {
-        override val isSuccess: Boolean get() = true
-    }
-
-    class Loading<out T> internal constructor() : Outcome<T>(null) {
-        override val isLoading: Boolean get() = true
-    }
-
+    class Success<out T> internal constructor(value: T) : Outcome<T>(STATUS_SUCCESS, value)
+    class Loading<out T> internal constructor() : Outcome<T>(STATUS_LOADING, null)
     class Failure<out T> internal constructor(
         val failureCause: String,
-        val throwable: Throwable? = null, ) : Outcome<T>(null) {
-        override val isFailure: Boolean get() = true
-    }
-
+        val throwable: Throwable? = null, ) : Outcome<T>(STATUS_ERROR, null)
 
 }
 

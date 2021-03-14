@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.ossiaustria.lib.domain.api.AlbumApi
 import org.ossiaustria.lib.domain.api.AuthorApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -47,8 +48,14 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideAuthorApi(retrofit: Retrofit): AuthorApi {
+    fun authorApi(retrofit: Retrofit): AuthorApi {
         return retrofit.create(AuthorApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun albumApi(retrofit: Retrofit): AlbumApi {
+        return retrofit.create(AlbumApi::class.java)
     }
 
 }
