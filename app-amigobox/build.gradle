@@ -90,6 +90,8 @@ dependencies {
     implementation(Libs.navigationDynamicFeatures)
     androidTestImplementation(Libs.navigationTest)
 
+    implementation(Libs.timber)
+
     // Testing
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterParams)

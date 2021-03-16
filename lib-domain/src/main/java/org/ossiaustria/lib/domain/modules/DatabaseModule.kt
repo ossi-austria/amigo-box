@@ -7,22 +7,43 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import org.ossiaustria.lib.domain.daos.AppDatabase
-import org.ossiaustria.lib.domain.daos.AuthorDao
+import org.ossiaustria.lib.domain.database.*
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 object DatabaseModule {
 
+    @PublishedApi
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
-        return Room.databaseBuilder(appContext, AppDatabase::class.java, "AmigoBoxDatabase").build()
+    internal fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
+        return Room
+            .databaseBuilder(appContext, AppDatabaseImpl::class.java, "AmigoBoxDatabase")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @PublishedApi
+    @Provides
+    internal fun provideAuthorDao(appDatabase: AppDatabase): AuthorDao {
+        return appDatabase.authorDao()
     }
 
     @Provides
-    fun provideAuthorDao(appDatabase: AppDatabase): AuthorDao {
-        return appDatabase.authorDao()
+    internal fun albumDao(appDatabase: AppDatabase): AlbumDao {
+        return appDatabase.albumDao()
+    }
+
+    @PublishedApi
+    @Provides
+    internal fun multimediaDao(appDatabase: AppDatabase): MultimediaDao {
+        return appDatabase.multimediaDao()
+    }
+
+    @PublishedApi
+    @Provides
+    internal fun personDao(appDatabase: AppDatabase): PersonDao {
+        return appDatabase.personDao()
     }
 }

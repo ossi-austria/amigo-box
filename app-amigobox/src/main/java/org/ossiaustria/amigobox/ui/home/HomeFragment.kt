@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import dagger.hilt.android.AndroidEntryPoint
 import org.ossiaustria.amigobox.R
 
@@ -24,9 +25,14 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val button = view.findViewById<Button>(R.id.button)
-        button.setOnClickListener {
+        val message = view.findViewById<TextView>(R.id.message)
 
+        viewModel.liveAlbums.observe(viewLifecycleOwner) { albums ->
+            message.text = if (albums.isNotEmpty()) {
+                albums.map { it.name }.reduce { all, next -> "$all $next" }
+            } else {
+                "empty"
+            }
         }
     }
 

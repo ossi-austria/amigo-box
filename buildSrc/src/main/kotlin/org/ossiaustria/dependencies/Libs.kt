@@ -110,6 +110,7 @@ object Libs {
 
     object Test {
         const val xtest_version = "1.3.0"
+        const val robolectric = "org.robolectric:robolectric:4.4"
         const val test = "androidx.test:core:$xtest_version"
         const val testExt = "androidx.test.ext:junit:1.1.2"
         const val testRunner = "androidx.test:runner:1.1.2"
@@ -136,6 +137,7 @@ object Libs {
 //        const val junit = "junit:junit:$junit4_version"
 
         const val mockk_Version = "1.10.0"
+        const val mockk = "io.mockk:mockk:${mockk_Version}"
         const val mockkAndroid = "io.mockk:mockk-android:${mockk_Version}"
 
         const val barista_version = "3.7.0"
