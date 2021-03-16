@@ -6,10 +6,11 @@ import java.util.*
 data class Album(
     val id: UUID,
 
-    val createdAt: Long,
-    val updatedAt: Long,
-
     val name: String,
-    val owner: Person,
-    val items: List<Multimedia>
-)
+    val ownerId: UUID,
+    val items: List<Multimedia>,
+
+    val createdAt: Long = System.currentTimeMillis(),
+    val updatedAt: Long = 0,
+
+    )

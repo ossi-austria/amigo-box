@@ -11,13 +11,6 @@ data class AlbumEntityWithData(
     val album: AlbumEntity,
 
     @Relation(
-        entity = PersonEntity::class,
-        parentColumn = "ownerId",
-        entityColumn = "personId",
-    )
-    val owner: PersonEntity,
-
-    @Relation(
         entity = MultimediaEntity::class,
         parentColumn = "albumId",
         entityColumn = "albumId",
@@ -30,7 +23,7 @@ fun AlbumEntityWithData.toAlbum(): Album {
     return Album(
         id = this.album.albumId,
         name = this.album.name,
-        owner = this.owner.toPerson(),
+        ownerId = this.album.ownerId,
         items = this.items.map(MultimediaEntity::toMultimedia),
         createdAt = this.album.createdAt,
         updatedAt = this.album.updatedAt,
@@ -44,7 +37,7 @@ fun List<AlbumEntityWithData>.toAlbumList(): List<Album> {
 fun Album.toAlbumEntity() = AlbumEntity(
     albumId = this.id,
     name = this.name,
-    ownerId = this.owner.id,
+    ownerId = this.ownerId,
     createdAt = this.createdAt,
     updatedAt = this.updatedAt,
 )

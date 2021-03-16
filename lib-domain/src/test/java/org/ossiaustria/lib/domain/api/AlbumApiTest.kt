@@ -33,16 +33,10 @@ class AlbumApiTest : AbstractApiTest<AlbumApi>(AlbumApi::class.java) {
         assertNotNull(album.id)
         assertNotNull(album.createdAt)
         assertNotNull(album.updatedAt)
-        assertNotNull(album.owner)
+        assertNotNull(album.ownerId)
         assertNotNull(album.items)
         assertSame(1, album.items.size)
 
-        album.owner.let {
-            assertNotNull(it.id)
-            assertNotNull(it.name)
-            assertNotNull(it.email)
-            assertNotNull(it.memberType)
-        }
         album.items.forEach {
             assertNotNull(it.id)
             assertNotNull(it.createdAt)

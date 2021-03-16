@@ -9,8 +9,8 @@ data class AlbumShareEntity(
     @PrimaryKey
     override val id: UUID,
     override val createdAt: Long = System.currentTimeMillis(),
-    override val sendAt: Long = System.currentTimeMillis(),
-    override val retrievedAt: Long = System.currentTimeMillis(),
+    override val sendAt: Long? = null,
+    override val retrievedAt: Long? = null,
     override val senderId: UUID,
     override val receiverId: UUID,
 

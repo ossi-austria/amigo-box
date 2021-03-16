@@ -11,8 +11,8 @@ data class CallEntity(
     @PrimaryKey
     override val id: UUID,
     override val createdAt: Long,
-    override val sendAt: Long,
-    override val retrievedAt: Long,
+    override val sendAt: Long? = null,
+    override val retrievedAt: Long? = null,
     override val senderId: UUID,
     override val receiverId: UUID,
 

@@ -11,7 +11,6 @@ import org.ossiaustria.lib.domain.api.AuthorApi
 import org.ossiaustria.lib.domain.database.AlbumDao
 import org.ossiaustria.lib.domain.database.AuthorDao
 import org.ossiaustria.lib.domain.database.MultimediaDao
-import org.ossiaustria.lib.domain.database.PersonDao
 import org.ossiaustria.lib.domain.repositories.AlbumRepository
 import org.ossiaustria.lib.domain.repositories.AlbumRepositoryImpl
 import org.ossiaustria.lib.domain.repositories.AuthorRepository
@@ -37,10 +36,9 @@ object RepositoryModule {
     internal fun albumRepository(
         albumApi: AlbumApi,
         albumDao: AlbumDao,
-        personDao: PersonDao,
         multimediaDao: MultimediaDao,
         dispatcherProvider: DispatcherProvider
     ): AlbumRepository {
-        return AlbumRepositoryImpl(albumApi, albumDao, personDao, multimediaDao, dispatcherProvider)
+        return AlbumRepositoryImpl(albumApi, albumDao, multimediaDao, dispatcherProvider)
     }
 }

@@ -7,17 +7,17 @@ import java.util.*
 interface Sendable {
     val id: UUID
     val createdAt: Long
-    val sendAt: Long
-    val retrievedAt: Long
+    val sendAt: Long?
+    val retrievedAt: Long?
     val senderId: UUID
     val receiverId: UUID
 }
 
 data class AlbumShare(
     override val id: UUID,
-    override val createdAt: Long,
-    override val sendAt: Long,
-    override val retrievedAt: Long,
+    override val createdAt: Long = System.currentTimeMillis(),
+    override val sendAt: Long? = null,
+    override val retrievedAt: Long? = null,
     override val senderId: UUID,
     override val receiverId: UUID,
 
@@ -26,10 +26,11 @@ data class AlbumShare(
 
 
 data class Multimedia(
+
     override val id: UUID,
-    override val createdAt: Long,
-    override val sendAt: Long,
-    override val retrievedAt: Long,
+    override val createdAt: Long = System.currentTimeMillis(),
+    override val sendAt: Long? = null,
+    override val retrievedAt: Long? = null,
     override val senderId: UUID,
     override val receiverId: UUID,
 
@@ -38,14 +39,15 @@ data class Multimedia(
     val localUrl: String,
     val type: MultimediaType,
     val size: Long? = null,
-    val albumId: UUID? = null
-) : Sendable
+    val albumId: UUID? = null,
+
+    ) : Sendable
 
 data class Message(
     override val id: UUID,
-    override val createdAt: Long,
-    override val sendAt: Long,
-    override val retrievedAt: Long,
+    override val createdAt: Long = System.currentTimeMillis(),
+    override val sendAt: Long? = null,
+    override val retrievedAt: Long? = null,
     override val senderId: UUID,
     override val receiverId: UUID,
 
@@ -54,9 +56,9 @@ data class Message(
 
 data class Call(
     override val id: UUID,
-    override val createdAt: Long,
-    override val sendAt: Long,
-    override val retrievedAt: Long,
+    override val createdAt: Long = System.currentTimeMillis(),
+    override val sendAt: Long? = null,
+    override val retrievedAt: Long? = null,
     override val senderId: UUID,
     override val receiverId: UUID,
 

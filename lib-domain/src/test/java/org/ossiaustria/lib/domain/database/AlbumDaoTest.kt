@@ -12,9 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.ossiaustria.lib.domain.database.entities.AlbumEntity
 import org.ossiaustria.lib.domain.database.entities.AlbumEntityWithData
-import org.ossiaustria.lib.domain.database.entities.PersonEntity
 import org.ossiaustria.lib.domain.database.entities.toAlbum
-import org.ossiaustria.lib.domain.models.enums.MembershipType
 import org.robolectric.RobolectricTestRunner
 import java.util.*
 
@@ -22,25 +20,10 @@ import java.util.*
 @RunWith(RobolectricTestRunner::class)
 internal class AlbumDaoTest : DoubleEntityDaoTest<AlbumEntity, AlbumEntityWithData, AlbumDao>() {
 
-
-    lateinit var personDao: PersonDao
     var personId: UUID = UUID.randomUUID()
 
     override fun init() {
         dao = db.albumDao()
-        personDao = db.personDao()
-
-        val person = PersonEntity(
-            personId = personId,
-            groupId = UUID.randomUUID(),
-            email = "email",
-            name = "name",
-            memberType = MembershipType.MEMBER
-        )
-
-        runBlocking {
-            personDao.insert(person)
-        }
     }
 
     @Test
@@ -58,7 +41,7 @@ internal class AlbumDaoTest : DoubleEntityDaoTest<AlbumEntity, AlbumEntityWithDa
         // ".take(1).first()" collects the Flow
         val findAll = runBlocking { dao.findAll().take(1).first() }
         val subject = findAll[0].toAlbum()
-        assertThat(subject.owner, CoreMatchers.not(CoreMatchers.nullValue()))
+        assertThat(subject.ownerId, CoreMatchers.not(CoreMatchers.nullValue()))
     }
 
     override fun createEntity(id: UUID): AlbumEntity {
