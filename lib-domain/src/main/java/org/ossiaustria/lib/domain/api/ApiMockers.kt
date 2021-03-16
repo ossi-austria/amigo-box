@@ -33,7 +33,6 @@ class JsonMocker {
         fun album(
             id: UUID = UUID.randomUUID(),
             ownerId: UUID = UUID.randomUUID(),
-            ownerMock: String = person(id = ownerId),
             multimediaMock: List<String> = emptyList()
         ) = """
 {
@@ -41,7 +40,7 @@ class JsonMocker {
     "createdAt":100,
     "updatedAt":100,
     "name":"name",
-    "owner":$ownerMock,
+    "ownerId":"$ownerId",
     "items": [${multimediaMock.joinToString(", ")}]
 }""".trim()
 
