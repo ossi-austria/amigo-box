@@ -5,15 +5,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import org.ossiaustria.lib.domain.database.converters.*
 import org.ossiaustria.lib.domain.database.entities.*
-import org.ossiaustria.lib.domain.models.Author
-import org.ossiaustria.lib.domain.models.Comment
-import org.ossiaustria.lib.domain.models.Post
 
 
 internal interface AppDatabase {
-    fun authorDao(): AuthorDao
-    fun postDao(): PostDao
-    fun commentDao(): CommentDao
     fun groupDao(): GroupDao
     fun personDao(): PersonDao
     fun callDao(): CallDao
@@ -27,9 +21,6 @@ internal interface AppDatabase {
 
 @Database(
     entities = [
-        Author::class,
-        Post::class,
-        Comment::class,
         GroupEntity::class,
         PersonEntity::class,
         CallEntity::class,
@@ -52,9 +43,6 @@ internal interface AppDatabase {
     ]
 )
 internal abstract class AppDatabaseImpl : RoomDatabase(), AppDatabase {
-    abstract override fun authorDao(): AuthorDao
-    abstract override fun postDao(): PostDao
-    abstract override fun commentDao(): CommentDao
     abstract override fun groupDao(): GroupDao
     abstract override fun personDao(): PersonDao
     abstract override fun callDao(): CallDao

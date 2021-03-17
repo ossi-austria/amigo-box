@@ -7,6 +7,18 @@ import java.util.*
  */
 class JsonMocker {
     companion object {
+
+        fun group(
+            id: UUID = UUID.randomUUID(),
+            name: String = "group",
+            personsMock: List<String> = emptyList(),
+        ) = """
+            {
+                "id":"$id",
+                "name":"$name",
+                "members": [${personsMock.joinToString(", ")}]
+            }""".trim()
+
         fun multimedia(
             id: UUID = UUID.randomUUID(),
             senderId: UUID = UUID.randomUUID(),
@@ -15,46 +27,48 @@ class JsonMocker {
             albumId: UUID = UUID.randomUUID(),
             type: String = "IMAGE"
         ) = """
-    {
-        "id":"$id",
-        "createdAt":100,
-        "sendAt":100,
-        "retrievedAt":100,
-        "senderId":"$senderId",
-        "receiverId":"$receiverId",
-        "ownerId":"$ownerId",
-        "remoteUrl":"remoteUrl",
-        "localUrl":"localUrl",
-        "type":"$type",
-        "size":3,
-        "albumId":"$albumId"
-    }""".trim()
+            {
+                "id":"$id",
+                "createdAt":100,
+                "sendAt":100,
+                "retrievedAt":100,
+                "senderId":"$senderId",
+                "receiverId":"$receiverId",
+                "ownerId":"$ownerId",
+                "remoteUrl":"remoteUrl",
+                "localUrl":"localUrl",
+                "type":"$type",
+                "size":3,
+                "albumId":"$albumId"
+            }""".trim()
 
         fun album(
             id: UUID = UUID.randomUUID(),
             ownerId: UUID = UUID.randomUUID(),
             multimediaMock: List<String> = emptyList()
         ) = """
-{
-    "id":"$id",
-    "createdAt":100,
-    "updatedAt":100,
-    "name":"name",
-    "ownerId":"$ownerId",
-    "items": [${multimediaMock.joinToString(", ")}]
-}""".trim()
+            {
+                "id":"$id",
+                "createdAt":100,
+                "updatedAt":100,
+                "name":"name",
+                "ownerId":"$ownerId",
+                "items": [${multimediaMock.joinToString(", ")}]
+            }""".trim()
 
         fun person(
             id: UUID = UUID.randomUUID(),
+            groupId: UUID? = UUID.randomUUID(),
             name: String = "",
             memberType: String = "MEMBER"
         ) = """
-    {
-        "id":"$id",
-        "name":"$name",
-        "email":"email",
-        "memberType":"$memberType"
-    }""".trim()
+            {
+                "id":"$id",
+                "name":"$name",
+                "email":"email",
+                "memberType":"$memberType",
+                "groupId":"$groupId"
+            }""".trim()
     }
 
 }

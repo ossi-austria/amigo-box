@@ -7,9 +7,9 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.ossiaustria.lib.domain.api.AlbumApi
-import org.ossiaustria.lib.domain.api.AuthorApi
 import org.ossiaustria.lib.domain.api.DebugMockInterceptor
 import org.ossiaustria.lib.domain.api.DebugMockInterceptorAdapter
+import org.ossiaustria.lib.domain.api.GroupApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -57,8 +57,8 @@ object ApiModule {
 
     @Provides
     @Singleton
-    internal fun authorApi(retrofit: Retrofit): AuthorApi {
-        return retrofit.create(AuthorApi::class.java)
+    internal fun groupApi(retrofit: Retrofit): GroupApi {
+        return retrofit.create(GroupApi::class.java)
     }
 
     @Provides

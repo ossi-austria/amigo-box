@@ -7,15 +7,15 @@ import kotlinx.coroutines.flow.Flow
 import org.ossiaustria.lib.domain.database.entities.AbstractEntity
 import java.util.*
 
- abstract class AbstractEntityDao<T, X> where  T : AbstractEntity {
+abstract class AbstractEntityDao<IN, OUT> where  IN : AbstractEntity {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract suspend fun insertAll(items: List<@JvmSuppressWildcards T>)
+    abstract suspend fun insertAll(items: List<@JvmSuppressWildcards IN>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insert(item: T)
+    abstract suspend fun insert(item: IN)
 
     @Delete
-    abstract suspend fun delete(item: T)
+    abstract suspend fun delete(item: IN)
 
     // must be overridden!
     abstract suspend fun deleteById(id: UUID)
@@ -24,9 +24,9 @@ import java.util.*
     abstract suspend fun deleteAll()
 
     // must be overridden!
-    abstract fun findAll(): Flow<List<@JvmSuppressWildcards X>>
+    abstract fun findAll(): Flow<List<@JvmSuppressWildcards OUT>>
 
     // must be overridden!
-    abstract fun findById(id: UUID): Flow<X>
+    abstract fun findById(id: UUID): Flow<OUT>
 
 }

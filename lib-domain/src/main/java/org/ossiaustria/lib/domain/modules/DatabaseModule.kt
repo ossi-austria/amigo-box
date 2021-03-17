@@ -26,8 +26,8 @@ object DatabaseModule {
 
     @PublishedApi
     @Provides
-    internal fun provideAuthorDao(appDatabase: AppDatabase): AuthorDao {
-        return appDatabase.authorDao()
+    internal fun groupDao(appDatabase: AppDatabase): GroupDao {
+        return appDatabase.groupDao()
     }
 
     @Provides

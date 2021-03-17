@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import java.util.*
 
-interface AlbumApi : Api {
+interface AlbumApi {
 
     @GET("albums")
     suspend fun getAll(): List<Album>
