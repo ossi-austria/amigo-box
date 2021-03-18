@@ -2,6 +2,8 @@
 
 package org.ossiaustria.lib.domain.database
 
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -9,6 +11,7 @@ import org.junit.Test
 import org.junit.jupiter.api.DisplayName
 import org.junit.runner.RunWith
 import org.ossiaustria.lib.domain.database.entities.GroupEntity
+import org.ossiaustria.lib.domain.database.entities.GroupEntityWithMembers
 import org.ossiaustria.lib.domain.database.entities.PersonEntity
 import org.ossiaustria.lib.domain.database.entities.toGroup
 import org.ossiaustria.lib.domain.models.enums.MembershipType
@@ -20,68 +23,52 @@ import java.util.*
  *
  */
 @RunWith(RobolectricTestRunner::class)
-internal class GroupDaoTest : RobolectricDaoTest() {
-    private lateinit var groupDao: GroupDao
+internal class GroupDaoTest : DoubleEntityDaoTest<GroupEntity, GroupEntityWithMembers, GroupDao>() {
+
     private lateinit var personDao: PersonDao
 
     override fun init() {
-        groupDao = db.groupDao()
+        dao = db.groupDao()
         personDao = db.personDao()
     }
 
 
     @DisplayName("insert should persist all items")
     @Test
-    fun `insert should persist the item`() {
+    fun `insert should persist the item and set groupId`() {
         val id = UUID.randomUUID()
         val group = GroupEntity(id, "Firstname Lastname")
 
-        runBlocking { groupDao.insert(group) }
+        runBlocking { dao.insert(group) }
 
-        val findAll = runBlocking { groupDao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
 
-        assertThat(findAll, not(equalTo(listOf())))
+        assertThat(findAll, not(equalTo(listOf<GroupEntityWithMembers>())))
         assertThat(findAll.size, equalTo(1))
         assertThat(findAll[0].group.groupId, equalTo(group.groupId))
         assertThat(findAll[0].group, equalTo(group))
     }
 
-    @Test
-    fun `insertAll should persist all items`() {
-        val id1 = UUID.randomUUID()
-        val id2 = UUID.randomUUID()
-        val group1 = GroupEntity(id1, "Firstname Lastname")
-        val group2 = GroupEntity(id2, "Firstname Lastname")
-
-        runBlocking { groupDao.insertAll(listOf(group1, group2)) }
-
-        val findAll = runBlocking { groupDao.findAll() }
-
-        assertThat(findAll, not(equalTo(listOf())))
-        assertThat(findAll.size, equalTo(2))
-        assertThat(findAll[0].group, equalTo(group1))
-        assertThat(findAll[1].group, equalTo(group2))
-    }
 
     @Test
-    fun `insertAll should not overwrite items`() {
+    fun `insertAll should not overwrite  group items`() {
         val id1 = UUID.randomUUID()
         val id2 = UUID.randomUUID()
         val group1 = GroupEntity(id1, "1")
         val group2 = GroupEntity(id2, "2")
 
-        runBlocking { groupDao.insertAll(listOf(group1, group2)) }
+        runBlocking { dao.insertAll(listOf(group1, group2)) }
 
         val group1b = GroupEntity(id1, "1b")
         val group3 = GroupEntity(UUID.randomUUID(), "3")
-        runBlocking { groupDao.insertAll(listOf(group1b, group3)) }
+        runBlocking { dao.insertAll(listOf(group1b, group3)) }
 
-        val findAll = runBlocking { groupDao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
 
         assertThat(findAll, not(equalTo(listOf())))
         assertThat(findAll.size, equalTo(3))
 
-        val findById = runBlocking { groupDao.findById(id1) }
+        val findById = runBlocking { dao.findById(id1).take(1).first() }
         assertThat(findById.group, equalTo(group1))
     }
 
@@ -92,17 +79,17 @@ internal class GroupDaoTest : RobolectricDaoTest() {
         val group1 = GroupEntity(id1, "1")
         val group2 = GroupEntity(id2, "2")
 
-        runBlocking { groupDao.insertAll(listOf(group1, group2)) }
+        runBlocking { dao.insertAll(listOf(group1, group2)) }
 
         val group1b = GroupEntity(id1, "new name")
-        runBlocking { groupDao.insert(group1b) }
+        runBlocking { dao.insert(group1b) }
 
-        val findAll = runBlocking { groupDao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
 
         assertThat(findAll, not(equalTo(listOf())))
         assertThat(findAll.size, equalTo(2))
 
-        val findById = runBlocking { groupDao.findById(id1) }
+        val findById = runBlocking { dao.findById(id1).take(1).first() }
         assertThat(findById.group, equalTo(group1b))
     }
 
@@ -110,7 +97,7 @@ internal class GroupDaoTest : RobolectricDaoTest() {
     fun `findAll should load group`() {
         createGroupAndMembers()
 
-        val findAll = runBlocking { groupDao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
 
         val subject = findAll[0]
         assertThat(subject.group, not(nullValue()))
@@ -122,7 +109,7 @@ internal class GroupDaoTest : RobolectricDaoTest() {
     fun `findAll should load members`() {
         createGroupAndMembers()
 
-        val findAll = runBlocking { groupDao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
 
         val subject = findAll[0]
         assertThat(subject.members, not(nullValue()))
@@ -140,7 +127,7 @@ internal class GroupDaoTest : RobolectricDaoTest() {
     fun `find should load members`() {
         val group = createGroupAndMembers()
 
-        val subject = runBlocking { groupDao.findById(group.groupId) }
+        val subject = runBlocking { dao.findById(group.groupId).take(1).first() }
 
         assertThat(subject.members, not(nullValue()))
         assertThat(subject.members.size, equalTo(3))
@@ -157,7 +144,7 @@ internal class GroupDaoTest : RobolectricDaoTest() {
     fun `mapping should contain person fields`() {
         createGroupAndMembers()
 
-        val findAll = runBlocking { groupDao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
         val subject = findAll[0].toGroup()
 
         assertThat(subject.members, not(nullValue()))
@@ -172,7 +159,7 @@ internal class GroupDaoTest : RobolectricDaoTest() {
     fun `mapping should map admin type`() {
         createGroupAndMembers()
 
-        val findAll = runBlocking { groupDao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
         val subject = findAll[0].toGroup()
 
         assertThat(subject.members, not(nullValue()))
@@ -190,7 +177,7 @@ internal class GroupDaoTest : RobolectricDaoTest() {
     fun `mapping should count all members`() {
         createGroupAndMembers()
 
-        val findAll = runBlocking { groupDao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
         val subject = findAll[0].toGroup()
 
         assertThat(subject.members, not(nullValue()))
@@ -201,7 +188,7 @@ internal class GroupDaoTest : RobolectricDaoTest() {
     fun `mapping should map centerPerson type`() {
         createGroupAndMembers()
 
-        val findAll = runBlocking { groupDao.findAll() }
+        val findAll = runBlocking { dao.findAll().take(1).first() }
         val subject = findAll[0].toGroup()
 
         assertThat(subject.centerPerson, not(nullValue()))
@@ -226,11 +213,36 @@ internal class GroupDaoTest : RobolectricDaoTest() {
         val admin = PersonEntity(adminId, "admin", "email", groupId, MembershipType.ADMIN)
 
         runBlocking {
-            groupDao.insert(group1)
+            dao.insert(group1)
             personDao.insert(centerPerson)
             personDao.insert(member)
             personDao.insert(admin)
         }
         return group1
+    }
+
+    override fun createEntity(id: UUID): GroupEntity {
+        return GroupEntity(
+            groupId = UUID.randomUUID(),
+            name = "name"
+        )
+    }
+
+    override fun permuteEntity(entity: GroupEntity): GroupEntity {
+        return entity.copy(
+            name = "new name",
+        )
+    }
+
+    override fun findBy(entity: GroupEntity): GroupEntityWithMembers {
+        return runBlocking { dao.findById(entity.groupId).take(1).first() }
+    }
+
+    override fun checkEqual(wrapper: GroupEntityWithMembers, entity: GroupEntity) {
+        assertThat(wrapper.group, equalTo(entity))
+    }
+
+    override fun checkSameId(wrapper: GroupEntityWithMembers, entity: GroupEntity) {
+        assertThat(wrapper.group.groupId, equalTo(entity.groupId))
     }
 }

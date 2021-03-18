@@ -7,6 +7,7 @@ import org.junit.Assert.assertSame
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import retrofit2.Retrofit
 import java.util.*
 
 /**
@@ -16,12 +17,18 @@ import java.util.*
  *  2. Apply TestRule
  *  3. mock the server response
  */
-class AlbumApiTest : AbstractApiTest<AlbumApi>(AlbumApi::class.java) {
+class AlbumApiTest : AbstractApiTest() {
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
     private val idExisting = UUID.randomUUID()
+
+    lateinit var subject: AlbumApi
+
+    override fun createApi(retrofit: Retrofit) {
+        subject = retrofit.create(AlbumApi::class.java)
+    }
 
     @Test
     fun `AlbumApi get should retrieve one item `() {

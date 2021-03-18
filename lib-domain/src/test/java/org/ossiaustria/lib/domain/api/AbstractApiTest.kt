@@ -11,9 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  *
  * use the setupMockingMap() method to describe the responses to use in test
  */
-abstract class AbstractApiTest<T : Api>(private val clazz: Class<T>) {
-
-    protected lateinit var subject: T
+abstract class AbstractApiTest() {
 
     private lateinit var mockingInterceptor: DebugMockInterceptor
 
@@ -39,8 +37,10 @@ abstract class AbstractApiTest<T : Api>(private val clazz: Class<T>) {
             .client(client)
             .build()
 
-        subject = retrofit.create(clazz)
+        createApi(retrofit)
     }
+
+    abstract fun createApi(retrofit: Retrofit)
 
     abstract fun setupMockingMap(): Map<String, MockResponse>
 }

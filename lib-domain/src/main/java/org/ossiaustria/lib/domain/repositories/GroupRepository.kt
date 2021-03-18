@@ -7,58 +7,58 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import org.ossiaustria.lib.commons.DispatcherProvider
-import org.ossiaustria.lib.domain.api.AlbumApi
+import org.ossiaustria.lib.domain.api.GroupApi
 import org.ossiaustria.lib.domain.common.Outcome
-import org.ossiaustria.lib.domain.database.AlbumDao
-import org.ossiaustria.lib.domain.database.MultimediaDao
+import org.ossiaustria.lib.domain.database.GroupDao
+import org.ossiaustria.lib.domain.database.PersonDao
 import org.ossiaustria.lib.domain.database.entities.*
-import org.ossiaustria.lib.domain.models.Album
+import org.ossiaustria.lib.domain.models.Group
 import timber.log.Timber
 import java.util.*
 
 
-interface AlbumRepository {
+interface GroupRepository {
 
-    fun getAllAlbums(): Flow<Outcome<List<Album>>>
+    fun getAllGroups(): Flow<Outcome<List<Group>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getAlbum(id: UUID): Flow<Outcome<Album>>
+    fun getGroup(id: UUID): Flow<Outcome<Group>>
 
 }
 
-internal class AlbumRepositoryImpl(
-    private val albumApi: AlbumApi,
-    private val albumDao: AlbumDao,
-    private val multimediaDao: MultimediaDao,
+internal class GroupRepositoryImpl(
+    private val groupApi: GroupApi,
+    private val groupDao: GroupDao,
+    private val personDao: PersonDao,
     private val dispatcherProvider: DispatcherProvider
-) : AlbumRepository,
-    SingleAndCollectionStore<AlbumEntity, AlbumEntityWithData, Album>(albumDao) {
+) : GroupRepository,
+    SingleAndCollectionStore<GroupEntity, GroupEntityWithMembers, Group>(groupDao) {
+
+    override suspend fun fetchOne(id: UUID): Group = groupApi.get(id)
+    override suspend fun fetchAll(): List<Group> = groupApi.getAll()
 
 
-    override suspend fun fetchOne(id: UUID): Album = albumApi.get(id)
-    override suspend fun fetchAll(): List<Album> = albumApi.getAll()
-
-    override suspend fun writeItem(item: Album) {
+    override suspend fun writeItem(item: Group) {
         try {
-            albumDao.insert(item.toAlbumEntity())
-            multimediaDao.insertAll(item.toMultimediaEntityList())
+            groupDao.insert(item.toGroupEntity())
+            personDao.insertAll(item.toPersonEntityList())
         } catch (e: Exception) {
             Timber.e(e, "Store4 cannot write item")
         }
     }
 
-    override fun readItem(id: UUID): Flow<Album> {
-        return albumDao.findById(id).map { it.toAlbum() }
+    override fun readItem(id: UUID): Flow<Group> {
+        return groupDao.findById(id).map { it.toGroup() }
     }
 
-    override fun readAllItems(): Flow<List<Album>> {
-        return albumDao.findAll().map {
+    override fun readAllItems(): Flow<List<Group>> {
+        return groupDao.findAll().map {
             try {
-                it.toAlbumList()
+                it.toGroupList()
             } catch (e: Exception) {
                 Timber.e(e, "Store4 cannot read collection")
-                emptyList<Album>()
+                emptyList<Group>()
             }
         }
     }
@@ -66,10 +66,10 @@ internal class AlbumRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllAlbums(): Flow<Outcome<List<Album>>> = flow {
+    override fun getAllGroups(): Flow<Outcome<List<Group>>> = flow {
         collectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
-            .collect { response: StoreResponse<List<Album>> ->
+            .collect { response: StoreResponse<List<Group>> ->
                 transformResponseToOutcome(response, onNewData = { Outcome.loading() })
             }
     }
@@ -77,15 +77,13 @@ internal class AlbumRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAlbum(id: UUID): Flow<Outcome<Album>> = flow {
+    override fun getGroup(id: UUID): Flow<Outcome<Group>> = flow {
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
-            .collect { response: StoreResponse<Album> ->
+            .collect { response: StoreResponse<Group> ->
                 transformResponseToOutcome(response, onNewData = { Outcome.loading() })
             }
     }
-
-
 }
 
 
