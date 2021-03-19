@@ -8,7 +8,7 @@ import org.ossiaustria.lib.domain.database.entities.AbstractEntity
 import java.util.*
 
 abstract class AbstractEntityDao<IN, OUT> where  IN : AbstractEntity {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertAll(items: List<@JvmSuppressWildcards IN>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

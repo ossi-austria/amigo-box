@@ -2,6 +2,7 @@ package org.ossiaustria.lib.domain.api
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertSame
 import org.junit.Rule
@@ -31,7 +32,7 @@ class GroupApiTest : AbstractApiTest() {
     }
 
     @Test
-    fun `get should retrieve one item `() {
+    fun `GroupApi get should retrieve one item `() {
         val group = runBlocking {
             subject.get(idExisting)
         }
@@ -48,7 +49,16 @@ class GroupApiTest : AbstractApiTest() {
             assertNotNull(it.memberType)
             assertNotNull(it.groupId)
         }
+    }
 
+    @Test
+    fun `GroupApi getAll should retrieve all items `() {
+        val items = runBlocking {
+            subject.getAll()
+        }
+
+        assertNotNull(items)
+        Assert.assertEquals(items.size, 2)
     }
 
     override fun setupMockingMap(): Map<String, MockResponse> = mapOf(
@@ -56,6 +66,14 @@ class GroupApiTest : AbstractApiTest() {
             JsonMocker.group(
                 id = idExisting,
                 personsMock = listOf(JsonMocker.person(groupId = idExisting),)
+            )
+        ),
+        "groups" to MockResponse(
+            JsonMocker.createList(
+                listOf(
+                    JsonMocker.group(personsMock = listOf(JsonMocker.person())),
+                    JsonMocker.group(personsMock = listOf(JsonMocker.person()))
+                )
             )
         )
     )

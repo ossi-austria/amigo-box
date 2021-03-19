@@ -5,6 +5,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.map
 import org.ossiaustria.lib.domain.common.Outcome
 import org.ossiaustria.lib.domain.database.AbstractEntityDao
 import org.ossiaustria.lib.domain.database.entities.AbstractEntity
@@ -83,4 +84,28 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, OUT, DOMAIN : A
         )
     ).build()
 
+    protected fun withFlowCollection(
+        itemsFlow: Flow<List<OUT>>,
+        transform: (OUT) -> DOMAIN
+    ): Flow<List<DOMAIN>> {
+        return itemsFlow.map { list ->
+            try {
+                list.map { transform(it) }
+            } catch (e: Exception) {
+                Timber.e(e, "Store4 cannot read collection:")
+                emptyList<DOMAIN>()
+            }
+        }
+    }
+
+    protected fun withFlowItem(itemsFlow: Flow<OUT>, transform: (OUT) -> DOMAIN): Flow<DOMAIN> {
+        return itemsFlow.map { item ->
+            try {
+                transform(item)
+            } catch (e: Exception) {
+                Timber.e(e, "Store4 cannot read item:")
+                throw e
+            }
+        }
+    }
 }

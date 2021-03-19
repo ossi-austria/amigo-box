@@ -38,11 +38,11 @@ class DebugMockInterceptor(
 
             val mockResponse = if (mockLiveResponse == null) {
                 val matchedKeys = requestContentMap.keys.filter { uri.endsWith(it) }
-                if (matchedKeys.isEmpty()) throw IllegalStateException("No key found for url: uri")
+                if (matchedKeys.isEmpty()) throw IllegalStateException("No key found for url: $uri")
                 if (matchedKeys.size > 1) Timber.w("More than one mocking candidate found: $matchedKeys")
                 val matchedKey = matchedKeys.first()
 
-                requestContentMap[matchedKey] ?: error("No key found for url: uri")
+                requestContentMap[matchedKey] ?: error("No key found for url: $uri")
             } else {
                 mockLiveResponse
             }

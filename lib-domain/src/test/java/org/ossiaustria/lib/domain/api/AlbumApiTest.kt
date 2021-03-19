@@ -2,6 +2,7 @@ package org.ossiaustria.lib.domain.api
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertSame
 import org.junit.Rule
@@ -61,11 +62,35 @@ class AlbumApiTest : AbstractApiTest() {
 
     }
 
+    @Test
+    fun `AlbumApi getAll should retrieve all items `() {
+        val items = runBlocking {
+            subject.getAll()
+        }
+
+        assertNotNull(items)
+        Assert.assertEquals(items.size, 2)
+    }
+
     override fun setupMockingMap(): Map<String, MockResponse> = mapOf(
         "albums/$idExisting" to MockResponse(
             JsonMocker.album(
                 id = idExisting,
                 multimediaMock = listOf(JsonMocker.multimedia(albumId = idExisting),)
+            )
+        ),
+        "albums" to MockResponse(
+            JsonMocker.createList(
+                listOf(
+                    JsonMocker.album(
+                        id = idExisting,
+                        multimediaMock = listOf(JsonMocker.multimedia(albumId = idExisting),)
+                    ),
+                    JsonMocker.album(
+                        id = idExisting,
+                        multimediaMock = listOf(JsonMocker.multimedia(albumId = idExisting),)
+                    )
+                )
             )
         )
     )

@@ -58,7 +58,7 @@ internal class AlbumDaoTest : DoubleEntityDaoTest<AlbumEntity, AlbumEntityWithDa
         )
     }
 
-    override fun findBy(entity: AlbumEntity): AlbumEntityWithData {
+    override fun findById(entity: AlbumEntity): AlbumEntityWithData {
         return runBlocking { dao.findById(entity.albumId).take(1).first() }
     }
 
@@ -70,5 +70,8 @@ internal class AlbumDaoTest : DoubleEntityDaoTest<AlbumEntity, AlbumEntityWithDa
         assertThat(wrapper.album.albumId, equalTo(entity.albumId))
     }
 
+    override fun deleteById(entity: AlbumEntity) {
+        runBlocking { dao.deleteById(entity.albumId) }
+    }
 
 }

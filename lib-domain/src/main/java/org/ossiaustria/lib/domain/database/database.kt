@@ -17,6 +17,9 @@ internal interface AppDatabase {
     fun albumDao(): AlbumDao
 
     fun albumShareDao(): AlbumShareDao
+
+    fun nfcTagDao(): NfcTagDao
+
 }
 
 @Database(
@@ -28,6 +31,7 @@ internal interface AppDatabase {
         MultimediaEntity::class,
         AlbumShareEntity::class,
         AlbumEntity::class,
+        NfcTagEntity::class,
     ],
     version = 2,
     exportSchema = false
@@ -52,4 +56,5 @@ internal abstract class AppDatabaseImpl : RoomDatabase(), AppDatabase {
     abstract override fun albumDao(): AlbumDao
 
     abstract override fun albumShareDao(): AlbumShareDao
+    abstract override fun nfcTagDao(): NfcTagDao
 }
