@@ -1,5 +1,6 @@
 package org.ossiaustria.lib.domain.api
 
+import org.ossiaustria.lib.domain.models.enums.NfcTagType
 import java.util.*
 
 /**
@@ -7,6 +8,8 @@ import java.util.*
  */
 class JsonMocker {
     companion object {
+
+        fun createList(mocks: List<String>) = """[${mocks.joinToString(", ")}]"""
 
         fun group(
             id: UUID = UUID.randomUUID(),
@@ -69,6 +72,32 @@ class JsonMocker {
                 "memberType":"$memberType",
                 "groupId":"$groupId"
             }""".trim()
+
+        fun nfc(
+            id: UUID = UUID.randomUUID(),
+            creatorId: UUID = UUID.randomUUID(),
+            createdAt: Long = 0,
+            ownerId: UUID? = UUID.randomUUID(),
+            type: NfcTagType = NfcTagType.COLLECTION,
+            linkedPersonId: UUID? = UUID.randomUUID(),
+            linkedMediaId: UUID? = UUID.randomUUID(),
+            linkedAlbumId: UUID? = UUID.randomUUID(),
+        ) = """
+            {
+                "id":"$id",
+                "creatorId":"$creatorId",
+                "createdAt":$createdAt,
+                "ownerId":${ownerId.json()},
+                "type":"$type",
+                "linkedPersonId":${linkedPersonId.json()},
+                "linkedMediaId":${linkedMediaId.json()},
+                "linkedAlbumId":${linkedAlbumId.json()}
+            }""".trim()
+
+
+        fun UUID?.json(): String = if (this != null) {
+            "\"$this\""
+        } else "null"
     }
 
 }

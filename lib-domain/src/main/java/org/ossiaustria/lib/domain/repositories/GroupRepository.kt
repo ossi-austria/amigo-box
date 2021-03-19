@@ -38,7 +38,6 @@ internal class GroupRepositoryImpl(
     override suspend fun fetchOne(id: UUID): Group = groupApi.get(id)
     override suspend fun fetchAll(): List<Group> = groupApi.getAll()
 
-
     override suspend fun writeItem(item: Group) {
         try {
             groupDao.insert(item.toGroupEntity())

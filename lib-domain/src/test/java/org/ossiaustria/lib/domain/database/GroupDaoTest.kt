@@ -51,7 +51,7 @@ internal class GroupDaoTest : DoubleEntityDaoTest<GroupEntity, GroupEntityWithMe
 
 
     @Test
-    fun `insertAll should not overwrite  group items`() {
+    fun `insertAll should overwrite group items`() {
         val id1 = UUID.randomUUID()
         val id2 = UUID.randomUUID()
         val group1 = GroupEntity(id1, "1")
@@ -69,7 +69,7 @@ internal class GroupDaoTest : DoubleEntityDaoTest<GroupEntity, GroupEntityWithMe
         assertThat(findAll.size, equalTo(3))
 
         val findById = runBlocking { dao.findById(id1).take(1).first() }
-        assertThat(findById.group, equalTo(group1))
+        assertThat(findById.group, equalTo(group1b))
     }
 
     @Test
@@ -234,7 +234,7 @@ internal class GroupDaoTest : DoubleEntityDaoTest<GroupEntity, GroupEntityWithMe
         )
     }
 
-    override fun findBy(entity: GroupEntity): GroupEntityWithMembers {
+    override fun findById(entity: GroupEntity): GroupEntityWithMembers {
         return runBlocking { dao.findById(entity.groupId).take(1).first() }
     }
 
@@ -244,5 +244,9 @@ internal class GroupDaoTest : DoubleEntityDaoTest<GroupEntity, GroupEntityWithMe
 
     override fun checkSameId(wrapper: GroupEntityWithMembers, entity: GroupEntity) {
         assertThat(wrapper.group.groupId, equalTo(entity.groupId))
+    }
+
+    override fun deleteById(entity: GroupEntity) {
+        runBlocking { dao.deleteById(entity.groupId) }
     }
 }

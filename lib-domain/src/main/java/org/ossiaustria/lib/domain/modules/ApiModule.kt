@@ -6,10 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.ossiaustria.lib.domain.api.AlbumApi
-import org.ossiaustria.lib.domain.api.DebugMockInterceptor
-import org.ossiaustria.lib.domain.api.DebugMockInterceptorAdapter
-import org.ossiaustria.lib.domain.api.GroupApi
+import org.ossiaustria.lib.domain.api.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -65,6 +62,12 @@ object ApiModule {
     @Singleton
     internal fun albumApi(retrofit: Retrofit): AlbumApi {
         return retrofit.create(AlbumApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    internal fun nfcTagApi(retrofit: Retrofit): NfcTagApi {
+        return retrofit.create(NfcTagApi::class.java)
     }
 
 }

@@ -6,10 +6,11 @@ import java.util.*
 
 data class NfcTag(
     val id: UUID,
-    val creator: Person,
-    val owner: Person,
+    val creatorId: UUID,
+    val createdAt: Long = System.currentTimeMillis(),
+    val ownerId: UUID? = null,
     val type: NfcTagType,
-    val linkedPerson: Person? = null,
-    val linkedMedia: Multimedia? = null,
-    val linkedAlbum: Album? = null
+    val linkedPersonId: UUID? = null,
+    val linkedMediaId: UUID? = null,
+    val linkedAlbumId: UUID? = null,
 )
