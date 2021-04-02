@@ -2,6 +2,8 @@
 
 package org.ossiaustria.lib.domain.database
 
+import org.hamcrest.CoreMatchers
+import org.hamcrest.MatcherAssert
 import org.junit.runner.RunWith
 import org.ossiaustria.lib.domain.database.entities.MultimediaEntity
 import org.ossiaustria.lib.domain.models.enums.MultimediaType
@@ -10,7 +12,8 @@ import java.util.*
 
 
 @RunWith(RobolectricTestRunner::class)
-internal class MultimediaDaoTest : SendableDaoTest<MultimediaEntity, MultimediaDao>() {
+internal class MultimediaDaoTest :
+    SendableDaoTest<MultimediaEntity, MultimediaEntity, MultimediaDao>() {
 
     override fun init() {
         dao = db.multimediaDao()
@@ -29,14 +32,19 @@ internal class MultimediaDaoTest : SendableDaoTest<MultimediaEntity, MultimediaD
         )
     }
 
-//    @Test
-//    fun `findAll should load group`() {
-//
-//        val findAll = runBlocking { dao.findAll() }
-//
-//        val subject = findAll[0]
-//        MatcherAssert.assertThat(subject.group, CoreMatchers.not(CoreMatchers.nullValue()))
-//        MatcherAssert.assertThat(subject.group.groupId, CoreMatchers.not(CoreMatchers.nullValue()))
-//        MatcherAssert.assertThat(subject.group.name, CoreMatchers.not(CoreMatchers.nullValue()))
-//    }
+    override fun permuteEntity(entity: MultimediaEntity): MultimediaEntity {
+        return entity.copy(
+            createdAt = 101,
+            sendAt = 102
+        )
+    }
+
+    override fun checkEqual(wrapper: MultimediaEntity, entity: MultimediaEntity) {
+        MatcherAssert.assertThat(wrapper, CoreMatchers.equalTo(entity))
+    }
+
+    override fun checkSameId(wrapper: MultimediaEntity, entity: MultimediaEntity) {
+        MatcherAssert.assertThat(wrapper.id, CoreMatchers.equalTo(entity.id))
+    }
+
 }

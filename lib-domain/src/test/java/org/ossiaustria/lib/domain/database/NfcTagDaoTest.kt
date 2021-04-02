@@ -40,15 +40,15 @@ internal class NfcTagDaoTest : DoubleEntityDaoTest<NfcTagEntity, NfcTagEntity, N
         return runBlocking { dao.findById(entity.nfcTagId).take(1).first() }
     }
 
+    override fun deleteById(entity: NfcTagEntity) {
+        runBlocking { dao.deleteById(entity.nfcTagId) }
+    }
+
     override fun checkEqual(wrapper: NfcTagEntity, entity: NfcTagEntity) {
         MatcherAssert.assertThat(wrapper, CoreMatchers.equalTo(entity))
     }
 
     override fun checkSameId(wrapper: NfcTagEntity, entity: NfcTagEntity) {
         MatcherAssert.assertThat(wrapper.nfcTagId, CoreMatchers.equalTo(entity.nfcTagId))
-    }
-
-    override fun deleteById(entity: NfcTagEntity) {
-        runBlocking { dao.deleteById(entity.nfcTagId) }
     }
 }

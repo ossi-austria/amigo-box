@@ -44,8 +44,8 @@ suspend fun <T> FlowCollector<Outcome<T>>.transformResponseToOutcome(
     }
 }
 
-abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, OUT, DOMAIN : Any>(
-    dao: AbstractEntityDao<ENTITY, OUT>
+abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN : Any>(
+    dao: AbstractEntityDao<ENTITY, WRAPPER>
 ) {
 
     protected abstract suspend fun writeItem(item: DOMAIN)
@@ -85,8 +85,8 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, OUT, DOMAIN : A
     ).build()
 
     protected fun withFlowCollection(
-        itemsFlow: Flow<List<OUT>>,
-        transform: (OUT) -> DOMAIN
+        itemsFlow: Flow<List<WRAPPER>>,
+        transform: (WRAPPER) -> DOMAIN
     ): Flow<List<DOMAIN>> {
         return itemsFlow.map { list ->
             try {
@@ -98,7 +98,10 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, OUT, DOMAIN : A
         }
     }
 
-    protected fun withFlowItem(itemsFlow: Flow<OUT>, transform: (OUT) -> DOMAIN): Flow<DOMAIN> {
+    protected fun withFlowItem(
+        itemsFlow: Flow<WRAPPER>,
+        transform: (WRAPPER) -> DOMAIN
+    ): Flow<DOMAIN> {
         return itemsFlow.map { item ->
             try {
                 transform(item)

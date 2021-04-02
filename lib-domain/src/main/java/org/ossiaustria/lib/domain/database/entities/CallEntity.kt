@@ -36,3 +36,19 @@ fun CallEntity.toCall(): Call {
         finishedAt = this.finishedAt,
     )
 }
+
+fun Call.toCallEntity(): CallEntity {
+
+    return CallEntity(
+        id = this.id,
+        createdAt = this.createdAt,
+        sendAt = this.sendAt,
+        retrievedAt = this.retrievedAt,
+        senderId = this.senderId,
+        receiverId = this.receiverId,
+
+        callType = this.callType,
+        startedAt = this.startedAt,
+        finishedAt = this.finishedAt,
+    )
+}

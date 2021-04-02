@@ -9,7 +9,7 @@ import java.util.*
 data class MessageEntity(
     @PrimaryKey
     override val id: UUID,
-    override val createdAt: Long,
+    override val createdAt: Long = System.currentTimeMillis(),
     override val sendAt: Long? = null,
     override val retrievedAt: Long? = null,
     override val senderId: UUID,
@@ -21,6 +21,19 @@ data class MessageEntity(
 internal fun MessageEntity.toMessage(): Message {
 
     return Message(
+        id = this.id,
+        createdAt = this.createdAt,
+        sendAt = this.sendAt,
+        retrievedAt = this.retrievedAt,
+        senderId = this.senderId,
+        receiverId = this.receiverId,
+        text = this.text
+    )
+}
+
+internal fun Message.toMessageEntity(): MessageEntity {
+
+    return MessageEntity(
         id = this.id,
         createdAt = this.createdAt,
         sendAt = this.sendAt,

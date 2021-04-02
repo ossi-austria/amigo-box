@@ -8,9 +8,10 @@ import java.util.*
 
 @Entity(tableName = "multimedias")
 data class MultimediaEntity(
+
     @PrimaryKey
     override val id: UUID,
-    override val createdAt: Long,
+    override val createdAt: Long = System.currentTimeMillis(),
     override val sendAt: Long? = null,
     override val retrievedAt: Long? = null,
     override val senderId: UUID,
