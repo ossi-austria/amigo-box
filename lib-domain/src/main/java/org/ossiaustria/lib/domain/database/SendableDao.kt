@@ -1,32 +1,19 @@
 package org.ossiaustria.lib.domain.database
 
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import kotlinx.coroutines.flow.Flow
 import org.ossiaustria.lib.domain.database.entities.SendableEntity
 import java.util.*
 
-abstract class SendableDao<T> where  T : SendableEntity {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract suspend fun insertAll(items: List<@JvmSuppressWildcards T>)
+abstract class SendableDao<ENTITY, WRAPPER> :
+    AbstractEntityDao<ENTITY, WRAPPER>() where  ENTITY : SendableEntity {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insert(item: T)
+    // must be overridden!
+    abstract fun findAllOldest(): Flow<List<@JvmSuppressWildcards WRAPPER>>
 
-    @Delete
-    abstract suspend fun delete(item: T)
+    // must be overridden!
+    abstract fun findBySender(id: UUID): Flow<List<@JvmSuppressWildcards WRAPPER>>
 
-    abstract suspend fun deleteAll()
-
-    abstract suspend fun findAll(): List<@JvmSuppressWildcards T>
-
-    abstract suspend fun findAllOldest(): List<@JvmSuppressWildcards T>
-
-    abstract suspend fun findById(id: UUID): T
-
-    abstract suspend fun findBySender(id: UUID): List<@JvmSuppressWildcards T>
-
-    abstract suspend fun findByReceiver(id: UUID): List<@JvmSuppressWildcards T>
-
+    // must be overridden!
+    abstract fun findByReceiver(id: UUID): Flow<List<@JvmSuppressWildcards WRAPPER>>
 
 }

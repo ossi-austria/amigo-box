@@ -13,7 +13,6 @@ import org.ossiaustria.lib.domain.models.enums.MembershipType
 import org.robolectric.RobolectricTestRunner
 import java.util.*
 
-
 @RunWith(RobolectricTestRunner::class)
 internal class PersonDaoTest : DoubleEntityDaoTest<PersonEntity, PersonEntity, PersonDao>() {
 

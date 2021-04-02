@@ -1,13 +1,11 @@
 package org.ossiaustria.lib.domain.repositories
 
-import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.After
 import org.ossiaustria.lib.commons.TestDispatcherProvider
-import org.ossiaustria.lib.domain.api.AlbumApi
 import org.ossiaustria.lib.domain.common.Outcome
 import org.ossiaustria.lib.domain.database.AppDatabaseImpl
 import java.util.concurrent.CountDownLatch
@@ -19,12 +17,8 @@ internal open class AbstractRepositoryTest<ENTITY, DOMAIN> {
 
     lateinit var db: AppDatabaseImpl
 
-
-    val dispatcher = TestCoroutineDispatcher()
+    private val dispatcher = TestCoroutineDispatcher()
     val testDispatcherProvider = TestDispatcherProvider(dispatcher)
-
-    @RelaxedMockK
-    lateinit var mockAlbumApi: AlbumApi
 
     @After
     fun tearDown() {
@@ -75,5 +69,4 @@ internal open class AbstractRepositoryTest<ENTITY, DOMAIN> {
         assert(outcome2.value!!.size == remoteList.size)
         job.cancelAndJoin()
     }
-
 }
