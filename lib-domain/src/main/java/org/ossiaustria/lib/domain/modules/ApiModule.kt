@@ -70,4 +70,10 @@ object ApiModule {
         return retrofit.create(NfcTagApi::class.java)
     }
 
+    @Provides
+    @Singleton
+    internal fun personApi(retrofit: Retrofit): PersonApi {
+        return retrofit.create(PersonApi::class.java)
+    }
+
 }

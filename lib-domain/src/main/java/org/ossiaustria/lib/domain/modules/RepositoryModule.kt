@@ -8,14 +8,12 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.AlbumApi
 import org.ossiaustria.lib.domain.api.GroupApi
+import org.ossiaustria.lib.domain.api.PersonApi
 import org.ossiaustria.lib.domain.database.AlbumDao
 import org.ossiaustria.lib.domain.database.GroupDao
 import org.ossiaustria.lib.domain.database.MultimediaDao
 import org.ossiaustria.lib.domain.database.PersonDao
-import org.ossiaustria.lib.domain.repositories.AlbumRepository
-import org.ossiaustria.lib.domain.repositories.AlbumRepositoryImpl
-import org.ossiaustria.lib.domain.repositories.GroupRepository
-import org.ossiaustria.lib.domain.repositories.GroupRepositoryImpl
+import org.ossiaustria.lib.domain.repositories.*
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
@@ -43,5 +41,16 @@ object RepositoryModule {
         dispatcherProvider: DispatcherProvider
     ): GroupRepository {
         return GroupRepositoryImpl(groupApi, groupDao, personDao, dispatcherProvider)
+    }
+
+    @PublishedApi
+    @Provides
+    @ActivityRetainedScoped
+    internal fun personRepository(
+        personApi: PersonApi,
+        personDao: PersonDao,
+        dispatcherProvider: DispatcherProvider
+    ): PersonRepository {
+        return PersonRepositoryImpl(personApi, personDao, dispatcherProvider)
     }
 }
