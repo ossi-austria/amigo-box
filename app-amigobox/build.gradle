@@ -71,6 +71,7 @@ android {
 dependencies {
     implementation project(":lib-commons")
     implementation project(":lib-domain")
+    implementation project(":lib-nfc")
     implementation(Libs.appcompat)
     implementation(Libs.Compose.material)
     implementation(Libs.material)

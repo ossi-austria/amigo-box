@@ -1,5 +1,5 @@
-import org.ossiaustria.dependencies.Libs
 import org.ossiaustria.dependencies.AndroidVersion
+import org.ossiaustria.dependencies.Libs
 
 plugins {
     id 'com.android.library'
@@ -10,21 +10,22 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
     id 'jacoco'
     id 'org.barfuin.gradle.jacocolog' version '1.2.4'
+    id "org.jlleitschuh.gradle.ktlint" version '10.0.0'
 }
 
 android {
 
     compileSdkVersion AndroidVersion.compileSdk
-            buildToolsVersion AndroidVersion.buildTools
+    buildToolsVersion AndroidVersion.buildTools
 
-            defaultConfig {
-                minSdkVersion AndroidVersion.minSdk
-                        targetSdkVersion AndroidVersion.targetSdk
-                        versionCode 1
-                versionName "0.0.1"
-                testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-                testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
-            }
+    defaultConfig {
+        minSdkVersion AndroidVersion.minSdk
+        targetSdkVersion AndroidVersion.targetSdk
+        versionCode 1
+        versionName "0.0.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
+    }
 
     buildTypes {
         debug {
@@ -38,7 +39,7 @@ android {
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
-                targetCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     packagingOptions {
@@ -85,6 +86,11 @@ dependencies {
     kapt(Libs.hiltAndroidCompiler)
     kapt(Libs.hiltCompiler)
 
+    // Android, material & friends
+    implementation(Libs.timber)
+    implementation(Libs.appcompat)
+    implementation(Libs.Compose.material)
+
     // Testing
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterParams)
@@ -99,7 +105,7 @@ dependencies {
     testImplementation(Libs.Test.test)
     testImplementation(Libs.Test.testExt)
     implementation(Libs.Test.coroutinesTest)
-    testImplementation(Libs.Test.mockkAndroid)
+    testImplementation(Libs.Test.mockk)
     androidTestImplementation(Libs.Test.mockkAndroid)
 
     androidTestImplementation(Libs.Test.espressoCore)
