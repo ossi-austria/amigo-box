@@ -16,6 +16,7 @@ build & test:
   stage: build
   script:
     - ./gradlew --console=plain assembleDebug assembleDebugUnitTest
+    - ./gradlew --console=plain ktlintCheck
     - ./gradlew --info -Pci --console=plain testDebug
     - ./gradlew --console=plain lintDebug :app-amigobox:jacocoTestReportDebug
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
