@@ -84,6 +84,10 @@ object Libs {
     const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:$navigation_version"
     const val navigationTest = "androidx.navigation:navigation-testing:$navigation_version"
 
+
+    const val permissions = "com.nabinbhandari.android:permissions:3.8"
+
+
     // Retrofit for HTTP and Json wrapping
     const val retrofit_version = "2.9.0"
     const val retrofit = "com.squareup.retrofit2:retrofit:$retrofit_version"

@@ -35,32 +35,8 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    packagingOptions {
-        exclude "META-INF/AL2.0"
-        exclude "META-INF/LGPL2.1"
-        exclude "META-INF/LICENSE*"
-    }
-
-    lintOptions {
-        checkReleaseBuilds true
-        abortOnError true
-        checkAllWarnings true
-        explainIssues true
-        ignoreWarnings false
-        quiet false
-    }
-
-    kapt {
-        correctErrorTypes true
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
+    kapt { correctErrorTypes true }
+    kotlinOptions { jvmTarget = '1.8' }
 }
 
 dependencies {

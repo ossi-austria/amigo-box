@@ -1,5 +1,6 @@
 package org.ossiaustria.amigobox
 
+import android.Manifest
 import android.app.PendingIntent
 import android.content.Intent
 import android.nfc.NfcAdapter
@@ -8,12 +9,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.facebook.react.modules.core.PermissionListener
+import com.nabinbhandari.android.permissions.PermissionHandler
+import com.nabinbhandari.android.permissions.Permissions
 import dagger.hilt.android.AndroidEntryPoint
+import org.jitsi.meet.sdk.JitsiMeetActivityInterface
+
 import org.ossiaustria.lib.nfc.NfcHandler
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), JitsiMeetActivityInterface{
 
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
@@ -80,5 +86,20 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, nfcInfo?.message, Toast.LENGTH_SHORT).show()
         // UID of NFC-Tag ist stored in nfcHandler.nfcTagId
         Toast.makeText(this, nfcInfo?.tagId, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun requestPermissions(p0: Array<out String>?, p1: Int, p2: PermissionListener?) {
+        val permissions =
+            arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.INTERNET, Manifest.permission.MODIFY_AUDIO_SETTINGS)
+        Permissions.check(
+            this /*context*/,
+            permissions,
+            null /*rationale*/,
+            null /*options*/,
+            object : PermissionHandler() {
+                override fun onGranted() {
+                    Toast.makeText(this@MainActivity, "Premission granted", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 }
