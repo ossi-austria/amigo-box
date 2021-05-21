@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.AlbumShareApi
-import org.ossiaustria.lib.domain.common.Outcome
+import org.ossiaustria.lib.domain.common.Effect
 import org.ossiaustria.lib.domain.database.AlbumShareDao
 import org.ossiaustria.lib.domain.database.entities.AlbumShareEntity
 import org.ossiaustria.lib.domain.database.entities.AlbumShareEntityWithData
@@ -24,11 +24,11 @@ import java.util.*
 
 interface AlbumShareRepository {
 
-    fun getAllAlbumShares(): Flow<Outcome<List<AlbumShare>>>
+    fun getAllAlbumShares(): Flow<Effect<List<AlbumShare>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getAlbumShare(id: UUID): Flow<Outcome<AlbumShare>>
+    fun getAlbumShare(id: UUID): Flow<Effect<AlbumShare>>
 }
 
 internal class AlbumShareRepositoryImpl(
@@ -62,22 +62,22 @@ internal class AlbumShareRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllAlbumShares(): Flow<Outcome<List<AlbumShare>>> = flow {
+    override fun getAllAlbumShares(): Flow<Effect<List<AlbumShare>>> = flow {
         collectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<AlbumShare>> ->
-                transformResponseToOutcome(response, onNewData = { Outcome.loading() })
+                transformResponseToOutcome(response, onNewData = { Effect.loading() })
             }
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAlbumShare(id: UUID): Flow<Outcome<AlbumShare>> = flow {
+    override fun getAlbumShare(id: UUID): Flow<Effect<AlbumShare>> = flow {
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<AlbumShare> ->
-                transformResponseToOutcome(response, onNewData = { Outcome.loading() })
+                transformResponseToOutcome(response, onNewData = { Effect.loading() })
             }
     }
 }

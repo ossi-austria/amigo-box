@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.ossiaustria.amigobox.R
@@ -16,9 +13,9 @@ import org.ossiaustria.amigobox.R
 @AndroidEntryPoint
 class LoadingFragment : Fragment() {
 
-    private val viewModel by viewModels<LoadingViewModel>()
 
-    lateinit var message: TextView
+    lateinit var registerButton: Button
+    lateinit var loginButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,20 +26,18 @@ class LoadingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val button = view.findViewById<Button>(R.id.button)
-        message = view.findViewById(R.id.message)
+        registerButton = view.findViewById(R.id.registerButton)
+        loginButton = view.findViewById(R.id.loginButton)
 
-        // observer
-        viewModel.liveUserLogin.observe(viewLifecycleOwner) { user: String ->
-            message.text = user
+
+        registerButton.setOnClickListener {
+            view.findNavController()
+                .navigate(LoadingFragmentDirections.actionLoadingFragmentToRegisterFragment())
+        }
+
+        loginButton.setOnClickListener {
             view.findNavController()
                 .navigate(LoadingFragmentDirections.actionLoadingFragmentToLoginFragment())
         }
-
-        // init logic
-        button.setOnClickListener {
-            viewModel.doFancyHeavyStuffOnBackground()
-        }
     }
-
 }

@@ -20,7 +20,8 @@ object Libs {
     }
 
     const val core_ktx_version = "1.3.2"
-    const val coreKtx = "androidx.core:core-ktx:$core_ktx_version"
+
+    //    const val coreKtx = "androidx.core:core-ktx:$core_ktx_version"
     const val coroutines_version = "1.4.2"
     const val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     const val coroutinesAndroid =
@@ -107,6 +108,10 @@ object Libs {
 
     const val timber_version = "4.7.1"
     const val timber = "com.jakewharton.timber:timber:$timber_version"
+
+    object Security {
+        const val crypto = "androidx.security:security-crypto:1.0.0"
+    }
 
     object Test {
         const val xtest_version = "1.3.0"

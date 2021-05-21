@@ -4,6 +4,12 @@
 * For Windows: install Putty + Putty Keygen
 * create a new key (with passphrase) and add to gitlab.com/-/profile/keys
 
+## Setup local env
+
+Add the API_ENDPOINT pointing to your local development server:
+
+~/.gradle/gradle.properties
+
 
 # Tutorials
 

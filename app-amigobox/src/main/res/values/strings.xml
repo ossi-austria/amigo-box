@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">OSSI AmigoBox</string>
+
+    <string name="onboarding_login_label">Login</string>
+    <string name="onboarding_register_label">Register</string>
+    <string name="onboarding_username_label">Email</string>
+    <string name="onboarding_password_label">Password</string>
+    <string name="onboarding_fullname_label">Password</string>
+
+
 </resources>

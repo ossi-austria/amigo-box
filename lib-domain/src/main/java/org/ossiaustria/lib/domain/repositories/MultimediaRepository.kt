@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.MultimediaApi
-import org.ossiaustria.lib.domain.common.Outcome
+import org.ossiaustria.lib.domain.common.Effect
 import org.ossiaustria.lib.domain.database.MultimediaDao
 import org.ossiaustria.lib.domain.database.entities.MultimediaEntity
 import org.ossiaustria.lib.domain.database.entities.toMultimedia
@@ -23,11 +23,11 @@ import java.util.*
 
 interface MultimediaRepository {
 
-    fun getAllMultimedias(): Flow<Outcome<List<Multimedia>>>
+    fun getAllMultimedias(): Flow<Effect<List<Multimedia>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getMultimedia(id: UUID): Flow<Outcome<Multimedia>>
+    fun getMultimedia(id: UUID): Flow<Effect<Multimedia>>
 }
 
 internal class MultimediaRepositoryImpl(
@@ -62,22 +62,22 @@ internal class MultimediaRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllMultimedias(): Flow<Outcome<List<Multimedia>>> = flow {
+    override fun getAllMultimedias(): Flow<Effect<List<Multimedia>>> = flow {
         collectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<Multimedia>> ->
-                transformResponseToOutcome(response, onNewData = { Outcome.loading() })
+                transformResponseToOutcome(response, onNewData = { Effect.loading() })
             }
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getMultimedia(id: UUID): Flow<Outcome<Multimedia>> = flow {
+    override fun getMultimedia(id: UUID): Flow<Effect<Multimedia>> = flow {
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<Multimedia> ->
-                transformResponseToOutcome(response, onNewData = { Outcome.loading() })
+                transformResponseToOutcome(response, onNewData = { Effect.loading() })
             }
     }
 }

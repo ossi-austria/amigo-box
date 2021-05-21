@@ -1,37 +1,41 @@
 package org.ossiaustria.lib.domain.repositories
 
-import com.dropbox.android.external.store4.*
+import com.dropbox.android.external.store4.Fetcher
+import com.dropbox.android.external.store4.SourceOfTruth
+import com.dropbox.android.external.store4.Store
+import com.dropbox.android.external.store4.StoreBuilder
+import com.dropbox.android.external.store4.StoreResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.map
-import org.ossiaustria.lib.domain.common.Outcome
+import org.ossiaustria.lib.domain.common.Effect
 import org.ossiaustria.lib.domain.database.AbstractEntityDao
 import org.ossiaustria.lib.domain.database.entities.AbstractEntity
 import timber.log.Timber
 import java.util.*
 
-suspend fun <T> FlowCollector<Outcome<T>>.transformResponseToOutcome(
+suspend fun <T> FlowCollector<Effect<T>>.transformResponseToOutcome(
     response: StoreResponse<T>,
-    onNewData: () -> Outcome<T>
+    onNewData: () -> Effect<T>
 ) {
     when (response) {
         is StoreResponse.Loading -> {
             Timber.d("[Store 4] Loading from ${response.origin}")
-            emit(Outcome.loading())
+            emit(Effect.loading())
         }
 
         is StoreResponse.Error -> {
             Timber.d("[Store 4] Error from ${response.origin}")
             emit(
-                Outcome.failure(response.errorMessageOrNull() ?: "Store 4 Error")
+                Effect.failure(response.errorMessageOrNull() ?: "Store 4 Error")
             )
         }
         is StoreResponse.Data -> {
             val data = response.value
             Timber.d("[Store 4] Data from ${response.origin}")
-            emit(Outcome.success(data))
+            emit(Effect.success(data))
         }
         is StoreResponse.NoNewData -> {
             Timber.d("[Store 4] NoNewData from ${response.origin}")

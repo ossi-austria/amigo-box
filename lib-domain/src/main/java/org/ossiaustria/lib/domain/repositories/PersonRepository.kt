@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.PersonApi
-import org.ossiaustria.lib.domain.common.Outcome
+import org.ossiaustria.lib.domain.common.Effect
 import org.ossiaustria.lib.domain.database.PersonDao
 import org.ossiaustria.lib.domain.database.entities.PersonEntity
 import org.ossiaustria.lib.domain.database.entities.toPerson
@@ -23,11 +23,11 @@ import java.util.*
 
 interface PersonRepository {
 
-    fun getAllPersons(): Flow<Outcome<List<Person>>>
+    fun getAllPersons(): Flow<Effect<List<Person>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getPerson(id: UUID): Flow<Outcome<Person>>
+    fun getPerson(id: UUID): Flow<Effect<Person>>
 
 }
 
@@ -62,22 +62,22 @@ internal class PersonRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllPersons(): Flow<Outcome<List<Person>>> = flow {
+    override fun getAllPersons(): Flow<Effect<List<Person>>> = flow {
         collectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<Person>> ->
-                transformResponseToOutcome(response, onNewData = { Outcome.loading() })
+                transformResponseToOutcome(response, onNewData = { Effect.loading() })
             }
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getPerson(id: UUID): Flow<Outcome<Person>> = flow {
+    override fun getPerson(id: UUID): Flow<Effect<Person>> = flow {
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<Person> ->
-                transformResponseToOutcome(response, onNewData = { Outcome.loading() })
+                transformResponseToOutcome(response, onNewData = { Effect.loading() })
             }
     }
 }
