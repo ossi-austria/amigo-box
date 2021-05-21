@@ -1,12 +1,17 @@
 package org.ossiaustria.lib.domain.repositories
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.After
 import org.ossiaustria.lib.commons.TestDispatcherProvider
-import org.ossiaustria.lib.domain.common.Outcome
+import org.ossiaustria.lib.domain.common.Effect
 import org.ossiaustria.lib.domain.database.AppDatabaseImpl
 import java.util.concurrent.CountDownLatch
 
@@ -29,29 +34,28 @@ internal open class AbstractRepositoryTest<ENTITY, DOMAIN> {
     protected suspend fun testAllStates(
         daoList: List<ENTITY>,
         remoteList: List<DOMAIN>,
-        flowList: Flow<Outcome<List<DOMAIN>>>
+        flowList: Flow<Effect<List<DOMAIN>>>
     ) = coroutineScope {
         val firstResultLatch = CountDownLatch(1)
         val secondResultLatch = CountDownLatch(1)
         val thirdResultLatch = CountDownLatch(1)
 
-        var results: MutableList<Outcome<List<DOMAIN>>>? = null
+        var results: MutableList<Effect<List<DOMAIN>>>? = null
 
         var resultCounter = 0
-        val job = async(testDispatcherProvider.io()) {
-            flowList
-                .collect { outcome: Outcome<List<DOMAIN>> ->
-                    if (results.isNullOrEmpty()) {
-                        results = mutableListOf()
-                    }
-                    results?.add(outcome)
-                    resultCounter += 1
-                    when (resultCounter) {
-                        1 -> firstResultLatch.countDown()
-                        2 -> secondResultLatch.countDown()
-                        3 -> thirdResultLatch.countDown()
-                    }
+        val job = async(dispatcher) {
+            flowList.collect { effect: Effect<List<DOMAIN>> ->
+                if (results.isNullOrEmpty()) {
+                    results = mutableListOf()
                 }
+                results?.add(effect)
+                resultCounter += 1
+                when (resultCounter) {
+                    1 -> firstResultLatch.countDown()
+                    2 -> secondResultLatch.countDown()
+                    3 -> thirdResultLatch.countDown()
+                }
+            }
         }
 
         firstResultLatch.await()

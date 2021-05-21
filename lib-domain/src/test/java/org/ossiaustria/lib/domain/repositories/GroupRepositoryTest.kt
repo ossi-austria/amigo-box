@@ -12,13 +12,13 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.ossiaustria.lib.domain.EntityMocks
 import org.ossiaustria.lib.domain.api.GroupApi
 import org.ossiaustria.lib.domain.database.AppDatabaseImpl
 import org.ossiaustria.lib.domain.database.GroupDao
 import org.ossiaustria.lib.domain.database.PersonDao
 import org.ossiaustria.lib.domain.database.entities.GroupEntity
 import org.ossiaustria.lib.domain.models.Group
-import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.models.enums.MembershipType
 import org.robolectric.RobolectricTestRunner
 import java.util.*
@@ -63,15 +63,15 @@ internal class GroupRepositoryTest : AbstractRepositoryTest<GroupEntity, Group>(
             val remoteList = listOf(
                 Group(
                     groupId1, "groupId1", listOf(
-                        mockPerson(centerPerson, groupId1, MembershipType.CENTER),
-                        mockPerson(person2, groupId1, MembershipType.MEMBER),
+                        EntityMocks.person(centerPerson, groupId1, MembershipType.CENTER),
+                        EntityMocks.person(person2, groupId1, MembershipType.MEMBER),
                     )
                 ),
                 Group(
                     groupId2, "groupId2",
                     listOf(
-                        mockPerson(person2, groupId2, MembershipType.ADMIN),
-                        mockPerson(person3, groupId2, MembershipType.MEMBER),
+                        EntityMocks.person(person2, groupId2, MembershipType.ADMIN),
+                        EntityMocks.person(person3, groupId2, MembershipType.MEMBER),
                     )
                 ),
             )
@@ -87,19 +87,4 @@ internal class GroupRepositoryTest : AbstractRepositoryTest<GroupEntity, Group>(
             testAllStates(daoList, remoteList, subject.getAllGroups())
         }
     }
-
-    private fun mockPerson(
-        personId: UUID,
-        groupId: UUID,
-        memberType: MembershipType = MembershipType.MEMBER
-    ): Person {
-        return Person(
-            id = personId,
-            name = "name",
-            email = "email",
-            memberType = memberType,
-            groupId = groupId
-        )
-    }
-
 }

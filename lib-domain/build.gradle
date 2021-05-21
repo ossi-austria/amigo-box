@@ -79,7 +79,7 @@ dependencies {
     implementation(Libs.timber)
     implementation(Libs.appcompat)
     implementation(Libs.Compose.material)
-
+    implementation Libs.Security.crypto
     // retrofit & web
     api(Libs.retrofit)
     implementation(Libs.retrofitJson)

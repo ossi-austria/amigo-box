@@ -17,6 +17,14 @@ data class MockResponse(
     val delay: Long = DELAY_DEFAULT
 )
 
+interface MockInterceptor : Interceptor
+
+class NoopMockInterceptor : MockInterceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        return chain.proceed(chain.request())
+    }
+}
+
 /**
  * This will help us to test our networking code while a particular API is not implemented
  * yet on Backend side.
@@ -24,7 +32,7 @@ data class MockResponse(
 class DebugMockInterceptor(
     private val requestContentMap: Map<String, MockResponse>,
     private val debugMockInterceptorAdapter: DebugMockInterceptorAdapter? = null
-) : Interceptor {
+) : MockInterceptor {
 
     companion object {
         const val DELAY_DEFAULT = 100L

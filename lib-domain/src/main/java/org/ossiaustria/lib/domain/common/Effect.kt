@@ -5,7 +5,7 @@ package org.ossiaustria.lib.domain.common
  *
  * It can be loading, success or failure
  */
-sealed class Outcome<out T>(
+sealed class Effect<out T>(
     private val status: Int,
     val value: T?
 ) {
@@ -22,6 +22,11 @@ sealed class Outcome<out T>(
             else -> value
         }
 
+    fun get(): T =
+        when {
+            else -> value!!
+        }
+
     fun exceptionOrNull(): Throwable? =
         when (this) {
             is Failure<*> -> throwable
@@ -29,7 +34,7 @@ sealed class Outcome<out T>(
         }
 
     /**
-     * Returns a string `Success(v)` if this instance represents [success][Outcome.isSuccess]
+     * Returns a string `Success(v)` if this instance represents [success][Effect.isSuccess]
      * where `v` is a string representation of the value or a string `Failure(x)` if
      * it is [failure][isFailure] where `x` is a string representation of the exception.
      */
@@ -51,31 +56,31 @@ sealed class Outcome<out T>(
          */
         @Suppress("INAPPLICABLE_JVM_NAME")
         @JvmName("success")
-        fun <T> success(value: T): Outcome<T> = Success(value)
-
+        inline fun <T> success(value: T): Effect<T> = Success(value)
 
         @Suppress("INAPPLICABLE_JVM_NAME")
         @JvmName("success")
-        fun <T> loading(): Outcome<T> = Loading()
+        fun <T> loading(): Effect<T> = Loading()
 
         /**
          * Returns an instance that encapsulates the given [Throwable] [exception] as failure.
          */
         @Suppress("INAPPLICABLE_JVM_NAME")
         @JvmName("failure")
-        fun <T> failure(exception: Throwable): Outcome<T> =
+        fun <T> failure(exception: Throwable): Effect<T> =
             Failure(exception.message ?: "Unknown exception", exception)
 
-        fun <T> failure(message: String): Outcome<T> =
+        fun <T> failure(message: String): Effect<T> =
             Failure(message, null)
     }
 
 
-    class Success<out T> internal constructor(value: T) : Outcome<T>(STATUS_SUCCESS, value)
-    class Loading<out T> internal constructor() : Outcome<T>(STATUS_LOADING, null)
-    class Failure<out T> internal constructor(
+    class Success<out T> constructor(value: T) : Effect<T>(STATUS_SUCCESS, value)
+    class Loading<out T> : Effect<T>(STATUS_LOADING, null)
+    class Failure<out T> constructor(
         val failureCause: String,
-        val throwable: Throwable? = null, ) : Outcome<T>(STATUS_ERROR, null)
+        val throwable: Throwable? = null,
+    ) : Effect<T>(STATUS_ERROR, null)
 
 }
 
@@ -86,8 +91,8 @@ sealed class Outcome<out T>(
  * add some exception-augmenting logic here (if needed).
  */
 @PublishedApi
-internal fun Outcome<*>.throwOnFailure() {
-    if (this is Outcome.Failure && throwable != null) throw throwable
+internal fun Effect<*>.throwOnFailure() {
+    if (this is Effect.Failure && throwable != null) throw throwable
 }
 
 /**
@@ -96,11 +101,11 @@ internal fun Outcome<*>.throwOnFailure() {
  */
 
 @Suppress("unused")
-inline fun <R> runCatching(block: () -> R): Outcome<R> {
+inline fun <R> runCatching(block: () -> R): Effect<R> {
     return try {
-        Outcome.success(block())
+        Effect.success(block())
     } catch (e: Throwable) {
-        Outcome.failure(e)
+        Effect.failure(e)
     }
 }
 
@@ -110,24 +115,24 @@ inline fun <R> runCatching(block: () -> R): Outcome<R> {
  */
 
 @Suppress("unused")
-inline fun <T, R> T.runCatching(block: T.() -> R): Outcome<R> {
+inline fun <T, R> T.runCatching(block: T.() -> R): Effect<R> {
     return try {
-        Outcome.success(block())
+        Effect.success(block())
     } catch (e: Throwable) {
-        Outcome.failure(e)
+        Effect.failure(e)
     }
 }
 
 // -- extensions ---
 
 /**
- * Returns the encapsulated value if this instance represents [success][Outcome.isSuccess] or throws the encapsulated [Throwable] exception
- * if it is [failure][Outcome.isFailure].
+ * Returns the encapsulated value if this instance represents [success][Effect.isSuccess] or throws the encapsulated [Throwable] exception
+ * if it is [failure][Effect.isFailure].
  *
  * This function is a shorthand for `getOrElse { throw it }` (see [getOrElse]).
  */
 
-fun <T> Outcome<T>.getOrThrow(): T? {
+fun <T> Effect<T>.getOrThrow(): T? {
     throwOnFailure()
     return value
 }

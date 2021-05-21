@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.NfcTagApi
-import org.ossiaustria.lib.domain.common.Outcome
+import org.ossiaustria.lib.domain.common.Effect
 import org.ossiaustria.lib.domain.database.NfcTagDao
 import org.ossiaustria.lib.domain.database.entities.NfcTagEntity
 import org.ossiaustria.lib.domain.database.entities.toNfcTag
@@ -23,11 +23,11 @@ import java.util.*
 
 interface NfcTagRepository {
 
-    fun getAllNfcTags(): Flow<Outcome<List<NfcTag>>>
+    fun getAllNfcTags(): Flow<Effect<List<NfcTag>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getNfcTag(id: UUID): Flow<Outcome<NfcTag>>
+    fun getNfcTag(id: UUID): Flow<Effect<NfcTag>>
 
 }
 
@@ -63,22 +63,22 @@ internal class NfcTagRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllNfcTags(): Flow<Outcome<List<NfcTag>>> = flow {
+    override fun getAllNfcTags(): Flow<Effect<List<NfcTag>>> = flow {
         collectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<NfcTag>> ->
-                transformResponseToOutcome(response, onNewData = { Outcome.loading() })
+                transformResponseToOutcome(response, onNewData = { Effect.loading() })
             }
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getNfcTag(id: UUID): Flow<Outcome<NfcTag>> = flow {
+    override fun getNfcTag(id: UUID): Flow<Effect<NfcTag>> = flow {
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<NfcTag> ->
-                transformResponseToOutcome(response, onNewData = { Outcome.loading() })
+                transformResponseToOutcome(response, onNewData = { Effect.loading() })
             }
     }
 }

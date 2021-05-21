@@ -32,6 +32,7 @@ android {
             applicationIdSuffix ".debug"
             minifyEnabled false
             testCoverageEnabled true
+            buildConfigField "String", "API_ENDPOINT", "\"API_ENDPOINT\""
         }
         release {
             minifyEnabled true
@@ -84,6 +85,9 @@ dependencies {
 
     implementation(Libs.coroutinesAndroid)
     implementation(Libs.coroutinesCore)
+    implementation(Libs.Lifecycle.livedata)
+    implementation(Libs.Lifecycle.livedataKtx)
+    implementation(Libs.Lifecycle.lifecycleKtx)
 
     implementation(Libs.navigationRuntimeKtx)
     implementation(Libs.navigationFragmentKtx)
@@ -109,7 +113,7 @@ dependencies {
     implementation(Libs.Test.coroutinesTest)
     testImplementation(Libs.Test.coroutinesTest)
     testImplementation(Libs.Lifecycle.coreTesting)
-    testImplementation(Libs.Test.mockkAndroid)
+    testImplementation(Libs.Test.mockk)
     androidTestImplementation(Libs.Test.mockkAndroid)
 
     androidTestImplementation(Libs.Test.espressoCore)

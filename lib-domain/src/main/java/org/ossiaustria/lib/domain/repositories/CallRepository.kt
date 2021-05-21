@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.CallApi
-import org.ossiaustria.lib.domain.common.Outcome
+import org.ossiaustria.lib.domain.common.Effect
 import org.ossiaustria.lib.domain.database.CallDao
 import org.ossiaustria.lib.domain.database.entities.CallEntity
 import org.ossiaustria.lib.domain.database.entities.toCall
@@ -23,11 +23,11 @@ import java.util.*
 
 interface CallRepository {
 
-    fun getAllCalls(): Flow<Outcome<List<Call>>>
+    fun getAllCalls(): Flow<Effect<List<Call>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getCall(id: UUID): Flow<Outcome<Call>>
+    fun getCall(id: UUID): Flow<Effect<Call>>
 }
 
 internal class CallRepositoryImpl(
@@ -62,22 +62,22 @@ internal class CallRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllCalls(): Flow<Outcome<List<Call>>> = flow {
+    override fun getAllCalls(): Flow<Effect<List<Call>>> = flow {
         collectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<Call>> ->
-                transformResponseToOutcome(response, onNewData = { Outcome.loading() })
+                transformResponseToOutcome(response, onNewData = { Effect.loading() })
             }
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getCall(id: UUID): Flow<Outcome<Call>> = flow {
+    override fun getCall(id: UUID): Flow<Effect<Call>> = flow {
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<Call> ->
-                transformResponseToOutcome(response, onNewData = { Outcome.loading() })
+                transformResponseToOutcome(response, onNewData = { Effect.loading() })
             }
     }
 }

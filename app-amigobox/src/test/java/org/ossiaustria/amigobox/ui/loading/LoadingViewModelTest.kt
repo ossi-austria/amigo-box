@@ -1,7 +1,10 @@
 package org.ossiaustria.amigobox.ui.loading
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
@@ -24,30 +27,31 @@ import org.ossiaustria.lib.commons.TestDispatcherProvider
 @FlowPreview
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
-class LoadingViewModelTest {
+internal class LoadingViewModelTest {
 
     lateinit var subject: LoadingViewModel
 
     private val testCoroutineDispatcher = TestCoroutineDispatcher()
     private val dispatcherProvider = TestDispatcherProvider(testCoroutineDispatcher)
 
-    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
-
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
     @Before
     fun setupBeforeEach() {
-        Dispatchers.setMain(mainThreadSurrogate)
+        Dispatchers.setMain(testCoroutineDispatcher)
         subject = LoadingViewModel(dispatcherProvider)
     }
 
     @After
     fun tearDown() {
         Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
-        mainThreadSurrogate.close()
+        testCoroutineDispatcher.cleanupTestCoroutines()
     }
 
+    /**
+     * Because we run coroutines (see viewModel!) we need to use "runBlockingTest"
+     */
     @Test
     fun `doFancyHeavyStuffOnBackground should login my user `() = runBlockingTest {
         subject.doFancyHeavyStuffOnBackground()
