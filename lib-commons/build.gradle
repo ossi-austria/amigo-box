@@ -6,15 +6,12 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'de.mannodermaus.android-junit5'
-    id 'dagger.hilt.android.plugin'
-    id 'androidx.navigation.safeargs.kotlin'
     id 'jacoco'
-    id 'org.barfuin.gradle.jacocolog' version '1.2.4'
 }
 android {
 
     compileSdkVersion AndroidVersion.compileSdk
-    buildToolsVersion AndroidVersion.buildTools
+
 
     defaultConfig {
         minSdkVersion AndroidVersion.minSdk
@@ -42,14 +39,14 @@ android {
 dependencies {
 
     implementation(Libs.appcompat)
-    implementation(Libs.Compose.material)
+//     implementation(Libs.Compose.material)
     implementation(Libs.material)
 
-    implementation(Libs.hiltAndroid)
-    implementation(Libs.hiltCommon)
-    implementation(Libs.hiltLifecycle)
-    kapt(Libs.hiltAndroidCompiler)
-    kapt(Libs.hiltCompiler)
+//    implementation(Libs.hiltAndroid)
+//    implementation(Libs.hiltCommon)
+//    implementation(Libs.hiltLifecycle)
+//    kapt(Libs.hiltAndroidCompiler)
+//    kapt(Libs.hiltCompiler)
 
     // Testing
     testImplementation(Libs.Test.jupiterApi)
@@ -57,7 +54,7 @@ dependencies {
 //    testRuntimeOnly(Libs.Test.jupiterEngine)
     testRuntimeOnly(Libs.Test.jupiterVintageEngine)
 
-    androidTestImplementation(Libs.Test.testRunner)
+    testImplementation(Libs.Test.testRunner)
     androidTestImplementation(Libs.Test.jupiterApi)
     androidTestImplementation(Libs.Test.mannodermausAndroidTestCore)
     androidTestRuntimeOnly(Libs.Test.mannodermausAndroidTestRunner)

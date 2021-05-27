@@ -4,17 +4,17 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertNotNull
-import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.ossiaustria.lib.commons.testing.TestCoroutineRule
 import org.ossiaustria.lib.domain.EntityMocks
-import org.ossiaustria.lib.domain.MainCoroutineRule
 import org.ossiaustria.lib.domain.auth.Account
 import org.ossiaustria.lib.domain.auth.AuthApi
 import org.ossiaustria.lib.domain.auth.LoginRequest
@@ -29,7 +29,7 @@ import java.util.*
 class AuthServiceTest {
 
     @get:Rule
-    val coroutineRule = MainCoroutineRule()
+    val coroutineRule = TestCoroutineRule()
 
     @MockK
     lateinit var authApi: AuthApi

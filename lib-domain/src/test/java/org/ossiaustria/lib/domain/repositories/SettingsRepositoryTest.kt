@@ -1,9 +1,9 @@
 package org.ossiaustria.lib.domain.repositories
 
 import androidx.test.platform.app.InstrumentationRegistry
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertNotNull
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

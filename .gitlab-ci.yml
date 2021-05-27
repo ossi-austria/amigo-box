@@ -15,11 +15,9 @@ cache:
 build & test:
   stage: build
   script:
-    - ./gradlew --console=plain assembleDebug assembleDebugUnitTest
-    - ./gradlew --console=plain ktlintCheck
-    - ./gradlew --info -Pci --console=plain testDebug
-    - ./gradlew --console=plain lintDebug :app-amigobox:jacocoTestReportDebug
-  coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
+    - ./gradlew --console=plain assembleDevelopDebug assembleDevelopDebugUnitTest
+    - ./gradlew --console=plain ktlintCheck lintDevelopDebug
+    - ./gradlew --console=plain testDebug
   artifacts:
     paths:
       - "*.apk"
@@ -28,7 +26,8 @@ build & test:
     reports:
       junit:
         - "build/test-results/tests/**/TEST-*.xml"
-        - "app-amigobox/build/test-results/**/TEST-*.xml"
-        - "lib-commons/build/test-results/**/TEST-*.xml"
         - "lib-domain/build/test-results/**/TEST-*.xml"
+        - "app-amigobox/build/test-results/**/TEST-*.xml"
+        - "app-digitaluser/build/test-results/**/TEST-*.xml"
+        - "lib-commons/build/test-results/**/TEST-*.xml"
         - "lib-nfc/build/test-results/**/TEST-*.xml"

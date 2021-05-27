@@ -8,14 +8,11 @@ plugins {
     id 'de.mannodermaus.android-junit5'
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs.kotlin'
-    id 'jacoco'
-    id 'org.barfuin.gradle.jacocolog' version '1.2.4'
 }
 
 android {
 
     compileSdkVersion AndroidVersion.compileSdk
-    buildToolsVersion AndroidVersion.buildTools
 
     defaultConfig {
         applicationId "org.ossiaustria.amigobox"
@@ -33,15 +30,22 @@ android {
             minifyEnabled false
             testCoverageEnabled true
             buildConfigField "String", "API_ENDPOINT", "\"API_ENDPOINT\""
+//            resConfigs("en","xxhdpi")
+            aaptOptions.cruncherEnabled = false
         }
         release {
             minifyEnabled true
-            useProguard true
             shrinkResources true
-           // proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-
         }
+    }
+    flavorDimensions "variant"
+    productFlavors {
+        develop {
+            resConfigs "en", "de"
+            resConfigs "xxhdpi" // NOTE: remove this line in case of launching errors
+        }
+        sandbox {}
     }
 
     kapt { correctErrorTypes true }
@@ -54,7 +58,7 @@ dependencies {
     implementation project(":lib-domain")
     implementation project(":lib-nfc")
     implementation(Libs.appcompat)
-    implementation(Libs.Compose.material)
+//     implementation(Libs.Compose.material)
     implementation(Libs.material)
 
     implementation(Libs.hiltAndroid)
@@ -78,6 +82,7 @@ dependencies {
     implementation(Libs.timber)
 
     // Testing
+    testImplementation project(':lib-test-commons')
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterParams)
 //    testRuntimeOnly(Libs.Test.jupiterEngine) Junit5 still broken
@@ -104,7 +109,7 @@ dependencies {
     androidTestImplementation(Libs.Test.testRules)
 
     //Jitsi
-    implementation ('org.jitsi.react:jitsi-meet-sdk:2.+') { transitive = true }
+    implementation(Libs.jitsiMeetSdk) { transitive = true }
 
     //Premissions
     implementation Libs.permissions

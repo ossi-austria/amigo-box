@@ -1,0 +1,65 @@
+import org.ossiaustria.dependencies.AndroidVersion
+import org.ossiaustria.dependencies.Libs
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'de.mannodermaus.android-junit5'
+}
+
+android {
+
+    compileSdkVersion AndroidVersion.compileSdk
+
+
+    defaultConfig {
+        minSdkVersion AndroidVersion.minSdk
+        targetSdkVersion AndroidVersion.targetSdk
+        versionCode 1
+        versionName "0.0.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    kapt { correctErrorTypes true }
+    kotlinOptions { jvmTarget = '1.8' }
+}
+
+dependencies {
+
+    implementation(Libs.appcompat)
+
+    implementation(Libs.Test.jupiterApi)
+    implementation(Libs.Test.jupiterParams)
+//    testRuntimeOnly(Libs.Test.jupiterEngine)
+    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
+
+    implementation(Libs.Test.test)
+    implementation(Libs.Test.testExt)
+    implementation(Libs.Test.testRunner)
+    implementation(Libs.Test.testRules)
+    implementation(Libs.Test.coroutinesTest)
+
+    implementation(Libs.Test.espressoCore)
+    implementation(Libs.Test.espressoContrib)
+    implementation(Libs.Test.barista)
+
+    testImplementation(Libs.Test.mockk)
+    androidTestImplementation(Libs.Test.mockkAndroid)
+    androidTestImplementation(Libs.Test.mannodermausAndroidTestCore)
+    androidTestRuntimeOnly(Libs.Test.mannodermausAndroidTestRunner)
+
+
+
+}
