@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.rules.TestRule
 import org.ossiaustria.amigobox.EntityMocks
-import org.ossiaustria.amigobox.MainCoroutineRule
+import org.ossiaustria.lib.commons.testing.TestCoroutineRule
 import org.ossiaustria.lib.domain.auth.Account
 import org.ossiaustria.lib.domain.common.Effect
 import org.ossiaustria.lib.domain.services.AuthService
@@ -39,7 +39,7 @@ internal class OnboardingViewModelTest {
     private lateinit var account: Account
 
     @get:Rule
-    val coroutineRule = MainCoroutineRule()
+    val coroutineRule = TestCoroutineRule()
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()

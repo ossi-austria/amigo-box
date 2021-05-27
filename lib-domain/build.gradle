@@ -7,15 +7,14 @@ plugins {
     id 'kotlin-kapt'
     id 'de.mannodermaus.android-junit5'
     id 'dagger.hilt.android.plugin'
-    id 'androidx.navigation.safeargs.kotlin'
     id 'jacoco'
-    id 'org.barfuin.gradle.jacocolog' version '1.2.4'
+
 }
 
 android {
 
     compileSdkVersion AndroidVersion.compileSdk
-    buildToolsVersion AndroidVersion.buildTools
+
 
     defaultConfig {
         minSdkVersion AndroidVersion.minSdk
@@ -24,6 +23,11 @@ android {
         versionName "0.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.incremental":"true"]
+            }
+        }
     }
 
     buildTypes {
@@ -54,7 +58,7 @@ dependencies {
     // Android, material & friends
     implementation(Libs.timber)
     implementation(Libs.appcompat)
-    implementation(Libs.Compose.material)
+//     implementation(Libs.Compose.material)
     implementation Libs.Security.crypto
     // retrofit & web
     api(Libs.retrofit)
@@ -73,6 +77,7 @@ dependencies {
     kaptTest(Libs.hiltCompiler)
 
     // Testing
+    testImplementation project(':lib-test-commons')
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterParams)
 //    testRuntimeOnly(Libs.Test.jupiterEngine) Junit5 still broken
@@ -98,7 +103,5 @@ dependencies {
     androidTestImplementation(Libs.Test.testExt)
     androidTestImplementation(Libs.Test.testRules)
 
-    //Jitsi
-    //implementation ('org.jitsi.react:jitsi-meet-sdk:2.+') { transitive = true }
 }
 

@@ -13,8 +13,6 @@ import org.ossiaustria.amigobox.R
 @AndroidEntryPoint
 class LoadingFragment : Fragment() {
 
-
-    lateinit var registerButton: Button
     lateinit var loginButton: Button
 
     override fun onCreateView(
@@ -26,17 +24,10 @@ class LoadingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        registerButton = view.findViewById(R.id.registerButton)
         loginButton = view.findViewById(R.id.loginButton)
-        val button = view.findViewById<Button>(R.id.button)
+
         val jitsi_button = view.findViewById<Button>(R.id.jitsi_button)
 
-
-
-        registerButton.setOnClickListener {
-            view.findNavController()
-                .navigate(LoadingFragmentDirections.actionLoadingFragmentToRegisterFragment())
-        }
 
         loginButton.setOnClickListener {
             view.findNavController()

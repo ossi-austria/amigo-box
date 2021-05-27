@@ -22,27 +22,30 @@ object Libs {
     const val core_ktx_version = "1.3.2"
 
     //    const val coreKtx = "androidx.core:core-ktx:$core_ktx_version"
-    const val coroutines_version = "1.4.2"
+    const val coroutines_version = "1.5.0"
     const val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     const val coroutinesAndroid =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    const val dropbox_store_version = "4.0.0"
+    const val dropbox_store_version = "4.0.2-KT15"
     const val dropboxStore = "com.dropbox.mobile.store:store4:${dropbox_store_version}"
 
 
     // hilt & dagger
-    const val dagger_version = "2.33"
-    const val hilt_version = "1.0.0-alpha03"
-    const val hilt_android_version = "2.33-beta"
+    const val dagger_version = "2.35.1"
+    const val hilt_ext_version = "1.0.0"
+    const val hilt_android_version = "2.35.1"
     const val dagger = "com.google.dagger:dagger:$dagger_version"
+    const val daggerCompiler = "com.google.dagger:dagger-compiler:$dagger_version"
     const val hiltAndroid = "com.google.dagger:hilt-android:$hilt_android_version"
     const val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:$hilt_android_version"
     const val hiltAndroidTesting = "com.google.dagger:hilt-android-testing:$hilt_android_version"
-    const val hiltCommon = "androidx.hilt:hilt-common:$hilt_version"
-    const val hiltLifecycle = "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_version"
-    const val daggerCompiler = "com.google.dagger:dagger-compiler:$dagger_version"
-    const val hiltCompiler = "androidx.hilt:hilt-compiler:$hilt_version"
+    const val hiltCompiler = "androidx.hilt:hilt-compiler:$hilt_ext_version"
+    const val hiltCommon = "androidx.hilt:hilt-common:$hilt_ext_version"
+    const val hiltLifecycle = "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
+
+    // Jitsi
+    const val jitsiMeetSdk = "org.jitsi.react:jitsi-meet-sdk:3.5.0"
 
 
     // Koin for DI (better: IoC or Service Locator)
@@ -99,7 +102,7 @@ object Libs {
     const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
     // Room for Persistence
-    const val room_version = "2.2.6"
+    const val room_version = "2.3.0"
     const val roomRuntime = "androidx.room:room-runtime:$room_version"
     const val roomCompiler = "androidx.room:room-compiler:$room_version"
     const val roomCommon = "androidx.room:room-common:$room_version"
@@ -119,11 +122,12 @@ object Libs {
 
     object Test {
         const val xtest_version = "1.3.0"
-        const val robolectric = "org.robolectric:robolectric:4.4"
+        const val robolectric = "org.robolectric:robolectric:4.5.1"
         const val test = "androidx.test:core:$xtest_version"
-        const val testExt = "androidx.test.ext:junit:1.1.2"
-        const val testRunner = "androidx.test:runner:1.1.2"
-        const val testRules = "androidx.test:runner:1.1.2"
+        const val testExt = "androidx.test.ext:junit-ktx:1.1.2"
+        const val testRunner = "androidx.test:runner:$xtest_version"
+        const val testRules = "androidx.test:rules:$xtest_version"
+        const val testTruth = "androidx.test:truth:$xtest_version"
         const val orchestrator = "androidx.test:orchestrator:$xtest_version"
 
         const val espresso_version = "3.3.0"

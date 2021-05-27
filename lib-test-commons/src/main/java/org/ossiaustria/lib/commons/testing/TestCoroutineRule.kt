@@ -1,4 +1,4 @@
-package org.ossiaustria.lib.domain
+package org.ossiaustria.lib.commons.testing
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -10,7 +10,7 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
 @ExperimentalCoroutinesApi
-class MainCoroutineRule(
+class TestCoroutineRule(
     val dispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
 ) : TestWatcher(), TestCoroutineScope by TestCoroutineScope(dispatcher) {
 
@@ -24,7 +24,7 @@ class MainCoroutineRule(
      */
     override fun finished(description: Description?) {
         super.finished(description)
-        cleanupTestCoroutines()
+//        cleanupTestCoroutines()
         Dispatchers.resetMain()
     }
 }

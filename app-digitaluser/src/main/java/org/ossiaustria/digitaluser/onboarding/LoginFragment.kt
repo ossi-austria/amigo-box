@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.onboarding
+package org.ossiaustria.digitaluser.onboarding
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,50 +12,48 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import org.ossiaustria.amigobox.R
+import org.ossiaustria.digitaluser.R
 
 @AndroidEntryPoint
-class RegisterFragment : Fragment() {
+class LoginFragment : Fragment() {
 
     // Retrieve OnboardingViewModel via injection
     private val viewModel by viewModels<OnboardingViewModel>()
 
+
     // use "lateinit var" for not-null GUI fields
-    lateinit var registerButton: Button
+    lateinit var loginButton: Button
     lateinit var nextFragmentButton: Button
     lateinit var emailEdit: EditText
     lateinit var passwordEdit: EditText
-    lateinit var fullnameEdit: EditText
     lateinit var statusText: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.register_fragment, container, false)
+        return inflater.inflate(R.layout.login_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // initialise views ONCE in beginning
-        registerButton = view.findViewById(R.id.registerButton)
+        loginButton = view.findViewById(R.id.loginButton)
         nextFragmentButton = view.findViewById(R.id.nextFragmentButton)
         emailEdit = view.findViewById(R.id.emailEdit)
         passwordEdit = view.findViewById(R.id.passwordEdit)
         statusText = view.findViewById(R.id.statusText)
-        fullnameEdit = view.findViewById(R.id.fullnameEdit)
 
-        registerButton.setOnClickListener {
+        loginButton.setOnClickListener {
             val email = emailEdit.text.toString()
             val password = passwordEdit.text.toString()
-            val fullname = fullnameEdit.text.toString()
-
-            viewModel.register(email, password, fullname)
+            viewModel.login(email, password)
         }
         nextFragmentButton.setOnClickListener {
             view.findNavController()
-                .navigate(RegisterFragmentDirections.actionRegisterFragmentToWelcomeFragment())
+                .navigate(LoginFragmentDirections.actionLoginFragmentToWelcomeFragment())
         }
+
     }
 
     /**
@@ -66,15 +64,14 @@ class RegisterFragment : Fragment() {
 
         // activate observers
         viewModel.state.observe(viewLifecycleOwner) { state: OnboardingState ->
-            if (state is OnboardingState.RegisterSuccess) {
-                Toast.makeText(context, "Erfolgreich registriert", Toast.LENGTH_LONG).show()
+            if (state is OnboardingState.LoginSuccess) {
+                Toast.makeText(context, "Erfolgreich eingeloggt", Toast.LENGTH_LONG).show()
                 statusText.text = state.account.toString()
-            } else if (state is OnboardingState.RegisterFailed) {
+            } else if (state is OnboardingState.LoginFailed) {
                 statusText.text = state.exception.toString()
             } else {
                 statusText.text = state.toString()
             }
-
         }
     }
 
@@ -86,8 +83,12 @@ class RegisterFragment : Fragment() {
         super.onPause()
 
         /**
-         * As the fragment is not active, we have to deactivate observers, as we cannot react to changes right now and would lose them
+         * As the fragment is not active, we have to deactive observers, as we cannot react to changes right now and would lose them
          */
         viewModel.state.removeObservers(viewLifecycleOwner)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }

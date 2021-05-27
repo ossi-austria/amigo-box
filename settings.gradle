@@ -1,5 +1,8 @@
 include ':lib-commons'
+include ':lib-test-commons'
 include ':lib-domain'
 include ':lib-nfc'
 include ':app-amigobox'
+include ':app-digitaluser'
+
 rootProject.name = "Amigo"
