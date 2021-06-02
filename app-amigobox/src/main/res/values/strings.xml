@@ -8,4 +8,5 @@
     <string name="onboarding_fullname_label">Password</string>
 
 
+    <string name="nfc_prefix" translatable="false">/ossi-austria.org:amigo</string>
 </resources>
