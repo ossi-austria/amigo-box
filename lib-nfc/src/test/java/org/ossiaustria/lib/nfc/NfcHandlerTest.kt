@@ -17,7 +17,7 @@ class NfcHandlerTest {
     lateinit var subject: NfcHandler
 
     @Before
-    fun before() {
+    fun beforeEach() {
         subject = NfcHandler()
     }
 
@@ -43,7 +43,8 @@ class NfcHandlerTest {
         val mockIntent = mockk<Intent>()
         every { mockIntent.action } returns NfcAdapter.ACTION_NDEF_DISCOVERED
         every { mockIntent.getParcelableArrayExtra(any()) } returns null
-        every { mockIntent.getByteArrayExtra(any()) } returns null
+        every { mockIntent.getByteArrayExtra(any()) } returns listOf(16.toByte()).toByteArray()
+        mockNdefMessages(mockIntent)
 
         val result = subject.processNfcIntent(mockIntent)
 
@@ -55,15 +56,8 @@ class NfcHandlerTest {
         val mockIntent = mockk<Intent>()
         every { mockIntent.action } returns NfcAdapter.ACTION_NDEF_DISCOVERED
 
-        val message = mockk<NdefMessage>()
-        val record = mockk<NdefRecord>()
-        every { message.records } returns listOf(record).toTypedArray()
-        every { record.payload } returns "data".toByteArray()
-
-        every { mockIntent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES) } returns arrayOf(
-            message
-        )
-        every { mockIntent.getByteArrayExtra(any()) } returns null
+        every { mockIntent.getByteArrayExtra(any()) } returns listOf(16.toByte()).toByteArray()
+        mockNdefMessages(mockIntent)
 
         val result = subject.processNfcIntent(mockIntent)
 
@@ -78,7 +72,10 @@ class NfcHandlerTest {
 
         every { mockIntent.getParcelableArrayExtra(any()) } returns null
 
-        every { mockIntent.getByteArrayExtra(NfcAdapter.EXTRA_ID) } returns
+        mockNdefMessages(mockIntent)
+
+        every { mockIntent.getByteArrayExtra(any()) } returns null
+        every { mockIntent.getByteArrayExtra(eq(NfcAdapter.EXTRA_ID)) } returns
             listOf(16.toByte()).toByteArray()
 
         val result = subject.processNfcIntent(mockIntent)
@@ -86,5 +83,17 @@ class NfcHandlerTest {
         assertNotNull(result)
         // x10 = 16
         assertEquals("10", result?.tagId)
+    }
+
+    private fun mockNdefMessages(mockIntent: Intent) {
+        val message = mockk<NdefMessage>()
+        val record = mockk<NdefRecord>()
+        every { message.records } returns listOf(record).toTypedArray()
+        every { record.payload } returns "data".toByteArray()
+        every { record.type } returns "type".toByteArray()
+
+        every { mockIntent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES) } returns arrayOf(
+            message
+        )
     }
 }

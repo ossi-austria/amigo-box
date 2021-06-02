@@ -9,7 +9,8 @@ class NfcHandler {
 
     data class NfcInfo(
         val message: String,
-        val tagId: String
+        val tagId: String,
+        val type: String
     )
 
     fun processNfcIntent(checkIntent: Intent?): NfcInfo? {
@@ -17,28 +18,36 @@ class NfcHandler {
         // with NDEF formatted contents
         if (checkIntent?.action == NfcAdapter.ACTION_NDEF_DISCOVERED) {
 
-            var inNfcMessage = ""
-            var nfcTagId = ""
             val rawMessages = checkIntent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
+            val nfcUidByteArray = checkIntent.getByteArrayExtra(NfcAdapter.EXTRA_ID)
 
-            if (rawMessages != null && rawMessages.isNotEmpty()) {
+            if (rawMessages != null && rawMessages.isNotEmpty() && nfcUidByteArray != null) {
                 val ndefMsg = rawMessages[0] as NdefMessage
                 if (ndefMsg.records != null && ndefMsg.records.isNotEmpty()) {
                     val ndefRecord = ndefMsg.records[0]
 
-                    inNfcMessage = String(ndefRecord.payload)
-                }
-            }
+                    val type = String(ndefRecord.type)
+                    val inNfcMessage = String(ndefRecord.payload)
 
-            val nfcUidByteArray = checkIntent.getByteArrayExtra(NfcAdapter.EXTRA_ID)
+                    var nfcTagId = ""
+                    for (byte in nfcUidByteArray) {
+                        val hexValue = String.format("%02X", byte)
 
-            if (nfcUidByteArray != null) {
-                for (byte in nfcUidByteArray) {
-                    val hexValue = String.format("%02X", byte)
-                    nfcTagId = nfcTagId.plus(hexValue)
+                        nfcTagId = nfcTagId.plus(hexValue)
+                    }
+
+                    return NfcInfo(inNfcMessage, nfcTagId, type)
                 }
+                // not sure why this is unreachable
+
+                else {
+                    Timber.w("NDEF message is empty, NFC-Tag can not be used")
+                    return null
+                }
+            } else {
+                Timber.w("Some part of NFC data is null, Tag can not be used")
+                return null
             }
-            return NfcInfo(inNfcMessage, nfcTagId)
         } else {
             Timber.w("Intent has no NFC data attached")
             return null

@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">OSSI NFC DemoApp</string>
+    <string name="hint_edit">insert Tag-ID here</string>
+    <string name="text_nfc">To write an ID to your NFC-Tag, \n type in ID and press WRITE-Button</string>
+    <string name="write">Write</string>
+</resources>

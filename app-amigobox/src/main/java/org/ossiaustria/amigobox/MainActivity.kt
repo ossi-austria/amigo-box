@@ -15,6 +15,7 @@ import com.nabinbhandari.android.permissions.Permissions
 import dagger.hilt.android.AndroidEntryPoint
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface
 
+import org.ossiaustria.lib.nfc.NfcConstants
 import org.ossiaustria.lib.nfc.NfcHandler
 
 
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity(), JitsiMeetActivityInterface{
                 Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0)
 
         nfcInfo = nfcHandler.processNfcIntent(intent)
-        if (nfcInfo?.message != "") {
+        if (nfcInfo?.type == NfcConstants.PREFIX) {
             Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
             Toast.makeText(this, nfcInfo?.message, Toast.LENGTH_SHORT).show()
         }
@@ -82,10 +83,14 @@ class MainActivity : AppCompatActivity(), JitsiMeetActivityInterface{
 
         nfcInfo = nfcHandler.processNfcIntent(intent)
 
-        // NFC Message is stored in nfcHandler.inNfcMessage
-        Toast.makeText(this, nfcInfo?.message, Toast.LENGTH_SHORT).show()
-        // UID of NFC-Tag ist stored in nfcHandler.nfcTagId
-        Toast.makeText(this, nfcInfo?.tagId, Toast.LENGTH_SHORT).show()
+        if (nfcInfo?.type == NfcConstants.PREFIX) {
+            // NFC Message is stored in nfcHandler.inNfcMessage
+            Toast.makeText(this, nfcInfo?.message, Toast.LENGTH_SHORT).show()
+            // UID of NFC-Tag ist stored in nfcHandler.nfcTagId
+            Toast.makeText(this, nfcInfo?.tagId, Toast.LENGTH_SHORT).show()
+        } else
+            Toast.makeText(this, "NFC-Tag ungültig", Toast.LENGTH_SHORT).show()
+
     }
 
     override fun requestPermissions(p0: Array<out String>?, p1: Int, p2: PermissionListener?) {
