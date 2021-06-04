@@ -9,33 +9,36 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import org.ossiaustria.lib.domain.common.Effect
+import org.ossiaustria.lib.commons.DispatcherProvider
+import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.database.AbstractEntityDao
 import org.ossiaustria.lib.domain.database.entities.AbstractEntity
 import timber.log.Timber
 import java.util.*
 
-suspend fun <T> FlowCollector<Effect<T>>.transformResponseToOutcome(
+suspend fun <T> FlowCollector<Resource<T>>.transformResponseToOutcome(
     response: StoreResponse<T>,
-    onNewData: () -> Effect<T>
+    onNewData: () -> Resource<T>
 ) {
     when (response) {
         is StoreResponse.Loading -> {
             Timber.d("[Store 4] Loading from ${response.origin}")
-            emit(Effect.loading())
+            emit(Resource.loading())
         }
 
         is StoreResponse.Error -> {
             Timber.d("[Store 4] Error from ${response.origin}")
             emit(
-                Effect.failure(response.errorMessageOrNull() ?: "Store 4 Error")
+                Resource.failure(response.errorMessageOrNull() ?: "Store 4 Error")
             )
         }
         is StoreResponse.Data -> {
             val data = response.value
             Timber.d("[Store 4] Data from ${response.origin}")
-            emit(Effect.success(data))
+            emit(Resource.success(data))
         }
         is StoreResponse.NoNewData -> {
             Timber.d("[Store 4] NoNewData from ${response.origin}")
@@ -49,14 +52,16 @@ suspend fun <T> FlowCollector<Effect<T>>.transformResponseToOutcome(
 }
 
 abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN : Any>(
-    dao: AbstractEntityDao<ENTITY, WRAPPER>
+    dao: AbstractEntityDao<ENTITY, WRAPPER>,
+    protected val dispatcherProvider: DispatcherProvider
 ) {
 
+    protected abstract fun transform(item: WRAPPER): DOMAIN
     protected abstract suspend fun writeItem(item: DOMAIN)
     protected abstract fun readItem(id: UUID): Flow<DOMAIN>
-    protected abstract fun readAllItems(): Flow<List<DOMAIN>>
+    protected abstract fun defaultReadAll(): Flow<List<WRAPPER>>
     protected abstract suspend fun fetchOne(id: UUID): DOMAIN
-    protected abstract suspend fun fetchAll(): List<DOMAIN>
+    protected abstract suspend fun defaultFetchAll(): List<DOMAIN>
 
     @ExperimentalCoroutinesApi
     @FlowPreview
@@ -64,9 +69,7 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
         fetcher = Fetcher.of { key: UUID -> fetchOne(key) },
         sourceOfTruth = SourceOfTruth.of(
             reader = { key -> readItem(key) },
-            writer = { _: UUID, input: DOMAIN ->
-                writeItem(input)
-            },
+            writer = { _: UUID, input: DOMAIN -> writeItem(input) },
             delete = { key: UUID -> dao.deleteById(key) },
             deleteAll = { dao.deleteAll() }
         )
@@ -74,21 +77,38 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
 
     @ExperimentalCoroutinesApi
     @FlowPreview
-    protected val collectionStore: Store<String, List<DOMAIN>> = StoreBuilder.from(
-        fetcher = Fetcher.of { fetchAll() },
+    protected val defaultCollectionStore: Store<String, List<DOMAIN>> = buildCollectionStore(
+        fetchApi = ::defaultFetchAll,
+        readDao = ::defaultReadAll,
+        transform = ::transform
+    )
+
+    @ExperimentalCoroutinesApi
+    @FlowPreview
+    protected fun <KEY : Any> buildCollectionStore(
+        fetchApi: suspend () -> List<DOMAIN>,
+        readDao: () -> Flow<List<WRAPPER>>,
+        transform: (WRAPPER) -> DOMAIN
+    ): Store<KEY, List<DOMAIN>> = StoreBuilder.from(
+        fetcher = Fetcher.of { fetchApi() },
         sourceOfTruth = SourceOfTruth.of(
             reader = {
-                readAllItems()
+                withFlowCollection(readDao()) { transform(it) }
             },
-            writer = { key: String, input: List<DOMAIN> ->
+            writer = { key: KEY, input: List<DOMAIN> ->
                 Timber.i("Store4 writer $key")
                 input.map { writeItem(it) }
             },
-            deleteAll = { dao.deleteAll() }
+            deleteAll = { deleteAll() }
         )
     ).build()
 
-    protected fun withFlowCollection(
+    private fun deleteAll() {
+
+
+    }
+
+    private fun withFlowCollection(
         itemsFlow: Flow<List<WRAPPER>>,
         transform: (WRAPPER) -> DOMAIN
     ): Flow<List<DOMAIN>> {
@@ -113,6 +133,22 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
                 Timber.e(e, "Store4 cannot read item:")
                 throw e
             }
+        }
+    }
+
+    protected suspend fun FlowCollector<Resource<DOMAIN>>.itemTransform(
+        flow: Flow<StoreResponse<DOMAIN>>
+    ) {
+        flow.flowOn(dispatcherProvider.io()).collect { response ->
+            transformResponseToOutcome(response, onNewData = { Resource.loading() })
+        }
+    }
+
+    protected suspend fun FlowCollector<Resource<List<DOMAIN>>>.listTransform(
+        flow: Flow<StoreResponse<List<DOMAIN>>>
+    ) {
+        flow.flowOn(dispatcherProvider.io()).collect { response ->
+            transformResponseToOutcome(response, onNewData = { Resource.loading() })
         }
     }
 }

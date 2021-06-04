@@ -37,16 +37,14 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
-    flavorDimensions "variant"
-    productFlavors {
-        develop {
-            resConfigs "en", "de"
-            resConfigs "xxhdpi" // NOTE: remove this line in case of launching errors
-        }
-        sandbox {}
-    }
+
+    buildFeatures { viewBinding true }
     kapt { correctErrorTypes true }
     kotlinOptions { jvmTarget = '1.8' }
+
+    hilt {
+        enableExperimentalClasspathAggregation = true
+    }
 }
 
 
@@ -82,32 +80,29 @@ dependencies {
     testImplementation project(":lib-test-commons")
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterParams)
-//    testRuntimeOnly(Libs.Test.jupiterEngine) Junit5 still broken
-    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
+    testRuntimeOnly(Libs.Test.jupiterEngine) //Junit5 still broken
+//    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
 
     androidTestImplementation(Libs.Test.testRunner)
     androidTestImplementation(Libs.Test.jupiterApi)
     androidTestImplementation(Libs.Test.mannodermausAndroidTestCore)
     androidTestRuntimeOnly(Libs.Test.mannodermausAndroidTestRunner)
 
+    implementation(Libs.Test.coroutinesTest)
     testImplementation(Libs.Test.test)
     testImplementation(Libs.Test.testExt)
-    implementation(Libs.Test.coroutinesTest)
+    testImplementation(Libs.Test.testRules)
     testImplementation(Libs.Test.coroutinesTest)
     testImplementation(Libs.Lifecycle.coreTesting)
     testImplementation(Libs.Test.mockk)
+
     androidTestImplementation(Libs.Test.mockkAndroid)
 
     androidTestImplementation(Libs.Test.espressoCore)
     androidTestImplementation(Libs.Test.espressoContrib)
     androidTestImplementation(Libs.Test.barista)
-    androidTestImplementation(Libs.Test.testRunner)
-    androidTestImplementation(Libs.Test.testExt)
-    androidTestImplementation(Libs.Test.testRules)
 
-    //Jitsi
     implementation(Libs.jitsiMeetSdk) { transitive = true }
-    //Premissions
     implementation Libs.permissions
 
 }

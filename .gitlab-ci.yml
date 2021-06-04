@@ -11,13 +11,13 @@ cache:
   key: ${CI_PROJECT_ID}
   paths:
     - .gradle/
+    - gradle/wrapper
 
 build & test:
   stage: build
   script:
-    - ./gradlew --console=plain assembleDevelopDebug assembleDevelopDebugUnitTest
-    - ./gradlew --console=plain ktlintCheck lintDevelopDebug
-    - ./gradlew --console=plain testDebug
+    - ./gradlew --console=plain :app-amigobox:assembleDebug :app-digitaluser:assembleDebug assembleDebugUnitTest
+    - ./gradlew --console=plain ktlintCheck testDebugUnitTest
   artifacts:
     paths:
       - "*.apk"

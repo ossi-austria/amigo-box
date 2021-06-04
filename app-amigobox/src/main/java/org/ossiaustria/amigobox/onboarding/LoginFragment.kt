@@ -20,7 +20,6 @@ class LoginFragment : Fragment() {
     // Retrieve OnboardingViewModel via injection
     private val viewModel by viewModels<OnboardingViewModel>()
 
-
     // use "lateinit var" for not-null GUI fields
     lateinit var loginButton: Button
     lateinit var nextFragmentButton: Button
@@ -51,9 +50,8 @@ class LoginFragment : Fragment() {
         }
         nextFragmentButton.setOnClickListener {
             view.findNavController()
-                .navigate(LoginFragmentDirections.actionLoginFragmentToWelcomeFragment())
+                .navigate(LoginFragmentDirections.actionLoginFragmentToTimelineFragment())
         }
-
     }
 
     /**

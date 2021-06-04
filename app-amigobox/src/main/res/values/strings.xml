@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">OSSI AmigoBox</string>
+    <string name="default_notification_channel_id" translatable="false">amigo-box-channel-information</string>
+    <string name="channel_message_id" translatable="false">amigo-box-channel-messages</string>
+    <string name="channel_message_name">AmigoBox - Nachrichten</string>
+    <string name="channel_message_description">Nachrichten aus deiner Gruppe</string>
+    <string name="channel_events_id" translatable="false">amigo-box-channel-information</string>
+    <string name="channel_events_name">AmigoBox - Informationen</string>
+    <string name="channel_events_description">Information zu deiner AmigoBox</string>
 
     <string name="onboarding_login_label">Login</string>
     <string name="onboarding_register_label">Register</string>

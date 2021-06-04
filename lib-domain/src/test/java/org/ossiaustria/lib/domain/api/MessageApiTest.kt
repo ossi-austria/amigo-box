@@ -42,7 +42,7 @@ class MessageApiTest : AbstractApiTest() {
     @Test
     fun `MessageApi getAll should retrieve all items `() {
         val items = runBlocking {
-            subject.getAll()
+            subject.getAllReceived()
         }
 
         assertNotNull(items)
@@ -54,7 +54,7 @@ class MessageApiTest : AbstractApiTest() {
         "messages/$idExisting" to MockResponse(
             JsonMocker.message()
         ),
-        "messages" to MockResponse(
+        "messages/received" to MockResponse(
             JsonMocker.createList(
                 listOf(
                     JsonMocker.message(),

@@ -22,6 +22,7 @@ import org.ossiaustria.lib.domain.auth.LoginResult
 import org.ossiaustria.lib.domain.auth.RefreshTokenRequest
 import org.ossiaustria.lib.domain.auth.RegisterRequest
 import org.ossiaustria.lib.domain.auth.TokenResult
+import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.repositories.SettingsRepository
 import java.util.*
 
@@ -74,8 +75,8 @@ class AuthServiceTest {
     fun `login should return Account when credentials are valid`() =
         runBlockingTest(coroutineRule.dispatcher) {
             val result = authService.login("test@example.org", "password").first { !it.isLoading }
-            assertTrue(result.isSuccess)
-            assertEquals(account, result.value)
+            assertTrue(result is Resource.Success)
+            assertEquals(account, result.valueOrNull())
         }
 
     @Test
@@ -93,7 +94,7 @@ class AuthServiceTest {
         runBlockingTest(coroutineRule.dispatcher) {
             val result = authService.login("test@example.org", "wrong").first { !it.isLoading }
             assertNotNull(result)
-            assertTrue(result.isFailure)
+            assertTrue(result is Resource.Failure)
         }
 
     @Test
@@ -101,8 +102,8 @@ class AuthServiceTest {
         runBlockingTest(coroutineRule.dispatcher) {
             val result = authService.register("test@example.org", "password", "Full name")
                 .first { !it.isLoading }
-            assertTrue(result.isSuccess)
-            assertEquals(account, result.value)
+            assertTrue(result is Resource.Success)
+            assertEquals(account, result.valueOrNull())
         }
 
     @Test
@@ -111,7 +112,7 @@ class AuthServiceTest {
             val result =
                 authService.register("test@example.org", "", "Full name").first { !it.isLoading }
             assertNotNull(result)
-            assertTrue(result.isFailure)
+            assertTrue(result is Resource.Failure)
 
         }
 
@@ -126,8 +127,8 @@ class AuthServiceTest {
             } returns mock
 
             val result = authService.refreshAccessToken().first { !it.isLoading }
-            assertTrue(result.isSuccess)
-            assertEquals(mock, result.value)
+            assertTrue(result is Resource.Success)
+            assertEquals(mock, result.valueOrNull())
             verify { settingsRepository.accessToken = eq(mock) }
         }
 
@@ -137,7 +138,7 @@ class AuthServiceTest {
             coEvery { settingsRepository.refreshToken } returns null
 
             val result = authService.refreshAccessToken().first { !it.isLoading }
-            assertTrue(result.isFailure)
+            assertTrue(result is Resource.Failure)
         }
 
     @Test
@@ -146,7 +147,7 @@ class AuthServiceTest {
             coEvery { authApi.refreshToken(any()) } throws IllegalArgumentException("RestReception")
 
             val result = authService.refreshAccessToken().first { !it.isLoading }
-            assertTrue(result.isFailure)
+            assertTrue(result is Resource.Failure)
         }
 
     @Test
@@ -156,8 +157,8 @@ class AuthServiceTest {
             coEvery { authApi.whoami() } returns account
 
             val result = authService.myAccount().first { !it.isLoading }
-            assertTrue(result.isSuccess)
-            assertEquals(account, result.value)
+            assertTrue(result is Resource.Success)
+            assertEquals(account, result.valueOrNull())
             verify { settingsRepository.account = eq(account) }
         }
 
@@ -167,6 +168,6 @@ class AuthServiceTest {
             coEvery { authApi.whoami() } throws IllegalArgumentException("RestReception")
             val result = authService.myAccount().first { !it.isLoading }
             assertNotNull(result)
-            assertTrue(result.isFailure)
+            assertTrue(result is Resource.Failure)
         }
 }

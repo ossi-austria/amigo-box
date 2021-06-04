@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.CallApi
-import org.ossiaustria.lib.domain.common.Effect
+import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.database.CallDao
 import org.ossiaustria.lib.domain.database.entities.CallEntity
 import org.ossiaustria.lib.domain.database.entities.toCall
@@ -23,22 +23,22 @@ import java.util.*
 
 interface CallRepository {
 
-    fun getAllCalls(): Flow<Effect<List<Call>>>
+    fun getAllCalls(): Flow<Resource<List<Call>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getCall(id: UUID): Flow<Effect<Call>>
+    fun getCall(id: UUID): Flow<Resource<Call>>
 }
 
 internal class CallRepositoryImpl(
     private val callApi: CallApi,
     private val callDao: CallDao,
-    private val dispatcherProvider: DispatcherProvider
+    dispatcherProvider: DispatcherProvider
 ) : CallRepository,
-    SingleAndCollectionStore<CallEntity, CallEntity, Call>(callDao) {
+    SingleAndCollectionStore<CallEntity, CallEntity, Call>(callDao, dispatcherProvider) {
 
     override suspend fun fetchOne(id: UUID): Call = callApi.get(id)
-    override suspend fun fetchAll(): List<Call> = callApi.getAll()
+    override suspend fun defaultFetchAll(): List<Call> = callApi.getAll()
 
     override suspend fun writeItem(item: Call) {
         try {
@@ -54,32 +54,32 @@ internal class CallRepositoryImpl(
         }
 
 
-    override fun readAllItems(): Flow<List<Call>> =
-        withFlowCollection(callDao.findAll()) {
-            it.toCall()
-        }
+    override fun defaultReadAll(): Flow<List<CallEntity>> = callDao.findAll()
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllCalls(): Flow<Effect<List<Call>>> = flow {
-        collectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
+    override fun getAllCalls(): Flow<Resource<List<Call>>> = flow {
+        defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<Call>> ->
-                transformResponseToOutcome(response, onNewData = { Effect.loading() })
+                transformResponseToOutcome(response, onNewData = { Resource.loading() })
             }
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getCall(id: UUID): Flow<Effect<Call>> = flow {
+    override fun getCall(id: UUID): Flow<Resource<Call>> = flow {
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<Call> ->
-                transformResponseToOutcome(response, onNewData = { Effect.loading() })
+                transformResponseToOutcome(response, onNewData = { Resource.loading() })
             }
     }
+
+    override fun transform(item: CallEntity): Call = item.toCall()
+
 }
 
 

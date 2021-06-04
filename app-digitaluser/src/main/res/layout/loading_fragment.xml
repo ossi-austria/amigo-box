@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/message" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/jitsi_button"
+        android:id="@+id/jitsiButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

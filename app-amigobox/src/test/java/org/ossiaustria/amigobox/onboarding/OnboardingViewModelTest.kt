@@ -18,7 +18,7 @@ import org.junit.rules.TestRule
 import org.ossiaustria.amigobox.EntityMocks
 import org.ossiaustria.lib.commons.testing.TestCoroutineRule
 import org.ossiaustria.lib.domain.auth.Account
-import org.ossiaustria.lib.domain.common.Effect
+import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.services.AuthService
 
 /**
@@ -74,7 +74,7 @@ internal class OnboardingViewModelTest {
         every {
             authService.register(any(), any(), any())
         } returns flow {
-            emit(Effect.success(account))
+            emit(Resource.success(account))
         }
 
         subject.register("email", "password", "fullname")
@@ -92,7 +92,7 @@ internal class OnboardingViewModelTest {
         every {
             authService.register(any(), any(), any())
         } returns flow {
-            emit(Effect.failure<Account>("some error"))
+            emit(Resource.failure<Account>("some error"))
         }
 
         // run test subject

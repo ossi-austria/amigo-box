@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "648045764166",
+    "project_id": "amigo-amigobox",
+    "storage_bucket": "amigo-amigobox.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:648045764166:android:663895db81a2dcba0eb447",
+        "android_client_info": {
+          "package_name": "org.ossiaustria.amigobox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "648045764166-5ip0kufaj1oicojr3uc9araeri799g1u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANmKkNGHQySOr9loU5FuIZLNfrDinfwew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "648045764166-5ip0kufaj1oicojr3uc9araeri799g1u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:648045764166:android:6e829adcf32ce8140eb447",
+        "android_client_info": {
+          "package_name": "org.ossiaustria.amigobox.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "648045764166-5ip0kufaj1oicojr3uc9araeri799g1u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANmKkNGHQySOr9loU5FuIZLNfrDinfwew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "648045764166-5ip0kufaj1oicojr3uc9araeri799g1u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

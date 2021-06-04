@@ -26,7 +26,8 @@ class LoadingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         loginButton = view.findViewById(R.id.loginButton)
 
-        val jitsi_button = view.findViewById<Button>(R.id.jitsi_button)
+        val jitsiButton = view.findViewById<Button>(R.id.jitsiButton)
+        val timelineButton = view.findViewById<Button>(R.id.timelineButton)
 
 
         loginButton.setOnClickListener {
@@ -35,9 +36,14 @@ class LoadingFragment : Fragment() {
         }
 
         // init logic
-        jitsi_button.setOnClickListener{
+        jitsiButton.setOnClickListener {
             view.findNavController()
                 .navigate(LoadingFragmentDirections.actionLoadingFragmentToJitsiFragment())
+        }
+
+        timelineButton.setOnClickListener {
+            view.findNavController()
+                .navigate(LoadingFragmentDirections.actionLoadingFragmentToTimelineFragment())
         }
 
     }

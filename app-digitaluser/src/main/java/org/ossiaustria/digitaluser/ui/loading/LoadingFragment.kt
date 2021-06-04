@@ -27,7 +27,7 @@ class LoadingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         registerButton = view.findViewById(R.id.registerButton)
         loginButton = view.findViewById(R.id.loginButton)
-        val jitsiButton = view.findViewById<Button>(R.id.jitsi_button)
+        val jitsiButton = view.findViewById<Button>(R.id.jitsiButton)
 
         registerButton.setOnClickListener {
             view.findNavController()
