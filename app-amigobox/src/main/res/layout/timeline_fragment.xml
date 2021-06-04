@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/welcome"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/default_gap"
+    tools:context=".ui.welcome.WelcomeFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sendablesView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/newMessage"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Next Fragment" />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

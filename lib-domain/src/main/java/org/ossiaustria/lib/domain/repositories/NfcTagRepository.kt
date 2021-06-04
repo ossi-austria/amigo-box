@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.NfcTagApi
-import org.ossiaustria.lib.domain.common.Effect
+import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.database.NfcTagDao
 import org.ossiaustria.lib.domain.database.entities.NfcTagEntity
 import org.ossiaustria.lib.domain.database.entities.toNfcTag
@@ -23,23 +23,23 @@ import java.util.*
 
 interface NfcTagRepository {
 
-    fun getAllNfcTags(): Flow<Effect<List<NfcTag>>>
+    fun getAllNfcTags(): Flow<Resource<List<NfcTag>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getNfcTag(id: UUID): Flow<Effect<NfcTag>>
+    fun getNfcTag(id: UUID): Flow<Resource<NfcTag>>
 
 }
 
 internal class NfcTagRepositoryImpl(
     private val nfcTagApi: NfcTagApi,
     private val nfcTagDao: NfcTagDao,
-    private val dispatcherProvider: DispatcherProvider
+    dispatcherProvider: DispatcherProvider
 ) : NfcTagRepository,
-    SingleAndCollectionStore<NfcTagEntity, NfcTagEntity, NfcTag>(nfcTagDao) {
+    SingleAndCollectionStore<NfcTagEntity, NfcTagEntity, NfcTag>(nfcTagDao, dispatcherProvider) {
 
     override suspend fun fetchOne(id: UUID): NfcTag = nfcTagApi.get(id)
-    override suspend fun fetchAll(): List<NfcTag> = nfcTagApi.getAll()
+    override suspend fun defaultFetchAll(): List<NfcTag> = nfcTagApi.getAll()
 
     override suspend fun writeItem(item: NfcTag) {
         try {
@@ -55,32 +55,32 @@ internal class NfcTagRepositoryImpl(
         }
 
 
-    override fun readAllItems(): Flow<List<NfcTag>> =
-        withFlowCollection(nfcTagDao.findAll()) {
-            it.toNfcTag()
-        }
+    override fun defaultReadAll(): Flow<List<NfcTagEntity>> = nfcTagDao.findAll()
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllNfcTags(): Flow<Effect<List<NfcTag>>> = flow {
-        collectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
+    override fun getAllNfcTags(): Flow<Resource<List<NfcTag>>> = flow {
+        defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<NfcTag>> ->
-                transformResponseToOutcome(response, onNewData = { Effect.loading() })
+                transformResponseToOutcome(response, onNewData = { Resource.loading() })
             }
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getNfcTag(id: UUID): Flow<Effect<NfcTag>> = flow {
+    override fun getNfcTag(id: UUID): Flow<Resource<NfcTag>> = flow {
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<NfcTag> ->
-                transformResponseToOutcome(response, onNewData = { Effect.loading() })
+                transformResponseToOutcome(response, onNewData = { Resource.loading() })
             }
     }
+
+    override fun transform(item: NfcTagEntity): NfcTag = item.toNfcTag()
+
 }
 
 

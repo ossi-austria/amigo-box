@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.MultimediaApi
-import org.ossiaustria.lib.domain.common.Effect
+import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.database.MultimediaDao
 import org.ossiaustria.lib.domain.database.entities.MultimediaEntity
 import org.ossiaustria.lib.domain.database.entities.toMultimedia
@@ -23,22 +23,25 @@ import java.util.*
 
 interface MultimediaRepository {
 
-    fun getAllMultimedias(): Flow<Effect<List<Multimedia>>>
+    fun getAllMultimedias(): Flow<Resource<List<Multimedia>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getMultimedia(id: UUID): Flow<Effect<Multimedia>>
+    fun getMultimedia(id: UUID): Flow<Resource<Multimedia>>
 }
 
 internal class MultimediaRepositoryImpl(
     private val multimediaApi: MultimediaApi,
     private val multimediaDao: MultimediaDao,
-    private val dispatcherProvider: DispatcherProvider
+    dispatcherProvider: DispatcherProvider
 ) : MultimediaRepository,
-    SingleAndCollectionStore<MultimediaEntity, MultimediaEntity, Multimedia>(multimediaDao) {
+    SingleAndCollectionStore<MultimediaEntity, MultimediaEntity, Multimedia>(
+        multimediaDao,
+        dispatcherProvider
+    ) {
 
     override suspend fun fetchOne(id: UUID): Multimedia = multimediaApi.get(id)
-    override suspend fun fetchAll(): List<Multimedia> = multimediaApi.getAll()
+    override suspend fun defaultFetchAll(): List<Multimedia> = multimediaApi.getAll()
 
     override suspend fun writeItem(item: Multimedia) {
         try {
@@ -53,33 +56,32 @@ internal class MultimediaRepositoryImpl(
             it.toMultimedia()
         }
 
-
-    override fun readAllItems(): Flow<List<Multimedia>> =
-        withFlowCollection(multimediaDao.findAll()) {
-            it.toMultimedia()
-        }
+    override fun defaultReadAll(): Flow<List<MultimediaEntity>> = multimediaDao.findAll()
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllMultimedias(): Flow<Effect<List<Multimedia>>> = flow {
-        collectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
+    override fun getAllMultimedias(): Flow<Resource<List<Multimedia>>> = flow {
+        defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<Multimedia>> ->
-                transformResponseToOutcome(response, onNewData = { Effect.loading() })
+                transformResponseToOutcome(response, onNewData = { Resource.loading() })
             }
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getMultimedia(id: UUID): Flow<Effect<Multimedia>> = flow {
+    override fun getMultimedia(id: UUID): Flow<Resource<Multimedia>> = flow {
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<Multimedia> ->
-                transformResponseToOutcome(response, onNewData = { Effect.loading() })
+                transformResponseToOutcome(response, onNewData = { Resource.loading() })
             }
     }
+
+    override fun transform(item: MultimediaEntity): Multimedia = item.toMultimedia()
+
 }
 
 

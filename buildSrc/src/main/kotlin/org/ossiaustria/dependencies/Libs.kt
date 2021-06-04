@@ -32,7 +32,7 @@ object Libs {
 
 
     // hilt & dagger
-    const val dagger_version = "2.35.1"
+    const val dagger_version = "2.36"
     const val hilt_ext_version = "1.0.0"
     const val hilt_android_version = "2.35.1"
     const val dagger = "com.google.dagger:dagger:$dagger_version"
@@ -47,6 +47,9 @@ object Libs {
     // Jitsi
     const val jitsiMeetSdk = "org.jitsi.react:jitsi-meet-sdk:3.5.0"
 
+    object Firebase {
+        const val firebaseBom = "com.google.firebase:firebase-bom:28.0.1"
+    }
 
     // Koin for DI (better: IoC or Service Locator)
     const val koin_version = "2.2.2"
@@ -134,7 +137,7 @@ object Libs {
         const val espressoCore = "androidx.test.espresso:espresso-core:$espresso_version"
         const val espressoContrib = "androidx.test.espresso:espresso-contrib:$espresso_version"
 
-        const val junit5_version = "5.3.1"
+        const val junit5_version = "5.4.1"
         const val manno_junit5_version = "1.0.0"
         const val mannodermausAndroidTestCore =
             "de.mannodermaus.junit5:android-test-core:$manno_junit5_version"

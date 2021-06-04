@@ -7,8 +7,11 @@ import java.util.*
 
 interface MessageApi {
 
-    @GET("messages")
-    suspend fun getAll(): List<Message>
+    @GET("messages/received")
+    suspend fun getAllReceived(): List<Message>
+
+    @GET("messages/sent")
+    suspend fun getAllSent(): List<Message>
 
     @GET("messages/{id}")
     suspend fun get(@Path("id") id: UUID): Message

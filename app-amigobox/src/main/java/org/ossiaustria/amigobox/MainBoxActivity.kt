@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.nfc.NfcAdapter
 import android.os.Bundle
+import android.view.WindowManager.LayoutParams.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -20,7 +21,7 @@ import org.ossiaustria.lib.nfc.NfcHandler
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), JitsiMeetActivityInterface{
+class MainBoxActivity : AppCompatActivity(), JitsiMeetActivityInterface {
 
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
@@ -38,6 +39,8 @@ class MainActivity : AppCompatActivity(), JitsiMeetActivityInterface{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        ActivityHelper.prepareActivityForDeviceLock(this)
 
         navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -103,7 +106,7 @@ class MainActivity : AppCompatActivity(), JitsiMeetActivityInterface{
             null /*options*/,
             object : PermissionHandler() {
                 override fun onGranted() {
-                    Toast.makeText(this@MainActivity, "Premission granted", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainBoxActivity, "Premission granted", Toast.LENGTH_SHORT).show()
                 }
             })
     }

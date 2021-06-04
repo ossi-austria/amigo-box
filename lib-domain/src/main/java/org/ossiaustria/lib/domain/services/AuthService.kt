@@ -11,7 +11,7 @@ import org.ossiaustria.lib.domain.auth.LoginRequest
 import org.ossiaustria.lib.domain.auth.RefreshTokenRequest
 import org.ossiaustria.lib.domain.auth.RegisterRequest
 import org.ossiaustria.lib.domain.auth.TokenResult
-import org.ossiaustria.lib.domain.common.Effect
+import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.repositories.SettingsRepository
 import timber.log.Timber
 
@@ -26,7 +26,7 @@ interface AuthService {
      * In case of any error, an Effect.Failure is returned.
      * May support Effect.Loading, but Effect.Success is possible immediately as well
      */
-    fun myAccount(): Flow<Effect<Account>>
+    fun myAccount(): Flow<Resource<Account>>
 
     /**
      * Performs a login on the server with (email, password) and stores the result locally.
@@ -35,7 +35,7 @@ interface AuthService {
      * In case of any error, an Effect.Failure is returned.
      * May support Effect.Loading, but Effect.Success is possible immediately as well
      */
-    fun login(email: String, password: String): Flow<Effect<Account>>
+    fun login(email: String, password: String): Flow<Resource<Account>>
 
     /**
      * Registers a new users on the server with (email, password, fullname).
@@ -43,7 +43,7 @@ interface AuthService {
      * In case of any error, an Effect.Failure is returned.
      * May support Effect.Loading, but Effect.Success is possible immediately as well
      */
-    fun register(email: String, password: String, name: String): Flow<Effect<Account>>
+    fun register(email: String, password: String, name: String): Flow<Resource<Account>>
 
     /**
      * Refreshes the accessToken with a pre-existing freshedToken (exists after login)
@@ -52,7 +52,7 @@ interface AuthService {
      * In case of any error, an Effect.Failure is returned.
      * May support Effect.Loading, but Effect.Success is possible immediately as well
      */
-    fun refreshAccessToken(): Flow<Effect<TokenResult>>
+    fun refreshAccessToken(): Flow<Resource<TokenResult>>
 }
 
 class AuthServiceImpl(
@@ -62,58 +62,58 @@ class AuthServiceImpl(
 ) : AuthService {
 
 
-    override fun login(email: String, password: String): Flow<Effect<Account>> {
+    override fun login(email: String, password: String): Flow<Resource<Account>> {
         return flow {
-            emit(Effect.loading())
+            emit(Resource.loading())
             val result = authApi.login(LoginRequest(email = email, password = password))
 
             settingsRepository.account = result.account
             settingsRepository.refreshToken = result.refreshToken
             settingsRepository.accessToken = result.accessToken
-            emit(Effect.success(result.account))
+            emit(Resource.success(result.account))
         }.catch {
             Timber.e(it)
-            emit(Effect.failure(it))
+            emit(Resource.failure(it))
         }.flowOn(ioDispatcher)
     }
 
-    override fun register(email: String, password: String, name: String): Flow<Effect<Account>> {
+    override fun register(email: String, password: String, name: String): Flow<Resource<Account>> {
         return flow {
-            emit(Effect.loading())
+            emit(Resource.loading())
             val account = authApi.register(RegisterRequest(email, password, name))
-            emit(Effect.success(account))
+            emit(Resource.success(account))
         }.catch {
             Timber.e(it)
-            emit(Effect.failure(it))
+            emit(Resource.failure(it))
         }.flowOn(ioDispatcher)
     }
 
-    override fun refreshAccessToken(): Flow<Effect<TokenResult>> {
-        return flow<Effect<TokenResult>> {
+    override fun refreshAccessToken(): Flow<Resource<TokenResult>> {
+        return flow<Resource<TokenResult>> {
             val refreshToken = settingsRepository.refreshToken
             if (refreshToken == null) {
-                emit(Effect.failure("No local refreshToken found!"))
+                emit(Resource.failure("No local refreshToken found!"))
             } else {
-                emit(Effect.loading())
+                emit(Resource.loading())
                 val accessToken = authApi.refreshToken(RefreshTokenRequest(refreshToken.token))
                 settingsRepository.accessToken = accessToken
-                emit(Effect.success(accessToken))
+                emit(Resource.success(accessToken))
             }
         }.catch { e ->
             Timber.e(e)
-            emit(Effect.failure(e))
+            emit(Resource.failure(e))
         }.flowOn(ioDispatcher)
     }
 
-    override fun myAccount(): Flow<Effect<Account>> {
+    override fun myAccount(): Flow<Resource<Account>> {
         return flow {
-            emit(Effect.loading())
+            emit(Resource.loading())
             val account = authApi.whoami()
             settingsRepository.account = account
-            emit(Effect.success(account))
+            emit(Resource.success(account))
         }.catch {
             Timber.e(it)
-            emit(Effect.failure(it))
+            emit(Resource.failure(it))
         }.flowOn(ioDispatcher)
     }
 }

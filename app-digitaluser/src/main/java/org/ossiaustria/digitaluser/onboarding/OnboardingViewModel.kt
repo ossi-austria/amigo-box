@@ -10,7 +10,7 @@ import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.ossiaustria.lib.domain.auth.Account
-import org.ossiaustria.lib.domain.common.Effect
+import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.services.AuthService
 import timber.log.Timber
 import javax.inject.Inject
@@ -54,8 +54,8 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             authService.myAccount().collect {
                 Timber.i(it.toString())
-                if (it.isSuccess) {
-                    it.value?.email
+                if (it is Resource.Success) {
+                    it.value.email
                 } else {
                     Timber.d("$it")//_state.emit(OnboardingState.Unauthenticated)
                 }
@@ -79,8 +79,8 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             authService.login(email, password).collect {
                 when (it) {
-                    is Effect.Success -> _state.postValue(OnboardingState.LoginSuccess(it.get()))
-                    is Effect.Failure -> _state.postValue(OnboardingState.LoginFailed(it.throwable!!))
+                    is Resource.Success -> _state.postValue(OnboardingState.LoginSuccess(it.value))
+                    is Resource.Failure -> _state.postValue(OnboardingState.LoginFailed(it.throwable!!))
                     else -> Timber.d("$it")//_state.emit(OnboardingState.Unauthenticated)
                 }
             }
@@ -95,8 +95,8 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             authService.register(email, password, fullName).collect {
                 when (it) {
-                    is Effect.Success -> _state.postValue(OnboardingState.RegisterSuccess(it.get()))
-                    is Effect.Failure -> _state.postValue(
+                    is Resource.Success -> _state.postValue(OnboardingState.RegisterSuccess(it.value))
+                    is Resource.Failure -> _state.postValue(
                         OnboardingState.RegisterFailed(it.throwable ?: Exception(it.failureCause))
                     )
                     else -> Timber.d("$it")//_state.emit(OnboardingState.Unauthenticated)

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.ossiaustria.lib.domain.common.Effect
+import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Album
 import org.ossiaustria.lib.domain.repositories.AlbumRepository
 import timber.log.Timber
@@ -25,9 +25,9 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             albumRepository.getAllAlbums().collect { result ->
                 when (result) {
-                    is Effect.Loading -> Timber.i("Loading")
-                    is Effect.Failure -> Timber.i(result.failureCause)
-                    is Effect.Success -> _liveAlbums.postValue(result.value!!)
+                    is Resource.Loading -> Timber.i("Loading")
+                    is Resource.Failure -> Timber.i(result.failureCause)
+                    is Resource.Success -> _liveAlbums.postValue(result.value!!)
                 }
             }
         }

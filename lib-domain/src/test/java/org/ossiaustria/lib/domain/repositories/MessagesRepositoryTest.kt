@@ -17,6 +17,7 @@ import org.ossiaustria.lib.domain.database.AppDatabaseImpl
 import org.ossiaustria.lib.domain.database.MessageDao
 import org.ossiaustria.lib.domain.database.entities.MessageEntity
 import org.ossiaustria.lib.domain.models.Message
+import org.ossiaustria.lib.domain.modules.UserContext
 import org.robolectric.RobolectricTestRunner
 import java.util.*
 
@@ -33,6 +34,9 @@ internal class MessagesRepositoryTest : AbstractRepositoryTest<MessageEntity, Me
     @RelaxedMockK
     lateinit var messageApi: MessageApi
 
+    @RelaxedMockK
+    lateinit var userContext: UserContext
+
     @Before
     fun before() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -41,7 +45,7 @@ internal class MessagesRepositoryTest : AbstractRepositoryTest<MessageEntity, Me
         messageDao = db.messageDao()
         MockKAnnotations.init(this, relaxUnitFun = true)
 
-        subject = MessageRepositoryImpl(messageApi, messageDao, testDispatcherProvider)
+        subject = MessageRepositoryImpl(messageApi, messageDao, testDispatcherProvider, userContext)
     }
 
     @InternalCoroutinesApi
@@ -59,7 +63,7 @@ internal class MessagesRepositoryTest : AbstractRepositoryTest<MessageEntity, Me
                 Message(id2, senderId = personId, receiverId = personId, text = "text"),
             )
 
-            coEvery { messageApi.getAll() } answers { remoteList }
+            coEvery { messageApi.getAllReceived() } answers { remoteList }
 
             val daoList = listOf(
                 MessageEntity(
