@@ -15,7 +15,6 @@ import com.nabinbhandari.android.permissions.PermissionHandler
 import com.nabinbhandari.android.permissions.Permissions
 import dagger.hilt.android.AndroidEntryPoint
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface
-
 import org.ossiaustria.lib.nfc.NfcConstants
 import org.ossiaustria.lib.nfc.NfcHandler
 
@@ -38,6 +37,7 @@ class MainBoxActivity : AppCompatActivity(), JitsiMeetActivityInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.main_activity)
 
         ActivityHelper.prepareActivityForDeviceLock(this)
@@ -50,21 +50,7 @@ class MainBoxActivity : AppCompatActivity(), JitsiMeetActivityInterface {
             navController.navigate(R.id.loadingFragment)
         }
 
-        // implement nfcAdapter Object
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this)
-
-        // Read all tags when app is running and in the foreground
-        // Create a generic PendingIntent that will be deliver to this activity. The NFC stack
-        // will fill in the intent with the details of the discovered tag before delivering to
-        // this activity.
-        nfcPendingIntent = PendingIntent.getActivity(this, 0,
-                Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0)
-
-        nfcInfo = nfcHandler.processNfcIntent(intent)
-        if (nfcInfo?.type == NfcConstants.PREFIX) {
-            Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
-            Toast.makeText(this, nfcInfo?.message, Toast.LENGTH_SHORT).show()
-        }
+        initNFC()
     }
 
     override fun onResume() {
@@ -106,8 +92,30 @@ class MainBoxActivity : AppCompatActivity(), JitsiMeetActivityInterface {
             null /*options*/,
             object : PermissionHandler() {
                 override fun onGranted() {
-                    Toast.makeText(this@MainBoxActivity, "Premission granted", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainBoxActivity, "Premission granted", Toast.LENGTH_SHORT)
+                        .show()
                 }
             })
     }
+
+    private fun initNFC() {
+        // implement nfcAdapter Object
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+
+        // Read all tags when app is running and in the foreground
+        // Create a generic PendingIntent that will be deliver to this activity. The NFC stack
+        // will fill in the intent with the details of the discovered tag before delivering to
+        // this activity.
+        nfcPendingIntent = PendingIntent.getActivity(
+            this, 0,
+            Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0
+        )
+
+        nfcInfo = nfcHandler.processNfcIntent(intent)
+        if (nfcInfo?.type == NfcConstants.PREFIX) {
+            Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, nfcInfo?.message, Toast.LENGTH_SHORT).show()
+        }
+    }
 }
+

@@ -11,11 +11,15 @@ import timber.log.Timber
 
 object NotificationChannels {
 
-    fun messageChannelId(context: Context) = context.getString(R.string.channel_message_id)
-    fun infoChannelId(context: Context) = context.getString(R.string.channel_events_id)
-
     fun createAllChannels(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(
+                context,
+                R.string.channel_calls_id,
+                R.string.channel_calls_name,
+                R.string.channel_calls_description,
+                NotificationManager.IMPORTANCE_MAX
+            )
             createNotificationChannel(
                 context,
                 R.string.channel_message_id,

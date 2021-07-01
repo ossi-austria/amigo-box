@@ -9,30 +9,30 @@
     android:orientation="vertical"
     tools:context=".ui.welcome.WelcomeFragment">
 
-    <TextView
-        android:id="@+id/message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/message"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content" />-->
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/loginButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/onboarding_login_label" />
+    <!--    <com.google.android.material.button.MaterialButton-->
+    <!--        android:id="@+id/loginButton"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="@string/onboarding_login_label" />-->
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/jitsiButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <!--    <com.google.android.material.button.MaterialButton-->
+    <!--        android:id="@+id/jitsiButton"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
 
-        android:text="Start jitsi" />
+    <!--        android:text="Start jitsi" />-->
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/timelineButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <!--    <com.google.android.material.button.MaterialButton-->
+    <!--        android:id="@+id/timelineButton"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
 
-        android:text="Show Timeline" />
+    <!--        android:text="Show Timeline" />-->
 
 </LinearLayout>

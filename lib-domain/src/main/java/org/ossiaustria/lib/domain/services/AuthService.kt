@@ -10,6 +10,7 @@ import org.ossiaustria.lib.domain.auth.AuthApi
 import org.ossiaustria.lib.domain.auth.LoginRequest
 import org.ossiaustria.lib.domain.auth.RefreshTokenRequest
 import org.ossiaustria.lib.domain.auth.RegisterRequest
+import org.ossiaustria.lib.domain.auth.SetFcmTokenRequest
 import org.ossiaustria.lib.domain.auth.TokenResult
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.repositories.SettingsRepository
@@ -53,6 +54,8 @@ interface AuthService {
      * May support Effect.Loading, but Effect.Success is possible immediately as well
      */
     fun refreshAccessToken(): Flow<Resource<TokenResult>>
+
+    fun setFcmToken(fcmToken: String): Flow<Resource<Boolean>>
 }
 
 class AuthServiceImpl(
@@ -114,6 +117,23 @@ class AuthServiceImpl(
         }.catch {
             Timber.e(it)
             emit(Resource.failure(it))
+        }.flowOn(ioDispatcher)
+    }
+
+    override fun setFcmToken(fcmToken: String): Flow<Resource<Boolean>> {
+        return flow<Resource<Boolean>> {
+            val account = settingsRepository.account
+            if (account == null) {
+                emit(Resource.failure("No local account found!"))
+            } else {
+                emit(Resource.loading())
+                settingsRepository.fcmToken = fcmToken
+                val success = authApi.setFcmToken(SetFcmTokenRequest(fcmToken))
+                emit(Resource.success(success))
+            }
+        }.catch { e ->
+            Timber.e(e)
+            emit(Resource.failure(e))
         }.flowOn(ioDispatcher)
     }
 }
