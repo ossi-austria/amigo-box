@@ -29,7 +29,8 @@
         <activity
             android:name=".MainBoxActivity"
             android:launchMode="singleTop"
-            android:showOnLockScreen="true">
+            android:showOnLockScreen="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
