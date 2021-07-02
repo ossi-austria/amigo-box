@@ -7,7 +7,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.ossiaustria.amigobox.cloudmessaging.CloudPushHandlerService
+import org.ossiaustria.amigobox.cloudmessaging.FCMHelper
 import org.ossiaustria.lib.domain.modules.UserContext
+import org.ossiaustria.lib.domain.services.AuthService
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -34,5 +36,13 @@ object AppModule {
 @InstallIn(SingletonComponent::class)
 @Module
 object FCMModule {
+
+    @Provides
+    @Singleton
+    fun fcmHelper(
+        authService: AuthService
+    ): FCMHelper {
+        return FCMHelper(authService)
+    }
 
 }

@@ -43,6 +43,7 @@ class LoginFragment : Fragment() {
         passwordEdit = view.findViewById(R.id.passwordEdit)
         statusText = view.findViewById(R.id.statusText)
 
+        viewModel.register("test@example.org", "password", "amigobox-user")
         loginButton.setOnClickListener {
             val email = emailEdit.text.toString()
             val password = passwordEdit.text.toString()

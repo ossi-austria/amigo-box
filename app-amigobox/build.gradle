@@ -40,7 +40,19 @@ android {
         }
     }
 
-    buildFeatures { viewBinding true }
+    buildFeatures {
+        viewBinding true
+        compose true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    composeOptions {
+        kotlinCompilerVersion "1.5.10"
+        kotlinCompilerExtensionVersion '1.0.0-beta09'
+    }
     kapt { correctErrorTypes true }
     kotlinOptions { jvmTarget = '1.8' }
 }
@@ -59,6 +71,17 @@ dependencies {
     implementation(Libs.hiltLifecycle)
     kapt(Libs.hiltAndroidCompiler)
     kapt(Libs.hiltCompiler)
+
+    implementation(Libs.Compose.ui)
+    implementation(Libs.Compose.uiTooling)
+    implementation(Libs.Compose.activity)
+    implementation(Libs.Compose.viewmodel)
+    implementation(Libs.Compose.livedata)
+    implementation(Libs.Compose.foundation)
+    implementation(Libs.Compose.animation)
+    implementation(Libs.Compose.material)
+    implementation(Libs.Compose.materialIconsCore)
+    implementation(Libs.Compose.materialIconsExtended)
 
     implementation(Libs.coroutinesAndroid)
     implementation(Libs.coroutinesCore)

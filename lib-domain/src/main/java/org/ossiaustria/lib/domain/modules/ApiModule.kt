@@ -33,7 +33,10 @@ object ApiModule {
     private const val CONNECT_TIMEOUT = 10L
     private const val WRITE_TIMEOUT = 1L
     private const val READ_TIMEOUT = 20L
-    private const val BASE_URL = "http://192.168.0.30:8080/v1/"
+
+    //    private const val BASE_URL = "http://192.168.0.30:8080/v1/"
+    private const val BASE_URL = "http://amigo-dev.ossi-austria.org:8080/v1/"
+
 
     @Provides
     @Singleton

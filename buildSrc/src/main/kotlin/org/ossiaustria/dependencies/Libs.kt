@@ -4,19 +4,29 @@ package org.ossiaustria.dependencies
 
 object Libs {
 
-    const val appcompat_version = "1.2.0"
+    const val appcompat_version = "1.3.0-rc01"
     const val appcompat = "androidx.appcompat:appcompat:$appcompat_version"
     const val appcompatResources = "androidx.appcompat:appcompat-resources:$appcompat_version"
 
     // Using Compose (still alpha) for declarative GUI components
     object Compose {
-        const val compose_version = "1.0.0-beta01"
-        const val animation = "androidx.compose.animation:animation:$compose_version"
-        const val compiler = "androidx.compose.compiler:compiler:$compose_version"
-        const val foundation = "androidx.compose.foundation:foundation:$compose_version"
-        const val material = "androidx.compose.material:material:$compose_version"
-        const val runtime = "androidx.compose.runtime:runtime:$compose_version"
+        const val compose_version = "1.0.0-beta09"
         const val ui = "androidx.compose.ui:ui:$compose_version"
+        const val uiTooling = "androidx.compose.ui:ui-tooling:$compose_version"
+        const val activity = "androidx.activity:activity-compose:1.3.0-beta02"
+        const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
+        const val livedata = "androidx.compose.runtime:runtime-livedata:$compose_version"
+        const val rxjava2 = "androidx.compose.runtime:runtime-rxjava2:$compose_version"
+        const val foundation = "androidx.compose.foundation:foundation:$compose_version"
+        const val animation = "androidx.compose.animation:animation:$compose_version"
+//        const val compiler = "androidx.compose.compiler:compiler:$compose_version"
+
+        const val material = "androidx.compose.material:material:$compose_version"
+        const val materialIconsCore =
+            "androidx.compose.material:material-icons-core:$compose_version"
+        const val materialIconsExtended =
+            "androidx.compose.material:material-icons-extended:$compose_version"
+//        const val runtime = "androidx.compose.runtime:runtime:$compose_version"
     }
 
     const val core_ktx_version = "1.3.2"

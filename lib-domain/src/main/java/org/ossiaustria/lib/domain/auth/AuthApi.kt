@@ -17,4 +17,7 @@ interface AuthApi {
 
     @GET("auth/whoami")
     suspend fun whoami(): Account
+
+    @POST("account/set-fcm-token")
+    suspend fun setFcmToken(@Body setFcmTokenRequest: SetFcmTokenRequest): Boolean
 }

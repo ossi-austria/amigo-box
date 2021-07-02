@@ -1,14 +1,17 @@
 package org.ossiaustria.amigobox.cloudmessaging
 
-import android.content.Context
-import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.runBlocking
+import org.ossiaustria.lib.domain.services.AuthService
 import timber.log.Timber
 
-object FCMHelper {
+class FCMHelper(private val authService: AuthService) {
+
     fun getToken(callback: ((String?) -> Unit)) {
+
         FirebaseMessaging.getInstance()
             .token
             .addOnCompleteListener(object : OnCompleteListener<String?> {
@@ -20,14 +23,19 @@ object FCMHelper {
 
                     // Get new FCM registration token
                     val token: String? = task.result
+                    runBlocking {
+                        tokenSuccessCallback(token)
+                    }
                     callback(token)
                 }
             })
     }
 
-    fun tokenSuccessCallback(context: Context, token: String?) {
+    suspend fun tokenSuccessCallback(token: String?) {
         val msg = "new token: $token"
+        if (token != null) {
+            authService.setFcmToken(token).last()
+        }
         Timber.d(msg)
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 }

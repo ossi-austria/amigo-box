@@ -23,16 +23,19 @@ class CloudPushHandlerService(val appContext: Context, val userContext: UserCont
         val intent = Intent(appContext, MainBoxActivity::class.java)
         val type = message.data.get("type") ?: ""
         when (type) {
-            "CALL" -> NotificationFactory.createForCall(appContext,
-                    intent = intent,
-                    title = "Notification title",
-                    text = message.data.toString())
+            "call" -> NotificationFactory.createForCall(
+                appContext,
+                intent = intent,
+                title = "Incoming CALL!",
+                text = message.data.toString()
+            )
             else -> NotificationFactory.createForMessage(
-                    appContext,
-                    intent = intent,
-                    title = "Notification title",
-                    text = message.data.toString(),
-                    priority = NotificationCompat.PRIORITY_HIGH)
+                appContext,
+                intent = intent,
+                title = "Message retrieved",
+                text = message.data.toString(),
+                priority = NotificationCompat.PRIORITY_HIGH
+            )
         }
 
     }

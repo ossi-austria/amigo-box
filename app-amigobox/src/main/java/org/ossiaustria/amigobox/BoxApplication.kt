@@ -24,6 +24,9 @@ class BoxApplication : Application() {
     lateinit var userContext: UserContext
 
     @Inject
+    lateinit var fcmHelper: FCMHelper
+
+    @Inject
     lateinit var cloudPushHandlerService: CloudPushHandlerService
 
     override fun onCreate() {
@@ -36,7 +39,7 @@ class BoxApplication : Application() {
 
         NotificationChannels.createAllChannels(this)
         // Assert FCM token
-        FCMHelper.getToken { Timber.i("Retrieved token: $it") }
+        fcmHelper.getToken { Timber.i("Retrieved token: $it") }
         CloudPushHandlerService.instance = cloudPushHandlerService
     }
 }
