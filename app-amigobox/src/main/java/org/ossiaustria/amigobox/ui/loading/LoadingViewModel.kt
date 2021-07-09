@@ -3,6 +3,7 @@ package org.ossiaustria.amigobox.ui.loading
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.ossiaustria.lib.commons.DispatcherProvider
@@ -16,6 +17,7 @@ class LoadingViewModel @Inject constructor(dispatcherProvider: DispatcherProvide
 
     private val ioScope = dispatcherProvider.io()
 
+    @DelicateCoroutinesApi
     fun doFancyHeavyStuffOnBackground() =
         GlobalScope.launch(ioScope) {
             liveUserLogin.postValue("user logged in!")

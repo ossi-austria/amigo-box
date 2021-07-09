@@ -82,6 +82,8 @@ dependencies {
     implementation(Libs.Compose.material)
     implementation(Libs.Compose.materialIconsCore)
     implementation(Libs.Compose.materialIconsExtended)
+    implementation(Libs.Accompanist.coil)
+    implementation(Libs.Accompanist.imageloading)
 
     implementation(Libs.coroutinesAndroid)
     implementation(Libs.coroutinesCore)

@@ -17,6 +17,8 @@
     <string name="onboarding_password_label">Password</string>
     <string name="onboarding_fullname_label">Password</string>
 
+    <string name="person_detail_call_button">%s anrufen</string>
+    <string name="person_detail_albums_button">Alben von %s ansehen</string>
 
     <string name="nfc_prefix" translatable="false">/ossi-austria.org:amigo</string>
 </resources>

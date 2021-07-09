@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.WindowManager.LayoutParams.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.facebook.react.modules.core.PermissionListener
 import com.nabinbhandari.android.permissions.PermissionHandler
@@ -17,13 +16,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface
 import org.ossiaustria.lib.nfc.NfcConstants
 import org.ossiaustria.lib.nfc.NfcHandler
+import javax.inject.Inject
+
+interface NavControllerProvider {
+
+}
 
 
 @AndroidEntryPoint
 class MainBoxActivity : AppCompatActivity(), JitsiMeetActivityInterface {
 
-    private lateinit var navHostFragment: NavHostFragment
-    private lateinit var navController: NavController
+    @Inject
+    lateinit var navigator: Navigator
 
     // NFC adapter for checking NFC state in the device
     private var nfcAdapter: NfcAdapter? = null
@@ -39,15 +43,14 @@ class MainBoxActivity : AppCompatActivity(), JitsiMeetActivityInterface {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.main_activity)
+        navigator.bind((supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController)
 
         ActivityHelper.prepareActivityForDeviceLock(this)
 
-        navHostFragment =
-                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
+        // NOTE: must be called in every Activity
 
         if (savedInstanceState == null) {
-            navController.navigate(R.id.loadingFragment)
+            navigator.toLoading()
         }
 
         initNFC()
@@ -84,7 +87,12 @@ class MainBoxActivity : AppCompatActivity(), JitsiMeetActivityInterface {
 
     override fun requestPermissions(p0: Array<out String>?, p1: Int, p2: PermissionListener?) {
         val permissions =
-            arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.INTERNET, Manifest.permission.MODIFY_AUDIO_SETTINGS)
+            arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.INTERNET,
+                Manifest.permission.MODIFY_AUDIO_SETTINGS
+            )
         Permissions.check(
             this /*context*/,
             permissions,
