@@ -5,25 +5,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
+import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.R
+import org.ossiaustria.amigobox.contacts.GlobalStateViewModel
+import org.ossiaustria.amigobox.ui.commons.MaterialButton
+import org.ossiaustria.lib.domain.modules.UserContext
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoadingFragment : Fragment() {
 
-//    lateinit var loginButton: Button
+    private val globalState: GlobalStateViewModel by activityViewModels()
 
-    lateinit var root: View
+    @Inject
+    lateinit var navigator: Navigator
+
+    @Inject
+    lateinit var userContext: UserContext
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +40,6 @@ class LoadingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        root = view
-        // init stuff
     }
 
     @Composable
@@ -50,39 +54,32 @@ class LoadingFragment : Fragment() {
 
                 MaterialButton(onClick = { startJitsi() }, text = "Start jitsi")
                 MaterialButton(onClick = { startTimeline() }, text = "Show Timeline")
+                MaterialButton(
+                    onClick = { startPersonDetail() },
+                    text = "Person detail (currentUser)"
+                )
 
             }
         }
     }
 
-    // reuse a composeable - there are no styles
-    @Composable
-    fun MaterialButton(
-        onClick: () -> Unit,
-        text: String
-    ) {
-        TextButton(
-            onClick = onClick,
-            Modifier.fillMaxWidth()
-        ) {
-            Text(text = text)
-        }
+    private fun startPersonDetail() {
+        val person = userContext.person()
+        globalState.setCurrentPerson(person)
+        navigator.toPersonDetail(person)
     }
 
     // private composable/view methods
     private fun startTimeline() {
-        root.findNavController()
-            .navigate(LoadingFragmentDirections.actionLoadingFragmentToTimelineFragment())
+        navigator.toTimeline()
     }
 
     private fun startJitsi() {
-        root.findNavController()
-            .navigate(LoadingFragmentDirections.actionLoadingFragmentToJitsiFragment())
+        navigator.toJitsiCall()
     }
 
     private fun startLogin() {
-        root.findNavController()
-            .navigate(LoadingFragmentDirections.actionLoadingFragmentToLoginFragment())
+        navigator.toLogin()
     }
 
 }

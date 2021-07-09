@@ -53,9 +53,13 @@
     <fragment
         android:id="@+id/jitsiFragment"
         android:name="org.ossiaustria.amigobox.ui.jitsi.JitsiFragment"
-        android:label="JitsiFragment"/>
+        android:label="JitsiFragment" />
     <fragment
         android:id="@+id/timelineFragment"
         android:name="org.ossiaustria.amigobox.timeline.TimelineFragment"
         android:label="TimelineFragment" />
+    <fragment
+        android:id="@+id/personDetailFragment"
+        android:name="org.ossiaustria.amigobox.contacts.PersonDetailFragment"
+        android:label="PersonDetailFragment" />
 </navigation>

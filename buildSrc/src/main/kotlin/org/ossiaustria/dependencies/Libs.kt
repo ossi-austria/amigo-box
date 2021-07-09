@@ -1,12 +1,19 @@
 //import Versions.compose_version
 package org.ossiaustria.dependencies
 
-
+// https://google.github.io/accompanist/
 object Libs {
 
     const val appcompat_version = "1.3.0-rc01"
     const val appcompat = "androidx.appcompat:appcompat:$appcompat_version"
     const val appcompatResources = "androidx.appcompat:appcompat-resources:$appcompat_version"
+
+    object Accompanist {
+        const val accomponist_version = "0.13.0"
+        const val coil = "com.google.accompanist:accompanist-coil:$accomponist_version"
+        const val imageloading =
+            "com.google.accompanist:accompanist-imageloading-core:$accomponist_version"
+    }
 
     // Using Compose (still alpha) for declarative GUI components
     object Compose {

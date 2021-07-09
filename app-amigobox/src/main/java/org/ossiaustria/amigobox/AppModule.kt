@@ -13,18 +13,14 @@ import org.ossiaustria.lib.domain.services.AuthService
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
-@Module(
-        includes = [
-            FCMModule::class
-        ]
-)
+@Module(includes = [FCMModule::class])
 object AppModule {
 
     @Provides
     @Singleton
     fun amigoBoxFCMHandlerService(
-            @ApplicationContext appContext: Context,
-            userContext: UserContext,
+        @ApplicationContext appContext: Context,
+        userContext: UserContext,
     ): CloudPushHandlerService {
         return CloudPushHandlerService(appContext, userContext).also {
             CloudPushHandlerService.instance = it
@@ -39,9 +35,7 @@ object FCMModule {
 
     @Provides
     @Singleton
-    fun fcmHelper(
-        authService: AuthService
-    ): FCMHelper {
+    fun fcmHelper(authService: AuthService): FCMHelper {
         return FCMHelper(authService)
     }
 
