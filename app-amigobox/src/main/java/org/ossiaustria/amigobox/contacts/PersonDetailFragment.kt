@@ -49,15 +49,12 @@ class PersonDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        globalState.currentPerson.observe(viewLifecycleOwner) {
-
-        }
         // init stuff
     }
 
     @Composable
     fun PersonDetailScreen(state: GlobalStateViewModel) {
-        val personState by state.currentPerson.observeAsState()
+        val personState by state.selectedPerson.observeAsState()
         if (personState != null) {
             MaterialTheme {
                 PersonDetailFragmentComposable(personState!!.name, "https://picsum.photos/300/300")
@@ -97,7 +94,7 @@ class PersonDetailFragment : Fragment() {
     }
 
     private fun startCall() {
-        navigator.toCallPerson(globalState.currentPerson.value!!)
+        navigator.toCallPerson(globalState.selectedPerson.value!!)
     }
 
 }

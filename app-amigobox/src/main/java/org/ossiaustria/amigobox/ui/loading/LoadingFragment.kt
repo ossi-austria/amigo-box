@@ -54,8 +54,8 @@ class LoadingFragment : Fragment() {
 
                 MaterialButton(onClick = { startJitsi() }, text = "Start jitsi")
                 MaterialButton(onClick = { startTimeline() }, text = "Show Timeline")
-                MaterialButton(
-                    onClick = { startPersonDetail() },
+                MaterialButton(onClick = { startContacts() }, text = "Show Contacts")
+                MaterialButton(onClick = { startPersonDetail() },
                     text = "Person detail (currentUser)"
                 )
 
@@ -66,7 +66,7 @@ class LoadingFragment : Fragment() {
     private fun startPersonDetail() {
         val person = userContext.person()
         globalState.setCurrentPerson(person)
-        navigator.toPersonDetail(person)
+        navigator.toPersonDetail()
     }
 
     // private composable/view methods
@@ -80,6 +80,10 @@ class LoadingFragment : Fragment() {
 
     private fun startLogin() {
         navigator.toLogin()
+    }
+
+    private fun startContacts() {
+        navigator.toContacts()
     }
 
 }

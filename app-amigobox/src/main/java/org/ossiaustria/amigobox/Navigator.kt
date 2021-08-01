@@ -30,11 +30,19 @@ class Navigator @Inject constructor() {
         navController.navigate(R.id.loginFragment)
     }
 
-    fun toPersonDetail(person: Person) {
+    fun toPersonDetail() {
         navController.navigate(R.id.personDetailFragment)
     }
 
     fun toCallPerson(person: Person) {
         navController.navigate(R.id.jitsiFragment)
+    }
+
+    fun toContacts() {
+        navController.navigate(R.id.contactsFragment)
+    }
+
+    fun toHome() {
+        navController.navigate(R.id.loadingFragment)
     }
 }

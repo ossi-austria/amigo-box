@@ -13,10 +13,12 @@ class GlobalStateViewModel @Inject constructor(
     ioDispatcher: CoroutineDispatcher,
 ) : BoxViewModel(ioDispatcher) {
 
-    private val _currentPerson = MutableLiveData<Person>(null)
-    val currentPerson: LiveData<Person> = _currentPerson
+    private val _selectedPerson = MutableLiveData<Person>(null)
+    val selectedPerson: LiveData<Person> = _selectedPerson
 
     fun setCurrentPerson(person: Person) {
-        _currentPerson.value = person
+        _selectedPerson.value = person
     }
+
+
 }
