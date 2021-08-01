@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_loadingFragment_to_timelineFragment"
             app:destination="@id/timelineFragment" />
+        <action
+            android:id="@+id/action_loadingFragment_to_contactsFragment"
+            app:destination="@id/contactsFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -58,6 +61,12 @@
         android:id="@+id/timelineFragment"
         android:name="org.ossiaustria.amigobox.timeline.TimelineFragment"
         android:label="TimelineFragment" />
+
+    <fragment
+        android:id="@+id/contactsFragment"
+        android:name="org.ossiaustria.amigobox.ui.contacts.ContactsFragment"
+        android:label="ContactsFragment" >
+    </fragment>
     <fragment
         android:id="@+id/personDetailFragment"
         android:name="org.ossiaustria.amigobox.contacts.PersonDetailFragment"
