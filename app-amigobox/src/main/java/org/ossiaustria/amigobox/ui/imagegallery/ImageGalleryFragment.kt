@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -48,23 +49,17 @@ class ImageGalleryFragment : Fragment() {
 
 //            val scope = rememberCoroutineScope()
 //            scope.launch{ viewModelImage.autoImageGallery() }
-            val album: Album = globalState.selectedAlbum.value!!
-
-            GalleryScreen(album)
+            val album: Album? = globalState.selectedAlbum.value
+            if (album != null) GalleryScreen(album)
+            else Text("Album cannot be loaded")
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     @Composable
     fun GalleryScreen(album: Album) {
 
         MaterialTheme {
-
             GalleryFragmentComposable(album)
-
         }
     }
 
@@ -74,24 +69,19 @@ class ImageGalleryFragment : Fragment() {
         val listState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
         LazyRow(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             state = listState
-
-
         ) {
 
             items(items = album.items, itemContent = { item ->
 
                 Column(
-                    modifier = Modifier
-                        .fillParentMaxWidth()
+                    modifier = Modifier.fillParentMaxWidth()
                 ) {
                     NetworkImage(
                         modifier = Modifier
                             .fillMaxSize()
                             .clickable(onClick = {
-
                             }),
                         url = item.remoteUrl,
                         contentScale = ContentScale.Fit
@@ -101,23 +91,17 @@ class ImageGalleryFragment : Fragment() {
 
             coroutineScope.launch {
 
-                album.items.forEachIndexed() { index, _ ->
+                album.items.forEachIndexed { index, _ ->
 
                     nextImage(listState, index)
                     Timber.w("Index: %s", index.toString())
                     Timber.w("Size: %s", album.items.size.toString())
-                    if (index+1 == album.items.size){
+                    if (index + 1 == album.items.size) {
                         startAlbums()
                     }
-
-            } }
-
-
+                } }
         }
-
-
     }
-
 
     suspend fun nextImage(listState: LazyListState, index: Int): Boolean {
         listState.animateScrollToItem(index)

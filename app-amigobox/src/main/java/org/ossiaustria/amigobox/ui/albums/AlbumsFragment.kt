@@ -24,8 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -33,7 +31,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.contacts.GlobalStateViewModel
-import org.ossiaustria.amigobox.ui.UIConstants
+import org.ossiaustria.amigobox.ui.UIConstants.HomeButtonRow
+import org.ossiaustria.amigobox.ui.UIConstants.ListFragment
+import org.ossiaustria.amigobox.ui.UIConstants.NavigationButtonRow
+import org.ossiaustria.amigobox.ui.UIConstants.ScrollButton
+import org.ossiaustria.amigobox.ui.UIConstants.ScrollableCardList
 import org.ossiaustria.amigobox.ui.commons.NavigationButton
 import org.ossiaustria.amigobox.ui.commons.ScrollButtonType
 import org.ossiaustria.amigobox.ui.commons.ScrollNavigationButton
@@ -58,14 +60,6 @@ class AlbumsFragment : Fragment() {
         setContent { AlbumsScreen() }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        globalState.selectedPerson.observe(viewLifecycleOwner) {
-
-        }
-    }
-
     @Preview
     @Composable
     fun AlbumsScreen() {
@@ -77,58 +71,68 @@ class AlbumsFragment : Fragment() {
     @Composable
     fun AlbumsFragmentComposable() {
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
         )
         {
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp, end = 16.dp)
-                    .height(40.dp),
+                    .padding(
+                        top = HomeButtonRow.TOP_PADDING,
+                        end = HomeButtonRow.END_PADDING
+                    )
+                    .height(HomeButtonRow.HEIGHT),
                 horizontalArrangement = Arrangement.End
             ) {
                 // Home Button
                 NavigationButton(onClick = { backToHome() }, text = "Zurück zum Start")
-
             }
-            // Text "Kontaktliste"
+            // Header
             Row(
                 modifier = Modifier
-                    .padding(start = 40.dp, top = 4.dp, bottom = 4.dp)
-                    .height(50.dp)
+                    .padding(
+                        start = ListFragment.HEADER_PADDING_START,
+                        top = ListFragment.HEADER_PADDING_TOP,
+                        bottom = ListFragment.HEADER_PADDING_BOTTOM
+                    )
+                    .height(ListFragment.HEADER_HEIGHT)
             ) {
                 Text(
                     text = "Fotos und Alben",
-                    fontSize = 40.sp
+                    fontSize = ListFragment.HEADER_FONT_SIZE
                 )
             }
 
             // Text Description
             Row(
                 modifier = Modifier
-                    .padding(start = 40.dp, top = 4.dp)
-                    .height(40.dp)
+                    .padding(
+                        start = ListFragment.DESCRIPTION_PADDING_START,
+                        top = ListFragment.DESCRIPTION_PADDING_TOP
+                    )
+                    .height(ListFragment.DESCRIPTION_HEIGHT)
             ) {
                 Text(
                     text = "Tippe auf ein Bild, um das Album zu öffnen",
-                    fontSize = 16.sp
+                    fontSize = ListFragment.DESCRIPTION_FONT_SIZE
                 )
             }
 
-
-            // Scrollable List of ALbums and Name of Album
+            // Scrollable List of Albums and Album Descriptions
 
             val scrollState = rememberScrollState()
             // Timber.w("Scrollstate: %s", scrollState.value.toString())
             val scope = rememberCoroutineScope()
 
             Row(
-
                 modifier = Modifier
-                    .padding(start = 0.dp, top = 16.dp)
+                    .padding(
+                        start = ScrollableCardList.PADDING_START,
+                        top = ScrollableCardList.PADDING_TOP
+                    )
                     .horizontalScroll(scrollState)
-
 
             ) {
 
@@ -136,35 +140,31 @@ class AlbumsFragment : Fragment() {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(ScrollableCardList.CARD_PADDING)
                             .clickable(
                                 onClick = { toAlbum(album) }
                             ),
-                        elevation = 0.dp,
-
-
-                        )
+                        elevation = ScrollableCardList.CARD_ELEVATION,
+                    )
                     {
-                        Column(
-                            //modifier = Modifier.verticalScroll(rememberScrollState())
-                        ) {
+                        Column {
                             LoadAlbumCardContent(album, viewModel.getThumbnail(album))
                         }
-
                     }
                 }
-
             }
-
 
             // Back and Forward Buttons
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 40.dp, end = 40.dp)
+                    .padding(
+                        start = NavigationButtonRow.PADDING_START,
+                        end = NavigationButtonRow.PADDING_END,
+                        bottom = NavigationButtonRow.PADDING_BOTTOM
+                    )
                     .fillMaxHeight()
-                    .padding(16.dp)
-                    .height(80.dp),
+                    .height(NavigationButtonRow.HEIGHT),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
@@ -175,7 +175,7 @@ class AlbumsFragment : Fragment() {
                         scope.launch {
                             scrollState.animateScrollTo(
                                 scrollState.value
-                                    - UIConstants.ScrollButton.SCROLL_DISTANCE
+                                    - ScrollButton.SCROLL_DISTANCE
                             )
                         }
                     },
@@ -184,14 +184,13 @@ class AlbumsFragment : Fragment() {
                     scrollState = scrollState,
                 )
 
-
                 // Forwards
                 ScrollNavigationButton(
                     onClick = {
                         scope.launch {
                             scrollState.animateScrollTo(
                                 scrollState.value
-                                    + UIConstants.ScrollButton.SCROLL_DISTANCE
+                                    + ScrollButton.SCROLL_DISTANCE
                             )
                         }
                     },
@@ -212,6 +211,4 @@ class AlbumsFragment : Fragment() {
         globalState.setCurrentAlbum(album)
         navigator.toImageGallery()
     }
-
-
 }

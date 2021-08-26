@@ -11,8 +11,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import org.ossiaustria.amigobox.ui.UIConstants
-
+import org.ossiaustria.amigobox.ui.UIConstants.ListCard
+import org.ossiaustria.amigobox.ui.UIConstants.ListCardContact
 
 @Composable
 fun LoadPersonCardContent(personImage: PersonImage) {
@@ -20,8 +20,8 @@ fun LoadPersonCardContent(personImage: PersonImage) {
 
     Row(
         modifier = Modifier
-            .height(UIConstants.PersonCard.AVATAR_IMAGE_HEIGHT)
-            .width(UIConstants.PersonCard.AVATAR_IMAGE_WIDTH),
+            .height(ListCard.AVATAR_IMAGE_HEIGHT)
+            .width(ListCard.CARD_WIDTH),
     ) {
         Image(
             modifier = Modifier.fillMaxSize(),
@@ -31,13 +31,13 @@ fun LoadPersonCardContent(personImage: PersonImage) {
     }
     Row(
         modifier = Modifier
-            .padding(UIConstants.PersonCard.NAME_PADDING)
-            .height(UIConstants.PersonCard.NAME_HEIGHT),
+            .padding(ListCard.TEXT_PADDING)
+            .height(ListCardContact.TEXT_HEIGHT),
     ){
         Text(
             text = personImage.person.name,
             style = MaterialTheme.typography.h2,
-            fontSize = UIConstants.PersonCard.NAME_FONT_SIZE,
+            fontSize = ListCardContact.NAME_FONT_SIZE,
         )
     }
 }
