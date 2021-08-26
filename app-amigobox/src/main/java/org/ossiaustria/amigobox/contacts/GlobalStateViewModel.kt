@@ -14,15 +14,11 @@ class GlobalStateViewModel @Inject constructor(
     ioDispatcher: CoroutineDispatcher,
 ) : BoxViewModel(ioDispatcher) {
 
-
     private val _selectedPerson = MutableLiveData<Person>(null)
     val selectedPerson: LiveData<Person> = _selectedPerson
 
     private val _selectedAlbum = MutableLiveData<Album>(null)
     val selectedAlbum: LiveData<Album> = _selectedAlbum
-
-    private val _albumsToShow = MutableLiveData<List<Album>>(null)
-    val albumsToShow: LiveData<List<Album>> = _albumsToShow
 
     fun setCurrentPerson(person: Person) {
         _selectedPerson.value = person
@@ -31,11 +27,4 @@ class GlobalStateViewModel @Inject constructor(
     fun setCurrentAlbum(album: Album) {
         _selectedAlbum.value = album
     }
-
-    fun setAlbumsToShow(albumGallery: List<Album>) {
-        _albumsToShow.value = albumGallery
-    }
-
-
-
 }
