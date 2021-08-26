@@ -45,4 +45,13 @@ class Navigator @Inject constructor() {
     fun toHome() {
         navController.navigate(R.id.loadingFragment)
     }
+
+    fun toAlbums(){
+        navController.navigate(R.id.albumsFragment)
+    }
+
+    fun toImageGallery(){
+        navController.navigate(R.id.imageGalleryFragment)
+    }
+
 }

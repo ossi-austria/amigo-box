@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.ui.contacts
+package org.ossiaustria.amigobox.ui.albums
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
@@ -36,26 +37,25 @@ import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.NavigationButton
 import org.ossiaustria.amigobox.ui.commons.ScrollButtonType
 import org.ossiaustria.amigobox.ui.commons.ScrollNavigationButton
-import org.ossiaustria.lib.domain.models.Person
+import org.ossiaustria.lib.domain.models.Album
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ContactsFragment : Fragment() {
+class AlbumsFragment : Fragment() {
 
     private val globalState: GlobalStateViewModel by activityViewModels()
 
     @Inject
     lateinit var navigator: Navigator
 
-    private val viewModel by viewModels<ContactsViewModel>()
-
+    private val viewModel by viewModels<AlbumsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-        setContent { ContactsScreen() }
+        setContent { AlbumsScreen() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,15 +66,16 @@ class ContactsFragment : Fragment() {
         }
     }
 
+    @Preview
     @Composable
-    fun ContactsScreen() {
+    fun AlbumsScreen() {
         MaterialTheme {
-            ContactsFragmentComposable()
+            AlbumsFragmentComposable()
         }
     }
 
     @Composable
-    fun ContactsFragmentComposable() {
+    fun AlbumsFragmentComposable() {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
         )
@@ -98,7 +99,7 @@ class ContactsFragment : Fragment() {
                     .height(50.dp)
             ) {
                 Text(
-                    text = "Kontaktliste",
+                    text = "Fotos und Alben",
                     fontSize = 40.sp
                 )
             }
@@ -110,13 +111,13 @@ class ContactsFragment : Fragment() {
                     .height(40.dp)
             ) {
                 Text(
-                    text = "Tippe auf eine Person um weitere Funktionen zu sehen",
+                    text = "Tippe auf ein Bild, um das Album zu öffnen",
                     fontSize = 16.sp
                 )
             }
 
 
-            // Scrollable List of Contacts and Name of each Contact
+            // Scrollable List of ALbums and Name of Album
 
             val scrollState = rememberScrollState()
             // Timber.w("Scrollstate: %s", scrollState.value.toString())
@@ -131,22 +132,24 @@ class ContactsFragment : Fragment() {
 
             ) {
 
-                listOfPeopleWithImages().forEach { person ->
-                    Card(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clickable(
-                            onClick = { toContact(person.person) }
-                        )
+                viewModel.getAlbums().forEach { album ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable(
+                                onClick = { toAlbum(album) }
+                            ),
+                        elevation = 0.dp,
 
-                    )
+
+                        )
                     {
                         Column(
                             //modifier = Modifier.verticalScroll(rememberScrollState())
                         ) {
-                            LoadPersonCardContent(person)
+                            LoadAlbumCardContent(album, viewModel.getThumbnail(album))
                         }
-
 
                     }
                 }
@@ -167,11 +170,14 @@ class ContactsFragment : Fragment() {
             ) {
 
                 // Backwards
-                // onClick adds or subtracts 500 to/from current scrollState
                 ScrollNavigationButton(
                     onClick = {
-                        scope.launch { scrollState.scrollTo(scrollState.value -
-                            UIConstants.ScrollButton.SCROLL_DISTANCE) }
+                        scope.launch {
+                            scrollState.animateScrollTo(
+                                scrollState.value
+                                    - UIConstants.ScrollButton.SCROLL_DISTANCE
+                            )
+                        }
                     },
                     type = ScrollButtonType.PREVIOUS,
                     text = "Vorherige Seite",
@@ -182,8 +188,12 @@ class ContactsFragment : Fragment() {
                 // Forwards
                 ScrollNavigationButton(
                     onClick = {
-                        scope.launch { scrollState.scrollTo(scrollState.value +
-                            UIConstants.ScrollButton.SCROLL_DISTANCE) }
+                        scope.launch {
+                            scrollState.animateScrollTo(
+                                scrollState.value
+                                    + UIConstants.ScrollButton.SCROLL_DISTANCE
+                            )
+                        }
                     },
                     type = ScrollButtonType.NEXT,
                     text = "Nächste Seite",
@@ -197,13 +207,10 @@ class ContactsFragment : Fragment() {
         navigator.toHome()
     }
 
-
-    //TODO: input is a Person object
-    // not sure, is that correct... person as input?
-// using globalState.setCurrentPerson method, to set Person
-    private fun toContact(person: Person) {
-        globalState.setCurrentPerson(person)
-        navigator.toPersonDetail()
+    // using globalState.setCurrentPerson method, to set Person
+    private fun toAlbum(album: Album) {
+        globalState.setCurrentAlbum(album)
+        navigator.toImageGallery()
     }
 
 

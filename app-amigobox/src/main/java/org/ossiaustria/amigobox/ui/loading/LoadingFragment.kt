@@ -55,6 +55,8 @@ class LoadingFragment : Fragment() {
                 MaterialButton(onClick = { startJitsi() }, text = "Start jitsi")
                 MaterialButton(onClick = { startTimeline() }, text = "Show Timeline")
                 MaterialButton(onClick = { startContacts() }, text = "Show Contacts")
+                MaterialButton(onClick = { startAlbums() }, text = "Show Albums")
+                MaterialButton(onClick = { startGallery() }, text = "Show Gallery")
                 MaterialButton(onClick = { startPersonDetail() },
                     text = "Person detail (currentUser)"
                 )
@@ -85,5 +87,14 @@ class LoadingFragment : Fragment() {
     private fun startContacts() {
         navigator.toContacts()
     }
+
+    private fun startAlbums() {
+        navigator.toAlbums()
+    }
+
+    private fun startGallery() {
+        navigator.toImageGallery()
+    }
+
 
 }
