@@ -71,4 +71,14 @@
         android:id="@+id/personDetailFragment"
         android:name="org.ossiaustria.amigobox.contacts.PersonDetailFragment"
         android:label="PersonDetailFragment" />
+
+    <fragment
+        android:id="@+id/albumsFragment"
+        android:name="org.ossiaustria.amigobox.ui.albums.AlbumsFragment"
+        android:label="AlbumsFragment" />
+
+    <fragment
+        android:id="@+id/imageGalleryFragment"
+        android:name="org.ossiaustria.amigobox.ui.imagegallery.ImageGalleryFragment"
+        android:label="ImageGalleryFragment" />
 </navigation>

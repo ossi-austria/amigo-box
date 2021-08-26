@@ -11,9 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import org.ossiaustria.amigobox.ui.UIConstantsAmigoBox
+import org.ossiaustria.amigobox.ui.UIConstants
 
 
 @Composable
@@ -22,8 +20,8 @@ fun LoadPersonCardContent(personImage: PersonImage) {
 
     Row(
         modifier = Modifier
-            .height(UIConstantsAmigoBox.PersonCard.AVATAR_IMAGE_HEIGHT)
-            .width(UIConstantsAmigoBox.PersonCard.AVATAR_IMAGE_WIDTH),
+            .height(UIConstants.PersonCard.AVATAR_IMAGE_HEIGHT)
+            .width(UIConstants.PersonCard.AVATAR_IMAGE_WIDTH),
     ) {
         Image(
             modifier = Modifier.fillMaxSize(),
@@ -33,13 +31,13 @@ fun LoadPersonCardContent(personImage: PersonImage) {
     }
     Row(
         modifier = Modifier
-            .padding(UIConstantsAmigoBox.PersonCard.NAME_PADDING)
-            .height(UIConstantsAmigoBox.PersonCard.NAME_HEIGHT),
+            .padding(UIConstants.PersonCard.NAME_PADDING)
+            .height(UIConstants.PersonCard.NAME_HEIGHT),
     ){
         Text(
             text = personImage.person.name,
             style = MaterialTheme.typography.h2,
-            fontSize = UIConstantsAmigoBox.PersonCard.NAME_FONT_SIZE,
+            fontSize = UIConstants.PersonCard.NAME_FONT_SIZE,
         )
     }
 }

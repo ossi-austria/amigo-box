@@ -4,7 +4,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
-class UIConstantsAmigoBox{
+class UIConstants{
     object PersonCard{
 
         // Person Card
@@ -25,7 +25,11 @@ class UIConstantsAmigoBox{
     }
 
     object ScrollButton{
-        val SCROLL_DISTANCE = 500
+        val SCROLL_DISTANCE = 800
+    }
+
+    object Slideshow{
+        var DELAY: Long = 3000
     }
 
 
