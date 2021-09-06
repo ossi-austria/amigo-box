@@ -46,12 +46,6 @@ class PersonDetailFragment : Fragment() {
         setContent { PersonDetailScreen(globalState) }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // init stuff
-    }
-
     @Composable
     fun PersonDetailScreen(state: GlobalStateViewModel) {
         val personState by state.selectedPerson.observeAsState()
@@ -68,7 +62,9 @@ class PersonDetailFragment : Fragment() {
             Row(Modifier.padding(16.dp)) {
                 NetworkImage(
                     url = pictureUrl,
-                    modifier = Modifier.fillMaxWidth(0.5F).fillMaxHeight(),
+                    modifier = Modifier
+                        .fillMaxWidth(0.5F)
+                        .fillMaxHeight(),
                     contentScale = ContentScale.Crop
                 )
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -94,7 +90,7 @@ class PersonDetailFragment : Fragment() {
     }
 
     private fun startCall() {
-        navigator.toCallPerson(globalState.selectedPerson.value!!)
+        navigator.toCallPerson()
     }
 
 }

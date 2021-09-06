@@ -1,5 +1,6 @@
 import org.ossiaustria.dependencies.AndroidVersion
 import org.ossiaustria.dependencies.Libs
+import org.ossiaustria.dependencies.Versions
 
 plugins {
     id 'com.android.application'
@@ -9,6 +10,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.gms.google-services'
+    id "com.github.ben-manes.versions"
 }
 
 android {
@@ -50,8 +52,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion "1.5.10"
-        kotlinCompilerExtensionVersion '1.0.0-beta09'
+        kotlinCompilerExtensionVersion Versions.compose_version
     }
     kapt { correctErrorTypes true }
     kotlinOptions { jvmTarget = '1.8' }
@@ -82,8 +83,8 @@ dependencies {
     implementation(Libs.Compose.material)
     implementation(Libs.Compose.materialIconsCore)
     implementation(Libs.Compose.materialIconsExtended)
-    implementation(Libs.Accompanist.coil)
-    implementation(Libs.Accompanist.imageloading)
+    implementation(Libs.Coil.coil)
+    implementation(Libs.Coil.coilCompose)
 
     implementation(Libs.coroutinesAndroid)
     implementation(Libs.coroutinesCore)

@@ -2,7 +2,6 @@ package org.ossiaustria.amigobox
 
 import androidx.navigation.NavController
 import dagger.hilt.android.scopes.ActivityScoped
-import org.ossiaustria.lib.domain.models.Person
 import javax.inject.Inject
 
 @ActivityScoped
@@ -34,7 +33,7 @@ class Navigator @Inject constructor() {
         navController.navigate(R.id.personDetailFragment)
     }
 
-    fun toCallPerson(person: Person) {
+    fun toCallPerson() {
         navController.navigate(R.id.jitsiFragment)
     }
 

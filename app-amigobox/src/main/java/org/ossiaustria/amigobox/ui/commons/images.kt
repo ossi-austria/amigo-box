@@ -3,15 +3,12 @@ package org.ossiaustria.amigobox.ui.commons
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.google.accompanist.coil.rememberCoilPainter
-import com.google.accompanist.imageloading.ImageLoadState
+import coil.compose.rememberImagePainter
 import org.ossiaustria.amigobox.R
 
 /**
@@ -25,7 +22,7 @@ fun NetworkImage(
     modifier: Modifier,
     contentScale: ContentScale
 ) {
-    val painter = rememberCoilPainter(url)
+    val painter = rememberImagePainter(url)
 
     Box {
         Image(
@@ -35,15 +32,15 @@ fun NetworkImage(
             contentScale = contentScale,
         )
 
-        when (painter.loadState) {
-            is ImageLoadState.Loading -> {
-                // Display a circular progress indicator whilst loading
-                CircularProgressIndicator(Modifier.align(Alignment.Center))
-            }
-            is ImageLoadState.Error -> {
-                NotFoundImage(modifier = modifier, contentScale = contentScale)
-            }
-        }
+//        when (painter.loadState) {
+//            is ImageLoadState.Loading -> {
+//                // Display a circular progress indicator whilst loading
+//                CircularProgressIndicator(Modifier.align(Alignment.Center))
+//            }
+//            is ImageLoadState.Error -> {
+//                NotFoundImage(modifier = modifier, contentScale = contentScale)
+//            }
+//        }
     }
 }
 
