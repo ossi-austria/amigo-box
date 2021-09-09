@@ -20,11 +20,18 @@ class GlobalStateViewModel @Inject constructor(
     private val _selectedAlbum = MutableLiveData<Album>(null)
     val selectedAlbum: LiveData<Album> = _selectedAlbum
 
+    private val _albumsToShow = MutableLiveData<List<Album>>(null)
+    val albumsToShow: LiveData<List<Album>> = _albumsToShow
+
     fun setCurrentPerson(person: Person) {
         _selectedPerson.value = person
     }
 
     fun setCurrentAlbum(album: Album) {
         _selectedAlbum.value = album
+    }
+
+    fun setAlbumsToShow(albumGallery: List<Album>) {
+        _albumsToShow.value = albumGallery
     }
 }

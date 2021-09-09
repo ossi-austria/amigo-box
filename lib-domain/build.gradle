@@ -40,6 +40,19 @@ android {
         }
     }
 
+    testOptions {
+        execution "ANDROIDX_TEST_ORCHESTRATOR"
+        reportDir "${rootProject.buildDir}/test-reports"
+        resultsDir "${rootProject.buildDir}/test-results"
+
+        junitPlatform {
+            instrumentationTests.integrityCheckEnabled = true
+        }
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
     kapt { correctErrorTypes true }
     kotlinOptions { jvmTarget = '1.8' }
 }
