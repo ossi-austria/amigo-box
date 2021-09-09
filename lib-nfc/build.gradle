@@ -44,6 +44,9 @@ android {
         junitPlatform {
             instrumentationTests.integrityCheckEnabled = true
         }
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 
     kapt { correctErrorTypes true }

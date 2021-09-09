@@ -46,7 +46,7 @@ class MessageRepositoryImpl(
     private val receivedStore: Store<String, List<Message>> =
         buildCollectionStore(
             fetchApi = { messageApi.getAllReceived() },
-            readDao = { messageDao.findByReceiver(userContext.personId()) },
+            readDao = { messageDao.findByReceiver(userContext.personId()!!) },
             transform = { it.toMessage() })
 
     override suspend fun fetchOne(id: UUID): Message = messageApi.get(id)

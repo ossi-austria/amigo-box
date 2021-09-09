@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -38,10 +39,6 @@ class LoadingFragment : Fragment() {
         setContent { LoadingFragmentComposable() }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     @Composable
     fun LoadingFragmentComposable() {
         MaterialTheme {
@@ -57,9 +54,11 @@ class LoadingFragment : Fragment() {
                 MaterialButton(onClick = { startContacts() }, text = "Show Contacts")
                 MaterialButton(onClick = { startAlbums() }, text = "Show Albums")
                 MaterialButton(onClick = { startGallery() }, text = "Show Gallery")
-                MaterialButton(onClick = { startPersonDetail() },
+                MaterialButton(
+                    onClick = { startPersonDetail() },
                     text = "Person detail (currentUser)"
                 )
+                MaterialButton(onClick = { startHome2() }, text = "Show HomeFragment")
 
             }
         }
@@ -67,8 +66,12 @@ class LoadingFragment : Fragment() {
 
     private fun startPersonDetail() {
         val person = userContext.person()
-        globalState.setCurrentPerson(person)
-        navigator.toPersonDetail()
+        if (person != null) {
+            globalState.setCurrentPerson(person)
+            navigator.toPersonDetail()
+        } else {
+            Toast.makeText(requireContext(), "Nicht eingeloggt!", Toast.LENGTH_LONG).show()
+        }
     }
 
     // private composable/view methods
@@ -96,5 +99,11 @@ class LoadingFragment : Fragment() {
         navigator.toImageGallery()
     }
 
+    private fun startHome() {
+        navigator.toHome()
+    }
 
+    private fun startHome2() {
+        navigator.toHome2()
+    }
 }

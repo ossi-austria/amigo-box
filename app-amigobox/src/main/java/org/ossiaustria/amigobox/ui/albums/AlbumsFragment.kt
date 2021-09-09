@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -44,8 +43,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlbumsFragment : Fragment() {
-
-    private val globalState: GlobalStateViewModel by activityViewModels()
 
     @Inject
     lateinit var navigator: Navigator
@@ -208,7 +205,7 @@ class AlbumsFragment : Fragment() {
 
     // using globalState.setCurrentPerson method, to set Person
     private fun toAlbum(album: Album) {
-        globalState.setCurrentAlbum(album)
+//        globalState.setCurrentAlbum(album)
         navigator.toImageGallery()
     }
 }

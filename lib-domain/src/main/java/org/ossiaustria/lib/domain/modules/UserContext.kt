@@ -11,16 +11,14 @@ class UserContext {
     private var person: Person? = null
 
     fun available() = account != null && person != null
-    fun account() =
-        account ?: throw IllegalStateException("Unauthenticated: Cannot access current account")
+    fun account() = account
 
     fun accountOrNull() = account
-    fun person() =
-        person ?: throw IllegalStateException("Unauthenticated: Cannot access current person")
+    fun person() = person
 
     fun personOrNull() = person
-    fun accountId() = account().id
-    fun personId() = person().id
+    fun accountId() = account()?.id
+    fun personId() = person()?.id
 
     fun initContext(account: Account?) {
         this.account = account

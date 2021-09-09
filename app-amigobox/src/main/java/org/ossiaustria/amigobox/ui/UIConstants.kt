@@ -63,4 +63,12 @@ class UIConstants {
         var DELAY: Long = 3000
     }
 
+    object HomeButtonsCard {
+        val IMAGE_HEIGHT = 150.dp
+        val IMAGE_WIDTH = 150.dp
+        val FONT_SIZE = 25.sp
+        val TEXT_PADDING = 4.dp
+        val TEXT_HEIGHT = 80.dp
+    }
+
 }
