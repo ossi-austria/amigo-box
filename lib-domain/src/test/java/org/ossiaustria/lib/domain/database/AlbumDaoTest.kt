@@ -8,7 +8,6 @@ import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.ossiaustria.lib.domain.database.entities.AlbumEntity
@@ -17,8 +16,6 @@ import org.ossiaustria.lib.domain.database.entities.toAlbum
 import org.robolectric.RobolectricTestRunner
 import java.util.*
 
-//TODO: fix me
-@Ignore
 @RunWith(RobolectricTestRunner::class)
 internal class AlbumDaoTest : DoubleEntityDaoTest<AlbumEntity, AlbumEntityWithData, AlbumDao>() {
 

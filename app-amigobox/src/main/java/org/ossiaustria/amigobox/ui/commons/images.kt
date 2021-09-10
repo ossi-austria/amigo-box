@@ -1,8 +1,11 @@
 package org.ossiaustria.amigobox.ui.commons
 
+import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -17,17 +20,18 @@ import org.ossiaustria.amigobox.R
 @Composable
 fun NetworkImage(
     url: String,
+    @SuppressLint("ModifierParameter")
+    modifier: Modifier = Modifier.fillMaxSize(),
     @StringRes altTextRes: Int? = null,
     altText: String? = null,
-    modifier: Modifier,
-    contentScale: ContentScale
+    contentScale: ContentScale = ContentScale.Crop
 ) {
     val painter = rememberImagePainter(url)
 
     Box {
         Image(
             painter = painter,
-            contentDescription = TextResString(altTextRes, altText),
+            contentDescription = textResString(altTextRes, altText),
             modifier = modifier.then(AmigoStyle.Images.roundBorders()),
             contentScale = contentScale,
         )
@@ -46,19 +50,19 @@ fun NetworkImage(
 
 @Composable
 fun NotFoundImage(
-    modifier: Modifier,
-    contentScale: ContentScale
+    modifier: Modifier = Modifier,
+    contentScale: ContentScale = ContentScale.Crop
 ) {
     Image(
         painter = painterResource(R.drawable.ic_launcher_foreground),
-        contentDescription = TextResString(altText = "Image not found"),
+        contentDescription = textResString(altText = "Image not found"),
         modifier = modifier.then(AmigoStyle.Images.roundBorders()),
         contentScale = contentScale,
     )
 }
 
 @Composable
-fun TextResString(@StringRes altTextRes: Int? = null, altText: String? = null): String =
+fun textResString(@StringRes altTextRes: Int? = null, altText: String? = null): String =
     altTextRes?.let { stringResource(altTextRes) } ?: altText ?: ""
 
 

@@ -1,8 +1,7 @@
-package org.ossiaustria.amigobox.ui.jitsi
+package org.ossiaustria.lib.jitsi.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,18 +11,18 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.facebook.react.modules.core.PermissionListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.jitsi.meet.sdk.JitsiMeetActivityDelegate
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 import org.jitsi.meet.sdk.JitsiMeetView
-import org.ossiaustria.amigobox.R
+import org.ossiaustria.lib.jitsi.R
 import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
-class JitsiFragment : Fragment(), JitsiMeetActivityInterface {
+class JitsiFragment : Fragment(),
+    JitsiMeetActivityInterface {
 
     private lateinit var view: JitsiMeetView
 
@@ -53,7 +52,7 @@ class JitsiFragment : Fragment(), JitsiMeetActivityInterface {
     }
 
     @SuppressLint("MissingSuperCall")
-    fun onNewIntent(intent: Intent) {
+    fun onNewIntent(intent: android.content.Intent) {
         JitsiMeetActivityDelegate.onNewIntent(intent)
     }
 
@@ -63,10 +62,18 @@ class JitsiFragment : Fragment(), JitsiMeetActivityInterface {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        JitsiMeetActivityDelegate.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        JitsiMeetActivityDelegate.onRequestPermissionsResult(
+            requestCode,
+            permissions,
+            grantResults
+        )
     }
 
-    override fun requestPermissions(p0: Array<out String>?, p1: Int, p2: PermissionListener?) {
+    override fun requestPermissions(
+        p0: Array<out String>?,
+        p1: Int,
+        p2: com.facebook.react.modules.core.PermissionListener?
+    ) {
         //  request INTERNET
         if (p0 != null) {
             ActivityCompat.requestPermissions(this.requireActivity(), p0, p1)
@@ -132,7 +139,10 @@ class JitsiFragment : Fragment(), JitsiMeetActivityInterface {
 
     override fun checkSelfPermission(permission: String?): Int {
         Timber.d("checkSelfPermission called, but not used")
-        return ActivityCompat.checkSelfPermission(requireContext(), permission ?: "")
+        return ActivityCompat.checkSelfPermission(
+            requireContext(),
+            permission ?: ""
+        )
     }
 
     override fun onResume() {

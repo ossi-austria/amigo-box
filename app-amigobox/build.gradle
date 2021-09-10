@@ -50,7 +50,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    testOptions {
+        reportDir "${rootProject.buildDir}/test-reports"
+        resultsDir "${rootProject.buildDir}/test-results"
+        junitPlatform { instrumentationTests.integrityCheckEnabled = true }
+        unitTests { includeAndroidResources = true }
+    }
     composeOptions {
         kotlinCompilerExtensionVersion Versions.compose_version
     }
@@ -63,8 +68,10 @@ dependencies {
     implementation project(":lib-commons")
     implementation project(":lib-domain")
     implementation project(":lib-nfc")
+    implementation project(":lib-jitsi")
+
+    implementation(Libs.timber)
     implementation(Libs.appcompat)
-//     implementation(Libs.Compose.material)
     implementation(Libs.material)
 
     implementation(Libs.hiltAndroid)
@@ -82,7 +89,7 @@ dependencies {
     implementation(Libs.Compose.animation)
     implementation(Libs.Compose.material)
     implementation(Libs.Compose.materialIconsCore)
-    implementation(Libs.Compose.materialIconsExtended)
+//    implementation(Libs.Compose.materialIconsExtended)
     implementation(Libs.Coil.coil)
     implementation(Libs.Coil.coilCompose)
 
@@ -98,17 +105,18 @@ dependencies {
     implementation(Libs.navigationDynamicFeatures)
     androidTestImplementation(Libs.navigationTest)
 
-    implementation(Libs.timber)
     implementation platform(Libs.Firebase.firebaseBom)
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging'
+
+    implementation Libs.permissions
 
     // Testing
     testImplementation project(':lib-test-commons')
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterParams)
-    testRuntimeOnly(Libs.Test.jupiterEngine) //Junit5 still broken
-//    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
+//    testRuntimeOnly(Libs.Test.jupiterEngine) //Junit5 still broken
+    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
 
     androidTestImplementation(Libs.Test.testRunner)
     androidTestImplementation(Libs.Test.jupiterApi)
@@ -128,7 +136,5 @@ dependencies {
     androidTestImplementation(Libs.Test.espressoContrib)
     androidTestImplementation(Libs.Test.barista)
 
-    implementation(Libs.jitsiMeetSdk) { transitive = true }
-    implementation Libs.permissions
 
 }

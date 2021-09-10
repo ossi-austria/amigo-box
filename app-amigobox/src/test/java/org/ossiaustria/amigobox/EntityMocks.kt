@@ -2,6 +2,7 @@ package org.ossiaustria.amigobox
 
 import org.ossiaustria.lib.domain.auth.Account
 import org.ossiaustria.lib.domain.auth.TokenResult
+import org.ossiaustria.lib.domain.models.Album
 import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.models.enums.MembershipType
 import java.util.*
@@ -39,5 +40,16 @@ object EntityMocks {
             groupId = groupId
         )
     }
+
+    fun album(
+        id: UUID = randomUUID(),
+        ownerId: UUID = randomUUID(),
+        name: String = "name"
+    ): Album = Album(
+        id = id,
+        name = name,
+        ownerId = ownerId,
+        items = listOf()
+    )
 }
 

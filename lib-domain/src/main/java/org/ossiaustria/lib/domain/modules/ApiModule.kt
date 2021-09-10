@@ -25,7 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
@@ -36,7 +35,6 @@ object ApiModule {
 
     //    private const val BASE_URL = "http://192.168.0.30:8080/v1/"
     private const val BASE_URL = "http://amigo-dev.ossi-austria.org:8080/v1/"
-
 
     @Provides
     @Singleton
@@ -66,7 +64,9 @@ object ApiModule {
             })
             networkInterceptors().add(Interceptor {
                 val requestBuilder: Request.Builder = it.request().newBuilder()
-                requestBuilder.header("Content-Type", "application/json")
+                requestBuilder
+                    .header("Content-Type", "application/json")
+                    .header("Accept", "application/json")
 
                 val currentToken = provideAuthInterceptor.currentToken()
                 currentToken?.let {
@@ -130,7 +130,6 @@ object ApiModule {
     internal fun multimediaApi(retrofit: Retrofit): MultimediaApi {
         return retrofit.create(MultimediaApi::class.java)
     }
-
 
     @Provides
     @Singleton

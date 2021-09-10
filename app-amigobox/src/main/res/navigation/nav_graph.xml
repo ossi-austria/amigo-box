@@ -55,7 +55,7 @@
 
     <fragment
         android:id="@+id/jitsiFragment"
-        android:name="org.ossiaustria.amigobox.ui.jitsi.JitsiFragment"
+        android:name="org.ossiaustria.lib.jitsi.ui.JitsiFragment"
         android:label="JitsiFragment" />
     <fragment
         android:id="@+id/timelineFragment"

@@ -1,21 +1,40 @@
 package org.ossiaustria.amigobox.ui.contacts
 
-import org.ossiaustria.amigobox.R
 import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.models.enums.MembershipType
-import java.util.*
+import java.util.UUID.randomUUID
+
+object ContactsSourceMockData {
+
+    private val groupId = randomUUID()
+
+    val lukas = createPersonMock("Lukas", "lukas@tum.de")
+
+    fun listOfPeopleWithImages(): MutableList<Person> {
+        return mutableListOf(
+            lukas,
+            createPersonMock("Michl", "michl@tum.de"),
+            createPersonMock("Moni", "moni@tum.de"),
+            createPersonMock("Peter", "peter@tum.de"),
+            createPersonMock("Flo", "flo@tum.de"),
+            createPersonMock("1 Michl", "michl@tum.de"),
+            createPersonMock("1 Moni", "moni@tum.de"),
+            createPersonMock("1 Peter", "peter@tum.de"),
+            createPersonMock("1 Flo", "flo@tum.de"),
+        )
+    }
+
+    fun createPersonMock(name: String, email: String) =
+        Person(
+            randomUUID(),
+            name,
+            groupId,
+            MembershipType.MEMBER,
+            email,
+            avatarUrl = "https://thispersondoesnotexist.com/image"
+        )
+
+}
 
 
-fun listOfPeopleWithImages() = mutableListOf(
-    PersonImage(Person(UUID.randomUUID(), "Lukas", "lukas@tum.de", MembershipType.MEMBER,
-        UUID.randomUUID()), R.drawable.image_lukas_amigo),
-    PersonImage(Person(UUID.randomUUID(), "Michl", "michl@tum.de", MembershipType.MEMBER,
-        UUID.randomUUID()), R.drawable.image_michl_amigo),
-    PersonImage(Person(UUID.randomUUID(), "Moni", "moni@tum.de", MembershipType.MEMBER,
-        UUID.randomUUID()), R.drawable.image_moni_amigo),
-    PersonImage(Person(UUID.randomUUID(), "Peter", "peter@tum.de", MembershipType.MEMBER,
-        UUID.randomUUID()), R.drawable.image_peter_amigo),
-    PersonImage(Person(UUID.randomUUID(), "Flo", "flo@tum.de", MembershipType.MEMBER,
-        UUID.randomUUID()), R.drawable.image_flo_amigo)
-    )
 

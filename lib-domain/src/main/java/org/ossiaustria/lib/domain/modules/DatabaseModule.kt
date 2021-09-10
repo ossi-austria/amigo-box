@@ -15,6 +15,7 @@ import org.ossiaustria.lib.domain.database.CallDao
 import org.ossiaustria.lib.domain.database.GroupDao
 import org.ossiaustria.lib.domain.database.MessageDao
 import org.ossiaustria.lib.domain.database.MultimediaDao
+import org.ossiaustria.lib.domain.database.NfcTagDao
 import org.ossiaustria.lib.domain.database.PersonDao
 import javax.inject.Singleton
 
@@ -63,6 +64,12 @@ object DatabaseModule {
     @Provides
     internal fun messageDao(appDatabase: AppDatabase): MessageDao {
         return appDatabase.messageDao()
+    }
+
+    @PublishedApi
+    @Provides
+    internal fun nfcTagDao(appDatabase: AppDatabase): NfcTagDao {
+        return appDatabase.nfcTagDao()
     }
 
     @PublishedApi

@@ -33,11 +33,12 @@ fun MaterialButton(
 
 @Composable
 fun NavigationButton(
-    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     text: String,
     colors: ButtonColors = ButtonDefaults.outlinedButtonColors(
         contentColor = MaterialTheme.colors.primary,
-    )
+    ),
+    onClick: () -> Unit
 ) {
     OutlinedButton(
         onClick = onClick,

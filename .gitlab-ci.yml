@@ -10,19 +10,24 @@ before_script:
 cache:
   key: ${CI_PROJECT_ID}
   paths:
-    - .gradle/
+    #    - .gradle/
     - gradle/wrapper
 
 build & test:
   stage: build
   script:
-    - ./gradlew --console=plain :app-amigobox:assembleDebug :app-digitaluser:assembleDebug assembleDebugUnitTest
-    - ./gradlew --console=plain ktlintCheck testDebugUnitTest
+    - ./gradlew --console=plain :app-amigobox:assembleDebug assembleDebugUnitTest
+    - ./gradlew --console=plain ktlintCheck lintDebug
+    - ./gradlew --console=plain assembleDebugUnitTest testDebugUnitTest
   artifacts:
+    when: always
     paths:
       - "*.apk"
       - "*/build"
-    when: always
+      - "build/reports/lint-results-debug.html"
+      - "**/build/reports/lint-results-debug.html"
+      - "app-amigobox/build/reports/lint-results-debug.html"
+
     reports:
       junit:
         - "build/test-results/tests/**/TEST-*.xml"

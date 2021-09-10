@@ -39,9 +39,20 @@ android {
 dependencies {
 
     implementation(Libs.appcompat)
-//     implementation(Libs.Compose.material)
     implementation(Libs.material)
 
+    implementation(Libs.Compose.ui)
+    implementation(Libs.Compose.uiTooling)
+    implementation(Libs.Compose.activity)
+    implementation(Libs.Compose.viewmodel)
+    implementation(Libs.Compose.livedata)
+    implementation(Libs.Compose.foundation)
+    implementation(Libs.Compose.animation)
+    implementation(Libs.Compose.material)
+//    implementation(Libs.Compose.materialIconsCore)
+//    implementation(Libs.Compose.materialIconsExtended)
+    implementation(Libs.Coil.coil)
+    implementation(Libs.Coil.coilCompose)
 //    implementation(Libs.hiltAndroid)
 //    implementation(Libs.hiltCommon)
 //    implementation(Libs.hiltLifecycle)

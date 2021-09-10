@@ -7,8 +7,8 @@ import java.util.*
 
 interface GroupApi : Api {
 
-    @GET("groups")
-    suspend fun getAll(): List<Group>
+    @GET("groups/my")
+    suspend fun getOwn(): List<Group>
 
     @GET("groups/{id}")
     suspend fun get(@Path("id") id: UUID): Group

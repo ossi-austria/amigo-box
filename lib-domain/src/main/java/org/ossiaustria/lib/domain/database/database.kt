@@ -3,9 +3,19 @@ package org.ossiaustria.lib.domain.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import org.ossiaustria.lib.domain.database.converters.*
-import org.ossiaustria.lib.domain.database.entities.*
-
+import org.ossiaustria.lib.domain.database.converters.CallTypeConverter
+import org.ossiaustria.lib.domain.database.converters.MembershipTypeConverter
+import org.ossiaustria.lib.domain.database.converters.MultimediaTypeConverter
+import org.ossiaustria.lib.domain.database.converters.NFCTagTypeConverter
+import org.ossiaustria.lib.domain.database.converters.UUIDConverter
+import org.ossiaustria.lib.domain.database.entities.AlbumEntity
+import org.ossiaustria.lib.domain.database.entities.AlbumShareEntity
+import org.ossiaustria.lib.domain.database.entities.CallEntity
+import org.ossiaustria.lib.domain.database.entities.GroupEntity
+import org.ossiaustria.lib.domain.database.entities.MessageEntity
+import org.ossiaustria.lib.domain.database.entities.MultimediaEntity
+import org.ossiaustria.lib.domain.database.entities.NfcTagEntity
+import org.ossiaustria.lib.domain.database.entities.PersonEntity
 
 internal interface AppDatabase {
     fun groupDao(): GroupDao
@@ -13,13 +23,9 @@ internal interface AppDatabase {
     fun callDao(): CallDao
     fun messageDao(): MessageDao
     fun multimediaDao(): MultimediaDao
-
     fun albumDao(): AlbumDao
-
     fun albumShareDao(): AlbumShareDao
-
     fun nfcTagDao(): NfcTagDao
-
 }
 
 @Database(
@@ -33,7 +39,7 @@ internal interface AppDatabase {
         AlbumEntity::class,
         NfcTagEntity::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(
