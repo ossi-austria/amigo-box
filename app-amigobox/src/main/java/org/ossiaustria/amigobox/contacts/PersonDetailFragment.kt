@@ -47,6 +47,13 @@ class PersonDetailFragment : Fragment() {
         setContent { PersonDetailScreen(globalState) }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val person = Navigator.getPerson(requireArguments())
+        globalState.setCurrentPerson(person)
+        // init stuff
+    }
+
     @Composable
     fun PersonDetailScreen(state: GlobalStateViewModel) {
         val personState by state.selectedPerson.observeAsState()
@@ -91,8 +98,7 @@ class PersonDetailFragment : Fragment() {
     }
 
     private fun startCall() {
-        navigator.toCallPerson()
+        navigator.toCallPerson(globalState.selectedPerson.value!!)
     }
 
 }
-

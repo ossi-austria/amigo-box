@@ -19,12 +19,14 @@ import org.ossiaustria.lib.domain.database.entities.CallEntity
 import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.enums.CallType
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.util.*
 
 @FlowPreview
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
+@Config
 internal class CallRepositoryTest : AbstractRepositoryTest<CallEntity, Call>() {
 
     lateinit var subject: CallRepository

@@ -13,25 +13,27 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.ossiaustria.amigobox.Navigator
-import org.ossiaustria.amigobox.contacts.GlobalStateViewModel
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.NavigationButton
 import org.ossiaustria.amigobox.ui.commons.ScrollButtonType
@@ -42,7 +44,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ContactsFragment : Fragment() {
 
-    private val globalState: GlobalStateViewModel by activityViewModels()
+//    private val globalState: GlobalStateViewModel by activityViewModels()
 
     @Inject
     lateinit var navigator: Navigator
@@ -55,31 +57,32 @@ class ContactsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-        setContent { ContactsScreen() }
+        setContent { ContactsScreen(viewModel) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        globalState.selectedPerson.observe(viewLifecycleOwner) {
-
-        }
+        viewModel.load()
     }
 
     @Composable
-    fun ContactsScreen() {
+    fun ContactsScreen(viewModel: ContactsViewModel) {
         MaterialTheme {
-            ContactsFragmentComposable()
+            val persons by viewModel.persons.observeAsState(emptyList())
+            ContactsFragmentComposable(persons)
         }
     }
 
+    @Preview
     @Composable
-    fun ContactsFragmentComposable() {
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
-        )
-        {
+    fun previewContactsFragmentComposable() {
+        val listOfPeopleWithImages = ContactsSourceMockData.listOfPeopleWithImages()
+        ContactsFragmentComposable(listOfPeopleWithImages)
+    }
 
+    @Composable
+    fun ContactsFragmentComposable(persons: List<Person>) {
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -89,7 +92,6 @@ class ContactsFragment : Fragment() {
             ) {
                 // Home Button
                 NavigationButton(onClick = { backToHome() }, text = "Zurück zum Start")
-
             }
             // Text "Kontaktliste"
             Row(
@@ -115,44 +117,27 @@ class ContactsFragment : Fragment() {
                 )
             }
 
-
-            // Scrollable List of Contacts and Name of each Contact
-
             val scrollState = rememberScrollState()
-            // Timber.w("Scrollstate: %s", scrollState.value.toString())
-            val scope = rememberCoroutineScope()
 
             Row(
-
                 modifier = Modifier
                     .padding(start = 0.dp, top = 16.dp)
                     .horizontalScroll(scrollState)
 
-
             ) {
+                Column(modifier = Modifier.width(40.dp)) {}
+                persons.forEach { person ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable(onClick = { toContact(person) })
 
-                listOfPeopleWithImages().forEach { person ->
-                    Card(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clickable(
-                            onClick = { toContact(person.person) }
-                        )
-
-                    )
-                    {
-                        Column(
-                            //modifier = Modifier.verticalScroll(rememberScrollState())
-                        ) {
-                            LoadPersonCardContent(person)
-                        }
-
-
+                    ) {
+                        LoadPersonCardContent(person.name, person.avatarUrl)
                     }
                 }
-
             }
-
 
             // Back and Forward Buttons
             Row(
@@ -165,25 +150,33 @@ class ContactsFragment : Fragment() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
+                val scope = rememberCoroutineScope()
 
                 // Backwards
                 // onClick adds or subtracts 500 to/from current scrollState
                 ScrollNavigationButton(
                     onClick = {
-                        scope.launch { scrollState.scrollTo(scrollState.value -
-                            UIConstants.ScrollButton.SCROLL_DISTANCE) }
+                        scope.launch {
+                            scrollState.scrollTo(
+                                scrollState.value -
+                                    UIConstants.ScrollButton.SCROLL_DISTANCE
+                            )
+                        }
                     },
                     type = ScrollButtonType.PREVIOUS,
                     text = "Vorherige Seite",
                     scrollState = scrollState,
                 )
 
-
                 // Forwards
                 ScrollNavigationButton(
                     onClick = {
-                        scope.launch { scrollState.scrollTo(scrollState.value +
-                            UIConstants.ScrollButton.SCROLL_DISTANCE) }
+                        scope.launch {
+                            scrollState.scrollTo(
+                                scrollState.value +
+                                    UIConstants.ScrollButton.SCROLL_DISTANCE
+                            )
+                        }
                     },
                     type = ScrollButtonType.NEXT,
                     text = "Nächste Seite",
@@ -193,6 +186,7 @@ class ContactsFragment : Fragment() {
         }
     }
 
+
     private fun backToHome() {
         navigator.toHome()
     }
@@ -200,10 +194,10 @@ class ContactsFragment : Fragment() {
 
     //TODO: input is a Person object
     // not sure, is that correct... person as input?
-// using globalState.setCurrentPerson method, to set Person
+    // using globalState.setCurrentPerson method, to set Person
     private fun toContact(person: Person) {
-        globalState.setCurrentPerson(person)
-        navigator.toPersonDetail()
+//        globalState.setCurrentPerson(person)
+        navigator.toPersonDetail(person)
     }
 
 

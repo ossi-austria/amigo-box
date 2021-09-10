@@ -10,7 +10,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.ossiaustria.amigobox.R
 
@@ -22,7 +21,6 @@ class LoginFragment : Fragment() {
 
     // use "lateinit var" for not-null GUI fields
     lateinit var loginButton: Button
-    lateinit var nextFragmentButton: Button
     lateinit var emailEdit: EditText
     lateinit var passwordEdit: EditText
     lateinit var statusText: TextView
@@ -38,7 +36,6 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // initialise views ONCE in beginning
         loginButton = view.findViewById(R.id.loginButton)
-        nextFragmentButton = view.findViewById(R.id.nextFragmentButton)
         emailEdit = view.findViewById(R.id.emailEdit)
         passwordEdit = view.findViewById(R.id.passwordEdit)
         statusText = view.findViewById(R.id.statusText)
@@ -48,10 +45,6 @@ class LoginFragment : Fragment() {
             val email = emailEdit.text.toString()
             val password = passwordEdit.text.toString()
             viewModel.login(email, password)
-        }
-        nextFragmentButton.setOnClickListener {
-            view.findNavController()
-                .navigate(LoginFragmentDirections.actionLoginFragmentToTimelineFragment())
         }
     }
 
@@ -87,7 +80,4 @@ class LoginFragment : Fragment() {
         viewModel.state.removeObservers(viewLifecycleOwner)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }

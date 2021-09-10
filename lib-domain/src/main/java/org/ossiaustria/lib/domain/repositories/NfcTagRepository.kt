@@ -64,7 +64,7 @@ internal class NfcTagRepositoryImpl(
         defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<NfcTag>> ->
-                transformResponseToOutcome(response, onNewData = { Resource.loading() })
+                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
             }
     }
 
@@ -75,7 +75,7 @@ internal class NfcTagRepositoryImpl(
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<NfcTag> ->
-                transformResponseToOutcome(response, onNewData = { Resource.loading() })
+                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
             }
     }
 

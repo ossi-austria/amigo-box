@@ -10,6 +10,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.ossiaustria.lib.domain.EntityMocks
@@ -27,6 +28,7 @@ import java.util.*
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
+@Ignore
 internal class GroupRepositoryTest : AbstractRepositoryTest<GroupEntity, Group>() {
 
     lateinit var subject: GroupRepository
@@ -76,7 +78,7 @@ internal class GroupRepositoryTest : AbstractRepositoryTest<GroupEntity, Group>(
                 ),
             )
 
-            coEvery { groupApi.getAll() } answers { remoteList }
+            coEvery { groupApi.getOwn() } answers { remoteList }
 
             val daoList = listOf(
                 GroupEntity(groupId1, "groupId1"),

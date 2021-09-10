@@ -66,7 +66,7 @@ internal class AlbumShareRepositoryImpl(
         defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<AlbumShare>> ->
-                transformResponseToOutcome(response, onNewData = { Resource.loading() })
+                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
             }
     }
 
@@ -77,7 +77,7 @@ internal class AlbumShareRepositoryImpl(
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<AlbumShare> ->
-                transformResponseToOutcome(response, onNewData = { Resource.loading() })
+                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
             }
     }
 

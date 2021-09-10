@@ -21,7 +21,7 @@ import java.util.*
 
 suspend fun <T> FlowCollector<Resource<T>>.transformResponseToOutcome(
     response: StoreResponse<T>,
-    onNewData: () -> Resource<T>
+    onNoNewData: () -> Resource<T>
 ) {
     when (response) {
         is StoreResponse.Loading -> {
@@ -43,7 +43,7 @@ suspend fun <T> FlowCollector<Resource<T>>.transformResponseToOutcome(
         is StoreResponse.NoNewData -> {
             Timber.d("[Store 4] NoNewData from ${response.origin}")
             // either use an empty list, fetch from dao, or just signify "still loading" here
-            emit(onNewData.invoke())
+            emit(onNoNewData.invoke())
         }
         else -> {
             throw IllegalStateException("State lost.")
@@ -140,7 +140,7 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
         flow: Flow<StoreResponse<DOMAIN>>
     ) {
         flow.flowOn(dispatcherProvider.io()).collect { response ->
-            transformResponseToOutcome(response, onNewData = { Resource.loading() })
+            transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
         }
     }
 
@@ -148,7 +148,7 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
         flow: Flow<StoreResponse<List<DOMAIN>>>
     ) {
         flow.flowOn(dispatcherProvider.io()).collect { response ->
-            transformResponseToOutcome(response, onNewData = { Resource.loading() })
+            transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
         }
     }
 }

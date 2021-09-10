@@ -15,7 +15,6 @@ android {
 
     compileSdkVersion AndroidVersion.compileSdk
 
-
     defaultConfig {
         minSdkVersion AndroidVersion.minSdk
         targetSdkVersion AndroidVersion.targetSdk
@@ -39,20 +38,12 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
-
     testOptions {
-        execution "ANDROIDX_TEST_ORCHESTRATOR"
         reportDir "${rootProject.buildDir}/test-reports"
         resultsDir "${rootProject.buildDir}/test-results"
-
-        junitPlatform {
-            instrumentationTests.integrityCheckEnabled = true
-        }
-        unitTests {
-            includeAndroidResources = true
-        }
+        junitPlatform { instrumentationTests.integrityCheckEnabled = true }
+        unitTests { includeAndroidResources = true }
     }
-
     kapt { correctErrorTypes true }
     kotlinOptions { jvmTarget = '1.8' }
 }

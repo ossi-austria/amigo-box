@@ -54,7 +54,7 @@ class GroupApiTest : AbstractApiTest() {
     @Test
     fun `GroupApi getAll should retrieve all items `() {
         val items = runBlocking {
-            subject.getAll()
+            subject.getOwn()
         }
 
         assertNotNull(items)
@@ -68,7 +68,7 @@ class GroupApiTest : AbstractApiTest() {
                 personsMock = listOf(JsonMocker.person(groupId = idExisting),)
             )
         ),
-        "groups" to MockResponse(
+        "groups/my" to MockResponse(
             JsonMocker.createList(
                 listOf(
                     JsonMocker.group(personsMock = listOf(JsonMocker.person())),

@@ -20,12 +20,14 @@ import org.ossiaustria.lib.domain.models.Album
 import org.ossiaustria.lib.domain.models.Multimedia
 import org.ossiaustria.lib.domain.models.enums.MultimediaType
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.util.*
 
 @FlowPreview
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
+@Config
 internal class MultimediaRepositoryTest : AbstractRepositoryTest<MultimediaEntity, Multimedia>() {
 
     lateinit var subject: MultimediaRepository

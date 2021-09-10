@@ -65,7 +65,7 @@ internal class MultimediaRepositoryImpl(
         defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<Multimedia>> ->
-                transformResponseToOutcome(response, onNewData = { Resource.loading() })
+                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
             }
     }
 
@@ -76,7 +76,7 @@ internal class MultimediaRepositoryImpl(
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<Multimedia> ->
-                transformResponseToOutcome(response, onNewData = { Resource.loading() })
+                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
             }
     }
 

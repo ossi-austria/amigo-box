@@ -24,14 +24,13 @@ import org.ossiaustria.lib.domain.models.Group
 import timber.log.Timber
 import java.util.*
 
-
 interface GroupRepository {
 
-    fun getAllGroups(): Flow<Resource<List<Group>>>
+    fun getAllGroups(refresh: Boolean = false): Flow<Resource<List<Group>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getGroup(id: UUID): Flow<Resource<Group>>
+    fun getGroup(id: UUID, refresh: Boolean = false): Flow<Resource<Group>>
 
 }
 
@@ -47,7 +46,7 @@ internal class GroupRepositoryImpl(
     ) {
 
     override suspend fun fetchOne(id: UUID): Group = groupApi.get(id)
-    override suspend fun defaultFetchAll(): List<Group> = groupApi.getAll()
+    override suspend fun defaultFetchAll(): List<Group> = groupApi.getOwn()
 
     override suspend fun writeItem(item: Group) {
         try {
@@ -69,22 +68,24 @@ internal class GroupRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllGroups(): Flow<Resource<List<Group>>> = flow {
-        defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
+    override fun getAllGroups(refresh: Boolean): Flow<Resource<List<Group>>> = flow {
+        defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = refresh))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<Group>> ->
-                transformResponseToOutcome(response, onNewData = { Resource.loading() })
+                transformResponseToOutcome(response, onNoNewData = { Resource.success(listOf()) })
             }
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getGroup(id: UUID): Flow<Resource<Group>> = flow {
-        singleStore.stream(StoreRequest.cached(key = id, refresh = true))
+    override fun getGroup(id: UUID, refresh: Boolean): Flow<Resource<Group>> = flow {
+        singleStore.stream(StoreRequest.cached(key = id, refresh = refresh))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<Group> ->
-                transformResponseToOutcome(response, onNewData = { Resource.loading() })
+                transformResponseToOutcome(
+                    response,
+                    onNoNewData = { Resource.failure("No new data") })
             }
     }
 

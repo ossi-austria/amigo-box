@@ -12,10 +12,12 @@ data class PersonEntity(
     val personId: UUID,
 
     val name: String,
-    val email: String,
+    val email: String?,
 
     val groupId: UUID?,
-    val memberType: MembershipType
+    val memberType: MembershipType,
+    val avatarUrl: String? = null
+
 ) : AbstractEntity
 
 internal fun PersonEntity.toPerson(): Person {

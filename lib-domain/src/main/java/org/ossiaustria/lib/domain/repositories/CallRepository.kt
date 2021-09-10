@@ -63,7 +63,7 @@ internal class CallRepositoryImpl(
         defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<Call>> ->
-                transformResponseToOutcome(response, onNewData = { Resource.loading() })
+                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
             }
     }
 
@@ -74,7 +74,7 @@ internal class CallRepositoryImpl(
         singleStore.stream(StoreRequest.cached(key = id, refresh = true))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<Call> ->
-                transformResponseToOutcome(response, onNewData = { Resource.loading() })
+                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
             }
     }
 

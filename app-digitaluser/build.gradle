@@ -80,8 +80,8 @@ dependencies {
     testImplementation project(":lib-test-commons")
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterParams)
-    testRuntimeOnly(Libs.Test.jupiterEngine) //Junit5 still broken
-//    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
+//    testRuntimeOnly(Libs.Test.jupiterEngine) //Junit5 still broken
+    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
 
     androidTestImplementation(Libs.Test.testRunner)
     androidTestImplementation(Libs.Test.jupiterApi)
