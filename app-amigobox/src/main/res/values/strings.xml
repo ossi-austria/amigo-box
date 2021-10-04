@@ -28,4 +28,5 @@
     <string name="nfc_prefix" translatable="false">/ossi-austria.org:amigo</string>
     <string name="Albums_button_description">Fotos und Alben ansehen</string>
     <string name="Messages_button_description">Alle Nachrichten ansehen</string>
+    <string name="back_home_description">Zurück zum Start</string>
 </resources>
