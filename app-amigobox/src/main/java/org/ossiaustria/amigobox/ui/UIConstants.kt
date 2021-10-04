@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 class UIConstants {
+
     object ListCard {
 
         // Person Card
@@ -64,11 +65,38 @@ class UIConstants {
     }
 
     object HomeButtonsCard {
+        val CARD_HEIGHT = 250.dp
+        val CARD_WIDTH = 250.dp
         val IMAGE_HEIGHT = 150.dp
         val IMAGE_WIDTH = 150.dp
-        val FONT_SIZE = 25.sp
         val TEXT_PADDING = 4.dp
         val TEXT_HEIGHT = 80.dp
+        val CARD_PADDING = 16.dp
+        val NOTIFICATION_PADDING_TOP = 16.dp
+        val NOTIFICATION_PADDING_END = 8.dp
+        val NOTIFICATION_SIZE = 32.dp
+        val CARD_SHAPE = 24.dp
     }
 
+    object HomeFragment {
+        val PADDING_START = 40.dp
+        val DESCRIPTION_PADDING_TOP = 8.dp
+        val DESCRIPTION_PADDING_BOTTOM = 24.dp
+        val HEADER_PADDING_TOP = 40.dp
+    }
+
+    object BigButtons {
+        val ICON_SIZE = 40.dp
+        val ICON_PADDING = 4.dp
+        val BUTTON_WIDTH = 280.dp
+        val BUTTON_HEIGHT = 64.dp
+        val ROUNDED_CORNER = 40.dp
+
+    }
+
+    object SmallButtons {
+        val BUTTON_SIZE = 64.dp
+        val ICON_SIZE = 32.dp
+
+    }
 }

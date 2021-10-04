@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -29,12 +28,12 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.ossiaustria.amigobox.Navigator
-import org.ossiaustria.amigobox.contacts.GlobalStateViewModel
 import org.ossiaustria.amigobox.ui.UIConstants.HomeButtonRow
 import org.ossiaustria.amigobox.ui.UIConstants.ListFragment
 import org.ossiaustria.amigobox.ui.UIConstants.NavigationButtonRow
 import org.ossiaustria.amigobox.ui.UIConstants.ScrollButton
 import org.ossiaustria.amigobox.ui.UIConstants.ScrollableCardList
+import org.ossiaustria.amigobox.ui.commons.MaterialThemeLight
 import org.ossiaustria.amigobox.ui.commons.NavigationButton
 import org.ossiaustria.amigobox.ui.commons.ScrollButtonType
 import org.ossiaustria.amigobox.ui.commons.ScrollNavigationButton
@@ -57,10 +56,10 @@ class AlbumsFragment : Fragment() {
         setContent { AlbumsScreen() }
     }
 
-    @Preview
+    @Preview(showBackground = true)
     @Composable
     fun AlbumsScreen() {
-        MaterialTheme {
+        MaterialThemeLight {
             AlbumsFragmentComposable()
         }
     }
