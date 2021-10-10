@@ -97,6 +97,20 @@ class UIConstants {
     object SmallButtons {
         val BUTTON_SIZE = 64.dp
         val ICON_SIZE = 32.dp
+    }
 
+    object ProfileImage {
+        val IMAGE_SIZE = 280.dp
+        val IMAGE_PADDING = 24.dp
+        val BORDER_WIDTH = 2.dp
+    }
+
+    object PersonDetailFragment {
+        val TOP_BAR_PADDING = 8.dp
+        val TOP_BAR_HEIGHT = 72.dp
+        val SEC_ROW_PADDING = 16.dp
+        val COLUMN_PADDING = 80.dp
+        val CALL_BUTTON_WIDTH = 320.dp
+        val ALBUM_BUTTON_WIDTH = 440.dp
     }
 }

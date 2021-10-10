@@ -29,8 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import org.ossiaustria.amigobox.ui.UIConstants
 
 // reuse a Composable - there are no styles
@@ -118,6 +122,7 @@ fun IconButtonSmall(
         modifier = Modifier
             .clickable(onClick = onClick)
             .size(UIConstants.SmallButtons.BUTTON_SIZE)
+            .padding(8.dp)
 
     ) {
         IconButtonShape(Modifier, fillColor, backgroundColor)
@@ -169,16 +174,18 @@ fun TextAndIconButton(
     @DrawableRes resourceId: Int,
     buttonDescription: String,
     backgroundColor: Color,
+    contentColor: Color,
     bottomStart: Boolean,
     topStart: Boolean,
+    buttonWidth: Dp,
     onClick: () -> Unit,
 
     ) {
     Card(
         modifier = Modifier
             .clickable(onClick = onClick)
-            .width(UIConstants.BigButtons.BUTTON_WIDTH)
             .height(UIConstants.BigButtons.BUTTON_HEIGHT)
+            .width(buttonWidth)
             .clip(
                 when {
                     bottomStart -> {
@@ -220,13 +227,18 @@ fun TextAndIconButton(
                         .padding(UIConstants.BigButtons.ICON_PADDING),
                     painter = painterResource(id = resourceId),
                     contentDescription = null,
+                    colorFilter = ColorFilter.tint(
+                        contentColor,
+                        BlendMode.SrcIn
+                    )
                 )
 
                 Text(
                     modifier = Modifier
                         .padding(UIConstants.BigButtons.ICON_PADDING),
                     text = buttonDescription,
-                    style = MaterialTheme.typography.caption
+                    style = MaterialTheme.typography.caption,
+                    color = contentColor
                 )
             }
         }
