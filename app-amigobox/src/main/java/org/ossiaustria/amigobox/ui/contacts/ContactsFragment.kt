@@ -30,27 +30,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.NavigationButton
 import org.ossiaustria.amigobox.ui.commons.ScrollButtonType
 import org.ossiaustria.amigobox.ui.commons.ScrollNavigationButton
 import org.ossiaustria.lib.domain.models.Person
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class ContactsFragment : Fragment() {
 
 //    private val globalState: GlobalStateViewModel by activityViewModels()
 
-    @Inject
-    lateinit var navigator: Navigator
+    val navigator: Navigator by inject()
 
-    private val viewModel by viewModels<ContactsViewModel>()
-
+    private val viewModel by viewModel<ContactsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -186,11 +182,9 @@ class ContactsFragment : Fragment() {
         }
     }
 
-
     private fun backToHome() {
         navigator.toHome()
     }
-
 
     //TODO: input is a Person object
     // not sure, is that correct... person as input?
@@ -199,6 +193,5 @@ class ContactsFragment : Fragment() {
 //        globalState.setCurrentPerson(person)
         navigator.toPersonDetail(person)
     }
-
 
 }

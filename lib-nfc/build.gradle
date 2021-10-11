@@ -6,9 +6,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'de.mannodermaus.android-junit5'
-    id 'dagger.hilt.android.plugin'
     id 'jacoco'
-
     id "org.jlleitschuh.gradle.ktlint" version '10.0.0'
 }
 
@@ -37,16 +35,10 @@ android {
     }
 
     testOptions {
-        execution "ANDROIDX_TEST_ORCHESTRATOR"
         reportDir "${rootProject.buildDir}/test-reports"
         resultsDir "${rootProject.buildDir}/test-results"
-
-        junitPlatform {
-            instrumentationTests.integrityCheckEnabled = true
-        }
-        unitTests {
-            includeAndroidResources = true
-        }
+        junitPlatform { instrumentationTests.integrityCheckEnabled = true }
+        unitTests { includeAndroidResources = true }
     }
 
     kapt { correctErrorTypes true }
@@ -58,12 +50,6 @@ dependencies {
     implementation(Libs.appcompat)
 //     implementation(Libs.Compose.material)
     implementation(Libs.material)
-
-    implementation(Libs.hiltAndroid)
-    implementation(Libs.hiltCommon)
-    implementation(Libs.hiltLifecycle)
-    kapt(Libs.hiltAndroidCompiler)
-    kapt(Libs.hiltCompiler)
 
     // Android, material & friends
     implementation(Libs.timber)

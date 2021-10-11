@@ -11,7 +11,7 @@ import org.ossiaustria.lib.domain.repositories.NfcTagRepository
 import timber.log.Timber
 import javax.inject.Inject
 
-class SynchronisationService @Inject constructor(
+class SynchronisationService(
     private val groupRepository: GroupRepository,
     private val albumRepository: AlbumRepository,
     private val albumShareRepository: AlbumShareRepository,

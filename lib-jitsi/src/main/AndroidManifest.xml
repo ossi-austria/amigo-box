@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="org.ossiaustria.lib.jitsi">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.ossiaustria.lib.jitsi">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
 </manifest>

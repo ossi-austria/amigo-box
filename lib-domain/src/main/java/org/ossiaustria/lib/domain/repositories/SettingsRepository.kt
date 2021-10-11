@@ -32,7 +32,8 @@ interface SettingsRepository {
 }
 
 class SettingsRepositoryImpl(
-    appContext: Context
+    appContext: Context,
+    val cryptedPreferences : SharedPreferences
 ) : SettingsRepository {
 
     @VisibleForTesting
@@ -41,14 +42,6 @@ class SettingsRepositoryImpl(
         Context.MODE_PRIVATE
     )
 
-    @VisibleForTesting
-    val cryptedPreferences = EncryptedSharedPreferences.create(
-        SettingsRepository.SETTINGS_AMIGO_CRYPTED,
-        MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
-        appContext,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
 
     override var account: Account?
         set(value) = putSecureJson(KEY_ACCOUNT, value)

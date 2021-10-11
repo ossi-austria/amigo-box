@@ -66,6 +66,15 @@ object Libs {
         const val firebaseBom = "com.google.firebase:firebase-bom:28.4.0"
     }
 
+    object Koin {
+        const val koin_version= "3.1.2"
+        const val koinCore = "io.insert-koin:koin-core:$koin_version"
+        const val koinTest = "io.insert-koin:koin-test:$koin_version"
+        const val koinTestJunit = "io.insert-koin:koin-test-junit4:$koin_version"
+        const val koinAndroid = "io.insert-koin:koin-android:$koin_version"
+        const val koinCompose = "io.insert-koin:koin:koin-androidx-compose:$koin_version"
+    }
+
     object Lifecycle {
         const val lifecycle_version = "2.3.1"
         const val arch_version = "2.1.0"

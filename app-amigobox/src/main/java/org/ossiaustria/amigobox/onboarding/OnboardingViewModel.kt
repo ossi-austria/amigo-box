@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.collect
@@ -13,7 +12,6 @@ import org.ossiaustria.lib.domain.auth.Account
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.services.AuthService
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * OnboardingState helps OnboardingViewModel to describe the current logical state of user flow and UI
@@ -27,14 +25,13 @@ sealed class OnboardingState {
 }
 
 /**
- * Every ViewModel needs @HiltViewModel and an @Inject constructor like this.
+ * Every ViewModel needs  and an @Inject constructor like this.
  * Objects in the constructor (mostly Services) will be injected automatically
  *
  * OnboardingViewModel uses AuthService and OnboardingState to handle register, login etc
  * and prepare the data for UI and other local purposes
  */
-@HiltViewModel
-class OnboardingViewModel @Inject constructor(
+class OnboardingViewModel(
     private val ioDispatcher: CoroutineDispatcher,
     private val authService: AuthService
 ) : ViewModel() {
@@ -96,8 +93,10 @@ class OnboardingViewModel @Inject constructor(
                 when (it) {
                     is Resource.Success -> _state.postValue(OnboardingState.RegisterSuccess(it.value))
                     is Resource.Failure -> _state.postValue(
-                            OnboardingState.RegisterFailed(it.throwable
-                                    ?: Exception(it.failureCause))
+                        OnboardingState.RegisterFailed(
+                            it.throwable
+                                ?: Exception(it.failureCause)
+                        )
                     )
                     else -> Timber.d("$it")//_state.emit(OnboardingState.Unauthenticated)
                 }

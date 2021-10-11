@@ -9,15 +9,13 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.R
 
-@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     // Retrieve OnboardingViewModel via injection
-    private val viewModel by viewModels<OnboardingViewModel>()
+    private val viewModel by viewModel<OnboardingViewModel>()
 
     // use "lateinit var" for not-null GUI fields
     lateinit var loginButton: Button

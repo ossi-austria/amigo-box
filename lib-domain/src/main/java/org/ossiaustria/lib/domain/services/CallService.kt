@@ -12,12 +12,17 @@ import org.ossiaustria.lib.domain.repositories.CallRepository
 import org.ossiaustria.lib.domain.services.ServiceMocks.HER_PERSON_ID
 import org.ossiaustria.lib.domain.services.ServiceMocks.HIS_ALBUM_ID
 import org.ossiaustria.lib.domain.services.ServiceMocks.MY_PERSON_ID
+import timber.log.Timber
 import java.time.ZonedDateTime
 import java.util.*
 import java.util.UUID.randomUUID
 
-
 interface CallService : SendableService<Call> {
+    fun informWillJoin()
+    fun informTerminated()
+    fun informJoined()
+    fun informParticipantJoined()
+    fun informParticipantLeft()
 }
 
 class MockCallServiceImpl(
@@ -78,6 +83,25 @@ class MockCallServiceImpl(
         finishedAt = System.currentTimeMillis(),
     )
 
+    override fun informWillJoin() {
+      Timber.i("informWillJoin")
+    }
+
+    override fun informTerminated() {
+        Timber.i("informTerminated")
+    }
+
+    override fun informJoined() {
+        Timber.i("informJoined")
+    }
+
+    override fun informParticipantJoined() {
+        Timber.i("informParticipantJoined")
+    }
+
+    override fun informParticipantLeft() {
+        Timber.i("informParticipantLeft")
+    }
 
     override fun getOne(id: UUID): Flow<Resource<Call>> = wrapper.getOne {
         mockCall()

@@ -9,34 +9,11 @@
         android:id="@+id/welcomeFragment"
         android:name="org.ossiaustria.amigobox.ui.welcome.WelcomeFragment"
         android:label="welcome_fragment"
-        tools:layout="@layout/welcome_fragment">
-        <action
-            android:id="@+id/action_welcomeFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_welcomeFragment_to_timelineFragment"
-            app:destination="@id/timelineFragment" />
-    </fragment>
+        tools:layout="@layout/welcome_fragment" />
     <fragment
         android:id="@+id/loadingFragment"
         android:name="org.ossiaustria.amigobox.ui.loading.LoadingFragment"
-        android:label="LoadingFragment">
-        <action
-            android:id="@+id/action_loadingFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_loadingFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_loadingFragment_to_jitsiFragment"
-            app:destination="@id/jitsiFragment" />
-        <action
-            android:id="@+id/action_loadingFragment_to_timelineFragment"
-            app:destination="@id/timelineFragment" />
-        <action
-            android:id="@+id/action_loadingFragment_to_contactsFragment"
-            app:destination="@id/contactsFragment" />
-    </fragment>
+        android:label="LoadingFragment" />
     <fragment
         android:id="@+id/homeFragment"
         android:name="org.ossiaustria.amigobox.ui.home.HomeFragment"
@@ -44,19 +21,8 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="org.ossiaustria.amigobox.onboarding.LoginFragment"
-        android:label="LoginFragment">
-        <action
-            android:id="@+id/action_loginFragment_to_welcomeFragment"
-            app:destination="@id/welcomeFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_timelineFragment"
-            app:destination="@id/timelineFragment" />
-    </fragment>
+        android:label="LoginFragment" />
 
-    <fragment
-        android:id="@+id/jitsiFragment"
-        android:name="org.ossiaustria.lib.jitsi.ui.JitsiFragment"
-        android:label="JitsiFragment" />
     <fragment
         android:id="@+id/timelineFragment"
         android:name="org.ossiaustria.amigobox.timeline.TimelineFragment"
@@ -65,8 +31,7 @@
     <fragment
         android:id="@+id/contactsFragment"
         android:name="org.ossiaustria.amigobox.ui.contacts.ContactsFragment"
-        android:label="ContactsFragment" >
-    </fragment>
+        android:label="ContactsFragment" />
     <fragment
         android:id="@+id/personDetailFragment"
         android:name="org.ossiaustria.amigobox.contacts.PersonDetailFragment"

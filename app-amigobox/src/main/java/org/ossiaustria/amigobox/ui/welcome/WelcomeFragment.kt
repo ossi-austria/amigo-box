@@ -23,7 +23,7 @@ class WelcomeFragment : Fragment() {
         val button = view.findViewById<Button>(R.id.button)
         button.setOnClickListener {
             view.findNavController()
-                .navigate(WelcomeFragmentDirections.actionWelcomeFragmentToHomeFragment())
+                .navigate(R.id.homeFragment)
         }
     }
 }

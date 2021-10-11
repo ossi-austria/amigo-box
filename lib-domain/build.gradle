@@ -6,9 +6,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'de.mannodermaus.android-junit5'
-    id 'dagger.hilt.android.plugin'
     id 'jacoco'
-
 }
 
 android {
@@ -46,6 +44,9 @@ android {
     }
     kapt { correctErrorTypes true }
     kotlinOptions { jvmTarget = '1.8' }
+    lintOptions {
+        disable "Instantiatable"
+    }
 }
 
 dependencies {
@@ -70,15 +71,11 @@ dependencies {
     implementation(Libs.loggingInterceptor)
 
     // hilt & dagger
-    implementation(Libs.hiltAndroid)
-    implementation(Libs.hiltCommon)
-    implementation(Libs.hiltLifecycle)
-    kapt(Libs.hiltAndroidCompiler)
-    kapt(Libs.hiltCompiler)
+    implementation(Libs.Koin.koinCore)
+    implementation(Libs.Koin.koinAndroid)
+    testImplementation(Libs.Koin.koinTest)
+    testImplementation(Libs.Koin.koinTestJunit)
 
-    testImplementation(Libs.hiltAndroidTesting)
-    kaptTest(Libs.hiltAndroidCompiler)
-    kaptTest(Libs.hiltCompiler)
 
     // Testing
     testImplementation project(':lib-test-commons')

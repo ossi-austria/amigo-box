@@ -22,21 +22,18 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.MaterialThemeLight
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    private val viewModel by viewModels<HomeViewModel>()
+    private val viewModel by viewModel<HomeViewModel>()
 
-    @Inject
-    lateinit var navigator: Navigator
+    val navigator: Navigator by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,

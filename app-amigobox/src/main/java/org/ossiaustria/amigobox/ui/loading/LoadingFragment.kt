@@ -23,22 +23,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.java.KoinJavaComponent.inject
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.ui.commons.MaterialButton
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Person
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class LoadingFragment : Fragment() {
 
-    @Inject
-    lateinit var navigator: Navigator
+    val navigator: Navigator by inject()
 
-    private val loadingViewModel by viewModels<LoadingViewModel>()
+    private val loadingViewModel by viewModel<LoadingViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,7 +69,6 @@ fun LoadingFragmentScreen(loadingViewModel: LoadingViewModel = viewModel()) {
         startTimeline = loadingViewModel::startTimeline,
         startContacts = loadingViewModel::startContacts,
         startAlbums = loadingViewModel::startAlbums,
-        startGallery = loadingViewModel::startGallery,
         startPersonDetail = loadingViewModel::startPersonDetail,
     )
 }
@@ -86,7 +83,6 @@ fun LoadingFragmentComposable(
     startTimeline: () -> Unit,
     startContacts: () -> Unit,
     startAlbums: () -> Unit,
-    startGallery: () -> Unit,
     startPersonDetail: () -> Unit,
 ) {
 
@@ -102,6 +98,7 @@ fun LoadingFragmentComposable(
             }
 
         } else if (state.isSuccess) {
+            val mod = Modifier.padding(16.dp)
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -112,16 +109,24 @@ fun LoadingFragmentComposable(
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text("Hallo ${person?.name}")
-                MaterialButton(onClick = { startLogin() }, text = "startLogin")
-                MaterialButton(onClick = { startHome() }, text = "Home")
-                MaterialButton(onClick = { startJitsi() }, text = "Start jitsi")
-                MaterialButton(onClick = { startTimeline() }, text = "Show Timeline")
-                MaterialButton(onClick = { startContacts() }, text = "Show Contacts")
-                MaterialButton(onClick = { startAlbums() }, text = "Show Albums")
-                MaterialButton(onClick = { startGallery() }, text = "Show Gallery")
+                MaterialButton(onClick = { startLogin() }, text = "startLogin", modifier = mod)
+                MaterialButton(onClick = { startHome() }, text = "Home", modifier = mod)
+                MaterialButton(onClick = { startJitsi() }, text = "Start jitsi", modifier = mod)
+                MaterialButton(
+                    onClick = { startTimeline() },
+                    text = "Show Timeline",
+                    modifier = mod
+                )
+                MaterialButton(
+                    onClick = { startContacts() },
+                    text = "Show Contacts",
+                    modifier = mod
+                )
+                MaterialButton(onClick = { startAlbums() }, text = "Show Albums", modifier = mod)
                 MaterialButton(
                     onClick = { startPersonDetail() },
-                    text = "Person detail (currentUser)"
+                    text = "Person detail (currentUser)",
+                    modifier = mod
                 )
             }
         }

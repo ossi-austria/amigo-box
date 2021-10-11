@@ -24,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.ui.UIConstants.HomeButtonRow
 import org.ossiaustria.amigobox.ui.UIConstants.ListFragment
@@ -38,15 +38,12 @@ import org.ossiaustria.amigobox.ui.commons.NavigationButton
 import org.ossiaustria.amigobox.ui.commons.ScrollButtonType
 import org.ossiaustria.amigobox.ui.commons.ScrollNavigationButton
 import org.ossiaustria.lib.domain.models.Album
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class AlbumsFragment : Fragment() {
 
-    @Inject
-    lateinit var navigator: Navigator
+    val navigator: Navigator by inject()
 
-    private val viewModel by viewModels<AlbumsViewModel>()
+    private val viewModel by viewModel<AlbumsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -204,7 +201,6 @@ class AlbumsFragment : Fragment() {
 
     // using globalState.setCurrentPerson method, to set Person
     private fun toAlbum(album: Album) {
-//        globalState.setCurrentAlbum(album)
-        navigator.toImageGallery()
+        navigator.toImageGallery(album)
     }
 }

@@ -7,7 +7,6 @@ plugins {
     id 'kotlin-kapt'
     id 'de.mannodermaus.android-junit5'
     id 'jacoco'
-    id 'dagger.hilt.android.plugin'
 }
 android {
 
@@ -33,11 +32,22 @@ android {
         }
     }
 
+    testOptions {
+        reportDir "${rootProject.buildDir}/test-reports"
+        resultsDir "${rootProject.buildDir}/test-results"
+        junitPlatform { instrumentationTests.integrityCheckEnabled = true }
+        unitTests { includeAndroidResources = true }
+    }
     kapt { correctErrorTypes true }
     kotlinOptions { jvmTarget = '1.8' }
+    lintOptions {
+        disable "Instantiatable"
+    }
 }
 
 dependencies {
+
+    api project(":lib-domain")
 
     implementation(Libs.timber)
     implementation(Libs.appcompat)
@@ -45,18 +55,26 @@ dependencies {
 
     implementation(Libs.jitsiMeetSdk) { transitive = true }
 
-    implementation(Libs.hiltAndroid)
-    implementation(Libs.hiltCommon)
-    implementation(Libs.hiltLifecycle)
-    kapt(Libs.hiltAndroidCompiler)
-    kapt(Libs.hiltCompiler)
+    implementation(Libs.coroutinesAndroid)
+    implementation(Libs.coroutinesCore)
+    implementation(Libs.Lifecycle.viewmodel)
+    implementation(Libs.Lifecycle.viewmodelKtx)
+    implementation(Libs.Lifecycle.livedata)
+    implementation(Libs.Lifecycle.livedataKtx)
+    implementation(Libs.Lifecycle.lifecycleKtx)
+
+    implementation(Libs.Koin.koinCore)
+    implementation(Libs.Koin.koinAndroid)
+    testImplementation(Libs.Koin.koinTest)
+    testImplementation(Libs.Koin.koinTestJunit)
 
     implementation Libs.permissions
 
     // Testing
+    testImplementation project(':lib-test-commons')
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterParams)
-    testRuntimeOnly(Libs.Test.jupiterEngine)
+    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
 
     testImplementation(Libs.Test.testRunner)
     androidTestImplementation(Libs.Test.jupiterApi)
@@ -65,7 +83,8 @@ dependencies {
 
     testImplementation(Libs.Test.test)
     testImplementation(Libs.Test.testExt)
+    testImplementation(Libs.Test.robolectric)
     implementation(Libs.Test.coroutinesTest)
-    testImplementation(Libs.Test.mockkAndroid)
-
+    testImplementation(Libs.Lifecycle.coreTesting)
+    testImplementation(Libs.Test.mockk)
 }

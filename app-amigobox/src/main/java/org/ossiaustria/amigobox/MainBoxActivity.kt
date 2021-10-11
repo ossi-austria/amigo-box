@@ -7,16 +7,13 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.android.ext.android.inject
 import org.ossiaustria.lib.nfc.NfcConstants
 import org.ossiaustria.lib.nfc.NfcHandler
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class MainBoxActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var navigator: Navigator
+    val navigator: Navigator by inject()
 
     // NFC adapter for checking NFC state in the device
     private var nfcAdapter: NfcAdapter? = null
@@ -32,7 +29,13 @@ class MainBoxActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.main_activity)
-        navigator.bind((supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController)
+        navigator.bind(
+            activity = this,
+            navController = (
+                supportFragmentManager
+                    .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                ).navController
+        )
 
         ActivityHelper.prepareActivityForDeviceLock(this)
 

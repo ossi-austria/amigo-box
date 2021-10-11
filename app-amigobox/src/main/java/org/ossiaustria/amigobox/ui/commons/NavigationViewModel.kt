@@ -3,7 +3,7 @@ package org.ossiaustria.amigobox.ui.commons
 import androidx.lifecycle.ViewModel
 import org.ossiaustria.amigobox.Navigator
 
-open class NavigationViewModel : ViewModel() {
+abstract class NavigationViewModel : ViewModel() {
 
     protected var navigator: Navigator? = null
 
