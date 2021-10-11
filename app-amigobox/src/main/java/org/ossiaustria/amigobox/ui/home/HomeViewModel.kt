@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -13,10 +12,8 @@ import org.ossiaustria.lib.domain.models.Album
 import org.ossiaustria.lib.domain.modules.UserContext
 import org.ossiaustria.lib.domain.repositories.AlbumRepository
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
+class HomeViewModel(
     private val ioDispatcher: CoroutineDispatcher,
     private val albumRepository: AlbumRepository,
     private val userContext: UserContext

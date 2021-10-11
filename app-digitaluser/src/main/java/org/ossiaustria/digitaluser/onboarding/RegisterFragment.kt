@@ -18,7 +18,7 @@ import org.ossiaustria.digitaluser.R
 class RegisterFragment : Fragment() {
 
     // Retrieve OnboardingViewModel via injection
-    private val viewModel by viewModels<OnboardingViewModel>()
+    private val viewModel by viewModel<OnboardingViewModel>()
 
     // use "lateinit var" for not-null GUI fields
     lateinit var registerButton: Button

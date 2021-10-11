@@ -30,8 +30,8 @@
         <activity
             android:name=".MainBoxActivity"
             android:launchMode="singleTop"
-            android:showOnLockScreen="true"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:showOnLockScreen="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -47,6 +47,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="org.ossiaustria.lib.jitsi.ui.AmigoJitsiActivity" />
+        <activity android:name="org.ossiaustria.lib.jitsi.ui.AmigoSingleJitsiActivity" />
 
         <service
             android:name=".cloudmessaging.DefaultFirebaseMessagingService"

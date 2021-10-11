@@ -13,8 +13,8 @@ import org.ossiaustria.lib.domain.repositories.AlbumRepository
 import timber.log.Timber
 import javax.inject.Inject
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
+
+class HomeViewModel(
     private var albumRepository: AlbumRepository
 ) : ViewModel() {
 

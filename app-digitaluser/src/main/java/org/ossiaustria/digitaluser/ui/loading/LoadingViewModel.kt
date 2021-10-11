@@ -8,8 +8,8 @@ import kotlinx.coroutines.launch
 import org.ossiaustria.lib.commons.DispatcherProvider
 import javax.inject.Inject
 
-@HiltViewModel
-class LoadingViewModel @Inject constructor(dispatcherProvider: DispatcherProvider) :
+
+class LoadingViewModel(dispatcherProvider: DispatcherProvider) :
     ViewModel() {
 
     val liveUserLogin = MutableLiveData<String>()

@@ -9,8 +9,7 @@ import javax.inject.Inject
 @HiltAndroidApp
 class DigitalUserApplication : Application() {
 
-    @Inject
-    lateinit var settingsRepository: SettingsRepository
+    val settingsRepository: SettingsRepository
 
     override fun onCreate() {
         super.onCreate()

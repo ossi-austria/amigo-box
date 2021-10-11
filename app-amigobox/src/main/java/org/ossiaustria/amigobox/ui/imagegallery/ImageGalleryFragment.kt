@@ -19,26 +19,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.ossiaustria.amigobox.Navigator
-import org.ossiaustria.amigobox.contacts.GlobalStateViewModel
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.NetworkImage
 import org.ossiaustria.lib.domain.models.Album
 import timber.log.Timber
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class ImageGalleryFragment : Fragment() {
 
-    private val globalState: GlobalStateViewModel by activityViewModels()
-    private val viewModelImage: ImageGalleryViewModel by activityViewModels()
+    val viewModelImage: ImageGalleryViewModel by viewModel<ImageGalleryViewModel>()
 
-    @Inject
-    lateinit var navigator: Navigator
+    val navigator: Navigator by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,12 +41,8 @@ class ImageGalleryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         setContent {
-
-//            val scope = rememberCoroutineScope()
-//            scope.launch{ viewModelImage.autoImageGallery() }
-            val album: Album? = globalState.selectedAlbum.value
-            if (album != null) GalleryScreen(album)
-            else Text("Album cannot be loaded")
+            val album: Album = Navigator.getAlbum(requireArguments())
+            GalleryScreen(album)
         }
     }
 
@@ -99,7 +90,8 @@ class ImageGalleryFragment : Fragment() {
                     if (index + 1 == album.items.size) {
                         startAlbums()
                     }
-                } }
+                }
+            }
         }
     }
 
@@ -112,6 +104,5 @@ class ImageGalleryFragment : Fragment() {
     private fun startAlbums() {
         navigator.toAlbums()
     }
-
 }
 

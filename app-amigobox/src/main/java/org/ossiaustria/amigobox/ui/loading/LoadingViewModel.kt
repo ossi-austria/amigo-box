@@ -2,19 +2,18 @@ package org.ossiaustria.amigobox.ui.loading
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ossiaustria.amigobox.ui.commons.NavigationViewModel
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.modules.UserContext
-import javax.inject.Inject
 
-@HiltViewModel
-class LoadingViewModel @Inject constructor(
+class LoadingViewModel(
     dispatcherProvider: DispatcherProvider,
     private val userContext: UserContext,
     private val synchronisationService: SynchronisationService,
@@ -39,7 +38,10 @@ class LoadingViewModel @Inject constructor(
                 _state.postValue(Resource.success(userContext.available()))
             } else {
                 _state.postValue(Resource.failure("Not loggedin"))
-                startLogin()
+
+                withContext(Dispatchers.Main) {
+                    startLogin()
+                }
             }
         }
     }
@@ -73,7 +75,4 @@ class LoadingViewModel @Inject constructor(
         navigator?.toAlbums()
     }
 
-    fun startGallery() {
-        navigator?.toImageGallery()
-    }
 }

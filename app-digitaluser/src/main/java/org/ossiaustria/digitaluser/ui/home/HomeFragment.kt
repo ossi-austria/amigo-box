@@ -13,7 +13,7 @@ import org.ossiaustria.digitaluser.R
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    private val viewModel by viewModels<HomeViewModel>()
+    private val viewModel by viewModel<HomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

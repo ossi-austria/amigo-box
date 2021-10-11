@@ -28,14 +28,14 @@ sealed class OnboardingState {
 }
 
 /**
- * Every ViewModel needs @HiltViewModel and an @Inject constructor like this.
+ * Every ViewModel needs  and an @Inject constructor like this.
  * Objects in the constructor (mostly Services) will be injected automatically
  *
  * OnboardingViewModel uses AuthService and OnboardingState to handle register, login etc
  * and prepare the data for UI and other local purposes
  */
-@HiltViewModel
-class OnboardingViewModel @Inject constructor(
+
+class OnboardingViewModel(
     private val ioDispatcher: CoroutineDispatcher,
     private val authService: AuthService
 ) : ViewModel() {

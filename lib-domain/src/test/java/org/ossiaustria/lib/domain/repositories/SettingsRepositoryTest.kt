@@ -1,12 +1,17 @@
 package org.ossiaustria.lib.domain.repositories
 
+import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 import androidx.test.platform.app.InstrumentationRegistry
+import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.android.ext.koin.androidContext
 import org.ossiaustria.lib.domain.FakeAndroidKeyStore
 import org.ossiaustria.lib.domain.auth.Account
 import org.ossiaustria.lib.domain.auth.TokenResult
@@ -26,7 +31,15 @@ internal class SettingsRepositoryTest() {
     fun before() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         FakeAndroidKeyStore.setup
-        subject = SettingsRepositoryImpl(context)
+
+        val cryptPrefs = EncryptedSharedPreferences.create(
+            SettingsRepository.SETTINGS_AMIGO_CRYPTED,
+            MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
+            context,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+        subject = SettingsRepositoryImpl(context, cryptPrefs)
     }
 
     @Test

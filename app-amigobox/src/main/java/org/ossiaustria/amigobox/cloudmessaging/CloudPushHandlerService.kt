@@ -5,11 +5,10 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.RemoteMessage
 import org.ossiaustria.amigobox.MainBoxActivity
-import org.ossiaustria.lib.domain.modules.UserContext
 import timber.log.Timber
 
 
-class CloudPushHandlerService(val appContext: Context, val userContext: UserContext) {
+class CloudPushHandlerService(val appContext: Context) {
 
 
     fun onNewToken(newToken: String) {

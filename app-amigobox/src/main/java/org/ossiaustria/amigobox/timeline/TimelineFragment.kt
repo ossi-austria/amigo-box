@@ -5,17 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.databinding.TimelineFragmentBinding
 import timber.log.Timber
 
-@AndroidEntryPoint
 class TimelineFragment : Fragment() {
 
     // Retrieve OnboardingViewModel via injection
-    private val viewModel by viewModels<TimelineViewModel>()
+    private val viewModel by viewModel<TimelineViewModel>()
 
     // Use "ViewBinding" to load the view nicely
     private lateinit var binding: TimelineFragmentBinding
