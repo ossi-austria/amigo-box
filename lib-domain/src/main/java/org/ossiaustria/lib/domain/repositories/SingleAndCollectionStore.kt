@@ -4,6 +4,7 @@ import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreBuilder
+import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -30,14 +31,19 @@ suspend fun <T> FlowCollector<Resource<T>>.transformResponseToOutcome(
         }
 
         is StoreResponse.Error -> {
-            Timber.d("[Store 4] Error from ${response.origin}")
+            Timber.e("[Store 4] Error from ${response.origin}: ${response.errorMessageOrNull()}")
+            try {
+                response.throwIfError()
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
             emit(
                 Resource.failure(response.errorMessageOrNull() ?: "Store 4 Error")
             )
         }
         is StoreResponse.Data -> {
             val data = response.value
-            Timber.d("[Store 4] Data from ${response.origin}")
+            Timber.i("[Store 4] Data from ${response.origin}")
             emit(Resource.success(data))
         }
         is StoreResponse.NoNewData -> {
@@ -105,7 +111,6 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
 
     private fun deleteAll() {
 
-
     }
 
     private fun withFlowCollection(
@@ -135,6 +140,18 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
             }
         }
     }
+
+    protected fun newRequest(key: String, refresh: Boolean) =
+        if (refresh)
+            StoreRequest.fresh(key = key)
+        else
+            StoreRequest.cached(key = key, refresh = true)
+
+    protected fun newRequest(key: UUID, refresh: Boolean) =
+        if (refresh)
+            StoreRequest.fresh(key = key)
+        else
+            StoreRequest.cached(key = key, refresh = true)
 
     protected suspend fun FlowCollector<Resource<DOMAIN>>.itemTransform(
         flow: Flow<StoreResponse<DOMAIN>>

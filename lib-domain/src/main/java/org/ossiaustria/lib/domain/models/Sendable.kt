@@ -4,9 +4,9 @@ import java.util.*
 
 interface Sendable {
     val id: UUID
-    val createdAt: Long
-    val sendAt: Long?
-    val retrievedAt: Long?
+    val createdAt: Date
+    val sendAt: Date?
+    val retrievedAt: Date?
     val senderId: UUID
     val receiverId: UUID
 }

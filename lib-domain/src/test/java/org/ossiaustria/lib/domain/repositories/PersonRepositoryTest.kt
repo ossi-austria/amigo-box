@@ -17,7 +17,7 @@ import org.ossiaustria.lib.domain.database.AppDatabaseImpl
 import org.ossiaustria.lib.domain.database.PersonDao
 import org.ossiaustria.lib.domain.database.entities.PersonEntity
 import org.ossiaustria.lib.domain.models.Person
-import org.ossiaustria.lib.domain.models.enums.MembershipType
+import org.ossiaustria.lib.domain.models.enums.MemberType
 import org.robolectric.RobolectricTestRunner
 import java.util.*
 
@@ -54,8 +54,8 @@ internal class PersonRepositoryTest : AbstractRepositoryTest<PersonEntity, Perso
 
 
             val remoteList = listOf(
-                mockPerson(personId1, MembershipType.MEMBER),
-                mockPerson(personId2, MembershipType.CENTER),
+                mockPerson(personId1, MemberType.MEMBER),
+                mockPerson(personId2, MemberType.ANALOGUE),
             )
 
             coEvery { personApi.getAll() } answers { remoteList }
@@ -66,7 +66,7 @@ internal class PersonRepositoryTest : AbstractRepositoryTest<PersonEntity, Perso
                     "personId1",
                     "email",
                     UUID.randomUUID(),
-                    MembershipType.MEMBER
+                    MemberType.MEMBER
                 ),
             )
 
@@ -78,7 +78,7 @@ internal class PersonRepositoryTest : AbstractRepositoryTest<PersonEntity, Perso
 
     private fun mockPerson(
         personId: UUID,
-        memberType: MembershipType = MembershipType.MEMBER
+        memberType: MemberType = MemberType.MEMBER
     ): Person {
         return Person(
             id = personId,

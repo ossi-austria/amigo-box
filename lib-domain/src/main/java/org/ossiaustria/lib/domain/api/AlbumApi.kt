@@ -7,8 +7,8 @@ import java.util.*
 
 interface AlbumApi {
 
-    @GET("albums")
-    suspend fun getAll(): List<Album>
+    @GET("albums/shared")
+    suspend fun getShared(): List<Album>
 
     @GET("albums/{id}")
     suspend fun get(@Path("id") id: UUID): Album

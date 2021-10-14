@@ -12,11 +12,11 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.ossiaustria.lib.domain.api.NfcTagApi
+import org.ossiaustria.lib.domain.api.NfcInfoApi
 import org.ossiaustria.lib.domain.database.AppDatabaseImpl
-import org.ossiaustria.lib.domain.database.NfcTagDao
-import org.ossiaustria.lib.domain.database.entities.NfcTagEntity
-import org.ossiaustria.lib.domain.models.NfcTag
+import org.ossiaustria.lib.domain.database.NfcInfoDao
+import org.ossiaustria.lib.domain.database.entities.NfcInfoEntity
+import org.ossiaustria.lib.domain.models.NfcInfo
 import org.ossiaustria.lib.domain.models.enums.NfcTagType
 import org.robolectric.RobolectricTestRunner
 import java.util.*
@@ -25,24 +25,24 @@ import java.util.*
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
-internal class NfcTagRepositoryTest : AbstractRepositoryTest<NfcTagEntity, NfcTag>() {
+internal class NfcTagRepositoryTest : AbstractRepositoryTest<NfcInfoEntity, NfcInfo>() {
 
-    lateinit var subject: NfcTagRepository
+    lateinit var subject: NfcInfoRepository
 
-    lateinit var nfcTagDao: NfcTagDao
+    lateinit var nfcInfoDao: NfcInfoDao
 
     @RelaxedMockK
-    lateinit var nfcTagApi: NfcTagApi
+    lateinit var nfcInfoApi: NfcInfoApi
 
     @Before
     fun before() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
         db = Room.inMemoryDatabaseBuilder(context, AppDatabaseImpl::class.java).build()
-        nfcTagDao = db.nfcTagDao()
+        nfcInfoDao = db.nfcInfoDao()
         MockKAnnotations.init(this, relaxUnitFun = true)
 
-        subject = NfcTagRepositoryImpl(nfcTagApi, nfcTagDao, testDispatcherProvider)
+        subject = NfcInfoRepositoryImpl(nfcInfoApi, nfcInfoDao, testDispatcherProvider)
     }
 
     @InternalCoroutinesApi
@@ -56,17 +56,35 @@ internal class NfcTagRepositoryTest : AbstractRepositoryTest<NfcTagEntity, NfcTa
             val id2 = UUID.randomUUID()
 
             val remoteList = listOf(
-                NfcTag(id1, creatorId = personId, type = NfcTagType.COLLECTION),
-                NfcTag(id2, creatorId = personId, type = NfcTagType.COLLECTION),
+                NfcInfo(
+                    id1,
+                    creatorId = personId,
+                    type = NfcTagType.OPEN_ALBUM,
+                    name = "name",
+                    nfcRef = "ref"
+                ),
+                NfcInfo(
+                    id2,
+                    creatorId = personId,
+                    type = NfcTagType.OPEN_ALBUM,
+                    name = "name",
+                    nfcRef = "ref"
+                ),
             )
 
-            coEvery { nfcTagApi.getAll() } answers { remoteList }
+            coEvery { nfcInfoApi.getAllAccessibleNfcs() } answers { remoteList }
 
             val daoList = listOf(
-                NfcTagEntity(id1, creatorId = personId, type = NfcTagType.COLLECTION),
+                NfcInfoEntity(
+                    id1,
+                    creatorId = personId,
+                    type = NfcTagType.OPEN_ALBUM,
+                    name = "name",
+                    nfcRef = "ref",
+                ),
             )
 
-            nfcTagDao.insertAll(daoList)
+            nfcInfoDao.insertAll(daoList)
 
             testAllStates(daoList, remoteList, subject.getAllNfcTags())
         }

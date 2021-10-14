@@ -20,7 +20,7 @@ val databaseModule = module {
     single { get<AppDatabase>().groupDao() }
     single { get<AppDatabase>().messageDao() }
     single { get<AppDatabase>().multimediaDao() }
-    single { get<AppDatabase>().nfcTagDao() }
+    single { get<AppDatabase>().nfcInfoDao() }
     single { get<AppDatabase>().personDao() }
 }
 

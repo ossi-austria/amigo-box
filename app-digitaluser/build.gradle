@@ -28,7 +28,6 @@ android {
             applicationIdSuffix ".debug"
             minifyEnabled false
             testCoverageEnabled true
-            buildConfigField "String", "API_ENDPOINT", "\"API_ENDPOINT\""
         }
         release {
             minifyEnabled true

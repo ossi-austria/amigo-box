@@ -8,8 +8,7 @@
 
 Add the API_ENDPOINT pointing to your local development server:
 
-~/.gradle/gradle.properties
-
+local.properties (see local.properties.example)
 
 # Tutorials
 

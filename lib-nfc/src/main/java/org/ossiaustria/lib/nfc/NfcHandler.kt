@@ -7,16 +7,25 @@ import timber.log.Timber
 
 class NfcHandler {
 
-    data class NfcInfo(
-        val message: String,
+    data class NfcTagData(
         val tagId: String,
-        val type: String
+        val message: String? = null,
+        val type: String? = null
     )
 
-    fun processNfcIntent(checkIntent: Intent?): NfcInfo? {
+    fun processNfcIntent(checkIntent: Intent?): NfcTagData? {
         // Check if intent has the action of a discovered NFC tag
         // with NDEF formatted contents
-        if (checkIntent?.action == NfcAdapter.ACTION_NDEF_DISCOVERED) {
+        if (checkIntent?.action == NfcAdapter.ACTION_TAG_DISCOVERED) {
+
+            val rawByteArray = checkIntent.getByteArrayExtra(NfcAdapter.EXTRA_ID)
+            return if (rawByteArray != null) {
+                val nfcTagId = extractNfcId(rawByteArray)
+                NfcTagData(nfcTagId)
+            } else {
+                null
+            }
+        } else if (checkIntent?.action == NfcAdapter.ACTION_NDEF_DISCOVERED) {
 
             val rawMessages = checkIntent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
             val nfcUidByteArray = checkIntent.getByteArrayExtra(NfcAdapter.EXTRA_ID)
@@ -29,18 +38,10 @@ class NfcHandler {
                     val type = String(ndefRecord.type)
                     val inNfcMessage = String(ndefRecord.payload)
 
-                    var nfcTagId = ""
-                    for (byte in nfcUidByteArray) {
-                        val hexValue = String.format("%02X", byte)
+                    val nfcTagId = extractNfcId(nfcUidByteArray)
 
-                        nfcTagId = nfcTagId.plus(hexValue)
-                    }
-
-                    return NfcInfo(inNfcMessage, nfcTagId, type)
-                }
-                // not sure why this is unreachable
-
-                else {
+                    return NfcTagData(nfcTagId, inNfcMessage, type)
+                } else {
                     Timber.w("NDEF message is empty, NFC-Tag can not be used")
                     return null
                 }
@@ -52,5 +53,15 @@ class NfcHandler {
             Timber.w("Intent has no NFC data attached")
             return null
         }
+    }
+
+    private fun extractNfcId(nfcUidByteArray: ByteArray): String {
+        var nfcTagId = ""
+        for (byte in nfcUidByteArray) {
+            val hexValue = String.format("%02X", byte)
+
+            nfcTagId = nfcTagId.plus(hexValue)
+        }
+        return nfcTagId
     }
 }

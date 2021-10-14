@@ -1,6 +1,6 @@
 package org.ossiaustria.lib.domain.models
 
-import org.ossiaustria.lib.domain.models.enums.MembershipType
+import org.ossiaustria.lib.domain.models.enums.MemberType
 import java.io.Serializable
 import java.util.*
 
@@ -11,8 +11,8 @@ import java.util.*
 data class Person(
     val id: UUID,
     val name: String,
-    val groupId: UUID?,
-    val memberType: MembershipType,
+    val groupId: UUID,
+    val memberType: MemberType,
     // email is null for every person, which is not the user themself
     val email: String? = null,
     val avatarUrl: String? = null

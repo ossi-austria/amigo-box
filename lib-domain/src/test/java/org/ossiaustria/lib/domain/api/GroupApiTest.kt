@@ -45,7 +45,6 @@ class GroupApiTest : AbstractApiTest() {
         group.members.forEach {
             assertNotNull(it.id)
             assertNotNull(it.name)
-            assertNotNull(it.email)
             assertNotNull(it.memberType)
             assertNotNull(it.groupId)
         }
@@ -68,7 +67,7 @@ class GroupApiTest : AbstractApiTest() {
                 personsMock = listOf(JsonMocker.person(groupId = idExisting),)
             )
         ),
-        "groups/my" to MockResponse(
+        "groups" to MockResponse(
             JsonMocker.createList(
                 listOf(
                     JsonMocker.group(personsMock = listOf(JsonMocker.person())),

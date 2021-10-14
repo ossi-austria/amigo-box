@@ -4,6 +4,7 @@ import org.ossiaustria.lib.domain.models.enums.CallType
 import org.ossiaustria.lib.domain.models.enums.MultimediaType
 import org.ossiaustria.lib.domain.models.enums.NfcTagType
 import java.util.*
+import java.util.UUID.randomUUID
 
 /**
  * Useful to mock data for ApiTests
@@ -14,7 +15,7 @@ class JsonMocker {
         fun createList(mocks: List<String>) = """[${mocks.joinToString(", ")}]"""
 
         fun group(
-            id: UUID = UUID.randomUUID(),
+            id: UUID = randomUUID(),
             name: String = "group",
             personsMock: List<String> = emptyList(),
         ) = """
@@ -25,112 +26,108 @@ class JsonMocker {
             }""".trim()
 
         fun multimedia(
-            id: UUID = UUID.randomUUID(),
-            senderId: UUID = UUID.randomUUID(),
-            receiverId: UUID = UUID.randomUUID(),
-            ownerId: UUID = UUID.randomUUID(),
-            albumId: UUID = UUID.randomUUID(),
+            id: UUID = randomUUID(),
+            ownerId: UUID = randomUUID(),
+            albumId: UUID = randomUUID(),
             type: String = "IMAGE"
         ) = """
             {
                 "id":"$id",
-                "createdAt":100,
-                "sendAt":100,
-                "retrievedAt":100,
-                "senderId":"$senderId",
-                "receiverId":"$receiverId",
+                "albumId":"$albumId",
+                "contentType": "string",
+                "createdAt":"2021-10-07T06:57:44.191Z",
                 "ownerId":"$ownerId",
-                "remoteUrl":"remoteUrl",
-                "localUrl":"localUrl",
+                "filename":"filename",
                 "type":"$type",
-                "size":3,
-                "albumId":"$albumId"
+                "size":3
             }""".trim()
 
         fun album(
-            id: UUID = UUID.randomUUID(),
-            ownerId: UUID = UUID.randomUUID(),
+            id: UUID = randomUUID(),
+            ownerId: UUID = randomUUID(),
             multimediaMock: List<String> = emptyList()
         ) = """
             {
                 "id":"$id",
-                "createdAt":100,
-                "updatedAt":100,
+                "createdAt":"2021-10-07T06:57:44.191Z",
+                "updatedAt":"2021-10-07T06:57:44.191Z",
                 "name":"name",
                 "ownerId":"$ownerId",
                 "items": ${createList(multimediaMock)}
             }""".trim()
 
         fun person(
-            id: UUID = UUID.randomUUID(),
-            groupId: UUID? = UUID.randomUUID(),
+            id: UUID = randomUUID(),
+            groupId: UUID? = randomUUID(),
             name: String = "",
             memberType: String = "MEMBER"
         ) = """
             {
                 "id":"$id",
                 "name":"$name",
-                "email":"email",
+                "avatarUrl":"avatarUrl",
                 "memberType":"$memberType",
                 "groupId":"$groupId"
             }""".trim()
 
         fun nfc(
-            id: UUID = UUID.randomUUID(),
-            creatorId: UUID = UUID.randomUUID(),
-            createdAt: Long = 0,
-            ownerId: UUID? = UUID.randomUUID(),
-            type: NfcTagType = NfcTagType.COLLECTION,
-            linkedPersonId: UUID? = UUID.randomUUID(),
-            linkedMediaId: UUID? = UUID.randomUUID(),
-            linkedAlbumId: UUID? = UUID.randomUUID(),
+            id: UUID = randomUUID(),
+            name: String = "name",
+            creatorId: UUID = randomUUID(),
+            createdAt: String = "2021-10-07T06:57:44.191Z",
+            updatedAt: String? = null,
+            ownerId: UUID? = randomUUID(),
+            type: NfcTagType = NfcTagType.OPEN_ALBUM,
+            linkedPersonId: UUID? = randomUUID(),
+            linkedAlbumId: UUID? = randomUUID(),
         ) = """
             {
                 "id":"$id",
                 "creatorId":"$creatorId",
-                "createdAt":$createdAt,
+                "createdAt":"$createdAt",
+                "updatedAt":${optDate(updatedAt)},
                 "ownerId":${ownerId.json()},
                 "type":"$type",
+                "name": "$name",
                 "linkedPersonId":${linkedPersonId.json()},
-                "linkedMediaId":${linkedMediaId.json()},
                 "linkedAlbumId":${linkedAlbumId.json()}
             }""".trim()
 
         fun share(
-            id: UUID = UUID.randomUUID(),
-            createdAt: Long = 0,
-            sendAt: Long = 0,
-            retrievedAt: Long = 0,
-            senderId: UUID? = UUID.randomUUID(),
-            receiverId: UUID? = UUID.randomUUID(),
+            id: UUID = randomUUID(),
+            createdAt: String = "2021-10-07T06:57:44.191Z",
+            sendAt: String = "2021-10-07T06:57:44.191Z",
+            retrievedAt: String = "2021-10-07T06:57:44.191Z",
+            senderId: UUID? = randomUUID(),
+            receiverId: UUID? = randomUUID(),
             albumMock: String = album()
         ) = """
             {
                 "id":"$id",
-                "createdAt":$createdAt,
-                "sendAt":$sendAt,
-                "retrievedAt":$retrievedAt,
+               "createdAt":${optDate(createdAt)},
+                   "sendAt":${optDate(sendAt)},
+                "retrievedAt":${optDate(retrievedAt)},
                 "senderId":${senderId.json()},
                 "receiverId":${receiverId.json()},
                 "album":$albumMock
             }""".trim()
 
         fun call(
-            id: UUID = UUID.randomUUID(),
-            createdAt: Long = 0,
-            sendAt: Long = 0,
-            retrievedAt: Long = 0,
-            senderId: UUID? = UUID.randomUUID(),
-            receiverId: UUID? = UUID.randomUUID(),
+            id: UUID = randomUUID(),
+            createdAt: String = "2021-10-07T06:57:44.191Z",
+            sendAt: String = "2021-10-07T06:57:44.191Z",
+            retrievedAt: String = "2021-10-07T06:57:44.191Z",
+            senderId: UUID? = randomUUID(),
+            receiverId: UUID? = randomUUID(),
             callType: CallType = CallType.VIDEO,
-            startedAt: Long = 0,
-            finishedAt: Long = 0,
+            startedAt: String? = null,
+            finishedAt: String? = null,
         ) = """
             {
-                "id":"$id",
-                "createdAt":$createdAt,
-                "sendAt":$sendAt,
-                "retrievedAt":$retrievedAt,
+               "id":"$id",
+               "createdAt":${optDate(createdAt)},
+                "sendAt":${optDate(sendAt)},
+                "retrievedAt":${optDate(retrievedAt)},
                 "senderId":${senderId.json()},
                 "receiverId":${receiverId.json()},
                 "callType":"$callType",
@@ -139,32 +136,32 @@ class JsonMocker {
             }""".trim()
 
         fun message(
-            id: UUID = UUID.randomUUID(),
-            createdAt: Long = 0,
-            sendAt: Long = 0,
-            retrievedAt: Long = 0,
-            senderId: UUID? = UUID.randomUUID(),
-            receiverId: UUID? = UUID.randomUUID(),
+            id: UUID = randomUUID(),
+            createdAt: String = "2021-10-07T06:57:44.191Z",
+            sendAt: String = "2021-10-07T06:57:44.191Z",
+            retrievedAt: String = "2021-10-07T06:57:44.191Z",
+            senderId: UUID? = randomUUID(),
+            receiverId: UUID? = randomUUID(),
             text: String = "",
         ) = """
             {
-                "id":"$id",
-                "createdAt":$createdAt,
-                "sendAt":$sendAt,
-                "retrievedAt":$retrievedAt,
-                "senderId":${senderId.json()},
-                "receiverId":${receiverId.json()},
-                "text":"$text"
+               "id":"$id",
+               "createdAt":${optDate(createdAt)},
+               "sendAt":${optDate(sendAt)},
+               "retrievedAt":${optDate(retrievedAt)},
+               "senderId":${senderId.json()},
+               "receiverId":${receiverId.json()},
+               "text":"$text"
             }""".trim()
 
         fun multimedia(
-            id: UUID = UUID.randomUUID(),
-            createdAt: Long = 0,
-            sendAt: Long = 0,
-            retrievedAt: Long = 0,
-            senderId: UUID? = UUID.randomUUID(),
-            receiverId: UUID? = UUID.randomUUID(),
-            ownerId: UUID? = UUID.randomUUID(),
+            id: UUID = randomUUID(),
+            createdAt: String = "2021-10-07T06:57:44.191Z",
+            sendAt: String = "2021-10-07T06:57:44.191Z",
+            retrievedAt: String = "2021-10-07T06:57:44.191Z",
+            senderId: UUID? = randomUUID(),
+            receiverId: UUID? = randomUUID(),
+            ownerId: UUID? = randomUUID(),
             remoteUrl: String = "remoteUrl",
             localUrl: String = "localUrl",
             type: MultimediaType = MultimediaType.VIDEO,
@@ -173,9 +170,9 @@ class JsonMocker {
         ) = """
             {
                 "id":"$id",
-                "createdAt":$createdAt,
-                "sendAt":$sendAt,
-                "retrievedAt":$retrievedAt,
+                "createdAt":${optDate(createdAt)},
+                "sendAt":${optDate(sendAt)},
+                "retrievedAt":${optDate(retrievedAt)},
                 "senderId":${senderId.json()},
                 "receiverId":${receiverId.json()},
                 "ownerId":${ownerId.json()},
@@ -189,6 +186,10 @@ class JsonMocker {
         fun UUID?.json(): String = if (this != null) {
             "\"$this\""
         } else "null"
+
+        private fun optDate(nullableDate: String?) =
+            if (nullableDate != null) "\"$nullableDate\"" else "null"
+
     }
 
 }
@@ -202,7 +203,7 @@ class DebugMockInterceptorAdapter {
         }
     }
 
-    private fun mockAlbum(uri: String): MockResponse? {
+    private fun mockAlbum(uri: String): MockResponse {
         val pathId = uri.substringAfterLast("/")
         val uuid = UUID.fromString(pathId)
         return MockResponse(JsonMocker.album(id = uuid))

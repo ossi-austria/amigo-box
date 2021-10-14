@@ -7,55 +7,59 @@ import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import org.ossiaustria.lib.domain.models.NfcInfo
 import retrofit2.Retrofit
 import java.util.*
 
-
-class NfcTagApiTest : AbstractApiTest() {
+class NfcInfoApiTest : AbstractApiTest() {
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
     private val idExisting = UUID.randomUUID()
 
-    lateinit var subject: NfcTagApi
+    lateinit var subject: NfcInfoApi
 
     override fun createApi(retrofit: Retrofit) {
-        subject = retrofit.create(NfcTagApi::class.java)
+        subject = retrofit.create(NfcInfoApi::class.java)
     }
 
     @Test
     fun `NfcTagApi get should retrieve one item `() {
         val item = runBlocking {
-            subject.get(idExisting)
+            subject.getOne(idExisting)
         }
+        checkItem(item)
+    }
+
+    @Test
+    fun `NfcTagApi getAll should retrieve all items `() {
+        val items = runBlocking {
+            subject.getAllAccessibleNfcs()
+        }
+
+        assertNotNull(items)
+        assertEquals(items.size, 2)
+        items.forEach { checkItem(it) }
+    }
+
+    private fun checkItem(item: NfcInfo) {
         assertNotNull(item)
         assertNotNull(item.id)
         assertNotNull(item.creatorId)
         assertNotNull(item.createdAt)
         assertNotNull(item.ownerId)
         assertNotNull(item.type)
+        assertNotNull(item.name)
         assertNotNull(item.linkedPersonId)
-        assertNotNull(item.linkedMediaId)
         assertNotNull(item.linkedAlbumId)
-    }
-
-    @Test
-    fun `NfcTagApi getAll should retrieve all items `() {
-        val items = runBlocking {
-            subject.getAll()
-        }
-
-        assertNotNull(items)
-        assertEquals(items.size, 2)
-
     }
 
     override fun setupMockingMap(): Map<String, MockResponse> = mapOf(
         "nfcs/$idExisting" to MockResponse(
             JsonMocker.nfc()
         ),
-        "nfcs" to MockResponse(
+        "nfcs/own" to MockResponse(
             JsonMocker.createList(
                 listOf(
                     JsonMocker.nfc(),

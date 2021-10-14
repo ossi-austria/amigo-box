@@ -8,12 +8,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import org.koin.android.ext.android.inject
-import org.ossiaustria.lib.nfc.NfcConstants
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.ossiaustria.amigobox.nfc.NfcViewModel
 import org.ossiaustria.lib.nfc.NfcHandler
 
 class MainBoxActivity : AppCompatActivity() {
 
     val navigator: Navigator by inject()
+    private val nfcViewModel: NfcViewModel by viewModel()
 
     // NFC adapter for checking NFC state in the device
     private var nfcAdapter: NfcAdapter? = null
@@ -22,8 +24,6 @@ class MainBoxActivity : AppCompatActivity() {
     // Used to read all NDEF tags while the app is running in the foreground.
     private var nfcPendingIntent: PendingIntent? = null
     private val nfcHandler: NfcHandler = NfcHandler()
-
-    private var nfcInfo: NfcHandler.NfcInfo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +40,11 @@ class MainBoxActivity : AppCompatActivity() {
         ActivityHelper.prepareActivityForDeviceLock(this)
 
         // NOTE: must be called in every Activity
-
         if (savedInstanceState == null) {
             navigator.toLoading()
         }
 
-        initNFC()
+        onCreateSetupNfcIntentHandling()
     }
 
     override fun onResume() {
@@ -54,30 +53,29 @@ class MainBoxActivity : AppCompatActivity() {
         // Get all NDEF discovered intents
         // Makes sure the app gets all discovered NDEF messages as long as it's in the foreground.
         nfcAdapter?.enableForegroundDispatch(this, nfcPendingIntent, null, null)
+
+        nfcViewModel.state.observe(this) { resource ->
+            if (resource.isSuccess) {
+                val nfcInfo = resource.valueOrNull()
+                if (nfcInfo != null) {
+                    // NFC Message is stored in nfcHandler.inNfcMessage
+                    val message = "NFC detected: ${nfcInfo.name} ${nfcInfo.nfcRef} ${nfcInfo.type}"
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "NFC-Tag ungültig", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     override fun onPause() {
         super.onPause()
 
         nfcAdapter?.disableForegroundDispatch(this)
+        nfcViewModel.state.removeObservers(this)
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-
-        nfcInfo = nfcHandler.processNfcIntent(intent)
-
-        if (nfcInfo?.type == NfcConstants.PREFIX) {
-            // NFC Message is stored in nfcHandler.inNfcMessage
-            Toast.makeText(this, nfcInfo?.message, Toast.LENGTH_SHORT).show()
-            // UID of NFC-Tag ist stored in nfcHandler.nfcTagId
-            Toast.makeText(this, nfcInfo?.tagId, Toast.LENGTH_SHORT).show()
-        } else
-            Toast.makeText(this, "NFC-Tag ungültig", Toast.LENGTH_SHORT).show()
-
-    }
-
-    private fun initNFC() {
+    private fun onCreateSetupNfcIntentHandling() {
         // implement nfcAdapter Object
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
@@ -87,14 +85,24 @@ class MainBoxActivity : AppCompatActivity() {
         // this activity.
         nfcPendingIntent = PendingIntent.getActivity(
             this, 0,
-            Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0
+            Intent(this, javaClass)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE
         )
 
-        nfcInfo = nfcHandler.processNfcIntent(intent)
-        if (nfcInfo?.type == NfcConstants.PREFIX) {
-            Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
-            Toast.makeText(this, nfcInfo?.message, Toast.LENGTH_SHORT).show()
+        handleNfcIntent(intent)
+    }
+
+    private fun handleNfcIntent(checkIntent: Intent?) {
+        val nfcInfo = nfcHandler.processNfcIntent(checkIntent)
+        if (nfcInfo != null) {
+            nfcViewModel.processNfcInfo(nfcInfo)
         }
+
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleNfcIntent(intent)
     }
 }
 

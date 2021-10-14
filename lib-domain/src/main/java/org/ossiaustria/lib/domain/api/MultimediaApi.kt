@@ -7,8 +7,8 @@ import java.util.*
 
 interface MultimediaApi {
 
-    @GET("multimedias")
-    suspend fun getAll(): List<Multimedia>
+    @GET("multimedias/shared")
+    suspend fun getShared(): List<Multimedia>
 
     @GET("multimedias/{id}")
     suspend fun get(@Path("id") id: UUID): Multimedia

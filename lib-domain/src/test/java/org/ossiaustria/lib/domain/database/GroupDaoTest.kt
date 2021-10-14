@@ -14,7 +14,7 @@ import org.ossiaustria.lib.domain.database.entities.GroupEntity
 import org.ossiaustria.lib.domain.database.entities.GroupEntityWithMembers
 import org.ossiaustria.lib.domain.database.entities.PersonEntity
 import org.ossiaustria.lib.domain.database.entities.toGroup
-import org.ossiaustria.lib.domain.models.enums.MembershipType
+import org.ossiaustria.lib.domain.models.enums.MemberType
 import org.robolectric.RobolectricTestRunner
 import java.util.*
 
@@ -168,7 +168,7 @@ internal class GroupDaoTest : DoubleEntityDaoTest<GroupEntity, GroupEntityWithMe
         subject.admins.forEach {
             assertThat(
                 it.memberType,
-                equalTo(MembershipType.ADMIN)
+                equalTo(MemberType.ADMIN)
             )
         }
     }
@@ -196,7 +196,7 @@ internal class GroupDaoTest : DoubleEntityDaoTest<GroupEntity, GroupEntityWithMe
         subject.centerPerson.let {
             assertThat(
                 it!!.memberType,
-                equalTo(MembershipType.CENTER)
+                equalTo(MemberType.ANALOGUE)
             )
         }
     }
@@ -208,9 +208,9 @@ internal class GroupDaoTest : DoubleEntityDaoTest<GroupEntity, GroupEntityWithMe
         val adminId = UUID.randomUUID()
         val group1 = GroupEntity(groupId, "group")
         val centerPerson =
-            PersonEntity(centerPersonId, "center", "email", groupId, MembershipType.CENTER)
-        val member = PersonEntity(memberId, "member", "email", groupId, MembershipType.MEMBER)
-        val admin = PersonEntity(adminId, "admin", "email", groupId, MembershipType.ADMIN)
+            PersonEntity(centerPersonId, "center", "email", groupId, MemberType.ANALOGUE)
+        val member = PersonEntity(memberId, "member", "email", groupId, MemberType.MEMBER)
+        val admin = PersonEntity(adminId, "admin", "email", groupId, MemberType.ADMIN)
 
         runBlocking {
             dao.insert(group1)

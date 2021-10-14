@@ -1,7 +1,7 @@
 package org.ossiaustria.amigobox.ui.contacts
 
 import org.ossiaustria.lib.domain.models.Person
-import org.ossiaustria.lib.domain.models.enums.MembershipType
+import org.ossiaustria.lib.domain.models.enums.MemberType
 import java.util.UUID.randomUUID
 
 object ContactsSourceMockData {
@@ -29,7 +29,7 @@ object ContactsSourceMockData {
             randomUUID(),
             name,
             groupId,
-            MembershipType.MEMBER,
+            MemberType.MEMBER,
             email,
             avatarUrl = "https://thispersondoesnotexist.com/image"
         )

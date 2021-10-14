@@ -9,6 +9,7 @@ import org.ossiaustria.lib.domain.database.entities.CallEntity
 import org.ossiaustria.lib.domain.models.enums.CallType
 import org.robolectric.RobolectricTestRunner
 import java.util.*
+import java.util.UUID.randomUUID
 
 /**
  * Example Test for Daos. Needs instrumentation (must run on device or emulator)
@@ -24,17 +25,21 @@ internal class CallDaoTest : SendableDaoTest<CallEntity, CallEntity, CallDao>() 
     override fun createEntity(id: UUID): CallEntity {
         return CallEntity(
             id = id,
-            createdAt = 1, sendAt = 2, retrievedAt = 3,
-            senderId = UUID.randomUUID(), receiverId = UUID.randomUUID(),
+            createdAt = Date(),
+            sendAt = Date(),
+            retrievedAt = Date(),
+            senderId = randomUUID(),
+            receiverId = randomUUID(),
             callType = CallType.AUDIO,
-            startedAt = 5, finishedAt = 6
+            startedAt = Date(),
+            finishedAt = null
         )
     }
 
     override fun permuteEntity(entity: CallEntity): CallEntity {
         return entity.copy(
-            createdAt = 101,
-            sendAt = 102
+            createdAt = Date(),
+            sendAt = Date()
         )
     }
 

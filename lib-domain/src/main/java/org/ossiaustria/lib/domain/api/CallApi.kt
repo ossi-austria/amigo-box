@@ -7,7 +7,7 @@ import java.util.*
 
 interface CallApi {
 
-    @GET("calls")
+    @GET("calls/all")
     suspend fun getAll(): List<Call>
 
     @GET("calls/{id}")

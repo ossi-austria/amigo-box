@@ -13,8 +13,8 @@ import org.ossiaustria.lib.domain.repositories.MessageRepository
 import org.ossiaustria.lib.domain.repositories.MessageRepositoryImpl
 import org.ossiaustria.lib.domain.repositories.MultimediaRepository
 import org.ossiaustria.lib.domain.repositories.MultimediaRepositoryImpl
-import org.ossiaustria.lib.domain.repositories.NfcTagRepository
-import org.ossiaustria.lib.domain.repositories.NfcTagRepositoryImpl
+import org.ossiaustria.lib.domain.repositories.NfcInfoRepository
+import org.ossiaustria.lib.domain.repositories.NfcInfoRepositoryImpl
 import org.ossiaustria.lib.domain.repositories.PersonRepository
 import org.ossiaustria.lib.domain.repositories.PersonRepositoryImpl
 
@@ -25,6 +25,6 @@ val repositoryModule = module {
     single<GroupRepository> { GroupRepositoryImpl(get(), get(), get(), get()) }
     single<MessageRepository> { MessageRepositoryImpl(get(), get(), get(), get()) }
     single<MultimediaRepository> { MultimediaRepositoryImpl(get(), get(), get()) }
-    single<NfcTagRepository> { NfcTagRepositoryImpl(get(), get(), get()) }
+    single<NfcInfoRepository> { NfcInfoRepositoryImpl(get(), get(), get()) }
     single<PersonRepository> { PersonRepositoryImpl(get(), get(), get()) }
 }

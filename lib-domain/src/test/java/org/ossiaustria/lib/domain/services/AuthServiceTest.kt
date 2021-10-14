@@ -2,6 +2,7 @@ package org.ossiaustria.lib.domain.services
 
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,12 +18,14 @@ import org.ossiaustria.lib.commons.testing.TestCoroutineRule
 import org.ossiaustria.lib.domain.EntityMocks
 import org.ossiaustria.lib.domain.auth.Account
 import org.ossiaustria.lib.domain.auth.AuthApi
+import org.ossiaustria.lib.domain.auth.AuthInterceptor
 import org.ossiaustria.lib.domain.auth.LoginRequest
 import org.ossiaustria.lib.domain.auth.LoginResult
 import org.ossiaustria.lib.domain.auth.RefreshTokenRequest
 import org.ossiaustria.lib.domain.auth.RegisterRequest
 import org.ossiaustria.lib.domain.auth.TokenResult
 import org.ossiaustria.lib.domain.common.Resource
+import org.ossiaustria.lib.domain.modules.UserContext
 import org.ossiaustria.lib.domain.repositories.SettingsRepository
 import java.util.*
 
@@ -38,6 +41,9 @@ class AuthServiceTest {
     @MockK
     lateinit var settingsRepository: SettingsRepository
 
+    @MockK
+    lateinit var userContext: UserContext
+
     lateinit var authService: AuthService
 
     private lateinit var loginResult: LoginResult
@@ -46,7 +52,8 @@ class AuthServiceTest {
     @Before
     fun before() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        authService = AuthServiceImpl(coroutineRule.dispatcher, authApi, settingsRepository)
+        authService =
+            AuthServiceImpl(coroutineRule.dispatcher, authApi, settingsRepository, userContext)
 
         account = EntityMocks.account(email = "test@example.org")
         loginResult = LoginResult(
@@ -69,6 +76,9 @@ class AuthServiceTest {
             authApi.register(eq(RegisterRequest("test@example.org", "password", "Full name")))
         } returns account
 
+        every { settingsRepository.accessToken } returns null
+        every { settingsRepository.account   } returns null
+        every { settingsRepository.currentPerson } returns null
     }
 
     @Test

@@ -1,14 +1,10 @@
 package org.ossiaustria.lib.domain.repositories
 
-import com.dropbox.android.external.store4.StoreRequest
-import com.dropbox.android.external.store4.StoreResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.GroupApi
@@ -31,7 +27,6 @@ interface GroupRepository {
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
     fun getGroup(id: UUID, refresh: Boolean = false): Flow<Resource<Group>>
-
 }
 
 internal class GroupRepositoryImpl(
@@ -69,24 +64,18 @@ internal class GroupRepositoryImpl(
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
     override fun getAllGroups(refresh: Boolean): Flow<Resource<List<Group>>> = flow {
-        defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = refresh))
-            .flowOn(dispatcherProvider.io())
-            .collect { response: StoreResponse<List<Group>> ->
-                transformResponseToOutcome(response, onNoNewData = { Resource.success(listOf()) })
-            }
+        listTransform(
+            defaultCollectionStore.stream(newRequest(key = "all", refresh = refresh))
+        )
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
     override fun getGroup(id: UUID, refresh: Boolean): Flow<Resource<Group>> = flow {
-        singleStore.stream(StoreRequest.cached(key = id, refresh = refresh))
-            .flowOn(dispatcherProvider.io())
-            .collect { response: StoreResponse<Group> ->
-                transformResponseToOutcome(
-                    response,
-                    onNoNewData = { Resource.failure("No new data") })
-            }
+        itemTransform(
+            singleStore.stream(newRequest(key = id, refresh = refresh))
+        )
     }
 
     override fun transform(item: GroupEntityWithMembers): Group = item.toGroup()

@@ -16,4 +16,7 @@ abstract class SendableDao<ENTITY, WRAPPER> :
     // must be overridden!
     abstract fun findByReceiver(id: UUID): Flow<List<@JvmSuppressWildcards WRAPPER>>
 
+    // must be overridden!
+    abstract fun findByPerson(id: UUID): Flow<List<@JvmSuppressWildcards WRAPPER>>
+
 }

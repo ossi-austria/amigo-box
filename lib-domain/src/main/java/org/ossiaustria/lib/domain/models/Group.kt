@@ -1,8 +1,7 @@
 package org.ossiaustria.lib.domain.models
 
-import org.ossiaustria.lib.domain.models.enums.MembershipType
+import org.ossiaustria.lib.domain.models.enums.MemberType
 import java.util.*
-
 
 data class Group(
 
@@ -11,8 +10,8 @@ data class Group(
     val members: List<Person>,
 ) {
     val centerPerson: Person? =
-        members.firstOrNull { it.memberType == MembershipType.CENTER }
+        members.firstOrNull { it.memberType == MemberType.ANALOGUE }
 
     val admins: List<Person> =
-        members.filter { it.memberType == MembershipType.ADMIN }
+        members.filter { it.memberType == MemberType.ADMIN }
 }

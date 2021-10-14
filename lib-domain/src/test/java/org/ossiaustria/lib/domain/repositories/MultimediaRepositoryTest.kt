@@ -66,33 +66,31 @@ internal class MultimediaRepositoryTest : AbstractRepositoryTest<MultimediaEntit
             )
             val remoteList = listOf(
                 Multimedia(
-                    id1, senderId = personId, receiverId = personId, type = MultimediaType.VIDEO,
+                    id1, type = MultimediaType.VIDEO,
                     albumId = album.id,
-                    localUrl = "localUrl",
-                    remoteUrl = "remoteUrl",
+                    contentType = "localUrl",
+                    filename = "remoteUrl",
                     ownerId = personId
                 ),
                 Multimedia(
-                    id2, senderId = personId, receiverId = personId, type = MultimediaType.VIDEO,
+                    id2, type = MultimediaType.VIDEO,
                     albumId = album.id,
-                    localUrl = "localUrl",
-                    remoteUrl = "remoteUrl",
+                    contentType = "localUrl",
+                    filename = "remoteUrl",
                     ownerId = personId
                 ),
             )
 
-            coEvery { multimediaApi.getAll() } answers { remoteList }
+            coEvery { multimediaApi.getShared() } answers { remoteList }
 
             val daoList = listOf(
                 MultimediaEntity(
                     id1,
-                    senderId = personId,
-                    receiverId = personId,
                     ownerId = personId,
                     type = MultimediaType.VIDEO,
                     albumId = album.id,
-                    localUrl = "localUrl",
-                    remoteUrl = "remoteUrl",
+                    contentType = "localUrl",
+                    filename = "remoteUrl",
                 ),
             )
 

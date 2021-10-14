@@ -7,6 +7,9 @@ import java.util.*
 
 interface MessageApi {
 
+    @GET("messages/all")
+    suspend fun getAllOwn(): List<Message>
+
     @GET("messages/received")
     suspend fun getAllReceived(): List<Message>
 

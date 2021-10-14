@@ -1,7 +1,8 @@
 package org.ossiaustria.lib.domain.models.enums
 
-enum class MembershipType {
-    MEMBER,
+enum class MemberType {
+    OWNER,
     ADMIN,
-    CENTER
+    MEMBER,
+    ANALOGUE,
 }

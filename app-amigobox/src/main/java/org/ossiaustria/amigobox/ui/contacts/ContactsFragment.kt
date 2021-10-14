@@ -42,8 +42,6 @@ import org.ossiaustria.lib.domain.models.Person
 
 class ContactsFragment : Fragment() {
 
-//    private val globalState: GlobalStateViewModel by activityViewModels()
-
     val navigator: Navigator by inject()
 
     private val viewModel by viewModel<ContactsViewModel>()
@@ -71,7 +69,7 @@ class ContactsFragment : Fragment() {
 
     @Preview
     @Composable
-    fun previewContactsFragmentComposable() {
+    fun ContactsFragmentComposablePreview() {
         val listOfPeopleWithImages = ContactsSourceMockData.listOfPeopleWithImages()
         ContactsFragmentComposable(listOfPeopleWithImages)
     }
@@ -186,11 +184,7 @@ class ContactsFragment : Fragment() {
         navigator.toHome()
     }
 
-    //TODO: input is a Person object
-    // not sure, is that correct... person as input?
-    // using globalState.setCurrentPerson method, to set Person
     private fun toContact(person: Person) {
-//        globalState.setCurrentPerson(person)
         navigator.toPersonDetail(person)
     }
 

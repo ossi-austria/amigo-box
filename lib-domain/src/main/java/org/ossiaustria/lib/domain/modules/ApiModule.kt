@@ -9,7 +9,7 @@ import org.ossiaustria.lib.domain.api.GroupApi
 import org.ossiaustria.lib.domain.api.MessageApi
 import org.ossiaustria.lib.domain.api.MockInterceptor
 import org.ossiaustria.lib.domain.api.MultimediaApi
-import org.ossiaustria.lib.domain.api.NfcTagApi
+import org.ossiaustria.lib.domain.api.NfcInfoApi
 import org.ossiaustria.lib.domain.api.NoopMockInterceptor
 import org.ossiaustria.lib.domain.api.OkHttpBuilder
 import org.ossiaustria.lib.domain.api.OkHttpBuilder.Companion.BASE_URL
@@ -21,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val apiModule = module {
     single { AuthInterceptor() }
-    single { UserContext() }
+    single { UserContext(get()) }
     single<OkHttpClient> {
         OkHttpBuilder().build(
             get(),
@@ -43,7 +43,7 @@ val apiModule = module {
     single { get<Retrofit>().create(GroupApi::class.java) }
     single { get<Retrofit>().create(MessageApi::class.java) }
     single { get<Retrofit>().create(MultimediaApi::class.java) }
-    single { get<Retrofit>().create(NfcTagApi::class.java) }
+    single { get<Retrofit>().create(NfcInfoApi::class.java) }
     single { get<Retrofit>().create(PersonApi::class.java) }
 
 }

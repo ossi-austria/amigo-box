@@ -10,7 +10,7 @@ data class Album(
     val ownerId: UUID,
     val items: List<Multimedia>,
 
-    val createdAt: Long = System.currentTimeMillis(),
-    val updatedAt: Long = 0
+    val createdAt: Date = Date(),
+    val updatedAt: Date? = null
 
 ) : Serializable

@@ -2,6 +2,9 @@
 
 package org.ossiaustria.lib.domain.database
 
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.runner.RunWith
@@ -13,7 +16,7 @@ import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 internal class MultimediaDaoTest :
-    SendableDaoTest<MultimediaEntity, MultimediaEntity, MultimediaDao>() {
+    DoubleEntityDaoTest<MultimediaEntity, MultimediaEntity, MultimediaDao>() {
 
     override fun init() {
         dao = db.multimediaDao()
@@ -22,21 +25,27 @@ internal class MultimediaDaoTest :
     override fun createEntity(id: UUID): MultimediaEntity {
         return MultimediaEntity(
             id = id,
-            createdAt = 1, sendAt = 2, retrievedAt = 3,
-            senderId = UUID.randomUUID(), receiverId = UUID.randomUUID(),
+            createdAt = Date(),
             type = MultimediaType.VIDEO,
             albumId = null,
-            localUrl = "localurl",
-            remoteUrl = "remoteUrl",
+            contentType = "localurl",
+            filename = "remoteUrl",
             ownerId = UUID.randomUUID()
         )
     }
 
     override fun permuteEntity(entity: MultimediaEntity): MultimediaEntity {
         return entity.copy(
-            createdAt = 101,
-            sendAt = 102
+            createdAt = Date(),
         )
+    }
+
+    override fun findById(entity: MultimediaEntity): MultimediaEntity {
+        return runBlocking { dao.findById(entity.id).take(1).first() }
+    }
+
+    override fun deleteById(entity: MultimediaEntity) {
+        runBlocking { dao.deleteById(entity.id) }
     }
 
     override fun checkEqual(wrapper: MultimediaEntity, entity: MultimediaEntity) {

@@ -7,7 +7,7 @@ import java.util.*
 
 interface GroupApi : Api {
 
-    @GET("groups/my")
+    @GET("groups")
     suspend fun getOwn(): List<Group>
 
     @GET("groups/{id}")

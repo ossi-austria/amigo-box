@@ -46,11 +46,6 @@ class PersonDetailFragment : Fragment() {
         setContent { PersonDetailScreen(person, ::startCall, ::toHome) }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val person = Navigator.getPerson(requireArguments())
-    }
-
     fun startCall() {
         val person = Navigator.getPerson(requireArguments())
         navigator.toCallPerson(person)

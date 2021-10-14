@@ -2,8 +2,10 @@ package org.ossiaustria.amigobox.ui.loading
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.CoroutineScope
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -12,6 +14,7 @@ import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.modules.UserContext
+import java.util.*
 
 class LoadingViewModel(
     dispatcherProvider: DispatcherProvider,
@@ -26,19 +29,18 @@ class LoadingViewModel(
     private val _person: MutableLiveData<Person> = MutableLiveData()
     val livePerson: LiveData<Person> = _person
 
-    private val ioScope = CoroutineScope(dispatcherProvider.io() + Job())
+    private val coContext = dispatcherProvider.io() + Job()
 
     fun loadAccount() {
-        ioScope.launch {
+        viewModelScope.launch(coContext) {
             val person = userContext.person()
 
             if (userContext.available()) {
-                synchronisationService.syncGroup()
+                synchronisationService.syncEverything()
                 _person.postValue(person)
                 _state.postValue(Resource.success(userContext.available()))
             } else {
                 _state.postValue(Resource.failure("Not loggedin"))
-
                 withContext(Dispatchers.Main) {
                     startLogin()
                 }

@@ -10,8 +10,8 @@ data class AlbumEntity(
     val albumId: UUID,
     val ownerId: UUID,
     val name: String,
-    val createdAt: Long = System.currentTimeMillis(),
-    val updatedAt: Long = System.currentTimeMillis(),
+    val createdAt: Date = Date(),
+    val updatedAt: Date? = null,
 ) : AbstractEntity
 
 

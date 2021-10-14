@@ -13,6 +13,7 @@ import org.ossiaustria.lib.domain.auth.RegisterRequest
 import org.ossiaustria.lib.domain.auth.SetFcmTokenRequest
 import org.ossiaustria.lib.domain.auth.TokenResult
 import org.ossiaustria.lib.domain.common.Resource
+import org.ossiaustria.lib.domain.modules.UserContext
 import org.ossiaustria.lib.domain.repositories.SettingsRepository
 import timber.log.Timber
 
@@ -61,21 +62,35 @@ interface AuthService {
 class AuthServiceImpl(
     private val ioDispatcher: CoroutineDispatcher,
     private val authApi: AuthApi,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val userContext: UserContext,
 ) : AuthService {
-
 
     override fun login(email: String, password: String): Flow<Resource<Account>> {
         return flow {
             emit(Resource.loading())
+            settingsRepository.accessToken = null
+
             val result = authApi.login(LoginRequest(email = email, password = password))
 
             settingsRepository.account = result.account
             settingsRepository.refreshToken = result.refreshToken
             settingsRepository.accessToken = result.accessToken
+
+            result.account.persons.lastOrNull()?.let {
+                settingsRepository.currentPerson = it
+                settingsRepository.currentPersonId = it.id
+            }
+
+            userContext.initContext(
+                settingsRepository.accessToken,
+                settingsRepository.account,
+                settingsRepository.currentPerson
+            )
+
             emit(Resource.success(result.account))
         }.catch {
-            Timber.e(it)
+            Timber.e(it, "Could not login")
             emit(Resource.failure(it))
         }.flowOn(ioDispatcher)
     }
@@ -85,9 +100,9 @@ class AuthServiceImpl(
             emit(Resource.loading())
             val account = authApi.register(RegisterRequest(email, password, name))
             emit(Resource.success(account))
-        }.catch {
-            Timber.e(it)
-            emit(Resource.failure(it))
+        }.catch { e ->
+            Timber.e(e, "Could not refreshAccessToken")
+            emit(Resource.failure(e))
         }.flowOn(ioDispatcher)
     }
 
@@ -103,7 +118,7 @@ class AuthServiceImpl(
                 emit(Resource.success(accessToken))
             }
         }.catch { e ->
-            Timber.e(e)
+            Timber.e(e, "Could not refreshAccessToken")
             emit(Resource.failure(e))
         }.flowOn(ioDispatcher)
     }
@@ -114,9 +129,9 @@ class AuthServiceImpl(
             val account = authApi.whoami()
             settingsRepository.account = account
             emit(Resource.success(account))
-        }.catch {
-            Timber.e(it)
-            emit(Resource.failure(it))
+        }.catch { e ->
+            Timber.e(e, "Could not myAccount")
+            emit(Resource.failure(e))
         }.flowOn(ioDispatcher)
     }
 
@@ -128,11 +143,13 @@ class AuthServiceImpl(
             } else {
                 emit(Resource.loading())
                 settingsRepository.fcmToken = fcmToken
-                val success = authApi.setFcmToken(SetFcmTokenRequest(fcmToken))
-                emit(Resource.success(success))
+                authApi.setFcmToken(SetFcmTokenRequest(fcmToken))
+
+                emit(Resource.success(true))
+
             }
         }.catch { e ->
-            Timber.e(e)
+            Timber.e(e, "Could not setFcmToken")
             emit(Resource.failure(e))
         }.flowOn(ioDispatcher)
     }

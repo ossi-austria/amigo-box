@@ -1,14 +1,10 @@
 package org.ossiaustria.lib.domain.repositories
 
-import com.dropbox.android.external.store4.StoreRequest
-import com.dropbox.android.external.store4.StoreResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.AlbumApi
@@ -24,15 +20,13 @@ import org.ossiaustria.lib.domain.models.Album
 import timber.log.Timber
 import java.util.*
 
-
 interface AlbumRepository {
 
-    fun getAllAlbums(): Flow<Resource<List<Album>>>
+    fun getAllAlbums(refresh: Boolean = false): Flow<Resource<List<Album>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getAlbum(id: UUID): Flow<Resource<Album>>
-
+    fun getAlbum(id: UUID, refresh: Boolean = false): Flow<Resource<Album>>
 }
 
 internal class AlbumRepositoryImpl(
@@ -46,9 +40,8 @@ internal class AlbumRepositoryImpl(
         dispatcherProvider
     ) {
 
-
     override suspend fun fetchOne(id: UUID): Album = albumApi.get(id)
-    override suspend fun defaultFetchAll(): List<Album> = albumApi.getAll()
+    override suspend fun defaultFetchAll(): List<Album> = albumApi.getShared()
 
     override suspend fun writeItem(item: Album) {
         try {
@@ -70,27 +63,24 @@ internal class AlbumRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllAlbums(): Flow<Resource<List<Album>>> = flow {
-        defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
-            .flowOn(dispatcherProvider.io())
-            .collect { response: StoreResponse<List<Album>> ->
-                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
-            }
+    override fun getAllAlbums(refresh: Boolean): Flow<Resource<List<Album>>> = flow {
+        listTransform(
+            defaultCollectionStore.stream(
+                newRequest(key = "all", refresh = refresh)
+            )
+        )
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAlbum(id: UUID): Flow<Resource<Album>> = flow {
-        singleStore.stream(StoreRequest.cached(key = id, refresh = true))
-            .flowOn(dispatcherProvider.io())
-            .collect { response: StoreResponse<Album> ->
-                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
-            }
+    override fun getAlbum(id: UUID, refresh: Boolean): Flow<Resource<Album>> = flow {
+        itemTransform(
+            singleStore.stream(newRequest(key = id, refresh = refresh))
+        )
     }
 
     override fun transform(item: AlbumEntityWithData): Album = item.toAlbum()
-
 
 }
 

@@ -31,14 +31,10 @@ class MultimediaApiTest : AbstractApiTest() {
         }
         assertNotNull(item)
         assertNotNull(item.id)
-        assertNotNull(item.sendAt)
         assertNotNull(item.createdAt)
-        assertNotNull(item.retrievedAt)
-        assertNotNull(item.senderId)
-        assertNotNull(item.receiverId)
         assertNotNull(item.ownerId)
-        assertNotNull(item.remoteUrl)
-        assertNotNull(item.localUrl)
+        assertNotNull(item.filename)
+        assertNotNull(item.contentType)
         assertNotNull(item.type)
         assertNotNull(item.size)
 //        assertNotNull(item.albumId)
@@ -47,7 +43,7 @@ class MultimediaApiTest : AbstractApiTest() {
     @Test
     fun `MultimediaApi getAll should retrieve all items `() {
         val items = runBlocking {
-            subject.getAll()
+            subject.getShared()
         }
 
         assertNotNull(items)
@@ -59,7 +55,7 @@ class MultimediaApiTest : AbstractApiTest() {
         "multimedias/$idExisting" to MockResponse(
             JsonMocker.multimedia()
         ),
-        "multimedias" to MockResponse(
+        "multimedias/shared" to MockResponse(
             JsonMocker.createList(
                 listOf(
                     JsonMocker.multimedia(),

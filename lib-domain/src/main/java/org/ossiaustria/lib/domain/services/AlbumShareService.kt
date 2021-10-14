@@ -17,9 +17,7 @@ import java.time.ZonedDateTime
 import java.util.*
 import java.util.UUID.randomUUID
 
-
-interface AlbumShareService : SendableService<AlbumShare> {
-}
+interface AlbumShareService : SendableService<AlbumShare>
 
 class MockAlbumShareServiceImpl(
     private val ioDispatcher: CoroutineDispatcher,
@@ -40,33 +38,24 @@ class MockAlbumShareServiceImpl(
 
     private fun mockMultimedia(
         id: UUID = randomUUID(),
-        senderId: UUID = HER_PERSON_ID,
-        receiverId: UUID = MY_PERSON_ID,
         ownerId: UUID = HER_PERSON_ID,
-        createdAt: Long = System.currentTimeMillis(),
-        sendAt: Long? = System.currentTimeMillis(),
-        retrievedAt: Long? = System.currentTimeMillis(),
+        createdAt: Date = Date(),
     ) = Multimedia(
         id = id,
         createdAt = createdAt,
-        sendAt = sendAt,
-        retrievedAt = retrievedAt,
-        senderId = senderId,
-        receiverId = receiverId,
         ownerId = ownerId,
-        remoteUrl = "https://en.wikipedia.org/wiki/Image#/media/File:Image_created_with_a_mobile_phone.png",
-        localUrl = "",
+        filename = "https://en.wikipedia.org/wiki/Image#/media/File:Image_created_with_a_mobile_phone.png",
+        contentType = "",
         type = MultimediaType.IMAGE
     )
-
     private fun mockAlbumShare(
         id: UUID = randomUUID(),
         senderId: UUID = HER_PERSON_ID,
         receiverId: UUID = MY_PERSON_ID,
         text: String = "mock message",
-        createdAt: Long = System.currentTimeMillis(),
-        sendAt: Long? = System.currentTimeMillis(),
-        retrievedAt: Long? = System.currentTimeMillis(),
+        createdAt: Date = Date(),
+        sendAt: Date? = Date(),
+        retrievedAt: Date? = Date(),
     ) = AlbumShare(
         id = id,
         createdAt = createdAt,
@@ -76,7 +65,6 @@ class MockAlbumShareServiceImpl(
         receiverId = receiverId,
         album = album
     )
-
 
     override fun getOne(id: UUID): Flow<Resource<AlbumShare>> = wrapper.getOne {
         mockAlbumShare()
@@ -118,12 +106,12 @@ class MockAlbumShareServiceImpl(
 
     override fun markAsSent(id: UUID, time: ZonedDateTime): Flow<Resource<AlbumShare>> =
         wrapper.markAsSent {
-            mockAlbumShare(id = id, senderId = id, sendAt = System.currentTimeMillis())
+            mockAlbumShare(id = id, senderId = id, sendAt = Date())
         }
 
     override fun markAsRetrieved(id: UUID, time: ZonedDateTime): Flow<Resource<AlbumShare>> =
         wrapper.markAsRetrieved {
-            mockAlbumShare(id = id, senderId = id, retrievedAt = System.currentTimeMillis())
+            mockAlbumShare(id = id, senderId = id, retrievedAt = Date())
         }
 
 }

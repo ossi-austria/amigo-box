@@ -2,6 +2,7 @@ package org.ossiaustria.amigobox.modules
 
 import android.content.Context
 import android.content.SharedPreferences
+import io.mockk.mockkClass
 import junit.framework.TestCase.assertNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -16,10 +17,6 @@ import org.koin.test.check.checkModules
 import org.koin.test.inject
 import org.koin.test.mock.MockProviderRule
 import org.koin.test.mock.declareMock
-import org.mockito.Mockito
-import org.ossiaustria.amigobox.Navigator
-import org.ossiaustria.amigobox.cloudmessaging.CloudPushHandlerService
-import org.ossiaustria.amigobox.cloudmessaging.FCMHelper
 import org.ossiaustria.amigobox.ui.loading.SynchronisationService
 import org.ossiaustria.lib.domain.modules.apiModule
 import org.ossiaustria.lib.domain.modules.databaseModule
@@ -36,7 +33,7 @@ class AppServiceModuleTest : KoinTest {
 
     @get:Rule
     val mockProvider = MockProviderRule.create { clazz ->
-        Mockito.mock(clazz.java)
+        mockkClass(clazz)
     }
 
     @After
@@ -48,9 +45,9 @@ class AppServiceModuleTest : KoinTest {
 
     @Test
     fun check() = checkModules {
-        declareMock<Context> { Mockito.mock(Context::class.java) }
-        declareMock<SharedPreferences> { Mockito.mock(SharedPreferences::class.java) }
-        declareMock<SettingsRepository> { Mockito.mock(SettingsRepository::class.java) }
+        declareMock<Context> { mockkClass(Context::class) }
+        declareMock<SharedPreferences> { mockkClass(SharedPreferences::class) }
+        declareMock<SettingsRepository> { mockkClass(SettingsRepository::class) }
 
         modules(
             dispatcherModule,

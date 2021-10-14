@@ -37,9 +37,9 @@ class MockMessageServiceImpl(
         senderId: UUID = HER_PERSON_ID,
         receiverId: UUID = MY_PERSON_ID,
         text: String = "mock message",
-        createdAt: Long = System.currentTimeMillis(),
-        sendAt: Long? = System.currentTimeMillis(),
-        retrievedAt: Long? = System.currentTimeMillis(),
+        createdAt: Date = Date(),
+        sendAt: Date? = Date(),
+        retrievedAt: Date? = Date(),
     ) = Message(
         id = id,
         createdAt = createdAt,
@@ -106,12 +106,12 @@ class MockMessageServiceImpl(
 
     override fun markAsSent(id: UUID, time: ZonedDateTime): Flow<Resource<Message>> =
         wrapper.markAsSent {
-            mockMessage(id = id, senderId = id, sendAt = System.currentTimeMillis())
+            mockMessage(id = id, senderId = id, sendAt = Date())
         }
 
     override fun markAsRetrieved(id: UUID, time: ZonedDateTime): Flow<Resource<Message>> =
         wrapper.markAsRetrieved {
-            mockMessage(id = id, senderId = id, retrievedAt = System.currentTimeMillis())
+            mockMessage(id = id, senderId = id, retrievedAt = Date())
         }
 
 }

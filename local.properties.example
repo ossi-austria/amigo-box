@@ -1,0 +1,7 @@
+# Set sdk.dir to your Android sdk (should be done by your IDE)
+# Set API_ENDPOINT to a) a global develop server instance or b) a local develop server instance
+#
+# a) API_ENDPOINT=https://amigo-dev.ossi-austria.org:8080/v1/
+# b) API_ENDPOINT=http://192.168.0.20:8080/v1/
+sdk.dir=C\:\\Dev\\Android\\Sdk
+API_ENDPOINT=http://192.168.0.20:8080/v1/

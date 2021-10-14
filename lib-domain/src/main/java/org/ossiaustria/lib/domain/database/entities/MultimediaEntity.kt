@@ -8,36 +8,25 @@ import java.util.*
 
 @Entity(tableName = "multimedias")
 data class MultimediaEntity(
-
     @PrimaryKey
-    override val id: UUID,
-    override val createdAt: Long = System.currentTimeMillis(),
-    override val sendAt: Long? = null,
-    override val retrievedAt: Long? = null,
-    override val senderId: UUID,
-    override val receiverId: UUID,
-
+    val id: UUID,
+    val createdAt: Date = Date(),
     val ownerId: UUID,
-    val remoteUrl: String,
-    val localUrl: String,
+    val filename: String,
+    val contentType: String,
     val type: MultimediaType,
     val size: Long? = null,
     val albumId: UUID? = null
-) : SendableEntity
+) : AbstractEntity
 
 internal fun MultimediaEntity.toMultimedia(): Multimedia {
 
     return Multimedia(
         id = this.id,
         createdAt = this.createdAt,
-        sendAt = this.sendAt,
-        retrievedAt = this.retrievedAt,
-        senderId = this.senderId,
-        receiverId = this.receiverId,
-
         ownerId = this.ownerId,
-        remoteUrl = this.remoteUrl,
-        localUrl = this.localUrl,
+        filename = this.filename,
+        contentType = this.contentType,
         type = this.type,
         size = this.size,
         albumId = this.albumId,
@@ -49,14 +38,9 @@ internal fun Multimedia.toMultimediaEntity(): MultimediaEntity {
     return MultimediaEntity(
         id = this.id,
         createdAt = this.createdAt,
-        sendAt = this.sendAt,
-        retrievedAt = this.retrievedAt,
-        senderId = this.senderId,
-        receiverId = this.receiverId,
-
         ownerId = this.ownerId,
-        remoteUrl = this.remoteUrl,
-        localUrl = this.localUrl,
+        filename = this.filename,
+        contentType = this.contentType,
         type = this.type,
         size = this.size,
         albumId = this.albumId,
