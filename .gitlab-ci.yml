@@ -1,8 +1,5 @@
 image: jangrewe/gitlab-ci-android
 
-stages:
-  - build
-
 before_script:
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   - chmod +x ./gradlew
@@ -10,29 +7,20 @@ before_script:
 cache:
   key: ${CI_PROJECT_ID}
   paths:
-    #    - .gradle/
+    - .gradle/
     - gradle/wrapper
 
 build & test:
   stage: build
   script:
-    - ./gradlew --console=plain :app-amigobox:assembleDebug assembleDebugUnitTest
-    - ./gradlew --console=plain ktlintCheck lintDebug
-    - ./gradlew --console=plain assembleDebugUnitTest testDebugUnitTest
+    - ./gradlew --console=plain :app-amigobox:assembleDebug
+    - ./gradlew --console=plain assembleDebugUnitTest testDebugUnitTest ktlintCheck lintDebug
   artifacts:
     when: always
     paths:
-      - "*.apk"
-      - "*/build"
-      - "build/reports/lint-results-debug.html"
+      - "**/*.apk"
       - "**/build/reports/lint-results-debug.html"
-      - "app-amigobox/build/reports/lint-results-debug.html"
-
     reports:
       junit:
-        - "build/test-results/tests/**/TEST-*.xml"
-        - "lib-domain/build/test-results/**/TEST-*.xml"
-        - "app-amigobox/build/test-results/**/TEST-*.xml"
-        - "app-digitaluser/build/test-results/**/TEST-*.xml"
-        - "lib-commons/build/test-results/**/TEST-*.xml"
-        - "lib-nfc/build/test-results/**/TEST-*.xml"
+        - "**/build/test-results/tests/**/TEST-*.xml"
+        - "**/build/test-results/**/TEST-*.xml"

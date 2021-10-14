@@ -35,4 +35,8 @@ abstract class CallDao : SendableDao<CallEntity, CallEntity>() {
     @Transaction
     @Query("SELECT * FROM calls where receiverId = :id")
     abstract override fun findByReceiver(id: UUID): Flow<List<CallEntity>>
+
+    @Transaction
+    @Query("SELECT * FROM calls where receiverId = :id or senderId = :id ")
+    abstract override fun findByPerson(id: UUID): Flow<List<CallEntity>>
 }

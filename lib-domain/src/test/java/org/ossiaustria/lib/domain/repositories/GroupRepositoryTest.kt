@@ -20,7 +20,7 @@ import org.ossiaustria.lib.domain.database.GroupDao
 import org.ossiaustria.lib.domain.database.PersonDao
 import org.ossiaustria.lib.domain.database.entities.GroupEntity
 import org.ossiaustria.lib.domain.models.Group
-import org.ossiaustria.lib.domain.models.enums.MembershipType
+import org.ossiaustria.lib.domain.models.enums.MemberType
 import org.robolectric.RobolectricTestRunner
 import java.util.*
 
@@ -28,7 +28,6 @@ import java.util.*
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
-@Ignore
 internal class GroupRepositoryTest : AbstractRepositoryTest<GroupEntity, Group>() {
 
     lateinit var subject: GroupRepository
@@ -65,15 +64,15 @@ internal class GroupRepositoryTest : AbstractRepositoryTest<GroupEntity, Group>(
             val remoteList = listOf(
                 Group(
                     groupId1, "groupId1", listOf(
-                        EntityMocks.person(centerPerson, groupId1, MembershipType.CENTER),
-                        EntityMocks.person(person2, groupId1, MembershipType.MEMBER),
+                        EntityMocks.person(centerPerson, groupId1, MemberType.ANALOGUE),
+                        EntityMocks.person(person2, groupId1, MemberType.MEMBER),
                     )
                 ),
                 Group(
                     groupId2, "groupId2",
                     listOf(
-                        EntityMocks.person(person2, groupId2, MembershipType.ADMIN),
-                        EntityMocks.person(person3, groupId2, MembershipType.MEMBER),
+                        EntityMocks.person(person2, groupId2, MemberType.ADMIN),
+                        EntityMocks.person(person3, groupId2, MemberType.MEMBER),
                     )
                 ),
             )

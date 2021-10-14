@@ -32,45 +32,14 @@ class MockCallServiceImpl(
 
     private val wrapper = SendableServiceWrapper<Call>(ioDispatcher)
 
-    private val album = Album(
-        id = HIS_ALBUM_ID,
-        name = "Album",
-        ownerId = MY_PERSON_ID,
-        items = listOf(
-            mockMultimedia(ownerId = MY_PERSON_ID),
-            mockMultimedia(ownerId = MY_PERSON_ID),
-        )
-    )
-
-    private fun mockMultimedia(
-        id: UUID = randomUUID(),
-        senderId: UUID = HER_PERSON_ID,
-        receiverId: UUID = MY_PERSON_ID,
-        ownerId: UUID = HER_PERSON_ID,
-        createdAt: Long = System.currentTimeMillis(),
-        sendAt: Long? = System.currentTimeMillis(),
-        retrievedAt: Long? = System.currentTimeMillis(),
-    ) = Multimedia(
-        id = id,
-        createdAt = createdAt,
-        sendAt = sendAt,
-        retrievedAt = retrievedAt,
-        senderId = senderId,
-        receiverId = receiverId,
-        ownerId = ownerId,
-        remoteUrl = "https://en.wikipedia.org/wiki/Image#/media/File:Image_created_with_a_mobile_phone.png",
-        localUrl = "",
-        type = MultimediaType.IMAGE
-    )
-
-    private fun mockCall(
+     private fun mockCall(
         id: UUID = randomUUID(),
         senderId: UUID = HER_PERSON_ID,
         receiverId: UUID = MY_PERSON_ID,
         callType: CallType = CallType.AUDIO,
-        createdAt: Long = System.currentTimeMillis(),
-        sendAt: Long? = System.currentTimeMillis(),
-        retrievedAt: Long? = System.currentTimeMillis(),
+        createdAt: Date = Date(),
+        sendAt: Date? = Date(),
+        retrievedAt: Date? = Date(),
     ) = Call(
         id = id,
         createdAt = createdAt,
@@ -79,12 +48,12 @@ class MockCallServiceImpl(
         senderId = senderId,
         receiverId = receiverId,
         callType = callType,
-        startedAt = System.currentTimeMillis(),
-        finishedAt = System.currentTimeMillis(),
+        startedAt = Date(),
+        finishedAt = Date(),
     )
 
     override fun informWillJoin() {
-      Timber.i("informWillJoin")
+        Timber.i("informWillJoin")
     }
 
     override fun informTerminated() {
@@ -140,12 +109,12 @@ class MockCallServiceImpl(
 
     override fun markAsSent(id: UUID, time: ZonedDateTime): Flow<Resource<Call>> =
         wrapper.markAsSent {
-            mockCall(id = id, senderId = id, sendAt = System.currentTimeMillis())
+            mockCall(id = id, senderId = id, sendAt = Date())
         }
 
     override fun markAsRetrieved(id: UUID, time: ZonedDateTime): Flow<Resource<Call>> =
         wrapper.markAsRetrieved {
-            mockCall(id = id, senderId = id, retrievedAt = System.currentTimeMillis())
+            mockCall(id = id, senderId = id, retrievedAt = Date())
         }
 
 }

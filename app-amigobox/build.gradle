@@ -31,7 +31,6 @@ android {
             applicationIdSuffix ".debug"
             minifyEnabled false
             testCoverageEnabled true
-            buildConfigField "String", "API_ENDPOINT", "\"API_ENDPOINT\""
             aaptOptions.cruncherEnabled = false
         }
         release {
@@ -59,7 +58,12 @@ android {
         kotlinCompilerExtensionVersion Versions.compose_version
     }
     kapt { correctErrorTypes true }
-    kotlinOptions { jvmTarget = '1.8' }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        freeCompilerArgs += [
+                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi"]
+    }
     lintOptions {
         disable "Instantiatable"
     }

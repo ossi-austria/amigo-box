@@ -3,8 +3,11 @@ package org.ossiaustria.lib.domain.database
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 import org.ossiaustria.lib.domain.database.entities.AbstractEntity
+import org.ossiaustria.lib.domain.database.entities.MultimediaEntity
 import java.util.*
 
 abstract class AbstractEntityDao<IN, OUT> where  IN : AbstractEntity {

@@ -3,7 +3,7 @@ package org.ossiaustria.lib.domain
 import org.ossiaustria.lib.domain.auth.Account
 import org.ossiaustria.lib.domain.auth.TokenResult
 import org.ossiaustria.lib.domain.models.Person
-import org.ossiaustria.lib.domain.models.enums.MembershipType
+import org.ossiaustria.lib.domain.models.enums.MemberType
 import java.util.*
 import java.util.UUID.randomUUID
 
@@ -29,7 +29,7 @@ internal object EntityMocks {
     fun person(
         personId: UUID,
         groupId: UUID,
-        memberType: MembershipType = MembershipType.MEMBER
+        memberType: MemberType = MemberType.MEMBER
     ): Person {
         return Person(
             id = personId,

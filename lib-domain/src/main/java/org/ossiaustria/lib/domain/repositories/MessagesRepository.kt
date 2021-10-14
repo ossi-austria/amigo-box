@@ -1,7 +1,6 @@
 package org.ossiaustria.lib.domain.repositories
 
 import com.dropbox.android.external.store4.Store
-import com.dropbox.android.external.store4.StoreRequest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -19,15 +18,14 @@ import org.ossiaustria.lib.domain.modules.UserContext
 import timber.log.Timber
 import java.util.*
 
-
 interface MessageRepository {
 
-    fun getAllMessages(): Flow<Resource<List<Message>>>
-    fun getReceived(): Flow<Resource<List<Message>>>
+    fun getAllMessages(refresh: Boolean = false): Flow<Resource<List<Message>>>
+    fun getReceived(refresh: Boolean = false): Flow<Resource<List<Message>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getMessage(id: UUID): Flow<Resource<Message>>
+    fun getMessage(id: UUID, refresh: Boolean = false): Flow<Resource<Message>>
 }
 
 class MessageRepositoryImpl(
@@ -45,7 +43,7 @@ class MessageRepositoryImpl(
     @FlowPreview
     private val receivedStore: Store<String, List<Message>> =
         buildCollectionStore(
-            fetchApi = { messageApi.getAllReceived() },
+            fetchApi = { messageApi.getAllOwn() },
             readDao = { messageDao.findByReceiver(userContext.personId()!!) },
             transform = { it.toMessage() })
 
@@ -65,16 +63,15 @@ class MessageRepositoryImpl(
             it.toMessage()
         }
 
-
     override fun defaultReadAll(): Flow<List<MessageEntity>> = messageDao.findAll()
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllMessages(): Flow<Resource<List<Message>>> = flow {
+    override fun getAllMessages(refresh: Boolean): Flow<Resource<List<Message>>> = flow {
         listTransform(
             defaultCollectionStore.stream(
-                StoreRequest.cached(key = "all", refresh = true)
+                newRequest(key = "all", refresh = refresh)
             )
         )
     }
@@ -82,15 +79,15 @@ class MessageRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getReceived(): Flow<Resource<List<Message>>> = flow {
-        listTransform(receivedStore.stream(StoreRequest.cached(key = "received", refresh = true)))
+    override fun getReceived(refresh: Boolean): Flow<Resource<List<Message>>> = flow {
+        listTransform(receivedStore.stream(newRequest(key = "received", refresh = refresh)))
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getMessage(id: UUID): Flow<Resource<Message>> = flow {
-        itemTransform(singleStore.stream(StoreRequest.cached(key = id, refresh = true)))
+    override fun getMessage(id: UUID, refresh: Boolean): Flow<Resource<Message>> = flow {
+        itemTransform(singleStore.stream(newRequest(key = id, refresh = refresh)))
     }
 
     override fun transform(item: MessageEntity): Message = item.toMessage()

@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -74,7 +73,7 @@ class ImageGalleryFragment : Fragment() {
                             .fillMaxSize()
                             .clickable(onClick = {
                             }),
-                        url = item.remoteUrl,
+                        url = item.filename,
                         contentScale = ContentScale.Fit
                     )
                 }

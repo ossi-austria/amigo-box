@@ -38,10 +38,8 @@ class PersonApiTest : AbstractApiTest() {
         assertNotNull(person)
         assertNotNull(person.name)
         assertNotNull(person.id)
-        assertNotNull(person.email)
         assertNotNull(person.memberType)
         assertNotNull(person.groupId)
-
     }
 
     @Test

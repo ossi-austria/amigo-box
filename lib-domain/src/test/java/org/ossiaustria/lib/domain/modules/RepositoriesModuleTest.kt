@@ -21,7 +21,7 @@ import org.ossiaustria.lib.domain.repositories.CallRepository
 import org.ossiaustria.lib.domain.repositories.GroupRepository
 import org.ossiaustria.lib.domain.repositories.MessageRepository
 import org.ossiaustria.lib.domain.repositories.MultimediaRepository
-import org.ossiaustria.lib.domain.repositories.NfcTagRepository
+import org.ossiaustria.lib.domain.repositories.NfcInfoRepository
 import org.ossiaustria.lib.domain.repositories.PersonRepository
 import org.ossiaustria.lib.domain.repositories.SettingsRepository
 import org.robolectric.RobolectricTestRunner
@@ -35,7 +35,7 @@ class RepositoriesModuleTest : KoinTest {
     private val groupRepository: GroupRepository by inject()
     private val messageRepository: MessageRepository by inject()
     private val multimediaRepository: MultimediaRepository by inject()
-    private val nfcTagRepository: NfcTagRepository by inject()
+    private val nfcInfoRepository: NfcInfoRepository by inject()
     private val personRepository: PersonRepository by inject()
 
     @get:Rule
@@ -66,7 +66,7 @@ class RepositoriesModuleTest : KoinTest {
         assertNotNull(groupRepository)
         assertNotNull(messageRepository)
         assertNotNull(multimediaRepository)
-        assertNotNull(nfcTagRepository)
+        assertNotNull(nfcInfoRepository)
         assertNotNull(personRepository)
 
     }

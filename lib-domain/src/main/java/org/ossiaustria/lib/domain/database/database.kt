@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import org.ossiaustria.lib.domain.database.converters.CallTypeConverter
+import org.ossiaustria.lib.domain.database.converters.DateConverter
 import org.ossiaustria.lib.domain.database.converters.MembershipTypeConverter
 import org.ossiaustria.lib.domain.database.converters.MultimediaTypeConverter
 import org.ossiaustria.lib.domain.database.converters.NFCTagTypeConverter
@@ -14,7 +15,7 @@ import org.ossiaustria.lib.domain.database.entities.CallEntity
 import org.ossiaustria.lib.domain.database.entities.GroupEntity
 import org.ossiaustria.lib.domain.database.entities.MessageEntity
 import org.ossiaustria.lib.domain.database.entities.MultimediaEntity
-import org.ossiaustria.lib.domain.database.entities.NfcTagEntity
+import org.ossiaustria.lib.domain.database.entities.NfcInfoEntity
 import org.ossiaustria.lib.domain.database.entities.PersonEntity
 
 internal interface AppDatabase {
@@ -25,7 +26,7 @@ internal interface AppDatabase {
     fun multimediaDao(): MultimediaDao
     fun albumDao(): AlbumDao
     fun albumShareDao(): AlbumShareDao
-    fun nfcTagDao(): NfcTagDao
+    fun nfcInfoDao(): NfcInfoDao
 }
 
 @Database(
@@ -37,13 +38,14 @@ internal interface AppDatabase {
         MultimediaEntity::class,
         AlbumShareEntity::class,
         AlbumEntity::class,
-        NfcTagEntity::class,
+        NfcInfoEntity::class,
     ],
-    version = 3,
+    version = 7,
     exportSchema = false
 )
 @TypeConverters(
     value = [
+        DateConverter::class,
         UUIDConverter::class,
         // EnumConverters
         CallTypeConverter::class,
@@ -62,5 +64,5 @@ internal abstract class AppDatabaseImpl : RoomDatabase(), AppDatabase {
     abstract override fun albumDao(): AlbumDao
 
     abstract override fun albumShareDao(): AlbumShareDao
-    abstract override fun nfcTagDao(): NfcTagDao
+    abstract override fun nfcInfoDao(): NfcInfoDao
 }

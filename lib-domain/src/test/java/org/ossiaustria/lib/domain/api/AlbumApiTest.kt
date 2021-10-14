@@ -48,24 +48,18 @@ class AlbumApiTest : AbstractApiTest() {
         album.items.forEach {
             assertNotNull(it.id)
             assertNotNull(it.createdAt)
-            assertNotNull(it.sendAt)
-            assertNotNull(it.retrievedAt)
-            assertNotNull(it.sendAt)
-            assertNotNull(it.senderId)
-            assertNotNull(it.receiverId)
-            assertNotNull(it.remoteUrl)
-            assertNotNull(it.localUrl)
+            assertNotNull(it.filename)
+            assertNotNull(it.contentType)
             assertNotNull(it.type)
             assertNotNull(it.size)
             assertNotNull(it.albumId)
         }
-
     }
 
     @Test
     fun `AlbumApi getAll should retrieve all items `() {
         val items = runBlocking {
-            subject.getAll()
+            subject.getShared()
         }
 
         assertNotNull(items)
@@ -79,7 +73,7 @@ class AlbumApiTest : AbstractApiTest() {
                 multimediaMock = listOf(JsonMocker.multimedia(albumId = idExisting),)
             )
         ),
-        "albums" to MockResponse(
+        "albums/shared" to MockResponse(
             JsonMocker.createList(
                 listOf(
                     JsonMocker.album(

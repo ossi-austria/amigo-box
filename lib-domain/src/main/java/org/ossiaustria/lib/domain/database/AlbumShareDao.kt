@@ -18,7 +18,7 @@ abstract class AlbumShareDao : SendableDao<AlbumShareEntity, AlbumShareEntityWit
     abstract override suspend fun deleteById(id: UUID)
 
     @Transaction
-    @Query("SELECT * FROM album_shares ORDER BY retrievedAt DESC")
+    @Query("SELECT * FROM album_shares ORDER BY retrievedAt ASC")
     abstract override fun findAll(): Flow<List<AlbumShareEntityWithData>>
 
     @Transaction
@@ -36,4 +36,8 @@ abstract class AlbumShareDao : SendableDao<AlbumShareEntity, AlbumShareEntityWit
     @Transaction
     @Query("SELECT * FROM album_shares where receiverId = :id")
     abstract override fun findByReceiver(id: UUID): Flow<List<AlbumShareEntityWithData>>
+
+    @Transaction
+    @Query("SELECT * FROM album_shares where receiverId = :id or senderId = :id ")
+    abstract override fun findByPerson(id: UUID): Flow<List<AlbumShareEntityWithData>>
 }

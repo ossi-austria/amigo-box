@@ -37,8 +37,6 @@ class CallApiTest : AbstractApiTest() {
         assertNotNull(item.senderId)
         assertNotNull(item.receiverId)
         assertNotNull(item.callType)
-        assertNotNull(item.startedAt)
-        assertNotNull(item.finishedAt)
     }
 
     @Test
@@ -56,7 +54,7 @@ class CallApiTest : AbstractApiTest() {
         "calls/$idExisting" to MockResponse(
             JsonMocker.call()
         ),
-        "calls" to MockResponse(
+        "calls/all" to MockResponse(
             JsonMocker.createList(
                 listOf(
                     JsonMocker.call(),

@@ -1,10 +1,14 @@
 package org.ossiaustria.lib.domain.modules
 
 import org.ossiaustria.lib.domain.auth.Account
+import org.ossiaustria.lib.domain.auth.AuthInterceptor
+import org.ossiaustria.lib.domain.auth.TokenResult
 import org.ossiaustria.lib.domain.models.Person
 import timber.log.Timber
 
-class UserContext {
+class UserContext(
+    private val authInterceptor: AuthInterceptor
+) {
 
     private var account: Account? = null
 
@@ -20,9 +24,17 @@ class UserContext {
     fun accountId() = account()?.id
     fun personId() = person()?.id
 
-    fun initContext(account: Account?) {
+    fun initContext(
+        accessToken: TokenResult?,
+        account: Account?,
+        currentPerson: Person?
+    ) {
         this.account = account
-        this.person = account?.persons?.firstOrNull()
+        this.person = currentPerson ?: account?.persons?.firstOrNull()
         Timber.i("Loaded UserContext for account ${account?.email} and ${person?.id}")
+
+        authInterceptor.clearToken()
+        authInterceptor.initToken(accessToken)
+        authInterceptor.initPerson(person?.id)
     }
 }

@@ -21,16 +21,18 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.java.KoinJavaComponent.inject
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.ui.commons.MaterialButton
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Person
+import org.ossiaustria.lib.domain.models.enums.MemberType
+import java.util.UUID.randomUUID
 
 class LoadingFragment : Fragment() {
 
@@ -131,4 +133,20 @@ fun LoadingFragmentComposable(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun LoadingFragmentComposablePreview() {
+    LoadingFragmentComposable(
+        Resource.success(true),
+        Person(randomUUID(), "AnalogueUser", randomUUID(), MemberType.ANALOGUE),
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+    )
 }

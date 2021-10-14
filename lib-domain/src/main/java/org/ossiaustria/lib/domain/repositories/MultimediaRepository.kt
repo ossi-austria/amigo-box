@@ -1,14 +1,10 @@
 package org.ossiaustria.lib.domain.repositories
 
-import com.dropbox.android.external.store4.StoreRequest
-import com.dropbox.android.external.store4.StoreResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.MultimediaApi
 import org.ossiaustria.lib.domain.common.Resource
@@ -20,14 +16,13 @@ import org.ossiaustria.lib.domain.models.Multimedia
 import timber.log.Timber
 import java.util.*
 
-
 interface MultimediaRepository {
 
-    fun getAllMultimedias(): Flow<Resource<List<Multimedia>>>
+    fun getAllMultimedias(refresh: Boolean = false): Flow<Resource<List<Multimedia>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getMultimedia(id: UUID): Flow<Resource<Multimedia>>
+    fun getMultimedia(id: UUID, refresh: Boolean = false): Flow<Resource<Multimedia>>
 }
 
 internal class MultimediaRepositoryImpl(
@@ -41,7 +36,7 @@ internal class MultimediaRepositoryImpl(
     ) {
 
     override suspend fun fetchOne(id: UUID): Multimedia = multimediaApi.get(id)
-    override suspend fun defaultFetchAll(): List<Multimedia> = multimediaApi.getAll()
+    override suspend fun defaultFetchAll(): List<Multimedia> = multimediaApi.getShared()
 
     override suspend fun writeItem(item: Multimedia) {
         try {
@@ -61,23 +56,19 @@ internal class MultimediaRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllMultimedias(): Flow<Resource<List<Multimedia>>> = flow {
-        defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
-            .flowOn(dispatcherProvider.io())
-            .collect { response: StoreResponse<List<Multimedia>> ->
-                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
-            }
+    override fun getAllMultimedias(refresh: Boolean): Flow<Resource<List<Multimedia>>> = flow {
+        listTransform(
+            defaultCollectionStore.stream(newRequest(key = "all", refresh = refresh))
+        )
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getMultimedia(id: UUID): Flow<Resource<Multimedia>> = flow {
-        singleStore.stream(StoreRequest.cached(key = id, refresh = true))
-            .flowOn(dispatcherProvider.io())
-            .collect { response: StoreResponse<Multimedia> ->
-                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
-            }
+    override fun getMultimedia(id: UUID, refresh: Boolean): Flow<Resource<Multimedia>> = flow {
+        itemTransform(
+            singleStore.stream(newRequest(key = id, refresh = refresh))
+        )
     }
 
     override fun transform(item: MultimediaEntity): Multimedia = item.toMultimedia()

@@ -50,8 +50,11 @@ class BoxApplication : Application() {
         val cloudPushHandlerService: CloudPushHandlerService by inject()
 
         authInterceptor.initToken(settingsRepository.accessToken)
-        userContext.initContext(settingsRepository.account)
-
+        userContext.initContext(
+            settingsRepository.accessToken,
+            settingsRepository.account,
+            settingsRepository.currentPerson
+        )
         NotificationChannels.createAllChannels(this)
         // Assert FCM token
         fcmHelper.getToken { Timber.i("Retrieved token: $it") }

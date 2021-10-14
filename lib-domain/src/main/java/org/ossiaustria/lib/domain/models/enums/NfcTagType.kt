@@ -1,8 +1,9 @@
 package org.ossiaustria.lib.domain.models.enums
 
 enum class NfcTagType {
+    UNDEFINED,
     SYSTEM,
-    PERSON,
-    COLLECTION,
-    MULTIMEDIA,
+    CALL_PERSON,
+    OPEN_ALBUM,
+    LOGIN,
 }

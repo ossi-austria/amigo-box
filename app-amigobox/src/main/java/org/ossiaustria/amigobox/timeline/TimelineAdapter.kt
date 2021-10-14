@@ -53,7 +53,7 @@ class TimelineAdapter : RecyclerView.Adapter<SendableHolder>() {
             is AlbumShare -> TYPE_ALBUM_SHARE
             is Call -> TYPE_CALL
             is Message -> TYPE_MESSAGE
-            is Multimedia -> TYPE_MULTIMEDIA
+//            is Multimedia -> TYPE_MULTIMEDIA
             else -> throw IllegalStateException("Not supported: ${sendables[position]}")
         }
     }

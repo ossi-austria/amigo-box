@@ -1,14 +1,10 @@
 package org.ossiaustria.lib.domain.repositories
 
-import com.dropbox.android.external.store4.StoreRequest
-import com.dropbox.android.external.store4.StoreResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.PersonApi
 import org.ossiaustria.lib.domain.common.Resource
@@ -20,15 +16,13 @@ import org.ossiaustria.lib.domain.models.Person
 import timber.log.Timber
 import java.util.*
 
-
 interface PersonRepository {
 
-    fun getAllPersons(): Flow<Resource<List<Person>>>
+    fun getAllPersons(refresh: Boolean = false): Flow<Resource<List<Person>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getPerson(id: UUID): Flow<Resource<Person>>
-
+    fun getPerson(id: UUID, refresh: Boolean = false): Flow<Resource<Person>>
 }
 
 internal class PersonRepositoryImpl(
@@ -59,23 +53,19 @@ internal class PersonRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllPersons(): Flow<Resource<List<Person>>> = flow {
-        defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
-            .flowOn(dispatcherProvider.io())
-            .collect { response: StoreResponse<List<Person>> ->
-                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
-            }
+    override fun getAllPersons(refresh: Boolean): Flow<Resource<List<Person>>> = flow {
+        listTransform(
+            defaultCollectionStore.stream(newRequest(key = "all", refresh = refresh))
+        )
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getPerson(id: UUID): Flow<Resource<Person>> = flow {
-        singleStore.stream(StoreRequest.cached(key = id, refresh = true))
-            .flowOn(dispatcherProvider.io())
-            .collect { response: StoreResponse<Person> ->
-                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
-            }
+    override fun getPerson(id: UUID, refresh: Boolean): Flow<Resource<Person>> = flow {
+        itemTransform(
+            singleStore.stream(newRequest(key = id, refresh = refresh))
+        )
     }
 
     override fun transform(item: PersonEntity): Person = item.toPerson()

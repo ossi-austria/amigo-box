@@ -10,15 +10,15 @@ import java.util.*
 data class CallEntity(
     @PrimaryKey
     override val id: UUID,
-    override val createdAt: Long,
-    override val sendAt: Long? = null,
-    override val retrievedAt: Long? = null,
+    override val createdAt: Date,
+    override val sendAt: Date? = null,
+    override val retrievedAt: Date? = null,
     override val senderId: UUID,
     override val receiverId: UUID,
 
     val callType: CallType,
-    val startedAt: Long,
-    val finishedAt: Long,
+    val startedAt: Date?,
+    val finishedAt: Date?,
 ) : SendableEntity
 
 fun CallEntity.toCall(): Call {

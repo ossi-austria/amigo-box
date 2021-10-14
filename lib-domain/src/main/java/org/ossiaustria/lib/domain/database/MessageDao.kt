@@ -35,4 +35,8 @@ abstract class MessageDao : SendableDao<MessageEntity, MessageEntity>() {
     @Transaction
     @Query("SELECT * FROM messages where receiverId = :id")
     abstract override fun findByReceiver(id: UUID): Flow<List<MessageEntity>>
+
+    @Transaction
+    @Query("SELECT * FROM messages where receiverId = :id or senderId = :id ")
+    abstract override fun findByPerson(id: UUID): Flow<List<MessageEntity>>
 }

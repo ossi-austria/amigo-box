@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.ossiaustria.lib.domain.database.entities.MessageEntity
 import org.robolectric.RobolectricTestRunner
 import java.util.*
-
+import java.util.UUID.randomUUID
 
 @RunWith(RobolectricTestRunner::class)
 internal class MessageDaoTest : SendableDaoTest<MessageEntity, MessageEntity, MessageDao>() {
@@ -20,16 +20,19 @@ internal class MessageDaoTest : SendableDaoTest<MessageEntity, MessageEntity, Me
     override fun createEntity(id: UUID): MessageEntity {
         return MessageEntity(
             id = id,
-            createdAt = 1, sendAt = 2, retrievedAt = 3,
-            senderId = UUID.randomUUID(), receiverId = UUID.randomUUID(),
-            text = UUID.randomUUID().toString()
+            createdAt = Date(),
+            sendAt = Date(),
+            retrievedAt = Date(),
+            senderId = randomUUID(),
+            receiverId = randomUUID(),
+            text = randomUUID().toString()
         )
     }
 
     override fun permuteEntity(entity: MessageEntity): MessageEntity {
         return entity.copy(
-            createdAt = 101,
-            sendAt = 102
+            createdAt = Date(),
+            sendAt = Date()
         )
     }
 

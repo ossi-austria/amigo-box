@@ -19,5 +19,16 @@ interface AuthApi {
     suspend fun whoami(): Account
 
     @POST("account/set-fcm-token")
-    suspend fun setFcmToken(@Body setFcmTokenRequest: SetFcmTokenRequest): Boolean
+    suspend fun setFcmToken(@Body setFcmTokenRequest: SetFcmTokenRequest)
 }
+
+data class LoginRequest(
+    val email: String,
+    val password: String,
+)
+
+data class RegisterRequest(
+    val email: String,
+    val password: String,
+    val name: String,
+)

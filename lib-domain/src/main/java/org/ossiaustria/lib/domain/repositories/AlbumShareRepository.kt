@@ -1,6 +1,5 @@
 package org.ossiaustria.lib.domain.repositories
 
-import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -21,14 +20,13 @@ import org.ossiaustria.lib.domain.models.AlbumShare
 import timber.log.Timber
 import java.util.*
 
-
 interface AlbumShareRepository {
 
-    fun getAllAlbumShares(): Flow<Resource<List<AlbumShare>>>
+    fun getAllAlbumShares(refresh: Boolean = false): Flow<Resource<List<AlbumShare>>>
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    fun getAlbumShare(id: UUID): Flow<Resource<AlbumShare>>
+    fun getAlbumShare(id: UUID, refresh: Boolean = false): Flow<Resource<AlbumShare>>
 }
 
 internal class AlbumShareRepositoryImpl(
@@ -62,8 +60,8 @@ internal class AlbumShareRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAllAlbumShares(): Flow<Resource<List<AlbumShare>>> = flow {
-        defaultCollectionStore.stream(StoreRequest.cached(key = "all", refresh = true))
+    override fun getAllAlbumShares(refresh: Boolean): Flow<Resource<List<AlbumShare>>> = flow {
+        defaultCollectionStore.stream(newRequest("all", refresh))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<AlbumShare>> ->
                 transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
@@ -73,12 +71,11 @@ internal class AlbumShareRepositoryImpl(
     @FlowPreview
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
-    override fun getAlbumShare(id: UUID): Flow<Resource<AlbumShare>> = flow {
-        singleStore.stream(StoreRequest.cached(key = id, refresh = true))
-            .flowOn(dispatcherProvider.io())
-            .collect { response: StoreResponse<AlbumShare> ->
-                transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
-            }
+    override fun getAlbumShare(id: UUID, refresh: Boolean): Flow<Resource<AlbumShare>> = flow {
+
+        itemTransform(
+            singleStore.stream(newRequest(key = id, refresh = refresh))
+        )
     }
 
     override fun transform(item: AlbumShareEntityWithData): AlbumShare = item.toAlbumShare()

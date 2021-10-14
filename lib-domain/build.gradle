@@ -9,6 +9,15 @@ plugins {
     id 'jacoco'
 }
 
+def API_ENDPOINT = "https://amigo-dev.ossi-austria.org:8080/v1/";
+try {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    API_ENDPOINT = properties.getProperty('API_ENDPOINT')
+} catch (ignored) {}
+
+
+
 android {
 
     compileSdkVersion AndroidVersion.compileSdk
@@ -30,6 +39,7 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
+            buildConfigField "String", "API_ENDPOINT", "\"$API_ENDPOINT\""
         }
         release {
             minifyEnabled true

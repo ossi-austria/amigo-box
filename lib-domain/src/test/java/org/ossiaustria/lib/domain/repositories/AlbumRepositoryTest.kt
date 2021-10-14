@@ -69,7 +69,7 @@ internal class AlbumRepositoryTest : AbstractRepositoryTest<AlbumEntity, Album>(
                 ),
             )
 
-            coEvery { mockAlbumApi.getAll() } answers { remoteList }
+            coEvery { mockAlbumApi.getShared() } answers { remoteList }
 
             val daoList = listOf(
                 AlbumEntity(id1, UUID.randomUUID(), "name"),
@@ -84,12 +84,10 @@ internal class AlbumRepositoryTest : AbstractRepositoryTest<AlbumEntity, Album>(
     private fun mockMultimedia(personId: UUID): Multimedia {
         return Multimedia(
             UUID.randomUUID(),
-            senderId = personId,
-            receiverId = personId,
             ownerId = personId,
             type = MultimediaType.VIDEO,
-            localUrl = "localUrl",
-            remoteUrl = "remoteUrl"
+            contentType = "localUrl",
+            filename = "remoteUrl"
         )
     }
 }

@@ -13,6 +13,7 @@ import org.ossiaustria.lib.domain.database.entities.AlbumShareEntityWithData
 import org.ossiaustria.lib.domain.database.entities.toAlbumShare
 import org.robolectric.RobolectricTestRunner
 import java.util.*
+import java.util.UUID.randomUUID
 
 @RunWith(RobolectricTestRunner::class)
 internal class AlbumShareDaoTest :
@@ -20,6 +21,9 @@ internal class AlbumShareDaoTest :
 
     lateinit var albumDao: AlbumDao
 
+    companion object {
+        var counter = 0
+    }
     override fun init() {
         dao = db.albumShareDao()
         albumDao = db.albumDao()
@@ -34,11 +38,14 @@ internal class AlbumShareDaoTest :
         val findAll = runBlocking { dao.findAll().take(1).first() }
         val subject = findAll[0].toAlbumShare()
         MatcherAssert.assertThat(subject.album, CoreMatchers.not(CoreMatchers.nullValue()))
+        runBlocking {
+            dao.deleteAll()
+        }
     }
 
     override fun createEntity(id: UUID): AlbumShareEntity {
-        val albumId = UUID.randomUUID()
-        val personId = UUID.randomUUID()
+        val albumId = randomUUID()
+        val personId = randomUUID()
         val albumEntity = AlbumEntity(
             albumId = albumId,
             ownerId = personId,
@@ -47,9 +54,9 @@ internal class AlbumShareDaoTest :
         runBlocking { albumDao.insert(albumEntity) }
         return AlbumShareEntity(
             id = id,
-            createdAt = 1,
-            sendAt = 2,
-            retrievedAt = 3,
+            createdAt = Date(),
+            sendAt = Date(),
+            retrievedAt = Date(),
             senderId = personId,
             receiverId = personId,
             albumId = albumId,
@@ -58,8 +65,9 @@ internal class AlbumShareDaoTest :
 
     override fun permuteEntity(entity: AlbumShareEntity): AlbumShareEntity {
         return entity.copy(
-            createdAt = 101,
-            sendAt = 102
+            createdAt = Date(),
+            sendAt = Date(),
+            retrievedAt = Date(System.currentTimeMillis()+counter)
         )
     }
 
