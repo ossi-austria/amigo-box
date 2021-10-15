@@ -7,7 +7,7 @@ import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.InternalCoroutinesApi
+
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -22,7 +22,6 @@ import org.robolectric.RobolectricTestRunner
 import java.util.*
 
 @FlowPreview
-@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 internal class MessagesRepositoryTest : AbstractRepositoryTest<MessageEntity, Message>() {
@@ -48,7 +47,6 @@ internal class MessagesRepositoryTest : AbstractRepositoryTest<MessageEntity, Me
         subject = MessageRepositoryImpl(messageApi, messageDao, testDispatcherProvider, userContext)
     }
 
-    @InternalCoroutinesApi
     @Test
     fun `should use database and fetcher`() {
 

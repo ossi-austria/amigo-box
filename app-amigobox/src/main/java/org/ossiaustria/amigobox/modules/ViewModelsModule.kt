@@ -19,5 +19,5 @@ val viewModelsModule = module {
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { ImageGalleryViewModel(get()) }
     viewModel { LoadingViewModel(get(), get(), get()) }
-    viewModel { NfcViewModel(get(), get()) }
+    viewModel { NfcViewModel(get(), get(),get(),get()) }
 }

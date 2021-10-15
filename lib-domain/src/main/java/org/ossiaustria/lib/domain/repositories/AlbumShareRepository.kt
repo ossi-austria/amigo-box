@@ -3,7 +3,7 @@ package org.ossiaustria.lib.domain.repositories
 import com.dropbox.android.external.store4.StoreResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.InternalCoroutinesApi
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -25,7 +25,6 @@ interface AlbumShareRepository {
     fun getAllAlbumShares(refresh: Boolean = false): Flow<Resource<List<AlbumShare>>>
 
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     fun getAlbumShare(id: UUID, refresh: Boolean = false): Flow<Resource<AlbumShare>>
 }
 
@@ -59,7 +58,6 @@ internal class AlbumShareRepositoryImpl(
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     override fun getAllAlbumShares(refresh: Boolean): Flow<Resource<List<AlbumShare>>> = flow {
         defaultCollectionStore.stream(newRequest("all", refresh))
             .flowOn(dispatcherProvider.io())
@@ -70,7 +68,6 @@ internal class AlbumShareRepositoryImpl(
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     override fun getAlbumShare(id: UUID, refresh: Boolean): Flow<Resource<AlbumShare>> = flow {
 
         itemTransform(

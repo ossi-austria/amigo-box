@@ -2,25 +2,14 @@ package org.ossiaustria.lib.nfc.demoapp
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.nfc.NdefMessage
-import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
-import android.nfc.Tag
-import android.nfc.tech.Ndef
-import android.nfc.tech.NdefFormatable
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
-import org.ossiaustria.lib.nfc.NfcConstants
 import org.ossiaustria.lib.nfc.NfcWriter
-import timber.log.Timber
-import java.io.IOException
-
 
 @AndroidEntryPoint
 class NfcDemoMainActivity : AppCompatActivity() {

@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
@@ -25,7 +24,6 @@ import org.ossiaustria.lib.commons.TestDispatcherProvider
  * 3. use runBlockingTest for coroutines which wait a long time
  */
 @FlowPreview
-@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 internal class LoadingViewModelTest {
 

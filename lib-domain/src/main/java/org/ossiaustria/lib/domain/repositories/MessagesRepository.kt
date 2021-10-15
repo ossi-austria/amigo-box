@@ -3,7 +3,7 @@ package org.ossiaustria.lib.domain.repositories
 import com.dropbox.android.external.store4.Store
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.InternalCoroutinesApi
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.ossiaustria.lib.commons.DispatcherProvider
@@ -24,7 +24,6 @@ interface MessageRepository {
     fun getReceived(refresh: Boolean = false): Flow<Resource<List<Message>>>
 
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     fun getMessage(id: UUID, refresh: Boolean = false): Flow<Resource<Message>>
 }
 
@@ -67,7 +66,6 @@ class MessageRepositoryImpl(
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     override fun getAllMessages(refresh: Boolean): Flow<Resource<List<Message>>> = flow {
         listTransform(
             defaultCollectionStore.stream(
@@ -78,14 +76,12 @@ class MessageRepositoryImpl(
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     override fun getReceived(refresh: Boolean): Flow<Resource<List<Message>>> = flow {
         listTransform(receivedStore.stream(newRequest(key = "received", refresh = refresh)))
     }
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     override fun getMessage(id: UUID, refresh: Boolean): Flow<Resource<Message>> = flow {
         itemTransform(singleStore.stream(newRequest(key = id, refresh = refresh)))
     }

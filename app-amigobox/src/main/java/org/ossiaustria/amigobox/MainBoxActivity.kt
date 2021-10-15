@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.nfc.NfcViewModel
+import org.ossiaustria.amigobox.nfc.NfcViewModelState
 import org.ossiaustria.lib.nfc.NfcHandler
 
 class MainBoxActivity : AppCompatActivity() {
@@ -54,16 +55,38 @@ class MainBoxActivity : AppCompatActivity() {
         // Makes sure the app gets all discovered NDEF messages as long as it's in the foreground.
         nfcAdapter?.enableForegroundDispatch(this, nfcPendingIntent, null, null)
 
-        nfcViewModel.state.observe(this) { resource ->
+        nfcViewModel.nfcInfo.observe(this) { resource ->
             if (resource.isSuccess) {
                 val nfcInfo = resource.valueOrNull()
                 if (nfcInfo != null) {
                     // NFC Message is stored in nfcHandler.inNfcMessage
                     val message = "NFC detected: ${nfcInfo.name} ${nfcInfo.nfcRef} ${nfcInfo.type}"
                     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    nfcViewModel.handleNfcInfo(nfcInfo)
                 } else {
                     Toast.makeText(this, "NFC-Tag ungültig", Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+
+        nfcViewModel.state.observe(this) { resource ->
+            if (resource.isSuccess) {
+                val currentState = resource.valueOrNull()
+                when (currentState) {
+                    is NfcViewModelState.OpenAlbum -> nfcViewModel.openAlbum(
+                        currentState.album,
+                        navigator
+                    )
+                    is NfcViewModelState.CallPerson -> nfcViewModel.callPerson(
+                        currentState.person,
+                        navigator
+                    )
+                    is NfcViewModelState.Error -> {
+                        Toast.makeText(this, "NFC-Tag ungültig", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else if (resource.isFailure) {
+                Toast.makeText(this, resource.toString(), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -86,7 +109,7 @@ class MainBoxActivity : AppCompatActivity() {
         nfcPendingIntent = PendingIntent.getActivity(
             this, 0,
             Intent(this, javaClass)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         handleNfcIntent(intent)
@@ -95,7 +118,7 @@ class MainBoxActivity : AppCompatActivity() {
     private fun handleNfcIntent(checkIntent: Intent?) {
         val nfcInfo = nfcHandler.processNfcIntent(checkIntent)
         if (nfcInfo != null) {
-            nfcViewModel.processNfcInfo(nfcInfo)
+            nfcViewModel.processNfcTagData(nfcInfo)
         }
 
     }
@@ -103,6 +126,10 @@ class MainBoxActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleNfcIntent(intent)
+    }
+
+    private fun nfcAction() {
+        navigator.toAlbums()
     }
 }
 
