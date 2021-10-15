@@ -16,12 +16,14 @@ import org.ossiaustria.amigobox.ui.albums.mockUUID1
 import org.ossiaustria.amigobox.ui.albums.mockUUID2
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Album
+import org.ossiaustria.lib.domain.repositories.AlbumRepository
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class ImageGalleryViewModel(
-    ioDispatcher: CoroutineDispatcher
+    ioDispatcher: CoroutineDispatcher,
+    private val albumRepository: AlbumRepository
 ) : BoxViewModel(ioDispatcher) {
 
     private val _currentAlbum = MutableLiveData<Album?>()
@@ -147,4 +149,3 @@ fun Long.formatTime(): String = String.format(
     TimeUnit.MILLISECONDS.toMinutes(this),
     TimeUnit.MILLISECONDS.toSeconds(this) % 60
 )
-}
