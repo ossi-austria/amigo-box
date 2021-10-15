@@ -6,7 +6,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.InternalCoroutinesApi
+
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
@@ -29,7 +29,6 @@ import org.ossiaustria.lib.domain.services.AuthService
  * 3. use runBlockingTest for coroutines which wait a long time
  */
 @FlowPreview
-@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 internal class OnboardingViewModelTest {
 

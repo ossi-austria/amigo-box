@@ -2,7 +2,7 @@ package org.ossiaustria.lib.domain.repositories
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.InternalCoroutinesApi
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.ossiaustria.lib.commons.DispatcherProvider
@@ -21,7 +21,6 @@ interface CallRepository {
     fun getAllCalls(refresh: Boolean = false): Flow<Resource<List<Call>>>
 
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     fun getCall(id: UUID, refresh: Boolean = false): Flow<Resource<Call>>
 }
 
@@ -52,7 +51,6 @@ internal class CallRepositoryImpl(
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     override fun getAllCalls(refresh: Boolean): Flow<Resource<List<Call>>> = flow {
         listTransform(
             defaultCollectionStore.stream(newRequest("all", refresh))
@@ -61,7 +59,6 @@ internal class CallRepositoryImpl(
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     override fun getCall(id: UUID, refresh: Boolean): Flow<Resource<Call>> = flow {
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))

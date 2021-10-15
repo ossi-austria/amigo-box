@@ -2,7 +2,7 @@ package org.ossiaustria.lib.domain.repositories
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.InternalCoroutinesApi
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.ossiaustria.lib.commons.DispatcherProvider
@@ -21,7 +21,6 @@ interface PersonRepository {
     fun getAllPersons(refresh: Boolean = false): Flow<Resource<List<Person>>>
 
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     fun getPerson(id: UUID, refresh: Boolean = false): Flow<Resource<Person>>
 }
 
@@ -52,7 +51,6 @@ internal class PersonRepositoryImpl(
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     override fun getAllPersons(refresh: Boolean): Flow<Resource<List<Person>>> = flow {
         listTransform(
             defaultCollectionStore.stream(newRequest(key = "all", refresh = refresh))
@@ -61,7 +59,6 @@ internal class PersonRepositoryImpl(
 
     @FlowPreview
     @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
     override fun getPerson(id: UUID, refresh: Boolean): Flow<Resource<Person>> = flow {
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))

@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -14,7 +12,6 @@ import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.modules.UserContext
-import java.util.*
 
 class LoadingViewModel(
     dispatcherProvider: DispatcherProvider,
