@@ -7,6 +7,10 @@ import java.math.BigInteger
 import java.util.*
 import java.util.UUID.randomUUID
 
+val mockUUID1 = randomUUID()
+val mockUUID2 = randomUUID()
+val mockUUID3 = randomUUID()
+
 val multimediaList = 1.until(10).map {
     Multimedia(
         randomUUID(),

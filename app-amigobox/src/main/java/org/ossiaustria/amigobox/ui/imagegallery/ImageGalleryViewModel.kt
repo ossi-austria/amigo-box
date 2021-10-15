@@ -12,6 +12,8 @@ import org.ossiaustria.amigobox.BoxViewModel
 import org.ossiaustria.amigobox.ui.albums.album1
 import org.ossiaustria.amigobox.ui.albums.album2
 import org.ossiaustria.amigobox.ui.albums.album3
+import org.ossiaustria.amigobox.ui.albums.mockUUID1
+import org.ossiaustria.amigobox.ui.albums.mockUUID2
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Album
 import timber.log.Timber
