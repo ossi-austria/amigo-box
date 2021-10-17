@@ -3,22 +3,15 @@ package org.ossiaustria.amigobox.ui.imagegallery
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.launch
 import org.ossiaustria.amigobox.BoxViewModel
 import org.ossiaustria.amigobox.ui.albums.album1
 import org.ossiaustria.amigobox.ui.albums.album2
 import org.ossiaustria.amigobox.ui.albums.album3
 import org.ossiaustria.amigobox.ui.albums.mockUUID1
 import org.ossiaustria.amigobox.ui.albums.mockUUID2
-import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Album
 import org.ossiaustria.lib.domain.repositories.AlbumRepository
-import timber.log.Timber
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 class ImageGalleryViewModel(
@@ -52,10 +45,10 @@ class ImageGalleryViewModel(
     private val _isPlaying = MutableLiveData(false)
     val isPlaying: LiveData<Boolean> = _isPlaying
 
-    fun getAlbumFromUUIDMock(albumId: UUID): Album {
-        if (albumId == mockUUID1) {
+    fun getAlbum(album: Album): Album {
+        if (album.id == mockUUID1) {
             return album1
-        } else if (albumId == mockUUID2) {
+        } else if (album.id == mockUUID2) {
             return album2
         } else {
             return album3
@@ -74,21 +67,21 @@ class ImageGalleryViewModel(
         _autoState.value = autoState
     }
 
-    @ExperimentalCoroutinesApi
-    @InternalCoroutinesApi
-    fun getAlbumFromUUID(albumId: UUID) {
-        viewModelScope.launch(ioDispatcher) {
-            albumRepository.getAlbum(albumId).collect {
-
-                when (it) {
-
-                    is Resource.Success -> _currentAlbum.postValue(it.value)
-                    is Resource.Failure -> _currentAlbum
-                    else -> Timber.d("$it")//_state.emit(OnboardingState.Unauthenticated)
-                }
-            }
-        }
-    }
+//    @ExperimentalCoroutinesApi
+//    @InternalCoroutinesApi
+//    fun getAlbumFromUUID(albumId: UUID) {
+//        viewModelScope.launch(ioDispatcher) {
+//            albumRepository.getAlbum(albumId).collect {
+//
+//                when (it) {
+//
+//                    is Resource.Success -> _currentAlbum.postValue(it.value)
+//                    is Resource.Failure -> _currentAlbum
+//                    else -> Timber.d("$it")//_state.emit(OnboardingState.Unauthenticated)
+//                }
+//            }
+//        }
+//    }
 
     fun pauseTimer() {
         countDownTimer?.cancel()
@@ -136,7 +129,6 @@ enum class AutoState {
 }
 
 object Utility {
-
     //time to countdown - 1hr - 60secs
     const val TIME_COUNTDOWN: Long = 5000L
     const val TIME_FORMAT = "%02d:%02d"
