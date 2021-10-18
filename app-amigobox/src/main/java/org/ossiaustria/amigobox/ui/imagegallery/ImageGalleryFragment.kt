@@ -39,7 +39,6 @@ import timber.log.Timber
 class ImageGalleryFragment : Fragment() {
 
     private val viewModel by viewModel<ImageGalleryViewModel>()
-    val imageGalleryHelper: ImageGalleryHelper = ImageGalleryHelper()
 
     val navigator: Navigator by inject()
 
