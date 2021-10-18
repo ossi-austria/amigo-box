@@ -5,17 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineDispatcher
 import org.ossiaustria.amigobox.BoxViewModel
-import org.ossiaustria.amigobox.ui.albums.album1
-import org.ossiaustria.amigobox.ui.albums.album2
-import org.ossiaustria.amigobox.ui.albums.album3
-import org.ossiaustria.amigobox.ui.albums.mockUUID1
-import org.ossiaustria.amigobox.ui.albums.mockUUID2
 import org.ossiaustria.lib.domain.models.Album
-import org.ossiaustria.lib.domain.repositories.AlbumRepository
 
 class ImageGalleryViewModel(
-    ioDispatcher: CoroutineDispatcher,
-    private val albumRepository: AlbumRepository
+    ioDispatcher: CoroutineDispatcher
 ) : BoxViewModel(ioDispatcher) {
 
     private val _currentAlbum = MutableLiveData<Album?>()
@@ -31,7 +24,6 @@ class ImageGalleryViewModel(
     val currentGalleryIndex: MutableLiveData<Int> = _currentGalleryIndex
 
     // Timer variables
-
     private var countDownTimer: CountDownTimer? = null
 
     private val _time = MutableLiveData(Utility.TIME_COUNTDOWN.formatTime())
@@ -44,16 +36,7 @@ class ImageGalleryViewModel(
     private val _isPlaying = MutableLiveData(false)
     val isPlaying: LiveData<Boolean> = _isPlaying
 
-    fun getAlbum(album: Album): Album {
-        if (album.id == mockUUID1) {
-            return album1
-        } else if (album.id == mockUUID2) {
-            return album2
-        } else {
-            return album3
-        }
-    }
-
+    // set states with following methods
     fun setNavigationState(navState: GalleryNavState) {
         _navigationState.value = navState
     }
@@ -65,22 +48,6 @@ class ImageGalleryViewModel(
     fun setAutoState(autoState: AutoState) {
         _autoState.value = autoState
     }
-
-//    @ExperimentalCoroutinesApi
-//    @InternalCoroutinesApi
-//    fun getAlbumFromUUID(albumId: UUID) {
-//        viewModelScope.launch(ioDispatcher) {
-//            albumRepository.getAlbum(albumId).collect {
-//
-//                when (it) {
-//
-//                    is Resource.Success -> _currentAlbum.postValue(it.value)
-//                    is Resource.Failure -> _currentAlbum
-//                    else -> Timber.d("$it")//_state.emit(OnboardingState.Unauthenticated)
-//                }
-//            }
-//        }
-//    }
 
     fun pauseTimer() {
         countDownTimer?.cancel()
