@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -44,13 +43,13 @@ class ImageGalleryFragment : Fragment() {
 
     val navigator: Navigator by inject()
 
-    @InternalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         val album = Navigator.getAlbum(requireArguments())
+
         setContent {
             GalleryScreen(
                 album,
@@ -74,7 +73,6 @@ class ImageGalleryFragment : Fragment() {
 
 }
 
-@InternalCoroutinesApi
 @Composable
 fun GalleryScreen(
     album: Album,
@@ -82,18 +80,13 @@ fun GalleryScreen(
     toAlbums: () -> Unit,
 ) {
 
-    if (album != null) {
-
-        MaterialTheme {
-            GalleryFragmentComposable(
-                album,
-                viewModel,
-                toAlbums
-            )
-
-        }
-
-    } else Text("Album cannot be loaded")
+    MaterialTheme {
+        GalleryFragmentComposable(
+            album,
+            viewModel,
+            toAlbums
+        )
+    }
 }
 
 @Composable
@@ -102,22 +95,20 @@ fun GalleryFragmentComposable(
     viewModel: ImageGalleryViewModel,
     toAlbums: () -> Unit
 ) {
-
     val navigationState by viewModel.navigationState.observeAsState()
     val currentIndex by viewModel.currentGalleryIndex.observeAsState()
     val time by viewModel.time.observeAsState(Utility.TIME_COUNTDOWN.formatTime())
     val autoState by viewModel.autoState.observeAsState()
 
-    Timber.w("time: $time")
-
-    val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
     Box {
+        val listState = rememberLazyListState()
+        val coroutineScope = rememberCoroutineScope()
+
         LazyRow(
             modifier = Modifier.fillMaxSize(),
+            state = listState
         ) {
             items(items = album.items, itemContent = { _ ->
-
                 coroutineScope.launch {
                     goToImage(viewModel, listState, currentIndex, album, toAlbums)
                 }
@@ -137,7 +128,6 @@ fun GalleryFragmentComposable(
                     )
                 }
             })
-
         }
     }
     Box(
@@ -207,7 +197,6 @@ suspend fun goToImage(
             viewModel.cancelTimer()
             toAlbums()
         }
-        Timber.w("visible index: " + listState.firstVisibleItemIndex)
         listState.animateScrollToItem(index)
     }
 }
@@ -227,14 +216,13 @@ fun nextPressed(
 ) {
     Timber.w("next pressed!!")
     if (currentIndex != null && currentIndex < album.items.size) {
-        Timber.w("Ablbum size: " + album.items.size.toString())
+        //Timber.w("Ablbum size: " + album.items.size.toString())
         viewModel.cancelTimer()
         viewModel.setGalleryIndex(currentIndex + 1)
         if (navigationState == GalleryNavState.PLAY) {
             viewModel.startTimer()
         }
     }
-
 }
 
 fun startStopPressed(viewModel: ImageGalleryViewModel, galleryNavState: GalleryNavState?) {
@@ -272,8 +260,6 @@ fun handleImages(
     currentIndex: Int?,
     autoState: AutoState?
 ) {
-    Timber.w("setting Index")
-    Timber.w("Current Index: " + currentIndex.toString())
     if ((time == "00:00") and (autoState == AutoState.CHANGE)) {
         if (currentIndex != null) {
             viewModel.setGalleryIndex(currentIndex + 1)
