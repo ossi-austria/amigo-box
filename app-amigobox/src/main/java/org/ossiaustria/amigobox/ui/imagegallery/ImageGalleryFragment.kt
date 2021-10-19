@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -92,7 +93,9 @@ fun GalleryScreen(
 fun GalleryFragmentComposable(
     album: Album,
     viewModel: ImageGalleryViewModel,
-    toAlbums: () -> Unit
+    toAlbums: () -> Unit,
+    listState: LazyListState = rememberLazyListState(),
+    scope: CoroutineScope = rememberCoroutineScope()
 ) {
     val navigationState by viewModel.navigationState.observeAsState()
     val currentIndex by viewModel.currentGalleryIndex.observeAsState()
@@ -100,19 +103,13 @@ fun GalleryFragmentComposable(
     val autoState by viewModel.autoState.observeAsState()
 
     Box {
-        val listState = rememberLazyListState()
-        val coroutineScope = rememberCoroutineScope()
-
         LazyRow(
             modifier = Modifier.fillMaxSize(),
             state = listState
         ) {
             items(items = album.items, itemContent = { _ ->
-                coroutineScope.launch {
-                    goToImage(viewModel, listState, currentIndex, album, toAlbums)
-                }
 
-                handleImages(viewModel, time, currentIndex, autoState)
+
                 Column(
                     modifier = Modifier.fillParentMaxWidth()
                 ) {
@@ -127,6 +124,10 @@ fun GalleryFragmentComposable(
                     )
                 }
             })
+            scope.launch {
+                goToImage(viewModel, listState, currentIndex, album, toAlbums)
+            }
+            handleImages(viewModel, time, currentIndex, autoState)
         }
     }
     Box(
@@ -197,6 +198,9 @@ suspend fun goToImage(
             toAlbums()
         }
         listState.animateScrollToItem(index)
+        Timber.w("index SOLL: $index")
+        Timber.w("listState change reached")
+        Timber.w("index IST: ${listState.firstVisibleItemIndex}")
     }
 }
 
