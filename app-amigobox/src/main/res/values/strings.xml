@@ -29,4 +29,10 @@
     <string name="Albums_button_description">Fotos und Alben ansehen</string>
     <string name="Messages_button_description">Alle Nachrichten ansehen</string>
     <string name="back_home_description">Zurück zum Start</string>
+
+    <string name="previous_image_button_description">Vorheriges Bild</string>
+    <string name="next_image_button_description">Nächstes Bild</string>
+    <string name="start_diashow_button_description">Diashow starten</string>
+    <string name="stop_diashow_button_description">Diashow anhalten</string>
+
 </resources>
