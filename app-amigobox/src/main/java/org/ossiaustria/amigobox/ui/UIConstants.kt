@@ -7,27 +7,19 @@ class UIConstants {
 
     object ListCard {
 
-        // Person Card
         val AVATAR_IMAGE_HEIGHT = 200.dp
+        val IMAGE_HEIGHT = 168.dp
         val CARD_WIDTH = 200.dp
         val TEXT_PADDING = 4.dp
-    }
-
-    object ListCardContact {
-        val NAME_FONT_SIZE = 32.sp
-        val TEXT_HEIGHT = 40.dp
-    }
-
-    object ListCardAlbum {
-        val NAME_FONT_SIZE = 22.sp
-        val TEXT_HEIGHT = 60.dp
+        val RECT_HEIGHT = 4.dp
+        val RECT_WIDTH = 50.dp
     }
 
     object ListFragment {
         val HEADER_PADDING_START = 40.dp
         val HEADER_PADDING_TOP = 4.dp
         val HEADER_PADDING_BOTTOM = 4.dp
-        val HEADER_HEIGHT = 50.dp
+        val HEADER_HEIGHT = 64.dp
         val HEADER_FONT_SIZE = 40.sp
 
         val DESCRIPTION_PADDING_START = 40.dp
@@ -37,8 +29,8 @@ class UIConstants {
     }
 
     object ScrollableCardList {
-        val PADDING_START = 0.dp
-        val PADDING_TOP = 16.dp
+        val PADDING_START = 40.dp
+        val PADDING_TOP = 8.dp
         val CARD_PADDING = 8.dp
         val CARD_ELEVATION = 0.dp
     }
@@ -46,14 +38,16 @@ class UIConstants {
     object HomeButtonRow {
         val END_PADDING = 40.dp
         val TOP_PADDING = 16.dp
-        val HEIGHT = 40.dp
+        val HEIGHT = 80.dp
     }
 
     object NavigationButtonRow {
         val PADDING_START = 40.dp
         val PADDING_END = 40.dp
-        val PADDING_BOTTOM = 16.dp
-        val HEIGHT = 80.dp
+        val PADDING_BOTTOM = 8.dp
+        val CONTACTS_PADDING_TOP = 32.dp
+        val PADDING_TOP = 16.dp
+        val HEIGHT = 40.dp
     }
 
     object ScrollButton {
@@ -88,15 +82,17 @@ class UIConstants {
     object BigButtons {
         val ICON_SIZE = 40.dp
         val ICON_PADDING = 4.dp
-        val BUTTON_WIDTH = 280.dp
+        val BUTTON_WIDTH = 240.dp
         val BUTTON_HEIGHT = 64.dp
         val ROUNDED_CORNER = 40.dp
+        val CARD_PADDING = 4.dp
 
     }
 
     object SmallButtons {
-        val BUTTON_SIZE = 64.dp
+        val BUTTON_SIZE = 72.dp
         val ICON_SIZE = 32.dp
+        val CARD_PADDING = 8.dp
     }
 
     object ProfileImage {
@@ -106,11 +102,18 @@ class UIConstants {
     }
 
     object PersonDetailFragment {
-        val TOP_BAR_PADDING = 8.dp
-        val TOP_BAR_HEIGHT = 72.dp
         val SEC_ROW_PADDING = 16.dp
         val COLUMN_PADDING = 80.dp
         val CALL_BUTTON_WIDTH = 320.dp
         val ALBUM_BUTTON_WIDTH = 440.dp
     }
+
+    object ScrollNavigationButton {
+        val CARD_HEIGHT = 40.dp
+        val CARD_WIDTH = 160.dp
+        val ROW_HEIGHT = 40.dp
+        val IMAGE_SIZE = 32.dp
+        val IMAGE_PADDING = 4.dp
+    }
+
 }

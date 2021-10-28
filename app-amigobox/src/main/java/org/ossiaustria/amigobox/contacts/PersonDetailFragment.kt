@@ -27,8 +27,8 @@ import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.AmigoStyle
+import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
 import org.ossiaustria.amigobox.ui.commons.IconButtonSmall
-import org.ossiaustria.amigobox.ui.commons.MaterialThemeLight
 import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 import org.ossiaustria.amigobox.ui.commons.profileImage
 import org.ossiaustria.lib.domain.models.Person
@@ -62,7 +62,7 @@ fun PersonDetailScreen(
     startCall: () -> Unit,
     toHome: () -> Unit,
 ) {
-    MaterialThemeLight {
+    AmigoThemeLight {
         Surface(color = MaterialTheme.colors.background) {
             PersonDetailFragmentComposable(
                 person.name,
@@ -84,9 +84,12 @@ fun PersonDetailFragmentComposable(
     Column(Modifier.fillMaxSize()) {
         Row(
             Modifier
-                .padding(UIConstants.PersonDetailFragment.TOP_BAR_PADDING)
+                .padding(
+                    top = UIConstants.HomeButtonRow.TOP_PADDING,
+                    end = UIConstants.HomeButtonRow.END_PADDING
+                )
                 .fillMaxWidth()
-                .height(UIConstants.PersonDetailFragment.TOP_BAR_HEIGHT),
+                .height(UIConstants.HomeButtonRow.HEIGHT),
             horizontalArrangement = Arrangement.End
         ) {
             IconButtonSmall(

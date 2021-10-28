@@ -4,20 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,18 +26,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
+import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
-import org.ossiaustria.amigobox.ui.commons.NavigationButton
+import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
 import org.ossiaustria.amigobox.ui.commons.ScrollButtonType
 import org.ossiaustria.amigobox.ui.commons.ScrollNavigationButton
+import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 import org.ossiaustria.lib.domain.models.Person
 
 class ContactsFragment : Fragment() {
@@ -59,76 +60,136 @@ class ContactsFragment : Fragment() {
         viewModel.load()
     }
 
-    @Composable
-    fun ContactsScreen(viewModel: ContactsViewModel) {
-        MaterialTheme {
-            val persons by viewModel.persons.observeAsState(emptyList())
-            ContactsFragmentComposable(persons)
-        }
-    }
-
     @Preview
     @Composable
     fun ContactsFragmentComposablePreview() {
         val listOfPeopleWithImages = ContactsSourceMockData.listOfPeopleWithImages()
-        ContactsFragmentComposable(listOfPeopleWithImages)
+        ContactsFragmentComposable(
+            listOfPeopleWithImages,
+            viewModel::backToHome,
+            viewModel::toContact
+        )
     }
+}
 
     @Composable
-    fun ContactsFragmentComposable(persons: List<Person>) {
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp, end = 16.dp)
-                    .height(40.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                // Home Button
-                NavigationButton(onClick = { backToHome() }, text = "Zurück zum Start")
+    fun ContactsScreen(viewModel: ContactsViewModel) {
+        AmigoThemeLight {
+            val persons by viewModel.persons.observeAsState(emptyList())
+            Surface(color = MaterialTheme.colors.background) {
+                ContactsFragmentComposable(
+                    persons,
+                    viewModel::backToHome,
+                    viewModel::toContact
+                )
             }
-            // Text "Kontaktliste"
+        }
+
+    }
+
+@Composable
+fun ContactsFragmentComposable(
+    persons: List<Person>,
+    backToHome: () -> Unit,
+    toContact: (Person) -> Unit
+) {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = UIConstants.HomeButtonRow.TOP_PADDING,
+                    end = UIConstants.HomeButtonRow.END_PADDING
+                )
+                .height(UIConstants.HomeButtonRow.HEIGHT),
+            horizontalArrangement = Arrangement.End
+        ) {
+            // Home Button
+            TextAndIconButton(
+                resourceId = R.drawable.ic_home_icon,
+                buttonDescription = stringResource(id = R.string.back_home_description),
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary,
+                bottomStart = true,
+                topStart = false,
+                buttonWidth = UIConstants.BigButtons.BUTTON_WIDTH
+            ) {
+                backToHome()
+            }
+            TextAndIconButton(
+                resourceId = R.drawable.ic_help_icon,
+                buttonDescription = stringResource(R.string.help_button_description),
+                backgroundColor = MaterialTheme.colors.surface,
+                contentColor = MaterialTheme.colors.onPrimary,
+                bottomStart = true,
+                topStart = false,
+                buttonWidth = UIConstants.BigButtons.BUTTON_WIDTH
+            ) {
+                //TODO: add help screens
+            }
+            }
+        // Header
             Row(
                 modifier = Modifier
-                    .padding(start = 40.dp, top = 4.dp, bottom = 4.dp)
-                    .height(50.dp)
+                    .padding(
+                        start = UIConstants.ListFragment.HEADER_PADDING_START,
+                        top = UIConstants.ListFragment.HEADER_PADDING_TOP,
+                        bottom = UIConstants.ListFragment.HEADER_PADDING_BOTTOM
+                    )
+                    .height(UIConstants.ListFragment.HEADER_HEIGHT)
             ) {
                 Text(
-                    text = "Kontaktliste",
-                    fontSize = 40.sp
+                    text = stringResource(R.string.contacts_headline),
+                    style = MaterialTheme.typography.h3
                 )
             }
 
             // Text Description
             Row(
                 modifier = Modifier
-                    .padding(start = 40.dp, top = 4.dp)
-                    .height(40.dp)
+                    .padding(
+                        start = UIConstants.ListFragment.DESCRIPTION_PADDING_START,
+                        top = UIConstants.ListFragment.DESCRIPTION_PADDING_TOP
+                    )
+                    .height(UIConstants.ListFragment.DESCRIPTION_HEIGHT)
             ) {
                 Text(
-                    text = "Tippe auf eine Person um weitere Funktionen zu sehen",
-                    fontSize = 16.sp
+                    text = stringResource(R.string.contacts_usage_description),
+                    style = MaterialTheme.typography.body1
                 )
             }
 
-            val scrollState = rememberScrollState()
+        val scrollState = rememberScrollState()
+        val scope = rememberCoroutineScope()
 
             Row(
                 modifier = Modifier
-                    .padding(start = 0.dp, top = 16.dp)
+                    .padding(
+                        start = UIConstants.ScrollableCardList.PADDING_START,
+                        top = UIConstants.ScrollableCardList.PADDING_TOP
+                    )
                     .horizontalScroll(scrollState)
 
             ) {
-                Column(modifier = Modifier.width(40.dp)) {}
+
                 persons.forEach { person ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable(onClick = { toContact(person) })
-
-                    ) {
-                        LoadPersonCardContent(person.name, person.avatarUrl)
+                            .padding(UIConstants.ScrollableCardList.CARD_PADDING)
+                            .clickable(
+                                onClick = { toContact(person) }
+                            ),
+                        elevation = UIConstants.ScrollableCardList.CARD_ELEVATION,
+                    )
+                    {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier.background(MaterialTheme.colors.background)
+                        ) {
+                            LoadPersonCardContent(person.name, person.avatarUrl)
+                        }
                     }
                 }
             }
@@ -137,55 +198,39 @@ class ContactsFragment : Fragment() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 40.dp, end = 40.dp)
-                    .fillMaxHeight()
-                    .padding(16.dp)
-                    .height(80.dp),
+                    .padding(
+                        start = UIConstants.NavigationButtonRow.PADDING_START,
+                        end = UIConstants.NavigationButtonRow.PADDING_END,
+                        bottom = UIConstants.NavigationButtonRow.PADDING_BOTTOM,
+                        top = UIConstants.NavigationButtonRow.CONTACTS_PADDING_TOP
+                    )
+                    .height(UIConstants.NavigationButtonRow.HEIGHT),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
-                val scope = rememberCoroutineScope()
 
                 // Backwards
-                // onClick adds or subtracts 500 to/from current scrollState
                 ScrollNavigationButton(
-                    onClick = {
-                        scope.launch {
-                            scrollState.scrollTo(
-                                scrollState.value -
-                                    UIConstants.ScrollButton.SCROLL_DISTANCE
-                            )
-                        }
-                    },
                     type = ScrollButtonType.PREVIOUS,
-                    text = "Vorherige Seite",
+                    text = stringResource(R.string.previous_scroll_navigation_btn),
                     scrollState = scrollState,
-                )
+                ) {
+                    scope.launch {
+                        scrollState.animateScrollTo(scrollState.value - UIConstants.ScrollButton.SCROLL_DISTANCE)
+                    }
+                }
 
                 // Forwards
                 ScrollNavigationButton(
-                    onClick = {
-                        scope.launch {
-                            scrollState.scrollTo(
-                                scrollState.value +
-                                    UIConstants.ScrollButton.SCROLL_DISTANCE
-                            )
-                        }
-                    },
                     type = ScrollButtonType.NEXT,
-                    text = "Nächste Seite",
+                    text = stringResource(R.string.next_scroll_navigation_btn),
                     scrollState = scrollState
-                )
+                ) {
+                    scope.launch {
+                        scrollState.animateScrollTo(scrollState.value + UIConstants.ScrollButton.SCROLL_DISTANCE)
+                    }
+                }
             }
-        }
     }
 
-    private fun backToHome() {
-        navigator.toHome()
     }
-
-    private fun toContact(person: Person) {
-        navigator.toPersonDetail(person)
-    }
-
-}
