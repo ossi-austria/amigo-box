@@ -41,16 +41,6 @@ fun NetworkImage(
             modifier = modifier.then(AmigoStyle.Images.roundBorders()),
             contentScale = contentScale,
         )
-
-//        when (painter.loadState) {
-//            is ImageLoadState.Loading -> {
-//                // Display a circular progress indicator whilst loading
-//                CircularProgressIndicator(Modifier.align(Alignment.Center))
-//            }
-//            is ImageLoadState.Error -> {
-//                NotFoundImage(modifier = modifier, contentScale = contentScale)
-//            }
-//        }
     }
 }
 

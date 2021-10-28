@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,7 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 
 // reuse a Composable - there are no styles
@@ -76,18 +75,70 @@ fun NavigationButton(
 
 @Composable
 fun ScrollNavigationButton(
-    onClick: () -> Unit,
     type: ScrollButtonType,
     text: String,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    onClick: () -> Unit,
 ) {
-    OutlinedButton(
-        onClick = onClick,
-        colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = scrollTextColor(type, scrollState)
-        ),
-    ) {
-        Text(text = text)
+    val scrollButtonRowModifier = Modifier
+        .height(UIConstants.ScrollNavigationButton.ROW_HEIGHT)
+        .background(MaterialTheme.colors.background)
+
+    val imageModifier = Modifier
+        .size(UIConstants.ScrollNavigationButton.IMAGE_SIZE)
+        .padding(end = UIConstants.ScrollNavigationButton.IMAGE_PADDING)
+
+    Card(
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .height(UIConstants.ScrollNavigationButton.CARD_HEIGHT)
+            .width(UIConstants.ScrollNavigationButton.CARD_WIDTH),
+        elevation = UIConstants.ScrollableCardList.CARD_ELEVATION,
+        contentColor = scrollTextColor(type, scrollState),
+    )
+    {
+        when (type) {
+            ScrollButtonType.PREVIOUS ->
+                Row(
+                    modifier = scrollButtonRowModifier,
+                    Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_arrow_left),
+                        contentDescription = null,
+                        modifier = imageModifier,
+                        colorFilter = ColorFilter.tint(
+                            scrollTextColor(type, scrollState),
+                            BlendMode.SrcIn
+                        ),
+                    )
+                    Text(
+                        text = text,
+                        style = MaterialTheme.typography.h4,
+                    )
+                }
+            ScrollButtonType.NEXT ->
+                Row(
+                    modifier = scrollButtonRowModifier,
+                    Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = text,
+                        style = MaterialTheme.typography.h4,
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_arrow_right),
+                        contentDescription = null,
+                        modifier = imageModifier,
+                        colorFilter = ColorFilter.tint(
+                            scrollTextColor(type, scrollState),
+                            BlendMode.SrcIn
+                        ),
+                    )
+                }
+        }
     }
 }
 
@@ -96,13 +147,13 @@ fun scrollTextColor(type: ScrollButtonType, scrollState: ScrollState): Color {
     if (type == ScrollButtonType.PREVIOUS) {
         if (scrollState.value == 0) {
             return Color.Gray
-        } else return MaterialTheme.colors.primary
+        } else return MaterialTheme.colors.secondary
     } else if (type == ScrollButtonType.NEXT) {
         if (scrollState.value == scrollState.maxValue) {
             return Color.Gray
-        } else return MaterialTheme.colors.primary
+        } else return MaterialTheme.colors.secondary
     } else {
-        return MaterialTheme.colors.primary
+        return MaterialTheme.colors.secondary
     }
 
 }
@@ -122,7 +173,8 @@ fun IconButtonSmall(
         modifier = Modifier
             .clickable(onClick = onClick)
             .size(UIConstants.SmallButtons.BUTTON_SIZE)
-            .padding(8.dp)
+            .padding(UIConstants.SmallButtons.CARD_PADDING),
+        elevation = UIConstants.ScrollableCardList.CARD_ELEVATION
 
     ) {
         IconButtonShape(Modifier, fillColor, backgroundColor)
@@ -186,6 +238,7 @@ fun TextAndIconButton(
             .clickable(onClick = onClick)
             .height(UIConstants.BigButtons.BUTTON_HEIGHT)
             .width(buttonWidth)
+            .padding(UIConstants.BigButtons.CARD_PADDING)
             .clip(
                 when {
                     bottomStart -> {
@@ -211,38 +264,34 @@ fun TextAndIconButton(
         backgroundColor = backgroundColor,
 
         ) {
-        Column(
-            verticalArrangement = Arrangement.Center
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+
         ) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
+            Image(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .width(UIConstants.BigButtons.ICON_SIZE)
+                    .height(UIConstants.BigButtons.ICON_SIZE)
+                    .padding(UIConstants.BigButtons.ICON_PADDING),
+                painter = painterResource(id = resourceId),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(
+                    contentColor,
+                    BlendMode.SrcIn
+                ),
+            )
 
-            ) {
-                Image(
-                    modifier = Modifier
-                        .width(UIConstants.BigButtons.ICON_SIZE)
-                        .height(UIConstants.BigButtons.ICON_SIZE)
-                        .padding(UIConstants.BigButtons.ICON_PADDING),
-                    painter = painterResource(id = resourceId),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(
-                        contentColor,
-                        BlendMode.SrcIn
-                    )
-                )
-
-                Text(
-                    modifier = Modifier
-                        .padding(UIConstants.BigButtons.ICON_PADDING),
-                    text = buttonDescription,
-                    style = MaterialTheme.typography.caption,
-                    color = contentColor
-                )
-            }
+            Text(
+                modifier = Modifier
+                    .padding(UIConstants.BigButtons.ICON_PADDING),
+                text = buttonDescription,
+                style = MaterialTheme.typography.body2,
+                color = contentColor,
+            )
         }
-
     }
 }
 

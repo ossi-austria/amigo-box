@@ -15,7 +15,7 @@ val viewModelsModule = module {
     viewModel { AlbumsViewModel(get(), get()) }
     viewModel { OnboardingViewModel(get(), get()) }
     viewModel { TimelineViewModel(get(), get()) }
-    viewModel { ContactsViewModel(get()) }
+    viewModel { ContactsViewModel(get(), get()) }
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { ImageGalleryViewModel(get()) }
     viewModel { LoadingViewModel(get(), get(), get()) }

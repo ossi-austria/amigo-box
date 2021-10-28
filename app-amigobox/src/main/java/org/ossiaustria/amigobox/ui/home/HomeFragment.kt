@@ -27,7 +27,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
-import org.ossiaustria.amigobox.ui.commons.MaterialThemeLight
+import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
 
 class HomeFragment : Fragment() {
 
@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         setContent {
-            MaterialThemeLight {
+            AmigoThemeLight {
                 Surface(color = MaterialTheme.colors.background) {
                     HomeFragmentComposable(
                         viewModel.name,
@@ -128,7 +128,7 @@ fun HomeFragmentComposable(
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeFragmentComposable() {
-    MaterialThemeLight {
+    AmigoThemeLight {
         HomeFragmentComposable("Emma", {}, {}, {})
     }
 

@@ -42,6 +42,16 @@ val MyTypography = Typography(
         fontFamily = Karla,
         fontWeight = FontWeight.W400,
         fontSize = 22.sp
+    ),
+    body2 = TextStyle(
+        fontFamily = Karla,
+        fontWeight = FontWeight.W700,
+        fontSize = 18.sp
+    ),
+    h4 = TextStyle(
+        fontFamily = Karla,
+        fontWeight = FontWeight.W400,
+        fontSize = 18.sp
     )
 )
-//MaterialTheme(typography = MyTypography)
+
