@@ -96,7 +96,7 @@ class JsonMocker {
         fun share(
             id: UUID = randomUUID(),
             createdAt: String = "2021-10-07T06:57:44.191Z",
-            sendAt: String = "2021-10-07T06:57:44.191Z",
+            sentAt: String = "2021-10-07T06:57:44.191Z",
             retrievedAt: String = "2021-10-07T06:57:44.191Z",
             senderId: UUID? = randomUUID(),
             receiverId: UUID? = randomUUID(),
@@ -105,7 +105,7 @@ class JsonMocker {
             {
                 "id":"$id",
                "createdAt":${optDate(createdAt)},
-                   "sendAt":${optDate(sendAt)},
+                   "sentAt":${optDate(sentAt)},
                 "retrievedAt":${optDate(retrievedAt)},
                 "senderId":${senderId.json()},
                 "receiverId":${receiverId.json()},
@@ -115,7 +115,7 @@ class JsonMocker {
         fun call(
             id: UUID = randomUUID(),
             createdAt: String = "2021-10-07T06:57:44.191Z",
-            sendAt: String = "2021-10-07T06:57:44.191Z",
+            sentAt: String = "2021-10-07T06:57:44.191Z",
             retrievedAt: String = "2021-10-07T06:57:44.191Z",
             senderId: UUID? = randomUUID(),
             receiverId: UUID? = randomUUID(),
@@ -126,7 +126,7 @@ class JsonMocker {
             {
                "id":"$id",
                "createdAt":${optDate(createdAt)},
-                "sendAt":${optDate(sendAt)},
+                "sentAt":${optDate(sentAt)},
                 "retrievedAt":${optDate(retrievedAt)},
                 "senderId":${senderId.json()},
                 "receiverId":${receiverId.json()},
@@ -138,7 +138,7 @@ class JsonMocker {
         fun message(
             id: UUID = randomUUID(),
             createdAt: String = "2021-10-07T06:57:44.191Z",
-            sendAt: String = "2021-10-07T06:57:44.191Z",
+            sentAt: String = "2021-10-07T06:57:44.191Z",
             retrievedAt: String = "2021-10-07T06:57:44.191Z",
             senderId: UUID? = randomUUID(),
             receiverId: UUID? = randomUUID(),
@@ -147,7 +147,7 @@ class JsonMocker {
             {
                "id":"$id",
                "createdAt":${optDate(createdAt)},
-               "sendAt":${optDate(sendAt)},
+               "sentAt":${optDate(sentAt)},
                "retrievedAt":${optDate(retrievedAt)},
                "senderId":${senderId.json()},
                "receiverId":${receiverId.json()},
@@ -157,7 +157,7 @@ class JsonMocker {
         fun multimedia(
             id: UUID = randomUUID(),
             createdAt: String = "2021-10-07T06:57:44.191Z",
-            sendAt: String = "2021-10-07T06:57:44.191Z",
+            sentAt: String = "2021-10-07T06:57:44.191Z",
             retrievedAt: String = "2021-10-07T06:57:44.191Z",
             senderId: UUID? = randomUUID(),
             receiverId: UUID? = randomUUID(),
@@ -171,7 +171,7 @@ class JsonMocker {
             {
                 "id":"$id",
                 "createdAt":${optDate(createdAt)},
-                "sendAt":${optDate(sendAt)},
+                "sentAt":${optDate(sentAt)},
                 "retrievedAt":${optDate(retrievedAt)},
                 "senderId":${senderId.json()},
                 "receiverId":${receiverId.json()},

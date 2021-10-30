@@ -83,6 +83,8 @@ object Libs {
         const val viewmodelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
         const val livedata = "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
         const val livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+        const val livedataTesting = "com.jraska.livedata:testing-ktx:1.1.2"
+
         const val viewmodeSavedstate =
             "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
         const val viewmodelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha01"

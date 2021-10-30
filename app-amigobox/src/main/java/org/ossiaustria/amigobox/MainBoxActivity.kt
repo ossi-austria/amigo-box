@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.ossiaustria.amigobox.calls.IncomingEventsViewModel
 import org.ossiaustria.amigobox.nfc.NfcViewModel
 import org.ossiaustria.amigobox.nfc.NfcViewModelState
 import org.ossiaustria.lib.nfc.NfcHandler
@@ -17,6 +18,7 @@ class MainBoxActivity : AppCompatActivity() {
 
     val navigator: Navigator by inject()
     private val nfcViewModel: NfcViewModel by viewModel()
+    private val incomingEventsViewModel: IncomingEventsViewModel by viewModel()
 
     // NFC adapter for checking NFC state in the device
     private var nfcAdapter: NfcAdapter? = null
@@ -67,6 +69,11 @@ class MainBoxActivity : AppCompatActivity() {
                     Toast.makeText(this, "NFC-Tag ungültig", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+
+        incomingEventsViewModel.startListening()
+        incomingEventsViewModel.notifiedCall.observe(this) {
+            navigator.toCallFragment(it)
         }
 
         nfcViewModel.state.observe(this) { resource ->

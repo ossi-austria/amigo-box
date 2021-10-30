@@ -14,7 +14,7 @@ class SendableServiceWrapper<S : Sendable>(
     private val ioDispatcher: CoroutineDispatcher,
 ) {
 
-    fun getOne(creator: () -> S): Flow<Resource<S>> = flow {
+    fun getOne(creator: suspend () -> S): Flow<Resource<S>> = flow {
         emit(Resource.loading())
         val mock = creator()
         emit(Resource.success(mock))
@@ -23,7 +23,7 @@ class SendableServiceWrapper<S : Sendable>(
         emit(Resource.failure(it))
     }.flowOn(ioDispatcher)
 
-    fun getAll(creator: () -> List<S>): Flow<Resource<List<S>>> = flow {
+    fun getAll(creator: suspend () -> List<S>): Flow<Resource<List<S>>> = flow {
         emit(Resource.loading())
         val mock = creator()
         emit(Resource.success(mock))

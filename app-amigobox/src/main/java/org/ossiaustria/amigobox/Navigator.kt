@@ -5,9 +5,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import org.ossiaustria.lib.domain.models.Album
+import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.Person
-import org.ossiaustria.lib.jitsi.ui.AmigoJitsiActivity
 import org.ossiaustria.lib.jitsi.ui.AmigoSingleJitsiActivity
+import org.ossiaustria.lib.jitsi.ui.AmigoSingleJitsiActivity.Companion.PARAM_JITSI_TOKEN
+import org.ossiaustria.lib.jitsi.ui.AmigoSingleJitsiActivity.Companion.PARAM_JITSI_URL
 
 class Navigator() {
 
@@ -19,6 +21,10 @@ class Navigator() {
         this.navController = navController
     }
 
+    fun back() {
+        navController.popBackStack()
+    }
+
     fun toLoading() {
         navController.navigate(R.id.loadingFragment)
     }
@@ -27,9 +33,13 @@ class Navigator() {
         navController.navigate(R.id.timelineFragment)
     }
 
-    fun toJitsiCall() {
-//        activity?.startActivity(Intent(activity, AmigoJitsiActivity::class.java))
-        activity?.startActivity(Intent(activity, AmigoSingleJitsiActivity::class.java))
+
+
+    fun toJitsiCall(url: String, token: String) {
+        activity?.startActivity(Intent(activity, AmigoSingleJitsiActivity::class.java).apply {
+            putExtra(PARAM_JITSI_URL, url)
+            putExtra(PARAM_JITSI_TOKEN, token)
+        })
     }
 
     fun toLogin() {
@@ -41,12 +51,21 @@ class Navigator() {
         navController.navigate(R.id.personDetailFragment, bundle)
     }
 
-    fun toCallPerson(person: Person) {
-        activity?.startActivity(
-            Intent(activity, AmigoJitsiActivity::class.java).apply {
-                putExtra(PARAM_PERSON, person)
-            })
+    /**
+     * Navigate without an existing (=incoming) Call to CallFragment, to
+     * create a NEW OUTGOING call to call a certain Person
+     */
+    fun toCallFragment(person: Person) {
+        val bundle = Bundle().apply { setPerson(this, person) }
+        navController.navigate(R.id.callFragment, bundle)
+    }
 
+    /**
+     * Navigate with an EXISTING (=incoming) Call to CallFragment
+     */
+    fun toCallFragment(call: Call) {
+        val bundle = Bundle().apply { setCall(this, call) }
+        navController.navigate(R.id.callFragment, bundle)
     }
 
     fun toContacts() {
@@ -69,12 +88,19 @@ class Navigator() {
     companion object {
         const val PARAM_ALBUM = "ALBUM"
         const val PARAM_PERSON = "PERSON"
-        fun getPerson(bundle: Bundle) = bundle.getSerializable(PARAM_PERSON) as Person
+        const val PARAM_CALL = "CALL"
+
+        fun getPerson(bundle: Bundle) = bundle.getSerializable(PARAM_PERSON) as Person?
         fun setPerson(bundle: Bundle, person: Person) =
             bundle.putSerializable(PARAM_PERSON, person)
 
         fun getAlbum(bundle: Bundle) = bundle.getSerializable(PARAM_ALBUM) as Album
         fun setAlbum(bundle: Bundle, album: Album) =
             bundle.putSerializable(PARAM_ALBUM, album)
+
+        fun getCall(bundle: Bundle) = bundle.getSerializable(PARAM_CALL) as Call?
+        fun setCall(bundle: Bundle, call: Call) =
+            bundle.putSerializable(PARAM_CALL, call)
+
     }
 }

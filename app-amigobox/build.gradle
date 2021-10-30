@@ -129,6 +129,7 @@ dependencies {
     androidTestRuntimeOnly(Libs.Test.mannodermausAndroidTestRunner)
 
     implementation(Libs.Test.coroutinesTest)
+    implementation(Libs.Lifecycle.livedataTesting)
     testImplementation(Libs.Test.test)
     testImplementation(Libs.Test.testExt)
     testImplementation(Libs.Test.robolectric)

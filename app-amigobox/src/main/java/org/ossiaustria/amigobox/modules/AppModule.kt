@@ -8,7 +8,7 @@ import org.ossiaustria.lib.domain.services.AuthService
 
 val appModule = module {
     single {
-        CloudPushHandlerService(get()).also {
+        CloudPushHandlerService(get(), get()).also {
             CloudPushHandlerService.instance = it
         }
     }

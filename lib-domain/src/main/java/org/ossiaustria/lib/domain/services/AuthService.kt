@@ -59,11 +59,16 @@ interface AuthService {
     fun setFcmToken(fcmToken: String): Flow<Resource<Boolean>>
 }
 
+interface LoginCleanupService {
+    suspend fun cleanup()
+}
+
 class AuthServiceImpl(
     private val ioDispatcher: CoroutineDispatcher,
     private val authApi: AuthApi,
     private val settingsRepository: SettingsRepository,
     private val userContext: UserContext,
+    private val loginCleanupService: LoginCleanupService,
 ) : AuthService {
 
     override fun login(email: String, password: String): Flow<Resource<Account>> {
@@ -73,6 +78,8 @@ class AuthServiceImpl(
 
             val result = authApi.login(LoginRequest(email = email, password = password))
 
+            // delete local stored data!!
+            loginCleanupService.cleanup()
             settingsRepository.account = result.account
             settingsRepository.refreshToken = result.refreshToken
             settingsRepository.accessToken = result.accessToken

@@ -13,7 +13,6 @@ import org.ossiaustria.lib.domain.repositories.MessageRepository
 import org.ossiaustria.lib.domain.services.ServiceMocks.HER_PERSON_ID
 import org.ossiaustria.lib.domain.services.ServiceMocks.MY_PERSON_ID
 import timber.log.Timber
-import java.time.ZonedDateTime
 import java.util.*
 import java.util.UUID.randomUUID
 
@@ -23,6 +22,9 @@ val Int.even: Boolean
 
 interface MessageService : SendableService<Message> {
     fun createMessage(senderId: UUID, receiverId: UUID, text: String): Flow<Resource<Message>>
+
+    fun markAsSent(id: UUID): Flow<Resource<Message>>
+    fun markAsRetrieved(id: UUID): Flow<Resource<Message>>
 }
 
 class MockMessageServiceImpl(
@@ -43,7 +45,7 @@ class MockMessageServiceImpl(
     ) = Message(
         id = id,
         createdAt = createdAt,
-        sendAt = sendAt,
+        sentAt = sendAt,
         retrievedAt = retrievedAt,
         senderId = senderId,
         receiverId = receiverId,
@@ -104,12 +106,12 @@ class MockMessageServiceImpl(
             (1..4).map { mockMessage(receiverId = receiverId) }
         }
 
-    override fun markAsSent(id: UUID, time: ZonedDateTime): Flow<Resource<Message>> =
+    override fun markAsSent(id: UUID): Flow<Resource<Message>> =
         wrapper.markAsSent {
             mockMessage(id = id, senderId = id, sendAt = Date())
         }
 
-    override fun markAsRetrieved(id: UUID, time: ZonedDateTime): Flow<Resource<Message>> =
+    override fun markAsRetrieved(id: UUID): Flow<Resource<Message>> =
         wrapper.markAsRetrieved {
             mockMessage(id = id, senderId = id, retrievedAt = Date())
         }

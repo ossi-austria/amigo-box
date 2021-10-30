@@ -61,7 +61,7 @@ internal class MessagesRepositoryTest : AbstractRepositoryTest<MessageEntity, Me
                 Message(id2, senderId = personId, receiverId = personId, text = "text"),
             )
 
-            coEvery { messageApi.getAllReceived() } answers { remoteList }
+            coEvery { messageApi.getReceived() } answers { remoteList }
 
             val daoList = listOf(
                 MessageEntity(

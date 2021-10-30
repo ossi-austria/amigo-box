@@ -6,6 +6,7 @@ import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.runner.RunWith
 import org.ossiaustria.lib.domain.database.entities.CallEntity
+import org.ossiaustria.lib.domain.models.enums.CallState
 import org.ossiaustria.lib.domain.models.enums.CallType
 import org.robolectric.RobolectricTestRunner
 import java.util.*
@@ -31,6 +32,7 @@ internal class CallDaoTest : SendableDaoTest<CallEntity, CallEntity, CallDao>() 
             senderId = randomUUID(),
             receiverId = randomUUID(),
             callType = CallType.AUDIO,
+            callState = CallState.CREATED,
             startedAt = Date(),
             finishedAt = null
         )

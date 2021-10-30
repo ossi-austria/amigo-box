@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -50,7 +51,7 @@ fun NotFoundImage(
     contentScale: ContentScale = ContentScale.Crop
 ) {
     Image(
-        painter = painterResource(R.drawable.ic_launcher_foreground),
+        painter = painterResource(R.drawable.ic_image_light),
         contentDescription = textResString(altText = "Image not found"),
         modifier = modifier.then(AmigoStyle.Images.roundBorders()),
         contentScale = contentScale,
@@ -64,21 +65,25 @@ fun textResString(@StringRes altTextRes: Int? = null, altText: String? = null): 
 // I was unable to create the exact image view as in Figma, so I decided to use circle view.
 // For the future use ProfilImageShape and try different approach
 @Composable
-fun profileImage(
-    url: String,
-    @SuppressLint("ModifierParameter")
-    modifier: Modifier = Modifier.fillMaxSize(),
+fun ProfileImage(
+    url: String?,
+    modifier: Modifier = Modifier,
     @StringRes altTextRes: Int? = null,
     altText: String? = null,
     contentScale: ContentScale = ContentScale.FillBounds,
-
-    ) {
-    val painter = rememberImagePainter(url)
+    onClick: () -> Unit = {}
+) {
+    val painter = if (!url.isNullOrBlank()) {
+        rememberImagePainter(url)
+    } else {
+        painterResource(R.drawable.ic_image_light)
+    }
     Image(
         painter = painter,
         contentDescription = textResString(altTextRes, altText),
         contentScale = contentScale,
         modifier = Modifier
+            .fillMaxSize()
             .size(UIConstants.ProfileImage.IMAGE_SIZE)
             .padding(UIConstants.ProfileImage.IMAGE_PADDING)
             .clip(CircleShape) //.clip(ProfilImageShape)
@@ -87,6 +92,8 @@ fun profileImage(
                 MaterialTheme.colors.surface,
                 CircleShape
             )
+            .clickable(onClick = onClick)
+
     )
 
 }

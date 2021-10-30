@@ -17,6 +17,7 @@ import org.ossiaustria.lib.domain.database.AppDatabaseImpl
 import org.ossiaustria.lib.domain.database.CallDao
 import org.ossiaustria.lib.domain.database.entities.CallEntity
 import org.ossiaustria.lib.domain.models.Call
+import org.ossiaustria.lib.domain.models.enums.CallState
 import org.ossiaustria.lib.domain.models.enums.CallType
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -61,6 +62,7 @@ internal class CallRepositoryTest : AbstractRepositoryTest<CallEntity, Call>() {
                     senderId = personId,
                     receiverId = personId,
                     callType = CallType.VIDEO,
+                    callState = CallState.CREATED,
                     startedAt = null,
                     finishedAt = Date()
                 ),
@@ -69,12 +71,13 @@ internal class CallRepositoryTest : AbstractRepositoryTest<CallEntity, Call>() {
                     senderId = personId,
                     receiverId = personId,
                     callType = CallType.VIDEO,
+                    callState = CallState.CREATED,
                     startedAt = null,
                     finishedAt = Date()
                 ),
             )
 
-            coEvery { callApi.getAll() } answers { remoteList }
+            coEvery { callApi.getOwn() } answers { remoteList }
 
             val daoList = listOf(
                 CallEntity(
@@ -82,6 +85,7 @@ internal class CallRepositoryTest : AbstractRepositoryTest<CallEntity, Call>() {
                     senderId = personId,
                     receiverId = personId,
                     callType = CallType.VIDEO,
+                    callState = CallState.CREATED,
                     startedAt = Date(),
                     finishedAt = Date(),
                     createdAt = Date()

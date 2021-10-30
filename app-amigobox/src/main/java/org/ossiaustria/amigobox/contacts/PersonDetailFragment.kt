@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -29,9 +31,9 @@ import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.AmigoStyle
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
 import org.ossiaustria.amigobox.ui.commons.IconButtonSmall
+import org.ossiaustria.amigobox.ui.commons.ProfileImage
 import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
-import org.ossiaustria.amigobox.ui.commons.profileImage
-import org.ossiaustria.lib.domain.models.Person
+import org.ossiaustria.amigobox.ui.commons.Toasts
 
 class PersonDetailFragment : Fragment() {
 
@@ -43,113 +45,116 @@ class PersonDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         val person = Navigator.getPerson(requireArguments())
-        setContent { PersonDetailScreen(person, ::startCall, ::toHome) }
-    }
-
-    fun startCall() {
-        val person = Navigator.getPerson(requireArguments())
-        navigator.toCallPerson(person)
-    }
-
-    fun toHome() {
-        navigator.toHome()
-    }
-}
-
-@Composable
-fun PersonDetailScreen(
-    person: Person,
-    startCall: () -> Unit,
-    toHome: () -> Unit,
-) {
-    AmigoThemeLight {
-        Surface(color = MaterialTheme.colors.background) {
-            PersonDetailFragmentComposable(
-                person.name,
-                "https://picsum.photos/300/300",
-                startCall,
-                toHome
-            )
+        setContent {
+            if (person != null) {
+                PersonDetailFragmentComposable(
+                    person.name,
+                    person.avatarUrl,
+                    ::startCall, ::toHome
+                )
+            } else {
+                Text("No Person?")
+                Toasts.personNotFound(requireContext())
+            }
         }
+    }
+
+    private fun startCall() {
+        val person = Navigator.getPerson(requireArguments())
+        if (person != null) {
+            navigator.toCallFragment(person)
+        } else {
+            Toasts.personNotFound(requireContext())
+        }
+    }
+
+    private fun toHome() {
+        navigator.toHome()
     }
 }
 
 @Composable
 fun PersonDetailFragmentComposable(
     name: String,
-    pictureUrl: String,
+    pictureUrl: String?,
     startCall: () -> Unit,
     toHome: () -> Unit,
 ) {
-    Column(Modifier.fillMaxSize()) {
-        Row(
-            Modifier
-                .padding(
-                    top = UIConstants.HomeButtonRow.TOP_PADDING,
-                    end = UIConstants.HomeButtonRow.END_PADDING
-                )
-                .fillMaxWidth()
-                .height(UIConstants.HomeButtonRow.HEIGHT),
-            horizontalArrangement = Arrangement.End
-        ) {
-            IconButtonSmall(
-                resourceId = R.drawable.ic_home_icon,
-                backgroundColor = MaterialTheme.colors.background,
-                fillColor = MaterialTheme.colors.surface,
+    AmigoThemeLight {
+        Surface(color = MaterialTheme.colors.background) {
+            val scrollState = rememberScrollState()
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
             ) {
-                toHome()
-            }
-            IconButtonSmall(
-                resourceId = R.drawable.ic_help_icon,
-                backgroundColor = MaterialTheme.colors.background,
-                fillColor = MaterialTheme.colors.primary,
-            ) {
-                //TODO: Add help screens
-            }
-        }
-        Row(
-            Modifier
-                .padding(UIConstants.PersonDetailFragment.SEC_ROW_PADDING)
-        ) {
-            /*NetworkImage(
-                url = pictureUrl,
-                modifier = Modifier
-                    .fillMaxWidth(0.5F),
-                contentScale = ContentScale.Crop
-            )
-             */
-            profileImage(
-                url = pictureUrl,
-                modifier = Modifier,
-                contentScale = ContentScale.Crop,
-            )
-
-            Column(modifier = Modifier.padding(UIConstants.PersonDetailFragment.COLUMN_PADDING)) {
-                Text(
-                    text = name,
-                    style = MaterialTheme.typography.h2
-                )
-                Spacer(modifier = Modifier.padding(AmigoStyle.Dim.C))
-                TextAndIconButton(
-                    R.drawable.ic_phone_call,
-                    stringResource(R.string.person_detail_call_button, name),
-                    MaterialTheme.colors.secondary,
-                    MaterialTheme.colors.onSecondary,
-                    false,
-                    true,
-                    UIConstants.PersonDetailFragment.CALL_BUTTON_WIDTH
-                ) { startCall() }
-                Spacer(modifier = Modifier.padding(AmigoStyle.Dim.C))
-                TextAndIconButton(
-                    R.drawable.ic_image_light,
-                    stringResource(R.string.person_detail_albums_button, name),
-                    MaterialTheme.colors.secondary,
-                    MaterialTheme.colors.onSecondary,
-                    false,
-                    true,
-                    UIConstants.PersonDetailFragment.ALBUM_BUTTON_WIDTH
+                Row(
+                    Modifier
+                        .padding(
+                            top = UIConstants.HomeButtonRow.TOP_PADDING,
+                            end = UIConstants.HomeButtonRow.END_PADDING
+                        )
+                        .fillMaxWidth()
+                        .height(UIConstants.HomeButtonRow.HEIGHT),
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    //TODO: missing fragment
+                    IconButtonSmall(
+                        resourceId = R.drawable.ic_home_icon,
+                        backgroundColor = MaterialTheme.colors.background,
+                        fillColor = MaterialTheme.colors.surface,
+                    ) {
+                        toHome()
+                    }
+                    IconButtonSmall(
+                        resourceId = R.drawable.ic_help_icon,
+                        backgroundColor = MaterialTheme.colors.background,
+                        fillColor = MaterialTheme.colors.primary,
+                    ) {
+                        //TODO: Add help screens
+                    }
+                }
+                Row(
+                    Modifier
+                        .padding(UIConstants.PersonDetailFragment.SEC_ROW_PADDING)
+                ) {
+
+                    ProfileImage(
+                        url = pictureUrl,
+                        modifier = Modifier,
+                        contentScale = ContentScale.Inside,
+                        onClick = startCall
+                    )
+
+                    Column(modifier = Modifier.padding(UIConstants.PersonDetailFragment.COLUMN_PADDING)) {
+                        Text(
+                            text = name,
+                            style = MaterialTheme.typography.h2
+                        )
+                        Spacer(modifier = Modifier.padding(AmigoStyle.Dim.C))
+                        TextAndIconButton(
+                            R.drawable.ic_phone_call,
+                            stringResource(R.string.person_detail_call_button, name),
+                            MaterialTheme.colors.secondary,
+                            MaterialTheme.colors.onSecondary,
+                            false,
+                            true,
+                            UIConstants.PersonDetailFragment.CALL_BUTTON_WIDTH
+                        ) {
+                            startCall()
+                        }
+                        Spacer(modifier = Modifier.padding(AmigoStyle.Dim.C))
+                        TextAndIconButton(
+                            R.drawable.ic_image_light,
+                            stringResource(R.string.person_detail_albums_button, name),
+                            MaterialTheme.colors.secondary,
+                            MaterialTheme.colors.onSecondary,
+                            false,
+                            true,
+                            UIConstants.PersonDetailFragment.ALBUM_BUTTON_WIDTH
+                        ) {
+                            //TODO: missing fragment
+                        }
+                    }
                 }
             }
         }

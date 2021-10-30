@@ -5,7 +5,7 @@ import java.util.*
 interface Sendable {
     val id: UUID
     val createdAt: Date
-    val sendAt: Date?
+    val sentAt: Date?
     val retrievedAt: Date?
     val senderId: UUID
     val receiverId: UUID

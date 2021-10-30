@@ -2,6 +2,7 @@ package org.ossiaustria.lib.domain.services
 
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
@@ -18,7 +19,6 @@ import org.ossiaustria.lib.commons.testing.TestCoroutineRule
 import org.ossiaustria.lib.domain.EntityMocks
 import org.ossiaustria.lib.domain.auth.Account
 import org.ossiaustria.lib.domain.auth.AuthApi
-import org.ossiaustria.lib.domain.auth.AuthInterceptor
 import org.ossiaustria.lib.domain.auth.LoginRequest
 import org.ossiaustria.lib.domain.auth.LoginResult
 import org.ossiaustria.lib.domain.auth.RefreshTokenRequest
@@ -44,6 +44,9 @@ class AuthServiceTest {
     @MockK
     lateinit var userContext: UserContext
 
+    @MockK
+    lateinit var loginCleanupService: LoginCleanupService
+
     lateinit var authService: AuthService
 
     private lateinit var loginResult: LoginResult
@@ -53,7 +56,13 @@ class AuthServiceTest {
     fun before() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         authService =
-            AuthServiceImpl(coroutineRule.dispatcher, authApi, settingsRepository, userContext)
+            AuthServiceImpl(
+                coroutineRule.dispatcher,
+                authApi,
+                settingsRepository,
+                userContext,
+                loginCleanupService
+            )
 
         account = EntityMocks.account(email = "test@example.org")
         loginResult = LoginResult(
@@ -77,7 +86,7 @@ class AuthServiceTest {
         } returns account
 
         every { settingsRepository.accessToken } returns null
-        every { settingsRepository.account   } returns null
+        every { settingsRepository.account } returns null
         every { settingsRepository.currentPerson } returns null
     }
 
@@ -105,6 +114,13 @@ class AuthServiceTest {
             val result = authService.login("test@example.org", "wrong").first { !it.isLoading }
             assertNotNull(result)
             assertTrue(result is Resource.Failure)
+        }
+
+    @Test
+    fun `login should call loginCleanupService`() =
+        runBlockingTest(coroutineRule.dispatcher) {
+            val result = authService.login("test@example.org", "password").first { !it.isLoading }
+            coVerify { loginCleanupService.cleanup() }
         }
 
     @Test

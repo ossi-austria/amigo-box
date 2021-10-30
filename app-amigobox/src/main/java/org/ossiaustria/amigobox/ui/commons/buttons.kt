@@ -32,26 +32,34 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 
-// reuse a Composable - there are no styles
 @Composable
 fun MaterialButton(
     onClick: () -> Unit,
     text: String,
-    modifier: Modifier? = null,
+    modifier: Modifier = Modifier,
     colors: ButtonColors = ButtonDefaults.outlinedButtonColors(
         contentColor = Color.Blue
     )
 ) {
     OutlinedButton(
         onClick = onClick,
-        modifier = modifier ?: Modifier.fillMaxWidth(),
+        modifier = modifier,
         colors = colors
     ) {
         Text(text = text)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MaterialButtonPreview() {
+    MaterialTheme {
+        MaterialButton({}, "text")
     }
 }
 

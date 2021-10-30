@@ -2,6 +2,8 @@ package org.ossiaustria.amigobox.modules
 
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import org.ossiaustria.amigobox.calls.CallViewModel
+import org.ossiaustria.amigobox.calls.IncomingEventsViewModel
 import org.ossiaustria.amigobox.nfc.NfcViewModel
 import org.ossiaustria.amigobox.onboarding.OnboardingViewModel
 import org.ossiaustria.amigobox.timeline.TimelineViewModel
@@ -19,5 +21,7 @@ val viewModelsModule = module {
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { ImageGalleryViewModel(get()) }
     viewModel { LoadingViewModel(get(), get(), get()) }
-    viewModel { NfcViewModel(get(), get(),get(),get()) }
+    viewModel { NfcViewModel(get(), get(), get(), get()) }
+    viewModel { IncomingEventsViewModel(get(), get()) }
+    viewModel { CallViewModel(get(), get(), get(), get()) }
 }

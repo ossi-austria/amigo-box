@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Album
+import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.NfcInfo
 import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.models.enums.NfcTagType
@@ -89,6 +90,10 @@ class NfcViewModel(
     }
 
     fun callPerson(linkedPerson: Person, navigator: Navigator) {
-        navigator.toCallPerson(linkedPerson)
+        navigator.toCallFragment(linkedPerson)
+    }
+
+    fun retrieveCall(call: Call, navigator: Navigator) {
+        navigator.toCallFragment(call)
     }
 }

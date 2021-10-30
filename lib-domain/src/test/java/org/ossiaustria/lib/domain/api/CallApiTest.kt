@@ -27,11 +27,11 @@ class CallApiTest : AbstractApiTest() {
     @Test
     fun `CallApi get should retrieve one item `() {
         val item = runBlocking {
-            subject.get(idExisting)
+            subject.getOne(idExisting)
         }
         assertNotNull(item)
         assertNotNull(item.id)
-        assertNotNull(item.sendAt)
+        assertNotNull(item.sentAt)
         assertNotNull(item.createdAt)
         assertNotNull(item.retrievedAt)
         assertNotNull(item.senderId)
@@ -42,7 +42,7 @@ class CallApiTest : AbstractApiTest() {
     @Test
     fun `CallApi getAll should retrieve all items `() {
         val items = runBlocking {
-            subject.getAll()
+            subject.getOwn()
         }
 
         assertNotNull(items)

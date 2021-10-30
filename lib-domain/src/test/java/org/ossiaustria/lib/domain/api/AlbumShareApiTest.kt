@@ -31,7 +31,7 @@ class AlbumShareApiTest : AbstractApiTest() {
         }
         assertNotNull(item)
         assertNotNull(item.id)
-        assertNotNull(item.sendAt)
+        assertNotNull(item.sentAt)
         assertNotNull(item.createdAt)
         assertNotNull(item.retrievedAt)
         assertNotNull(item.senderId)

@@ -14,6 +14,7 @@ import org.koin.test.mock.MockProviderRule
 import org.koin.test.mock.declareMock
 import org.mockito.Mockito
 import org.ossiaustria.lib.domain.repositories.SettingsRepository
+import org.ossiaustria.lib.domain.services.LoginCleanupService
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -35,6 +36,7 @@ class LibDomainKoinModulesTest : KoinTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         androidContext(context)
         declareMock<SettingsRepository>()
+        declareMock<LoginCleanupService>()
         modules(
             dispatcherModule,
             apiModule,
