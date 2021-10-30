@@ -25,7 +25,7 @@
             android:id="@+id/emailEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="test@example.org"
+            android:text="analogue@example.org"
             android:hint="@string/onboarding_username_label" />
     </com.google.android.material.textfield.TextInputLayout>
 

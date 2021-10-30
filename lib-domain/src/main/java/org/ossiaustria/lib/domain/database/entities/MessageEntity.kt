@@ -23,7 +23,7 @@ internal fun MessageEntity.toMessage(): Message {
     return Message(
         id = this.id,
         createdAt = this.createdAt,
-        sendAt = this.sendAt,
+        sentAt = this.sendAt,
         retrievedAt = this.retrievedAt,
         senderId = this.senderId,
         receiverId = this.receiverId,
@@ -36,7 +36,7 @@ internal fun Message.toMessageEntity(): MessageEntity {
     return MessageEntity(
         id = this.id,
         createdAt = this.createdAt,
-        sendAt = this.sendAt,
+        sendAt = this.sentAt,
         retrievedAt = this.retrievedAt,
         senderId = this.senderId,
         receiverId = this.receiverId,

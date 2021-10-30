@@ -80,7 +80,6 @@ internal class NfcViewModelTest {
     @Test
     fun `handleNfcInfo should load Album for OPEN_ALBUM`() =
         runBlockingTest {
-            val data = NfcHandler.NfcTagData("nfcRef")
             // prepare test
             val nfcInfo = mockNfcInfo(tagType = NfcTagType.OPEN_ALBUM)
             every { albumRepository.getAlbum(eq(nfcInfo.linkedAlbumId!!)) } returns
@@ -97,7 +96,6 @@ internal class NfcViewModelTest {
 
     @Test
     fun `handleNfcInfo should load Person for CALL_PERSON`() = runBlockingTest {
-        val data = NfcHandler.NfcTagData("nfcRef")
         // prepare test
         val nfcInfo = mockNfcInfo(tagType = NfcTagType.CALL_PERSON)
         val person = EntityMocks.person(personId = nfcInfo.linkedPersonId!!, randomUUID())
@@ -140,7 +138,7 @@ internal class NfcViewModelTest {
         )
 
         subject.callPerson(mock, navigator)
-        every { navigator.toCallPerson(eq(mock)) }
+        every { navigator.toCallFragment(eq(mock)) }
     }
 
 }

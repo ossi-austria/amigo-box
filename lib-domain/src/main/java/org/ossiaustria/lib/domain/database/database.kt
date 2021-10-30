@@ -40,7 +40,7 @@ internal interface AppDatabase {
         AlbumEntity::class,
         NfcInfoEntity::class,
     ],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 @TypeConverters(

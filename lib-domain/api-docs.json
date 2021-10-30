@@ -1,0 +1,4058 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Almost RESTful API for amigo-platform auth, multimedia and messaging v0.1",
+    "version": "0.1",
+    "title": "amigo-platform API",
+    "contact": {
+      "name": "OSSI Austria",
+      "url": "ossi-austria.org",
+      "email": "hello@ossi-austria.org"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "host": "amigo-dev.ossi-austria.org:8080",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "account-api",
+      "description": "Account Api"
+    },
+    {
+      "name": "albums-api",
+      "description": "Albums Api"
+    },
+    {
+      "name": "auth-api",
+      "description": "Auth Api"
+    },
+    {
+      "name": "calls-api",
+      "description": "Calls Api"
+    },
+    {
+      "name": "groups-api",
+      "description": "Groups Api"
+    },
+    {
+      "name": "messages-api",
+      "description": "Messages Api"
+    },
+    {
+      "name": "multimedias-api",
+      "description": "Multimedias Api"
+    },
+    {
+      "name": "nfc-info-api",
+      "description": "Nfc Info Api"
+    },
+    {
+      "name": "password-api",
+      "description": "Password Api"
+    },
+    {
+      "name": "person-profile-api",
+      "description": "Person Profile Api"
+    },
+    {
+      "name": "persons-api",
+      "description": "Persons Api"
+    }
+  ],
+  "paths": {
+    "/v1/account/set-fcm-token": {
+      "post": {
+        "tags": [
+          "account-api"
+        ],
+        "summary": "Update Firebase Cloud Messaging token for own Account",
+        "operationId": "setFcmToken",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "accountNonExpired",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "accountNonLocked",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "authorities[0].authority",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "credentialsNonExpired",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "enabled",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "expiration",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "issuedAt",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "issuer",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "personsIds",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "in": "body",
+            "name": "setFcmTokenRequest",
+            "description": "setFcmTokenRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetFcmTokenRequest"
+            }
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/albums": {
+      "post": {
+        "tags": [
+          "albums-api"
+        ],
+        "summary": "Create a new Album as Owner",
+        "operationId": "createAlbum",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateAlbumRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AlbumDto"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/albums/own": {
+      "get": {
+        "tags": [
+          "albums-api"
+        ],
+        "summary": "Get all Albums you can access",
+        "operationId": "ownUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AlbumDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/albums/shared": {
+      "get": {
+        "tags": [
+          "albums-api"
+        ],
+        "summary": "Get all Albums you are allowed to view",
+        "operationId": "sharedUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AlbumDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/albums/{id}": {
+      "get": {
+        "tags": [
+          "albums-api"
+        ],
+        "summary": "Get one Album",
+        "operationId": "getOneUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AlbumDto"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "tags": [
+          "auth-api"
+        ],
+        "summary": "Log in with existing Account",
+        "operationId": "login",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "loginRequest",
+            "description": "loginRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/LoginResultDto"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/auth/password/reset": {
+      "post": {
+        "tags": [
+          "password-api"
+        ],
+        "summary": "UNSTABLE: Begin password reset process for Account",
+        "operationId": "passwordReset",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "email",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "user_id",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "user_name",
+            "in": "query",
+            "description": "user_name",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/auth/password/reset/confirm": {
+      "post": {
+        "tags": [
+          "password-api"
+        ],
+        "summary": "UNSTABLE: Confirm password reset for Account",
+        "operationId": "passwordResetConfirmation",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PasswordResetRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/auth/refresh-token": {
+      "post": {
+        "tags": [
+          "auth-api"
+        ],
+        "summary": "Refresh the AccessToken via valid RefreshToken for an Account",
+        "operationId": "refreshToken",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "refreshAccessTokenRequest",
+            "description": "refreshAccessTokenRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RefreshAccessTokenRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TokenResultDto"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/auth/register": {
+      "post": {
+        "tags": [
+          "auth-api"
+        ],
+        "summary": "Register a new Account",
+        "operationId": "register",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "registerRequest",
+            "description": "registerRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Register a new Account and attach to explicit or implicit Group with a Person"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SecretAccountDto"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/auth/whoami": {
+      "get": {
+        "tags": [
+          "auth-api"
+        ],
+        "summary": "DEPRECATED, get own Account information",
+        "operationId": "whoamiUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AccountDto"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/calls": {
+      "post": {
+        "tags": [
+          "calls-api"
+        ],
+        "summary": "Create a new Call",
+        "operationId": "createCall",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "callType",
+            "in": "query",
+            "description": "callType",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "VIDEO",
+              "AUDIO"
+            ]
+          },
+          {
+            "name": "receiverId",
+            "in": "query",
+            "description": "receiverId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CallTokenDto"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/calls/all": {
+      "get": {
+        "tags": [
+          "calls-api"
+        ],
+        "summary": "Get all Calls",
+        "operationId": "getOwnUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CallDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/calls/filter": {
+      "get": {
+        "tags": [
+          "calls-api"
+        ],
+        "summary": "Filter all Calls for receiver and/or sender",
+        "operationId": "getFilteredUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "receiverId",
+            "in": "query",
+            "description": "receiverId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "senderId",
+            "in": "query",
+            "description": "senderId",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CallDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/calls/received": {
+      "get": {
+        "tags": [
+          "calls-api"
+        ],
+        "summary": "Get all received Calls",
+        "operationId": "getReceivedUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CallDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/calls/sent": {
+      "get": {
+        "tags": [
+          "calls-api"
+        ],
+        "summary": "Get all sent Calls",
+        "operationId": "getSentUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CallDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/calls/{id}": {
+      "get": {
+        "tags": [
+          "calls-api"
+        ],
+        "summary": "Get one Call",
+        "operationId": "getOneUsingGET_1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CallTokenDto"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/calls/{id}/accept": {
+      "patch": {
+        "tags": [
+          "calls-api"
+        ],
+        "summary": "Accept an incoming Call",
+        "operationId": "acceptCall",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CallTokenDto"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/calls/{id}/cancel": {
+      "patch": {
+        "tags": [
+          "calls-api"
+        ],
+        "summary": "Cancel an existing Call",
+        "operationId": "cancelCall",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CallDto"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/calls/{id}/deny": {
+      "patch": {
+        "tags": [
+          "calls-api"
+        ],
+        "summary": "Deny an incoming Call",
+        "operationId": "denyCall",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CallDto"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/calls/{id}/finish": {
+      "patch": {
+        "tags": [
+          "calls-api"
+        ],
+        "summary": "Finish an active Call",
+        "operationId": "finishCall",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CallDto"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/groups": {
+      "get": {
+        "tags": [
+          "groups-api"
+        ],
+        "summary": "Get own Group[s]",
+        "operationId": "getMyGroupsUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GroupDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "post": {
+        "tags": [
+          "groups-api"
+        ],
+        "summary": "Create new Group and an admin Person for own Account",
+        "operationId": "createGroup",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "createGroupRequest",
+            "description": "createGroupRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateGroupRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GroupDto"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/groups/filtered": {
+      "get": {
+        "tags": [
+          "groups-api"
+        ],
+        "summary": "Search/filter visible Groups",
+        "operationId": "filterGroupsUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "personId",
+            "in": "query",
+            "description": "personId",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GroupDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/groups/{id}": {
+      "get": {
+        "tags": [
+          "groups-api"
+        ],
+        "summary": "Get a Group by :id",
+        "operationId": "getGroupUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GroupDto"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "patch": {
+        "tags": [
+          "groups-api"
+        ],
+        "summary": "Change name of Group via PATCH",
+        "operationId": "changeGroupName",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "changeGroupRequest",
+            "description": "changeGroupRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ChangeGroupRequest"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GroupDto"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/groups/{id}/members": {
+      "post": {
+        "tags": [
+          "groups-api"
+        ],
+        "summary": "Add a new Person to this Group",
+        "operationId": "addMember",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddGroupMemberRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GroupDto"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/groups/{id}/members/{personId}": {
+      "delete": {
+        "tags": [
+          "groups-api"
+        ],
+        "summary": "Remove a Person/Membership of this Group",
+        "operationId": "removeMemberUsingDELETE",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "personId",
+            "in": "path",
+            "description": "personId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "schema": {
+              "$ref": "#/definitions/GroupDto"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      },
+      "patch": {
+        "tags": [
+          "groups-api"
+        ],
+        "summary": "Change a Person/Membership of this Group",
+        "operationId": "changeMember",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "personId",
+            "in": "path",
+            "description": "personId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ChangeGroupMemberRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GroupDto"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/messages": {
+      "post": {
+        "tags": [
+          "messages-api"
+        ],
+        "summary": "Create a new Message with attached Multimedia/File",
+        "operationId": "createMultimediaMessage",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "in": "formData",
+            "name": "receiverId",
+            "description": "receiverId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "formData",
+            "name": "text",
+            "description": "text",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MultiMessageDto"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/messages/all": {
+      "get": {
+        "tags": [
+          "messages-api"
+        ],
+        "summary": "getOwn",
+        "operationId": "getOwnUsingGET_1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved list",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MessageDto"
+              }
+            }
+          },
+          "401": {
+            "description": "You are not authorized to view the resource"
+          },
+          "403": {
+            "description": "Accessing the resource you were trying to reach is forbidden"
+          },
+          "404": {
+            "description": "The resource you were trying to reach is not found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/messages/filter": {
+      "get": {
+        "tags": [
+          "messages-api"
+        ],
+        "summary": "Filter all Messages for receiver and/or sender",
+        "operationId": "getFilteredUsingGET_1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "receiverId",
+            "in": "query",
+            "description": "receiverId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "senderId",
+            "in": "query",
+            "description": "senderId",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MessageDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/messages/received": {
+      "get": {
+        "tags": [
+          "messages-api"
+        ],
+        "summary": "Get all received Messages",
+        "operationId": "getReceivedUsingGET_1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MessageDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/messages/sent": {
+      "get": {
+        "tags": [
+          "messages-api"
+        ],
+        "summary": "Get all sent Messages",
+        "operationId": "getSentUsingGET_1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MessageDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/messages/{id}": {
+      "get": {
+        "tags": [
+          "messages-api"
+        ],
+        "summary": "Get one Message",
+        "operationId": "getOneUsingGET_2",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MultiMessageDto"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/messages/{id}/set-retrieved": {
+      "patch": {
+        "tags": [
+          "messages-api"
+        ],
+        "summary": "markAsRetrieved",
+        "operationId": "markAsRetrieved",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MultiMessageDto"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/multimedias": {
+      "post": {
+        "tags": [
+          "multimedias-api"
+        ],
+        "summary": "Upload a File and create new Multimedia",
+        "operationId": "createMultimedia",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "albumId",
+            "description": "albumId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "description": "name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "formData",
+            "name": "ownerId",
+            "description": "ownerId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MultimediaDto"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/multimedias/own": {
+      "get": {
+        "tags": [
+          "multimedias-api"
+        ],
+        "summary": "Get all own Multimedias",
+        "operationId": "ownUsingGET_1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MultimediaDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/multimedias/shared": {
+      "get": {
+        "tags": [
+          "multimedias-api"
+        ],
+        "summary": "Get all Multimedias shared for you",
+        "operationId": "sharedUsingGET_1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MultimediaDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/multimedias/{id}": {
+      "get": {
+        "tags": [
+          "multimedias-api"
+        ],
+        "summary": "getOne",
+        "operationId": "getOneUsingGET_3",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MultimediaDto"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/multimedias/{id}/file": {
+      "get": {
+        "tags": [
+          "multimedias-api"
+        ],
+        "summary": "Download File of Multimedia",
+        "operationId": "downloadFileUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "post": {
+        "tags": [
+          "multimedias-api"
+        ],
+        "summary": "Upload a File to update Multimedia",
+        "operationId": "uploadFile",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Multimedia"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/nfcs": {
+      "post": {
+        "tags": [
+          "nfc-info-api"
+        ],
+        "summary": "Create a new NfcInfo as Creator for an Owner",
+        "operationId": "createNfc",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Custom Head for current PersonId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "request",
+            "description": "Create Request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateNfcInfoRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/NfcInfoDto"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/nfcs/albums": {
+      "get": {
+        "tags": [
+          "nfc-info-api"
+        ],
+        "summary": "Get all Albums which are accessible via your NfcInfos",
+        "operationId": "sharedUsingGET_2",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AlbumDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/nfcs/created": {
+      "get": {
+        "tags": [
+          "nfc-info-api"
+        ],
+        "summary": "Get all NfcInfo which have you as Owner",
+        "operationId": "createdUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/NfcInfoDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/nfcs/own": {
+      "get": {
+        "tags": [
+          "nfc-info-api"
+        ],
+        "summary": "Get all NfcInfo which have you as Owner",
+        "operationId": "ownUsingGET_2",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/NfcInfoDto"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/nfcs/{id}": {
+      "get": {
+        "tags": [
+          "nfc-info-api"
+        ],
+        "summary": "Get one NfcInfo",
+        "operationId": "getOneUsingGET_4",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "UUID of NfcInfo",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/NfcInfoDto"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "patch": {
+        "tags": [
+          "nfc-info-api"
+        ],
+        "summary": "Change name or linked Entity of an NFC you created",
+        "operationId": "changeNfc",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "UUID of NfcInfo",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "request",
+            "description": "Create Request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ChangeNfcInfoRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/NfcInfoDto"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/persons/{id}/avatar.*": {
+      "get": {
+        "tags": [
+          "persons-api"
+        ],
+        "summary": "Download avatar File of an Person",
+        "operationId": "profileAvatarUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Amigo-Person-Id",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/profile": {
+      "get": {
+        "tags": [
+          "person-profile-api"
+        ],
+        "summary": "Get own Person information (=Profile) for primary or given personId",
+        "operationId": "myProfileUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PersonDto"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "patch": {
+        "tags": [
+          "person-profile-api"
+        ],
+        "summary": "Update Profile for primary or given personId",
+        "operationId": "updateProfile",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "changePersonDto",
+            "description": "changePersonDto",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ChangePersonDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PersonDto"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/profile/avatar": {
+      "post": {
+        "tags": [
+          "person-profile-api"
+        ],
+        "summary": "Upload Profile's avatar for primary or given personId",
+        "operationId": "uploadAvatar",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Amigo-Person-Id",
+            "in": "header",
+            "description": "Optional personId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token DESC",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PersonDto"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "AccountDto": {
+      "type": "object",
+      "required": [
+        "email",
+        "id",
+        "persons"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "persons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PersonDto"
+          }
+        }
+      },
+      "title": "AccountDto"
+    },
+    "AddGroupMemberRequest": {
+      "type": "object",
+      "required": [
+        "email",
+        "membershipType",
+        "name"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "membershipType": {
+          "type": "string",
+          "enum": [
+            "OWNER",
+            "ADMIN",
+            "ANALOGUE",
+            "MEMBER"
+          ]
+        }
+      },
+      "title": "AddGroupMemberRequest"
+    },
+    "AlbumDto": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "id",
+        "items",
+        "name",
+        "ownerId"
+      ],
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MultimediaDto"
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "ownerId": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "AlbumDto"
+    },
+    "CallDto": {
+      "type": "object",
+      "required": [
+        "callState",
+        "callType",
+        "createdAt",
+        "id",
+        "receiverId",
+        "senderId"
+      ],
+      "properties": {
+        "callState": {
+          "type": "string",
+          "enum": [
+            "CREATED",
+            "CALLING",
+            "CANCELLED",
+            "DENIED",
+            "ACCEPTED",
+            "FINISHED",
+            "TIMEOUT"
+          ]
+        },
+        "callType": {
+          "type": "string",
+          "enum": [
+            "VIDEO",
+            "AUDIO"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "finishedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string"
+        },
+        "receiverId": {
+          "type": "string"
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "senderId": {
+          "type": "string"
+        },
+        "sentAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "CallDto"
+    },
+    "CallTokenDto": {
+      "type": "object",
+      "required": [
+        "callState",
+        "callType",
+        "createdAt",
+        "id",
+        "receiverId",
+        "senderId"
+      ],
+      "properties": {
+        "callState": {
+          "type": "string",
+          "enum": [
+            "CREATED",
+            "CALLING",
+            "CANCELLED",
+            "DENIED",
+            "ACCEPTED",
+            "FINISHED",
+            "TIMEOUT"
+          ]
+        },
+        "callType": {
+          "type": "string",
+          "enum": [
+            "VIDEO",
+            "AUDIO"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "finishedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string"
+        },
+        "receiverId": {
+          "type": "string"
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "senderId": {
+          "type": "string"
+        },
+        "sentAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "token": {
+          "type": "string"
+        }
+      },
+      "title": "CallTokenDto"
+    },
+    "ChangeGroupMemberRequest": {
+      "type": "object",
+      "required": [
+        "membershipType"
+      ],
+      "properties": {
+        "membershipType": {
+          "type": "string",
+          "enum": [
+            "OWNER",
+            "ADMIN",
+            "ANALOGUE",
+            "MEMBER"
+          ]
+        }
+      },
+      "title": "ChangeGroupMemberRequest"
+    },
+    "ChangeGroupRequest": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "ChangeGroupRequest"
+    },
+    "ChangeNfcInfoRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "linkedAlbumId": {
+          "type": "string"
+        },
+        "linkedPersonId": {
+          "type": "string"
+        }
+      },
+      "title": "ChangeNfcInfoRequest"
+    },
+    "ChangePersonDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "avatarUrl": {
+          "type": "string"
+        }
+      },
+      "title": "ChangePersonDto"
+    },
+    "CreateAlbumRequest": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "CreateAlbumRequest"
+    },
+    "CreateGroupRequest": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ownerName": {
+          "type": "string"
+        }
+      },
+      "title": "CreateGroupRequest"
+    },
+    "CreateNfcInfoRequest": {
+      "type": "object",
+      "required": [
+        "creatorId",
+        "name",
+        "nfcRef",
+        "ownerId"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "nfcRef": {
+          "type": "string"
+        },
+        "ownerId": {
+          "type": "string"
+        },
+        "creatorId": {
+          "type": "string"
+        }
+      },
+      "title": "CreateNfcInfoRequest"
+    },
+    "File": {
+      "type": "object",
+      "properties": {
+        "absolute": {
+          "type": "boolean"
+        },
+        "absoluteFile": {
+          "$ref": "#/definitions/File"
+        },
+        "absolutePath": {
+          "type": "string"
+        },
+        "canonicalFile": {
+          "$ref": "#/definitions/File"
+        },
+        "canonicalPath": {
+          "type": "string"
+        },
+        "directory": {
+          "type": "boolean"
+        },
+        "file": {
+          "type": "boolean"
+        },
+        "freeSpace": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "hidden": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parent": {
+          "type": "string"
+        },
+        "parentFile": {
+          "$ref": "#/definitions/File"
+        },
+        "path": {
+          "type": "string"
+        },
+        "totalSpace": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "usableSpace": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "File"
+    },
+    "GroupDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "members",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PersonDto"
+          }
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "GroupDto"
+    },
+    "InputStream": {
+      "type": "object",
+      "title": "InputStream"
+    },
+    "LoginRequest": {
+      "type": "object",
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "title": "LoginRequest"
+    },
+    "LoginResultDto": {
+      "type": "object",
+      "required": [
+        "accessToken",
+        "account",
+        "refreshToken"
+      ],
+      "properties": {
+        "accessToken": {
+          "$ref": "#/definitions/TokenResultDto"
+        },
+        "account": {
+          "$ref": "#/definitions/SecretAccountDto"
+        },
+        "refreshToken": {
+          "$ref": "#/definitions/TokenResultDto"
+        }
+      },
+      "title": "LoginResultDto"
+    },
+    "MessageDto": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string"
+        },
+        "multimediaId": {
+          "type": "string"
+        },
+        "receiverId": {
+          "type": "string"
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "senderId": {
+          "type": "string"
+        },
+        "sentAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "title": "MessageDto",
+      "description": "Message"
+    },
+    "MultiMessageDto": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "id",
+        "receiverId",
+        "senderId",
+        "text"
+      ],
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string"
+        },
+        "multimedia": {
+          "$ref": "#/definitions/Multimedia"
+        },
+        "multimediaId": {
+          "type": "string"
+        },
+        "receiverId": {
+          "type": "string"
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "senderId": {
+          "type": "string"
+        },
+        "sentAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "title": "MultiMessageDto"
+    },
+    "Multimedia": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "filename",
+        "id",
+        "ownerId",
+        "type"
+      ],
+      "properties": {
+        "albumId": {
+          "type": "string"
+        },
+        "contentType": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "filename": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "ownerId": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "IMAGE",
+            "VIDEO",
+            "AUDIO"
+          ]
+        }
+      },
+      "title": "Multimedia"
+    },
+    "MultimediaDto": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "filename",
+        "id",
+        "ownerId",
+        "type"
+      ],
+      "properties": {
+        "albumId": {
+          "type": "string"
+        },
+        "contentType": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "filename": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "ownerId": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "IMAGE",
+            "VIDEO",
+            "AUDIO"
+          ]
+        }
+      },
+      "title": "MultimediaDto"
+    },
+    "NfcInfoDto": {
+      "type": "object",
+      "required": [
+        "createdAt",
+        "creatorId",
+        "id",
+        "name",
+        "nfcRef",
+        "ownerId",
+        "type"
+      ],
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "creatorId": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "linkedAlbumId": {
+          "type": "string"
+        },
+        "linkedPersonId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nfcRef": {
+          "type": "string"
+        },
+        "ownerId": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "UNDEFINED",
+            "CALL_PERSON",
+            "OPEN_ALBUM",
+            "SYSTEM",
+            "LOGIN"
+          ]
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "NfcInfoDto"
+    },
+    "PasswordResetRequest": {
+      "type": "object",
+      "required": [
+        "password",
+        "token"
+      ],
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "title": "PasswordResetRequest"
+    },
+    "PersonDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "memberType",
+        "name"
+      ],
+      "properties": {
+        "avatarUrl": {
+          "type": "string"
+        },
+        "groupId": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "memberType": {
+          "type": "string",
+          "enum": [
+            "OWNER",
+            "ADMIN",
+            "ANALOGUE",
+            "MEMBER"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "PersonDto"
+    },
+    "RefreshAccessTokenRequest": {
+      "type": "object",
+      "required": [
+        "refreshToken"
+      ],
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      },
+      "title": "RefreshAccessTokenRequest"
+    },
+    "Register a new Account and attach to explicit or implicit Group with a Person": {
+      "type": "object",
+      "required": [
+        "email",
+        "name",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Valid unused email"
+        },
+        "name": {
+          "type": "string",
+          "description": "Not-blank firstname, fullname or spitzname"
+        },
+        "optionalGroupId": {
+          "type": "string",
+          "description": "When given: attaches to existing Group. If not: creating a new implicit Group"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password. Keep it safe"
+        }
+      },
+      "title": "Register a new Account and attach to explicit or implicit Group with a Person"
+    },
+    "Resource": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "file": {
+          "$ref": "#/definitions/File"
+        },
+        "filename": {
+          "type": "string"
+        },
+        "inputStream": {
+          "$ref": "#/definitions/InputStream"
+        },
+        "open": {
+          "type": "boolean"
+        },
+        "readable": {
+          "type": "boolean"
+        },
+        "uri": {
+          "$ref": "#/definitions/URI"
+        },
+        "url": {
+          "$ref": "#/definitions/URL"
+        }
+      },
+      "title": "Resource"
+    },
+    "SecretAccountDto": {
+      "type": "object",
+      "required": [
+        "email",
+        "id",
+        "persons"
+      ],
+      "properties": {
+        "changeAccountToken": {
+          "type": "string"
+        },
+        "changeAccountTokenCreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "persons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PersonDto"
+          }
+        }
+      },
+      "title": "SecretAccountDto"
+    },
+    "SetFcmTokenRequest": {
+      "type": "object",
+      "required": [
+        "fcmToken"
+      ],
+      "properties": {
+        "fcmToken": {
+          "type": "string"
+        }
+      },
+      "title": "SetFcmTokenRequest"
+    },
+    "TokenResultDto": {
+      "type": "object",
+      "required": [
+        "expiration",
+        "issuedAt",
+        "issuer",
+        "subject",
+        "token"
+      ],
+      "properties": {
+        "expiration": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "issuedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      },
+      "title": "TokenResultDto"
+    },
+    "URI": {
+      "type": "object",
+      "properties": {
+        "absolute": {
+          "type": "boolean"
+        },
+        "authority": {
+          "type": "string"
+        },
+        "fragment": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "opaque": {
+          "type": "boolean"
+        },
+        "path": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "query": {
+          "type": "string"
+        },
+        "rawAuthority": {
+          "type": "string"
+        },
+        "rawFragment": {
+          "type": "string"
+        },
+        "rawPath": {
+          "type": "string"
+        },
+        "rawQuery": {
+          "type": "string"
+        },
+        "rawSchemeSpecificPart": {
+          "type": "string"
+        },
+        "rawUserInfo": {
+          "type": "string"
+        },
+        "scheme": {
+          "type": "string"
+        },
+        "schemeSpecificPart": {
+          "type": "string"
+        },
+        "userInfo": {
+          "type": "string"
+        }
+      },
+      "title": "URI"
+    },
+    "URL": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "type": "string"
+        },
+        "content": {
+          "type": "object"
+        },
+        "defaultPort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "file": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "query": {
+          "type": "string"
+        },
+        "ref": {
+          "type": "string"
+        },
+        "userInfo": {
+          "type": "string"
+        }
+      },
+      "title": "URL"
+    },
+    "URLStreamHandler": {
+      "type": "object",
+      "title": "URLStreamHandler"
+    }
+  }
+}

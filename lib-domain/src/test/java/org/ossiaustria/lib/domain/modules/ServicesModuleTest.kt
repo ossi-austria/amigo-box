@@ -19,6 +19,7 @@ import org.ossiaustria.lib.domain.repositories.SettingsRepository
 import org.ossiaustria.lib.domain.services.AlbumShareService
 import org.ossiaustria.lib.domain.services.AuthService
 import org.ossiaustria.lib.domain.services.CallService
+import org.ossiaustria.lib.domain.services.LoginCleanupService
 import org.ossiaustria.lib.domain.services.MessageService
 import org.ossiaustria.lib.domain.services.MultimediaService
 import org.ossiaustria.lib.domain.services.TimelineService
@@ -51,6 +52,7 @@ class ServicesModuleTest : KoinTest {
             val context = InstrumentationRegistry.getInstrumentation().targetContext
             androidContext(context)
             declareMock<SettingsRepository>()
+            declareMock<LoginCleanupService>()
             modules(
                 dispatcherModule,
                 apiModule,

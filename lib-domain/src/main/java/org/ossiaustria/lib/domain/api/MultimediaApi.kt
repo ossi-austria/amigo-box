@@ -11,5 +11,8 @@ interface MultimediaApi {
     suspend fun getShared(): List<Multimedia>
 
     @GET("multimedias/{id}")
-    suspend fun get(@Path("id") id: UUID): Multimedia
+    suspend fun getOne(@Path("id") id: UUID): Multimedia
+
+    @GET("multimedias/{id}/file")
+    suspend fun downloadFile(@Path("id") id: UUID): Multimedia
 }

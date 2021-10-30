@@ -67,7 +67,6 @@ fun LoadingFragmentScreen(loadingViewModel: LoadingViewModel = viewModel()) {
         state = state, person = person,
         startHome = loadingViewModel::startHome,
         startLogin = loadingViewModel::startLogin,
-        startJitsi = loadingViewModel::startJitsi,
         startTimeline = loadingViewModel::startTimeline,
         startContacts = loadingViewModel::startContacts,
         startAlbums = loadingViewModel::startAlbums,
@@ -81,7 +80,6 @@ fun LoadingFragmentComposable(
     person: Person?,
     startHome: () -> Unit,
     startLogin: () -> Unit,
-    startJitsi: () -> Unit,
     startTimeline: () -> Unit,
     startContacts: () -> Unit,
     startAlbums: () -> Unit,
@@ -113,7 +111,6 @@ fun LoadingFragmentComposable(
                 Text("Hallo ${person?.name}")
                 MaterialButton(onClick = { startLogin() }, text = "startLogin", modifier = mod)
                 MaterialButton(onClick = { startHome() }, text = "Home", modifier = mod)
-                MaterialButton(onClick = { startJitsi() }, text = "Start jitsi", modifier = mod)
                 MaterialButton(
                     onClick = { startTimeline() },
                     text = "Show Timeline",
@@ -141,7 +138,6 @@ fun LoadingFragmentComposablePreview() {
     LoadingFragmentComposable(
         Resource.success(true),
         Person(randomUUID(), "AnalogueUser", randomUUID(), MemberType.ANALOGUE),
-        {},
         {},
         {},
         {},

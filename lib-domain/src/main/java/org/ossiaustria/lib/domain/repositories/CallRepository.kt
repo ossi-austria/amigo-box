@@ -1,8 +1,6 @@
 package org.ossiaustria.lib.domain.repositories
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.ossiaustria.lib.commons.DispatcherProvider
@@ -31,8 +29,8 @@ internal class CallRepositoryImpl(
 ) : CallRepository,
     SingleAndCollectionStore<CallEntity, CallEntity, Call>(callDao, dispatcherProvider) {
 
-    override suspend fun fetchOne(id: UUID): Call = callApi.get(id)
-    override suspend fun defaultFetchAll(): List<Call> = callApi.getAll()
+    override suspend fun fetchOne(id: UUID): Call = callApi.getOne(id)
+    override suspend fun defaultFetchAll(): List<Call> = callApi.getOwn()
 
     override suspend fun writeItem(item: Call) {
         try {
@@ -49,16 +47,12 @@ internal class CallRepositoryImpl(
 
     override fun defaultReadAll(): Flow<List<CallEntity>> = callDao.findAll()
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
     override fun getAllCalls(refresh: Boolean): Flow<Resource<List<Call>>> = flow {
         listTransform(
             defaultCollectionStore.stream(newRequest("all", refresh))
         )
     }
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
     override fun getCall(id: UUID, refresh: Boolean): Flow<Resource<Call>> = flow {
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))

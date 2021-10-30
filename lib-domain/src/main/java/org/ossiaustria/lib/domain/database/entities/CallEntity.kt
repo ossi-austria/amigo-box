@@ -3,6 +3,7 @@ package org.ossiaustria.lib.domain.database.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import org.ossiaustria.lib.domain.models.Call
+import org.ossiaustria.lib.domain.models.enums.CallState
 import org.ossiaustria.lib.domain.models.enums.CallType
 import java.util.*
 
@@ -17,6 +18,7 @@ data class CallEntity(
     override val receiverId: UUID,
 
     val callType: CallType,
+    val callState: CallState,
     val startedAt: Date?,
     val finishedAt: Date?,
 ) : SendableEntity
@@ -26,12 +28,13 @@ fun CallEntity.toCall(): Call {
     return Call(
         id = this.id,
         createdAt = this.createdAt,
-        sendAt = this.sendAt,
+        sentAt = this.sendAt,
         retrievedAt = this.retrievedAt,
         senderId = this.senderId,
         receiverId = this.receiverId,
 
         callType = this.callType,
+        callState = this.callState,
         startedAt = this.startedAt,
         finishedAt = this.finishedAt,
     )
@@ -42,12 +45,13 @@ fun Call.toCallEntity(): CallEntity {
     return CallEntity(
         id = this.id,
         createdAt = this.createdAt,
-        sendAt = this.sendAt,
+        sendAt = this.sentAt,
         retrievedAt = this.retrievedAt,
         senderId = this.senderId,
         receiverId = this.receiverId,
 
         callType = this.callType,
+        callState = this.callState,
         startedAt = this.startedAt,
         finishedAt = this.finishedAt,
     )

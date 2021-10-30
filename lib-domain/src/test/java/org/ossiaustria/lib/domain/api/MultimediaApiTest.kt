@@ -27,7 +27,7 @@ class MultimediaApiTest : AbstractApiTest() {
     @Test
     fun `MultimediaApi get should retrieve one item `() {
         val item = runBlocking {
-            subject.get(idExisting)
+            subject.getOne(idExisting)
         }
         assertNotNull(item)
         assertNotNull(item.id)

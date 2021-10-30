@@ -42,12 +42,12 @@ class MessageRepositoryImpl(
     @FlowPreview
     private val receivedStore: Store<String, List<Message>> =
         buildCollectionStore(
-            fetchApi = { messageApi.getAllOwn() },
+            fetchApi = { messageApi.getOwn() },
             readDao = { messageDao.findByReceiver(userContext.personId()!!) },
             transform = { it.toMessage() })
 
-    override suspend fun fetchOne(id: UUID): Message = messageApi.get(id)
-    override suspend fun defaultFetchAll(): List<Message> = messageApi.getAllReceived()
+    override suspend fun fetchOne(id: UUID): Message = messageApi.getOne(id)
+    override suspend fun defaultFetchAll(): List<Message> = messageApi.getReceived()
 
     override suspend fun writeItem(item: Message) {
         try {

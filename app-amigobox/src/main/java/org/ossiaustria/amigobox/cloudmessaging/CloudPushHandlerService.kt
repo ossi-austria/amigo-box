@@ -5,11 +5,14 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.RemoteMessage
 import org.ossiaustria.amigobox.MainBoxActivity
+import org.ossiaustria.lib.domain.services.AmigoCloudEvent
+import org.ossiaustria.lib.domain.services.IncomingEventCallbackService
 import timber.log.Timber
 
-
-class CloudPushHandlerService(val appContext: Context) {
-
+class CloudPushHandlerService(
+    private val appContext: Context,
+    private val incomingEventCallbackService: IncomingEventCallbackService,
+) {
 
     fun onNewToken(newToken: String) {
         Timber.tag(TAG).i("New FCM token: $newToken")
@@ -21,7 +24,13 @@ class CloudPushHandlerService(val appContext: Context) {
 
         val intent = Intent(appContext, MainBoxActivity::class.java)
         val type = message.data.get("type") ?: ""
-        when (type) {
+
+        val cloudEvent = AmigoCloudEvent.fromMap(message.data)
+        val handled = if (cloudEvent != null)
+            incomingEventCallbackService.handleEvent(cloudEvent)
+        else false
+
+        if (!handled) when (type) {
             "call" -> NotificationFactory.createForCall(
                 appContext,
                 intent = intent,

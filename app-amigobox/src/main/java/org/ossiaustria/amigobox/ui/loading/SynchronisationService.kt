@@ -56,7 +56,7 @@ class SynchronisationService(
         multimediaRepository.getAllMultimedias(refresh = true)
     }
 
-    suspend fun syncNfcTags() = syncCollection("syncNfcTags") {
+    private suspend fun syncNfcTags() = syncCollection("syncNfcTags") {
         nfcInfoRepository.getAllNfcTags(refresh = true)
     }
 

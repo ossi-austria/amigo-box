@@ -27,6 +27,10 @@
         android:id="@+id/timelineFragment"
         android:name="org.ossiaustria.amigobox.timeline.TimelineFragment"
         android:label="TimelineFragment" />
+    <fragment
+        android:id="@+id/callFragment"
+        android:name="org.ossiaustria.amigobox.calls.CallFragment"
+        android:label="CallFragment" />
 
     <fragment
         android:id="@+id/contactsFragment"

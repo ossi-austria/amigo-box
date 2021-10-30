@@ -34,7 +34,7 @@ internal class MultimediaRepositoryImpl(
         dispatcherProvider
     ) {
 
-    override suspend fun fetchOne(id: UUID): Multimedia = multimediaApi.get(id)
+    override suspend fun fetchOne(id: UUID): Multimedia = multimediaApi.getOne(id)
     override suspend fun defaultFetchAll(): List<Multimedia> = multimediaApi.getShared()
 
     override suspend fun writeItem(item: Multimedia) {

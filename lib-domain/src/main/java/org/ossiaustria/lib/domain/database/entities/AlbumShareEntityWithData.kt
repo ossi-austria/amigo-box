@@ -27,7 +27,7 @@ internal fun AlbumShareEntityWithData.toAlbumShare(): AlbumShare {
         senderId = this.albumShare.senderId,
         createdAt = this.albumShare.createdAt,
         retrievedAt = this.albumShare.retrievedAt,
-        sendAt = this.albumShare.sendAt,
+        sentAt = this.albumShare.sendAt,
     )
 }
 
@@ -37,7 +37,7 @@ internal fun AlbumShare.toAlbumShareEntity(): AlbumShareEntity {
     return AlbumShareEntity(
         id = this.id,
         createdAt = this.createdAt,
-        sendAt = this.sendAt,
+        sendAt = this.sentAt,
         retrievedAt = this.retrievedAt,
         senderId = this.senderId,
         receiverId = this.receiverId,

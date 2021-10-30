@@ -13,11 +13,13 @@ import org.ossiaustria.lib.domain.repositories.AlbumShareRepository
 import org.ossiaustria.lib.domain.services.ServiceMocks.HER_PERSON_ID
 import org.ossiaustria.lib.domain.services.ServiceMocks.HIS_ALBUM_ID
 import org.ossiaustria.lib.domain.services.ServiceMocks.MY_PERSON_ID
-import java.time.ZonedDateTime
 import java.util.*
 import java.util.UUID.randomUUID
 
-interface AlbumShareService : SendableService<AlbumShare>
+interface AlbumShareService : SendableService<AlbumShare> {
+    fun markAsSent(id: UUID): Flow<Resource<AlbumShare>>
+    fun markAsRetrieved(id: UUID): Flow<Resource<AlbumShare>>
+}
 
 class MockAlbumShareServiceImpl(
     private val ioDispatcher: CoroutineDispatcher,
@@ -59,7 +61,7 @@ class MockAlbumShareServiceImpl(
     ) = AlbumShare(
         id = id,
         createdAt = createdAt,
-        sendAt = sendAt,
+        sentAt = sendAt,
         retrievedAt = retrievedAt,
         senderId = senderId,
         receiverId = receiverId,
@@ -104,12 +106,12 @@ class MockAlbumShareServiceImpl(
             (1..4).map { mockAlbumShare(receiverId = receiverId) }
         }
 
-    override fun markAsSent(id: UUID, time: ZonedDateTime): Flow<Resource<AlbumShare>> =
+    override fun markAsSent(id: UUID): Flow<Resource<AlbumShare>> =
         wrapper.markAsSent {
             mockAlbumShare(id = id, senderId = id, sendAt = Date())
         }
 
-    override fun markAsRetrieved(id: UUID, time: ZonedDateTime): Flow<Resource<AlbumShare>> =
+    override fun markAsRetrieved(id: UUID): Flow<Resource<AlbumShare>> =
         wrapper.markAsRetrieved {
             mockAlbumShare(id = id, senderId = id, retrievedAt = Date())
         }

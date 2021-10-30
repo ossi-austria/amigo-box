@@ -58,10 +58,6 @@ class LoadingViewModel(
         navigator?.toHome()
     }
 
-    fun startJitsi() {
-        navigator?.toJitsiCall()
-    }
-
     fun startLogin() {
         navigator?.toLogin()
     }

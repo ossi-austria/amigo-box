@@ -26,6 +26,7 @@ import org.ossiaustria.lib.domain.modules.dispatcherModule
 import org.ossiaustria.lib.domain.modules.repositoryModule
 import org.ossiaustria.lib.domain.modules.serviceModule
 import org.ossiaustria.lib.domain.repositories.SettingsRepository
+import org.ossiaustria.lib.domain.services.LoginCleanupService
 
 class AppModuleTest : KoinTest {
 
@@ -50,6 +51,7 @@ class AppModuleTest : KoinTest {
     @Test
     fun check() = checkModules {
         declareMock<Context> { mockkClass(Context::class) }
+        declareMock<LoginCleanupService> { mockkClass(LoginCleanupService::class) }
         declareMock<SharedPreferences> { mockkClass(SharedPreferences::class) }
         declareMock<SettingsRepository> { mockkClass(SettingsRepository::class) }
 
