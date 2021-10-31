@@ -47,6 +47,7 @@ class GroupApiTest : AbstractApiTest() {
             assertNotNull(it.name)
             assertNotNull(it.memberType)
             assertNotNull(it.groupId)
+            assertNotNull(it.avatarUrl)
         }
     }
 

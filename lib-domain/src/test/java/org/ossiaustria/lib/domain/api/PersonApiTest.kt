@@ -40,6 +40,7 @@ class PersonApiTest : AbstractApiTest() {
         assertNotNull(person.id)
         assertNotNull(person.memberType)
         assertNotNull(person.groupId)
+        assertNotNull(person.avatarUrl)
     }
 
     @Test

@@ -1,5 +1,6 @@
 package org.ossiaustria.lib.domain.models
 
+import org.ossiaustria.lib.domain.BuildConfig
 import org.ossiaustria.lib.domain.models.enums.MemberType
 import java.io.Serializable
 import java.util.*
@@ -14,6 +15,12 @@ data class Person(
     val groupId: UUID,
     val memberType: MemberType,
     // email is null for every person, which is not the user themself
-    val email: String? = null,
-    val avatarUrl: String? = null
-) : Serializable
+    val avatarUrl: String?,
+    val email: String? = null
+) : Serializable {
+
+    // {{baseUrl}}/v1/persons/:id/public/:key
+    fun absoluteAvatarUrl() = if (!avatarUrl.isNullOrBlank()) {
+        BuildConfig.API_ENDPOINT + "persons/$id/public/$avatarUrl"
+    } else null
+}

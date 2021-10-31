@@ -1,5 +1,6 @@
 package org.ossiaustria.amigobox.contacts
 
+import ProfileImage
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +32,6 @@ import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.AmigoStyle
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
 import org.ossiaustria.amigobox.ui.commons.IconButtonSmall
-import org.ossiaustria.amigobox.ui.commons.ProfileImage
 import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 import org.ossiaustria.amigobox.ui.commons.Toasts
 
@@ -49,7 +49,7 @@ class PersonDetailFragment : Fragment() {
             if (person != null) {
                 PersonDetailFragmentComposable(
                     person.name,
-                    person.avatarUrl,
+                    person.absoluteAvatarUrl(),
                     ::startCall, ::toHome
                 )
             } else {

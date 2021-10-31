@@ -37,7 +37,7 @@ import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.albums.album1
 import org.ossiaustria.amigobox.ui.commons.NavigationButton
-import org.ossiaustria.amigobox.ui.commons.NetworkImage
+import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
 import org.ossiaustria.lib.domain.models.Album
 import timber.log.Timber
 

@@ -137,7 +137,13 @@ fun LoadingFragmentComposable(
 fun LoadingFragmentComposablePreview() {
     LoadingFragmentComposable(
         Resource.success(true),
-        Person(randomUUID(), "AnalogueUser", randomUUID(), MemberType.ANALOGUE),
+        Person(
+            randomUUID(),
+            "AnalogueUser",
+            randomUUID(),
+            MemberType.ANALOGUE,
+            "https://thispersondoesnotexist.com/image"
+        ),
         {},
         {},
         {},
