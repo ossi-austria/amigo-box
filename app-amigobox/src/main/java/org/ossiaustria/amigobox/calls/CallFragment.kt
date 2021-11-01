@@ -1,5 +1,6 @@
 package org.ossiaustria.amigobox.calls
 
+import ProfileImage
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +24,6 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.ui.commons.MaterialButton
-import org.ossiaustria.amigobox.ui.commons.ProfileImage
 import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.enums.CallState
 import org.ossiaustria.lib.domain.models.enums.CallType
@@ -83,7 +83,7 @@ class CallFragment : Fragment() {
                 if (partner != null && state != null) {
                     CallFragmentComposable(
                         partner!!.name,
-                        partner!!.avatarUrl,
+                        partner!!.absoluteAvatarUrl(),
                         state!!,
                         onAccept = callViewModel::accept,
                         onCancel = callViewModel::cancel,

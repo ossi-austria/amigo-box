@@ -36,7 +36,8 @@ internal object EntityMocks {
             name = "name",
             email = "email",
             memberType = memberType,
-            groupId = groupId
+            groupId = groupId,
+            avatarUrl = "https://thispersondoesnotexist.com/image"
         )
     }
 }

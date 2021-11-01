@@ -1,5 +1,6 @@
 package org.ossiaustria.amigobox.ui.contacts
 
+import NotFoundImage
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,8 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants.ListCard
-import org.ossiaustria.amigobox.ui.commons.NetworkImage
-import org.ossiaustria.amigobox.ui.commons.NotFoundImage
+import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
 
 @Composable
 fun LoadPersonCardContent(name: String, url: String?) {

@@ -5,7 +5,9 @@ package org.ossiaustria.lib.domain.database
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers.*
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.not
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.jupiter.api.DisplayName
@@ -208,9 +210,9 @@ internal class GroupDaoTest : DoubleEntityDaoTest<GroupEntity, GroupEntityWithMe
         val adminId = UUID.randomUUID()
         val group1 = GroupEntity(groupId, "group")
         val centerPerson =
-            PersonEntity(centerPersonId, "center", "email", groupId, MemberType.ANALOGUE)
-        val member = PersonEntity(memberId, "member", "email", groupId, MemberType.MEMBER)
-        val admin = PersonEntity(adminId, "admin", "email", groupId, MemberType.ADMIN)
+            PersonEntity(centerPersonId, "center", "email", groupId, MemberType.ANALOGUE, "")
+        val member = PersonEntity(memberId, "member", "email", groupId, MemberType.MEMBER, "")
+        val admin = PersonEntity(adminId, "admin", "email", groupId, MemberType.ADMIN, "")
 
         runBlocking {
             dao.insert(group1)

@@ -50,7 +50,6 @@ internal class PersonRepositoryTest : AbstractRepositoryTest<PersonEntity, Perso
             val personId1 = UUID.randomUUID()
             val personId2 = UUID.randomUUID()
 
-
             val remoteList = listOf(
                 mockPerson(personId1, MemberType.MEMBER),
                 mockPerson(personId2, MemberType.ANALOGUE),
@@ -64,7 +63,8 @@ internal class PersonRepositoryTest : AbstractRepositoryTest<PersonEntity, Perso
                     "personId1",
                     "email",
                     UUID.randomUUID(),
-                    MemberType.MEMBER
+                    MemberType.MEMBER,
+                    "https://thispersondoesnotexist.com/image"
                 ),
             )
 
@@ -83,7 +83,8 @@ internal class PersonRepositoryTest : AbstractRepositoryTest<PersonEntity, Perso
             name = "name",
             email = "email",
             memberType = memberType,
-            groupId = UUID.randomUUID()
+            groupId = UUID.randomUUID(),
+            avatarUrl = "https://thispersondoesnotexist.com/image"
         )
     }
 

@@ -1,5 +1,6 @@
 package org.ossiaustria.amigobox.ui.albums
 
+import NotFoundImage
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,8 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants.ListCard
-import org.ossiaustria.amigobox.ui.commons.NetworkImage
-import org.ossiaustria.amigobox.ui.commons.NotFoundImage
+import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
 import org.ossiaustria.lib.domain.models.Album
 
 @Composable

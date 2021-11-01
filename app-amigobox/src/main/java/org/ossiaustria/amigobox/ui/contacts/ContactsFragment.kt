@@ -59,33 +59,22 @@ class ContactsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.load()
     }
-
-    @Preview
-    @Composable
-    fun ContactsFragmentComposablePreview() {
-        val listOfPeopleWithImages = ContactsSourceMockData.listOfPeopleWithImages()
-        ContactsFragmentComposable(
-            listOfPeopleWithImages,
-            viewModel::backToHome,
-            viewModel::toContact
-        )
-    }
 }
 
-    @Composable
-    fun ContactsScreen(viewModel: ContactsViewModel) {
-        AmigoThemeLight {
-            val persons by viewModel.persons.observeAsState(emptyList())
-            Surface(color = MaterialTheme.colors.background) {
-                ContactsFragmentComposable(
-                    persons,
-                    viewModel::backToHome,
-                    viewModel::toContact
-                )
-            }
+@Composable
+fun ContactsScreen(viewModel: ContactsViewModel) {
+    AmigoThemeLight {
+        val persons by viewModel.persons.observeAsState(emptyList())
+        Surface(color = MaterialTheme.colors.background) {
+            ContactsFragmentComposable(
+                persons,
+                viewModel::backToHome,
+                viewModel::toContact
+            )
         }
-
     }
+
+}
 
 @Composable
 fun ContactsFragmentComposable(
@@ -127,110 +116,117 @@ fun ContactsFragmentComposable(
             ) {
                 //TODO: add help screens
             }
-            }
+        }
         // Header
-            Row(
-                modifier = Modifier
-                    .padding(
-                        start = UIConstants.ListFragment.HEADER_PADDING_START,
-                        top = UIConstants.ListFragment.HEADER_PADDING_TOP,
-                        bottom = UIConstants.ListFragment.HEADER_PADDING_BOTTOM
-                    )
-                    .height(UIConstants.ListFragment.HEADER_HEIGHT)
-            ) {
-                Text(
-                    text = stringResource(R.string.contacts_headline),
-                    style = MaterialTheme.typography.h3
+        Text(
+            modifier = Modifier
+                .padding(
+                    start = UIConstants.ListFragment.HEADER_PADDING_START,
+                    top = UIConstants.ListFragment.HEADER_PADDING_TOP,
+                    bottom = UIConstants.ListFragment.HEADER_PADDING_BOTTOM
                 )
-            }
+                .height(UIConstants.ListFragment.HEADER_HEIGHT),
+            text = stringResource(R.string.contacts_headline),
+            style = MaterialTheme.typography.h3
+        )
 
-            // Text Description
-            Row(
-                modifier = Modifier
-                    .padding(
-                        start = UIConstants.ListFragment.DESCRIPTION_PADDING_START,
-                        top = UIConstants.ListFragment.DESCRIPTION_PADDING_TOP
-                    )
-                    .height(UIConstants.ListFragment.DESCRIPTION_HEIGHT)
-            ) {
-                Text(
-                    text = stringResource(R.string.contacts_usage_description),
-                    style = MaterialTheme.typography.body1
+        // Text Description
+        Row(
+            modifier = Modifier
+                .padding(
+                    start = UIConstants.ListFragment.DESCRIPTION_PADDING_START,
+                    top = UIConstants.ListFragment.DESCRIPTION_PADDING_TOP
                 )
-            }
+                .height(UIConstants.ListFragment.DESCRIPTION_HEIGHT)
+        ) {
+            Text(
+                text = stringResource(R.string.contacts_usage_description),
+                style = MaterialTheme.typography.body1
+            )
+        }
 
         val scrollState = rememberScrollState()
         val scope = rememberCoroutineScope()
 
-            Row(
-                modifier = Modifier
-                    .padding(
-                        start = UIConstants.ScrollableCardList.PADDING_START,
-                        top = UIConstants.ScrollableCardList.PADDING_TOP
-                    )
-                    .horizontalScroll(scrollState)
+        Row(
+            modifier = Modifier
+                .padding(
+                    start = UIConstants.ScrollableCardList.PADDING_START,
+                    top = UIConstants.ScrollableCardList.PADDING_TOP
+                )
+                .horizontalScroll(scrollState)
 
-            ) {
+        ) {
 
-                persons.forEach { person ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(UIConstants.ScrollableCardList.CARD_PADDING)
-                            .clickable(
-                                onClick = { toContact(person) }
-                            ),
-                        elevation = UIConstants.ScrollableCardList.CARD_ELEVATION,
-                    )
-                    {
-                        Column(
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.Start,
-                            modifier = Modifier.background(MaterialTheme.colors.background)
-                        ) {
-                            LoadPersonCardContent(person.name, person.avatarUrl)
-                        }
+            persons.forEach { person ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(UIConstants.ScrollableCardList.CARD_PADDING)
+                        .clickable(
+                            onClick = { toContact(person) }
+                        ),
+                    elevation = UIConstants.ScrollableCardList.CARD_ELEVATION,
+                )
+                {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.Start,
+                        modifier = Modifier.background(MaterialTheme.colors.background)
+                    ) {
+                        LoadPersonCardContent(person.name, person.absoluteAvatarUrl())
                     }
                 }
             }
+        }
 
-            // Back and Forward Buttons
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = UIConstants.NavigationButtonRow.PADDING_START,
-                        end = UIConstants.NavigationButtonRow.PADDING_END,
-                        bottom = UIConstants.NavigationButtonRow.PADDING_BOTTOM,
-                        top = UIConstants.NavigationButtonRow.CONTACTS_PADDING_TOP
-                    )
-                    .height(UIConstants.NavigationButtonRow.HEIGHT),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Bottom
+        // Back and Forward Buttons
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = UIConstants.NavigationButtonRow.PADDING_START,
+                    end = UIConstants.NavigationButtonRow.PADDING_END,
+                    bottom = UIConstants.NavigationButtonRow.PADDING_BOTTOM,
+                    top = UIConstants.NavigationButtonRow.CONTACTS_PADDING_TOP
+                )
+                .height(UIConstants.NavigationButtonRow.HEIGHT),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom
+        ) {
+
+            // Backwards
+            ScrollNavigationButton(
+                type = ScrollButtonType.PREVIOUS,
+                text = stringResource(R.string.previous_scroll_navigation_btn),
+                scrollState = scrollState,
             ) {
-
-                // Backwards
-                ScrollNavigationButton(
-                    type = ScrollButtonType.PREVIOUS,
-                    text = stringResource(R.string.previous_scroll_navigation_btn),
-                    scrollState = scrollState,
-                ) {
-                    scope.launch {
-                        scrollState.animateScrollTo(scrollState.value - UIConstants.ScrollButton.SCROLL_DISTANCE)
-                    }
-                }
-
-                // Forwards
-                ScrollNavigationButton(
-                    type = ScrollButtonType.NEXT,
-                    text = stringResource(R.string.next_scroll_navigation_btn),
-                    scrollState = scrollState
-                ) {
-                    scope.launch {
-                        scrollState.animateScrollTo(scrollState.value + UIConstants.ScrollButton.SCROLL_DISTANCE)
-                    }
+                scope.launch {
+                    scrollState.animateScrollTo(scrollState.value - UIConstants.ScrollButton.SCROLL_DISTANCE)
                 }
             }
+
+            // Forwards
+            ScrollNavigationButton(
+                type = ScrollButtonType.NEXT,
+                text = stringResource(R.string.next_scroll_navigation_btn),
+                scrollState = scrollState
+            ) {
+                scope.launch {
+                    scrollState.animateScrollTo(scrollState.value + UIConstants.ScrollButton.SCROLL_DISTANCE)
+                }
+            }
+        }
     }
 
-    }
+}
+
+@Preview
+@Composable
+fun ContactsFragmentComposablePreview() {
+    ContactsFragmentComposable(
+        ContactsSourceMockData.listOfPeopleWithImages(),
+        { },
+        { },
+    )
+}

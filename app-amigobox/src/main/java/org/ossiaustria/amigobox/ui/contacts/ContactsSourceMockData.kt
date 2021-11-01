@@ -30,8 +30,8 @@ object ContactsSourceMockData {
             name,
             groupId,
             MemberType.MEMBER,
-            email,
-            avatarUrl = "https://thispersondoesnotexist.com/image"
+            "https://thispersondoesnotexist.com/image",
+            email
         )
 
 }

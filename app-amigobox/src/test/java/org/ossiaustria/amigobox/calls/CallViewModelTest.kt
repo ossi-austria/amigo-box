@@ -53,13 +53,15 @@ internal class CallViewModelTest {
         id = randomUUID(),
         name = "Analgue",
         groupId = groupId,
-        memberType = MemberType.ANALOGUE
+        memberType = MemberType.ANALOGUE,
+        avatarUrl = "https://thispersondoesnotexist.com/image"
     )
     val digitalPerson = Person(
         id = randomUUID(),
         name = "digitalPerson",
         groupId = groupId,
-        memberType = MemberType.MEMBER
+        memberType = MemberType.MEMBER,
+        avatarUrl = "https://thispersondoesnotexist.com/image"
     )
     val group = Group(id = groupId, name = "Group", members = listOf(analoguePerson, digitalPerson))
 

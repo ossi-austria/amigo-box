@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.ossiaustria.amigobox.Navigator
-import org.ossiaustria.amigobox.ui.contacts.ContactsSourceMockData.listOfPeopleWithImages
 import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.repositories.GroupRepository
 
@@ -21,19 +20,16 @@ class ContactsViewModel(
 
     fun load() {
         viewModelScope.launch {
-            val first = groupRepository.getAllGroups().first()
-            if (first.isSuccess && !first.valueOrNull().isNullOrEmpty()) {
-                val groups = first.valueOrNull()
-                groups?.flatMap { it.members }?.let {
-                    _persons.value = it
+            groupRepository.getAllGroups(true).collect {
+                if (it.isSuccess && !it.valueOrNull().isNullOrEmpty()) {
+                    val groups = it.valueOrNull()
+                    groups?.firstOrNull()?.members?.let { _persons.value = it }
+                } else {
+                    _persons.value = emptyList()
                 }
-            } else {
-                _persons.value = getPersons()
             }
         }
     }
-
-    private fun getPersons(): List<Person> = listOfPeopleWithImages()
 
     fun backToHome() {
         navigator.toHome()
