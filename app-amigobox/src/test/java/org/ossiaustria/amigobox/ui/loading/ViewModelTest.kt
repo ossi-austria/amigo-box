@@ -2,7 +2,6 @@ package org.ossiaustria.amigobox.ui.loading
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -13,7 +12,6 @@ import org.junit.rules.TestRule
 import org.ossiaustria.lib.commons.TestDispatcherProvider
 import org.ossiaustria.lib.commons.testing.TestCoroutineRule
 
-@ExperimentalCoroutinesApi
 open class ViewModelTest {
 
     @get:Rule

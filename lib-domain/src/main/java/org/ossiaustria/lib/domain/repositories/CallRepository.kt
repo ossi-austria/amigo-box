@@ -1,6 +1,5 @@
 package org.ossiaustria.lib.domain.repositories
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.ossiaustria.lib.commons.DispatcherProvider
@@ -18,8 +17,7 @@ interface CallRepository {
 
     fun getAllCalls(refresh: Boolean = false): Flow<Resource<List<Call>>>
 
-    @ExperimentalCoroutinesApi
-    fun getCall(id: UUID, refresh: Boolean = false): Flow<Resource<Call>>
+        fun getCall(id: UUID, refresh: Boolean = false): Flow<Resource<Call>>
 }
 
 internal class CallRepositoryImpl(

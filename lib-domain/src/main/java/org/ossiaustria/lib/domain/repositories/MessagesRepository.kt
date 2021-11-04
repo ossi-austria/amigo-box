@@ -1,9 +1,7 @@
 package org.ossiaustria.lib.domain.repositories
 
 import com.dropbox.android.external.store4.Store
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.ossiaustria.lib.commons.DispatcherProvider
@@ -23,8 +21,7 @@ interface MessageRepository {
     fun getAllMessages(refresh: Boolean = false): Flow<Resource<List<Message>>>
     fun getReceived(refresh: Boolean = false): Flow<Resource<List<Message>>>
 
-    @ExperimentalCoroutinesApi
-    fun getMessage(id: UUID, refresh: Boolean = false): Flow<Resource<Message>>
+        fun getMessage(id: UUID, refresh: Boolean = false): Flow<Resource<Message>>
 }
 
 class MessageRepositoryImpl(
@@ -38,8 +35,7 @@ class MessageRepositoryImpl(
         dispatcherProvider
     ) {
 
-    @ExperimentalCoroutinesApi
-    @FlowPreview
+        @FlowPreview
     private val receivedStore: Store<String, List<Message>> =
         buildCollectionStore(
             fetchApi = { messageApi.getOwn() },
@@ -65,8 +61,7 @@ class MessageRepositoryImpl(
     override fun defaultReadAll(): Flow<List<MessageEntity>> = messageDao.findAll()
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getAllMessages(refresh: Boolean): Flow<Resource<List<Message>>> = flow {
+        override fun getAllMessages(refresh: Boolean): Flow<Resource<List<Message>>> = flow {
         listTransform(
             defaultCollectionStore.stream(
                 newRequest(key = "all", refresh = refresh)
@@ -75,14 +70,12 @@ class MessageRepositoryImpl(
     }
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getReceived(refresh: Boolean): Flow<Resource<List<Message>>> = flow {
+        override fun getReceived(refresh: Boolean): Flow<Resource<List<Message>>> = flow {
         listTransform(receivedStore.stream(newRequest(key = "received", refresh = refresh)))
     }
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getMessage(id: UUID, refresh: Boolean): Flow<Resource<Message>> = flow {
+        override fun getMessage(id: UUID, refresh: Boolean): Flow<Resource<Message>> = flow {
         itemTransform(singleStore.stream(newRequest(key = id, refresh = refresh)))
     }
 

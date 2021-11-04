@@ -18,10 +18,6 @@
         android:id="@+id/homeFragment"
         android:name="org.ossiaustria.amigobox.ui.home.HomeFragment"
         android:label="HomeFragment" />
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="org.ossiaustria.amigobox.onboarding.LoginFragment"
-        android:label="LoginFragment" />
 
     <fragment
         android:id="@+id/timelineFragment"

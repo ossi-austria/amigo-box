@@ -77,7 +77,6 @@ fun HomeBtnCard(@DrawableRes imageResId: Int, buttonDescription: String, showCou
                                 color = MaterialTheme.colors.onSecondary
                             )
                         }
-
                     }
                 }
             }

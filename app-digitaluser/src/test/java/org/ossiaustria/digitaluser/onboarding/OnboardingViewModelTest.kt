@@ -29,7 +29,6 @@ import org.ossiaustria.lib.domain.services.AuthService
  * 3. use runBlockingTest for coroutines which wait a long time
  */
 @FlowPreview
-@ExperimentalCoroutinesApi
 internal class OnboardingViewModelTest {
 
     // let us call the test subject "subject"

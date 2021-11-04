@@ -2,7 +2,6 @@ package org.ossiaustria.digitaluser.ui.loading
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -24,7 +23,6 @@ import org.ossiaustria.lib.commons.TestDispatcherProvider
  * 3. use runBlockingTest for coroutines which wait a long time
  */
 @FlowPreview
-@ExperimentalCoroutinesApi
 internal class LoadingViewModelTest {
 
     lateinit var subject: LoadingViewModel

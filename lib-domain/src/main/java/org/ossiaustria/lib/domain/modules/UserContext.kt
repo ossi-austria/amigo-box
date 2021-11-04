@@ -17,10 +17,8 @@ class UserContext(
     fun available() = account != null && person != null
     fun account() = account
 
-    fun accountOrNull() = account
     fun person() = person
 
-    fun personOrNull() = person
     fun accountId() = account()?.id
     fun personId() = person()?.id
 

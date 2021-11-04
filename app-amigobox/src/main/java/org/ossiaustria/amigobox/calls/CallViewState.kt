@@ -45,4 +45,13 @@ sealed class CallViewState(
 
     data class Finished(override val call: Call, override val outgoing: Boolean) :
         CallViewState(call, outgoing, false)
+
+    data class Failure(
+        override val call: Call,
+        override val outgoing: Boolean,
+        val error: Throwable?
+    ) :
+        CallViewState(call, outgoing, false)
+
+    fun error(error: Throwable?): CallViewState = Failure(call, outgoing, error)
 }

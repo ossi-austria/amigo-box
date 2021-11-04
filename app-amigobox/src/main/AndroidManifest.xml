@@ -47,7 +47,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.ossiaustria.lib.jitsi.ui.AmigoJitsiActivity" />
         <activity android:name="org.ossiaustria.lib.jitsi.ui.AmigoSingleJitsiActivity" />
 
         <service

@@ -32,7 +32,7 @@ class ContactsViewModel(
     }
 
     fun backToHome() {
-        navigator.toHome()
+        navigator.back()
     }
 
     fun toContact(person: Person) {

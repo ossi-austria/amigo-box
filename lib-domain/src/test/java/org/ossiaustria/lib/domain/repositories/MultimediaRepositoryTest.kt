@@ -5,9 +5,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -24,7 +22,6 @@ import org.robolectric.annotation.Config
 import java.util.*
 
 @FlowPreview
-@ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 @Config
 internal class MultimediaRepositoryTest : AbstractRepositoryTest<MultimediaEntity, Multimedia>() {

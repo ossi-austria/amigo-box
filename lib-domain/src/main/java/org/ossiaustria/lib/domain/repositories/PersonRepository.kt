@@ -1,8 +1,6 @@
 package org.ossiaustria.lib.domain.repositories
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.ossiaustria.lib.commons.DispatcherProvider
@@ -20,8 +18,7 @@ interface PersonRepository {
 
     fun getAllPersons(refresh: Boolean = false): Flow<Resource<List<Person>>>
 
-    @ExperimentalCoroutinesApi
-    fun getPerson(id: UUID, refresh: Boolean = false): Flow<Resource<Person>>
+        fun getPerson(id: UUID, refresh: Boolean = false): Flow<Resource<Person>>
 }
 
 internal class PersonRepositoryImpl(
@@ -50,16 +47,14 @@ internal class PersonRepositoryImpl(
     override fun defaultReadAll(): Flow<List<PersonEntity>> = personDao.findAll()
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getAllPersons(refresh: Boolean): Flow<Resource<List<Person>>> = flow {
+        override fun getAllPersons(refresh: Boolean): Flow<Resource<List<Person>>> = flow {
         listTransform(
             defaultCollectionStore.stream(newRequest(key = "all", refresh = refresh))
         )
     }
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getPerson(id: UUID, refresh: Boolean): Flow<Resource<Person>> = flow {
+        override fun getPerson(id: UUID, refresh: Boolean): Flow<Resource<Person>> = flow {
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))
         )

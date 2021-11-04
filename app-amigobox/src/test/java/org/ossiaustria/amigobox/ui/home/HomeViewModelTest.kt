@@ -2,7 +2,6 @@ package org.ossiaustria.amigobox.ui.home
 
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.flowOf
 import org.hamcrest.CoreMatchers.equalTo
@@ -15,7 +14,6 @@ import org.ossiaustria.lib.domain.modules.UserContext
 import org.ossiaustria.lib.domain.repositories.AlbumRepository
 
 @FlowPreview
-@ExperimentalCoroutinesApi
 class HomeViewModelTest : ViewModelTest() {
 
     lateinit var subject: HomeViewModel

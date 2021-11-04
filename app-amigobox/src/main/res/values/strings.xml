@@ -11,11 +11,11 @@
     <string name="channel_events_name">AmigoBox - Informationen</string>
     <string name="channel_events_description">Information zu deiner AmigoBox</string>
 
-    <string name="onboarding_login_label">Login</string>
-    <string name="onboarding_register_label">Register</string>
-    <string name="onboarding_username_label">Email</string>
-    <string name="onboarding_password_label">Password</string>
-    <string name="onboarding_fullname_label">Password</string>
+    <string name="onboarding_login_label">Per E-Mail anmelden</string>
+    <string name="onboarding_login_token_label">Per Token anmelden</string>
+    <string name="onboarding_email_label">E-Mail</string>
+    <string name="onboarding_password_label">Passwort</string>
+    <string name="onboarding_login_button">Anmelden</string>
 
     <string name="person_detail_call_button">%s anrufen</string>
     <string name="person_detail_albums_button">Alben von %s ansehen</string>
@@ -23,6 +23,7 @@
     <string name="home_greeting_var">Guten Morgen, %s!</string>
     <string name="home_subtitle">Tippe auf eine Kachel oder schiebe eine AMIGO-Karte ein um zu starten</string>
     <string name="home_menu_open_contacts">Kontaktliste öffnen</string>
+    <string name="home_logout">Abmelden</string>
 
 
     <string name="nfc_prefix" translatable="false">/ossi-austria.org:amigo</string>

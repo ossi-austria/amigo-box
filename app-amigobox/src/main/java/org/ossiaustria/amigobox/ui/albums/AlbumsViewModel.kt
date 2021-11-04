@@ -23,7 +23,7 @@ class AlbumsViewModel(
     fun getThumbnail(album: Album): String = album.items[0].filename
 
     fun backToHome() {
-        navigator.toHome()
+        navigator.back()
     }
 
     fun toAlbum(album: Album) {

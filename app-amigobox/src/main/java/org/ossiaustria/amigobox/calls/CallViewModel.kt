@@ -87,6 +87,7 @@ class CallViewModel(
                     activeCall = it.value
                     _state.postValue(callState.start(it.value))
                 } else if (it is Resource.Failure) {
+                    _state.postValue(callState.error(it.throwable))
                     Timber.e("accept: ${it.throwable}")
                 }
             }
@@ -99,6 +100,9 @@ class CallViewModel(
             callService.deny(callState.call).collect {
                 if (it is Resource.Success) {
                     _state.postValue(callState.cancel(it.value))
+                } else if (it is Resource.Failure) {
+                    _state.postValue(callState.error(it.throwable))
+                    Timber.e("accept: ${it.throwable}")
                 }
             }
         }
@@ -110,6 +114,9 @@ class CallViewModel(
             callService.cancel(callState.call).collect {
                 if (it is Resource.Success) {
                     _state.postValue(callState.cancel(it.value))
+                } else if (it is Resource.Failure) {
+                    _state.postValue(callState.error(it.throwable))
+                    Timber.e("accept: ${it.throwable}")
                 }
             }
         }

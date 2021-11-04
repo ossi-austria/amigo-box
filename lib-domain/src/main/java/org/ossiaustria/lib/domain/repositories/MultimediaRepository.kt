@@ -1,8 +1,6 @@
 package org.ossiaustria.lib.domain.repositories
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.ossiaustria.lib.commons.DispatcherProvider
@@ -20,8 +18,7 @@ interface MultimediaRepository {
 
     fun getAllMultimedias(refresh: Boolean = false): Flow<Resource<List<Multimedia>>>
 
-    @ExperimentalCoroutinesApi
-    fun getMultimedia(id: UUID, refresh: Boolean = false): Flow<Resource<Multimedia>>
+        fun getMultimedia(id: UUID, refresh: Boolean = false): Flow<Resource<Multimedia>>
 }
 
 internal class MultimediaRepositoryImpl(
@@ -53,16 +50,14 @@ internal class MultimediaRepositoryImpl(
     override fun defaultReadAll(): Flow<List<MultimediaEntity>> = multimediaDao.findAll()
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getAllMultimedias(refresh: Boolean): Flow<Resource<List<Multimedia>>> = flow {
+        override fun getAllMultimedias(refresh: Boolean): Flow<Resource<List<Multimedia>>> = flow {
         listTransform(
             defaultCollectionStore.stream(newRequest(key = "all", refresh = refresh))
         )
     }
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getMultimedia(id: UUID, refresh: Boolean): Flow<Resource<Multimedia>> = flow {
+        override fun getMultimedia(id: UUID, refresh: Boolean): Flow<Resource<Multimedia>> = flow {
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))
         )
