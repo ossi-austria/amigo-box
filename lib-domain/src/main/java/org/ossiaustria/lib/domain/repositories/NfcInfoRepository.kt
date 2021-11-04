@@ -1,6 +1,5 @@
 package org.ossiaustria.lib.domain.repositories
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -18,12 +17,10 @@ import java.util.*
 interface NfcInfoRepository {
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    fun getAllNfcTags(refresh: Boolean = false): Flow<Resource<List<NfcInfo>>>
+        fun getAllNfcTags(refresh: Boolean = false): Flow<Resource<List<NfcInfo>>>
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    fun getNfcTag(id: UUID, refresh: Boolean = false): Flow<Resource<NfcInfo>>
+        fun getNfcTag(id: UUID, refresh: Boolean = false): Flow<Resource<NfcInfo>>
 }
 
 internal class NfcInfoRepositoryImpl(
@@ -52,16 +49,14 @@ internal class NfcInfoRepositoryImpl(
     override fun defaultReadAll(): Flow<List<NfcInfoEntity>> = nfcInfoDao.findAll()
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getAllNfcTags(refresh: Boolean): Flow<Resource<List<NfcInfo>>> = flow {
+        override fun getAllNfcTags(refresh: Boolean): Flow<Resource<List<NfcInfo>>> = flow {
         listTransform(
             defaultCollectionStore.stream(newRequest(key = "all", refresh = refresh))
         )
     }
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getNfcTag(id: UUID, refresh: Boolean): Flow<Resource<NfcInfo>> = flow {
+        override fun getNfcTag(id: UUID, refresh: Boolean): Flow<Resource<NfcInfo>> = flow {
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))
         )

@@ -24,7 +24,6 @@ import org.ossiaustria.amigobox.ui.albums.AlbumsViewModel
 import org.ossiaustria.amigobox.ui.contacts.ContactsViewModel
 import org.ossiaustria.amigobox.ui.home.HomeViewModel
 import org.ossiaustria.amigobox.ui.imagegallery.ImageGalleryViewModel
-import org.ossiaustria.amigobox.ui.loading.LoadingViewModel
 import org.ossiaustria.lib.domain.modules.apiModule
 import org.ossiaustria.lib.domain.modules.databaseModule
 import org.ossiaustria.lib.domain.modules.dispatcherModule
@@ -40,7 +39,6 @@ class AppViewModelModuleTest : KoinTest {
     private val contactsViewModel: ContactsViewModel by inject()
     private val homeViewModel: HomeViewModel by inject()
     private val galleryViewModel: ImageGalleryViewModel by inject()
-    private val loadingViewModel: LoadingViewModel by inject()
 
     private val dispatcher = TestCoroutineDispatcher()
 
@@ -78,6 +76,5 @@ class AppViewModelModuleTest : KoinTest {
         assertNotNull(contactsViewModel)
         assertNotNull(homeViewModel)
         assertNotNull(galleryViewModel)
-        assertNotNull(loadingViewModel)
     }
 }

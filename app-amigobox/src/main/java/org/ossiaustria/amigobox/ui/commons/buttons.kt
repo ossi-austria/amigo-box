@@ -44,12 +44,14 @@ fun MaterialButton(
     modifier: Modifier = Modifier,
     colors: ButtonColors = ButtonDefaults.outlinedButtonColors(
         contentColor = Color.Blue
-    )
+    ),
+    enabled: Boolean = true,
 ) {
     OutlinedButton(
         onClick = onClick,
         modifier = modifier,
-        colors = colors
+        colors = colors,
+        enabled = enabled,
     ) {
         Text(text = text)
     }
@@ -65,7 +67,6 @@ fun MaterialButtonPreview() {
 
 @Composable
 fun NavigationButton(
-    modifier: Modifier = Modifier,
     text: String,
     colors: ButtonColors = ButtonDefaults.outlinedButtonColors(
         contentColor = MaterialTheme.colors.primary,
@@ -103,8 +104,7 @@ fun ScrollNavigationButton(
             .width(UIConstants.ScrollNavigationButton.CARD_WIDTH),
         elevation = UIConstants.ScrollableCardList.CARD_ELEVATION,
         contentColor = scrollTextColor(type, scrollState),
-    )
-    {
+    ) {
         when (type) {
             ScrollButtonType.PREVIOUS ->
                 Row(
@@ -224,7 +224,6 @@ fun IconButtonShape(
                 topLeft = Offset(0F, size.width - size.width / 2),
                 size = Size(size.height / 2, size.width / 2)
             )
-
         }
     )
 }
@@ -235,9 +234,9 @@ fun TextAndIconButton(
     buttonDescription: String,
     backgroundColor: Color,
     contentColor: Color,
-    bottomStart: Boolean,
-    topStart: Boolean,
-    buttonWidth: Dp,
+    bottomStart: Boolean = true,
+    topStart: Boolean = false,
+    buttonWidth: Dp = UIConstants.BigButtons.BUTTON_WIDTH,
     onClick: () -> Unit,
 
     ) {
@@ -269,9 +268,8 @@ fun TextAndIconButton(
                 }
             ),
         contentColor = MaterialTheme.colors.onPrimary,
-        backgroundColor = backgroundColor,
-
-        ) {
+        backgroundColor = backgroundColor
+    ) {
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,

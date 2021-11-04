@@ -5,7 +5,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
@@ -29,7 +28,6 @@ import java.util.UUID.randomUUID
 import kotlin.test.assertEquals
 
 @FlowPreview
-@ExperimentalCoroutinesApi
 internal class NfcViewModelTest {
 
     private lateinit var subject: NfcViewModel

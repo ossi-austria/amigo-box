@@ -1,8 +1,6 @@
 package org.ossiaustria.lib.domain.repositories
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -24,8 +22,7 @@ interface GroupRepository {
 
     fun getAllGroups(refresh: Boolean = false): Flow<Resource<List<Group>>>
 
-    @ExperimentalCoroutinesApi
-    fun getGroup(id: UUID, refresh: Boolean = false): Flow<Resource<Group>>
+        fun getGroup(id: UUID, refresh: Boolean = false): Flow<Resource<Group>>
 }
 
 internal class GroupRepositoryImpl(
@@ -60,16 +57,14 @@ internal class GroupRepositoryImpl(
     }
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getAllGroups(refresh: Boolean): Flow<Resource<List<Group>>> = flow {
+        override fun getAllGroups(refresh: Boolean): Flow<Resource<List<Group>>> = flow {
         listTransform(
             defaultCollectionStore.stream(newRequest(key = "all", refresh = refresh))
         )
     }
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getGroup(id: UUID, refresh: Boolean): Flow<Resource<Group>> = flow {
+        override fun getGroup(id: UUID, refresh: Boolean): Flow<Resource<Group>> = flow {
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))
         )

@@ -1,8 +1,6 @@
 package org.ossiaustria.lib.domain.repositories
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -24,8 +22,7 @@ interface AlbumRepository {
 
     fun getAllAlbums(refresh: Boolean = false): Flow<Resource<List<Album>>>
 
-    @ExperimentalCoroutinesApi
-    fun getAlbum(id: UUID, refresh: Boolean = false): Flow<Resource<Album>>
+        fun getAlbum(id: UUID, refresh: Boolean = false): Flow<Resource<Album>>
 }
 
 internal class AlbumRepositoryImpl(
@@ -60,8 +57,7 @@ internal class AlbumRepositoryImpl(
     }
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getAllAlbums(refresh: Boolean): Flow<Resource<List<Album>>> = flow {
+        override fun getAllAlbums(refresh: Boolean): Flow<Resource<List<Album>>> = flow {
         listTransform(
             defaultCollectionStore.stream(
                 newRequest(key = "all", refresh = refresh)
@@ -70,8 +66,7 @@ internal class AlbumRepositoryImpl(
     }
 
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun getAlbum(id: UUID, refresh: Boolean): Flow<Resource<Album>> = flow {
+        override fun getAlbum(id: UUID, refresh: Boolean): Flow<Resource<Album>> = flow {
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))
         )

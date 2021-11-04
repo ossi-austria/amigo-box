@@ -1,6 +1,5 @@
 package org.ossiaustria.lib.domain.services
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.merge
 import org.ossiaustria.lib.domain.common.Resource
@@ -20,8 +19,7 @@ class TimelineServiceImpl(
     val multimediaService: MultimediaService,
 ) : TimelineService {
 
-    @ExperimentalCoroutinesApi
-    override fun findWithPersons(
+        override fun findWithPersons(
         senderId: UUID?,
         receiverId: UUID?
     ): Flow<Resource<List<Sendable>>> {
@@ -31,16 +29,14 @@ class TimelineServiceImpl(
         return merge(albumShares, calls, messages)
     }
 
-    @ExperimentalCoroutinesApi
-    override fun findWithSender(senderId: UUID): Flow<Resource<List<Sendable>>> {
+        override fun findWithSender(senderId: UUID): Flow<Resource<List<Sendable>>> {
         val albumShares = albumShareService.findWithSender(senderId)
         val calls = callService.findWithSender(senderId)
         val messages = messageService.findWithSender(senderId)
         return merge(albumShares, calls, messages)
     }
 
-    @ExperimentalCoroutinesApi
-    override fun findWithReceiver(receiverId: UUID): Flow<Resource<List<Sendable>>> {
+        override fun findWithReceiver(receiverId: UUID): Flow<Resource<List<Sendable>>> {
         val albumShares = albumShareService.findWithReceiver(receiverId)
         val calls = callService.findWithReceiver(receiverId)
         val messages = messageService.findWithReceiver(receiverId)

@@ -11,8 +11,6 @@ abstract class NavigationViewModel : ViewModel() {
         this.navigator = navigator
     }
 
-    fun unbind() = onCleared()
-
     override fun onCleared() {
         navigator = null
         super.onCleared()

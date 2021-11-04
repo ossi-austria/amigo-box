@@ -6,7 +6,6 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
@@ -29,7 +28,6 @@ import org.ossiaustria.lib.domain.modules.UserContext
 import org.ossiaustria.lib.domain.repositories.SettingsRepository
 import java.util.*
 
-@ExperimentalCoroutinesApi
 class AuthServiceTest {
 
     @get:Rule

@@ -39,6 +39,8 @@ interface AuthService {
      */
     fun login(email: String, password: String): Flow<Resource<Account>>
 
+    fun logout(): Flow<Resource<Boolean>>
+
     /**
      * Registers a new users on the server with (email, password, fullname).
      *
@@ -99,6 +101,29 @@ class AuthServiceImpl(
         }.catch {
             Timber.e(it, "Could not login")
             emit(Resource.failure(it))
+        }.flowOn(ioDispatcher)
+    }
+
+    override fun logout(): Flow<Resource<Boolean>> {
+        return flow {
+            emit(Resource.loading())
+
+            if (userContext.available()) {
+                loginCleanupService.cleanup()
+                settingsRepository.fcmToken = null
+                settingsRepository.account = null
+                settingsRepository.currentPerson = null
+                settingsRepository.currentPersonId = null
+                settingsRepository.refreshToken = null
+                settingsRepository.accessToken = null
+                userContext.initContext(null, null, null)
+                emit(Resource.success(true))
+            } else {
+                emit(Resource.success(false))
+            }
+        }.catch { e ->
+            Timber.e(e, "Could not refreshAccessToken")
+            emit(Resource.failure(e))
         }.flowOn(ioDispatcher)
     }
 

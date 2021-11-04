@@ -6,7 +6,6 @@ import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.StoreBuilder
 import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -69,8 +68,7 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
     protected abstract suspend fun fetchOne(id: UUID): DOMAIN
     protected abstract suspend fun defaultFetchAll(): List<DOMAIN>
 
-    @ExperimentalCoroutinesApi
-    @FlowPreview
+        @FlowPreview
     protected val singleStore: Store<UUID, DOMAIN> = StoreBuilder.from(
         fetcher = Fetcher.of { key: UUID -> fetchOne(key) },
         sourceOfTruth = SourceOfTruth.of(
@@ -81,16 +79,14 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
         )
     ).build()
 
-    @ExperimentalCoroutinesApi
-    @FlowPreview
+        @FlowPreview
     protected val defaultCollectionStore: Store<String, List<DOMAIN>> = buildCollectionStore(
         fetchApi = ::defaultFetchAll,
         readDao = ::defaultReadAll,
         transform = ::transform
     )
 
-    @ExperimentalCoroutinesApi
-    @FlowPreview
+        @FlowPreview
     protected fun <KEY : Any> buildCollectionStore(
         fetchApi: suspend () -> List<DOMAIN>,
         readDao: () -> Flow<List<WRAPPER>>,

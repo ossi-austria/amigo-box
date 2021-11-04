@@ -5,7 +5,6 @@ import com.jraska.livedata.test
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
@@ -28,7 +27,6 @@ import java.util.*
 import java.util.UUID.randomUUID
 
 @FlowPreview
-@ExperimentalCoroutinesApi
 internal class CallViewModelTest {
 
     private lateinit var subject: CallViewModel

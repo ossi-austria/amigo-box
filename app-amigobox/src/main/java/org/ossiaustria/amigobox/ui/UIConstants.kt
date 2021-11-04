@@ -5,6 +5,12 @@ import androidx.compose.ui.unit.sp
 
 class UIConstants {
 
+    object Defaults {
+        val OUTER_PADDING = 40.dp
+        val INNER_PADDING = 16.dp
+        val BOX_WIDTH = 450.dp
+    }
+
     object ListCard {
 
         val AVATAR_IMAGE_HEIGHT = 200.dp

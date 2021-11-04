@@ -52,7 +52,7 @@ class ContactsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-        setContent { ContactsScreen(viewModel) }
+        setContent { ContactsFragmentScreen(viewModel) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,22 +62,21 @@ class ContactsFragment : Fragment() {
 }
 
 @Composable
-fun ContactsScreen(viewModel: ContactsViewModel) {
+fun ContactsFragmentScreen(viewModel: ContactsViewModel) {
     AmigoThemeLight {
         val persons by viewModel.persons.observeAsState(emptyList())
         Surface(color = MaterialTheme.colors.background) {
-            ContactsFragmentComposable(
+            ContactsFragmentContent(
                 persons,
                 viewModel::backToHome,
                 viewModel::toContact
             )
         }
     }
-
 }
 
 @Composable
-fun ContactsFragmentComposable(
+fun ContactsFragmentContent(
     persons: List<Person>,
     backToHome: () -> Unit,
     toContact: (Person) -> Unit
@@ -223,8 +222,8 @@ fun ContactsFragmentComposable(
 
 @Preview
 @Composable
-fun ContactsFragmentComposablePreview() {
-    ContactsFragmentComposable(
+fun ContactsFragmentContentPreview() {
+    ContactsFragmentContent(
         ContactsSourceMockData.listOfPeopleWithImages(),
         { },
         { },

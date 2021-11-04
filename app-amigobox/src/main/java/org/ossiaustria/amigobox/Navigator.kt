@@ -33,17 +33,11 @@ class Navigator() {
         navController.navigate(R.id.timelineFragment)
     }
 
-
-
     fun toJitsiCall(url: String, token: String) {
         activity?.startActivity(Intent(activity, AmigoSingleJitsiActivity::class.java).apply {
             putExtra(PARAM_JITSI_URL, url)
             putExtra(PARAM_JITSI_TOKEN, token)
         })
-    }
-
-    fun toLogin() {
-        navController.navigate(R.id.loginFragment)
     }
 
     fun toPersonDetail(person: Person) {
