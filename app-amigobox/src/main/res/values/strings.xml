@@ -42,5 +42,11 @@
     <string name="next_scroll_navigation_btn">Nächste Seite</string>
     <string name="contacts_headline">Kontaktliste</string>
     <string name="contacts_usage_description">Tippe auf eine Person um weitere Funktionen zu sehen</string>
+    <string name="calling_text">Wird angerufen…</string>
+    <string name="wants_to_talk_to_you_text">möchte mit dir reden</string>
+    <string name="tap_to">Tippen um</string>
+    <string name="end_the_call">Gespräch zu beenden</string>
+    <string name="accept_the_call">Anruf zu annehmen</string>
+    <string name="decline_the_call">Anruf zu ablehnen</string>
 
 </resources>

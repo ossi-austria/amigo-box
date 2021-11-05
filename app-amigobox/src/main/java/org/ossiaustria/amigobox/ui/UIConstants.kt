@@ -7,7 +7,7 @@ class UIConstants {
 
     object Defaults {
         val OUTER_PADDING = 40.dp
-        val INNER_PADDING = 16.dp
+        val INNER_PADDING = 8.dp
         val BOX_WIDTH = 450.dp
     }
 
@@ -44,7 +44,7 @@ class UIConstants {
     object HomeButtonRow {
         val END_PADDING = 40.dp
         val TOP_PADDING = 16.dp
-        val HEIGHT = 80.dp
+        val HEIGHT = 88.dp
     }
 
     object NavigationButtonRow {
@@ -120,6 +120,13 @@ class UIConstants {
         val ROW_HEIGHT = 40.dp
         val IMAGE_SIZE = 32.dp
         val IMAGE_PADDING = 4.dp
+    }
+
+    object CallFragmentConstants {
+        val MIDDLE_ROW_HEIGHT = 350.dp
+        val BOTTOM_ROW_HEIGHT = 180.dp
+        val COLUMN_WIDTH = 400.dp
+        val COLUMN_START_PADDING = 160.dp
     }
 
 }

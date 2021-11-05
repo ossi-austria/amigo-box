@@ -31,9 +31,11 @@ val LightColors = lightColors(
     surface = white,
     onPrimary = textColor,
     secondary = darkBlue,
+    secondaryVariant = darkBlueVariance,
     onSecondary = white,
     background = lightGrey,
     onBackground = textColor,
+    error = redVariance
 )
 val DarkColors = darkColors(
     primary = orange,
