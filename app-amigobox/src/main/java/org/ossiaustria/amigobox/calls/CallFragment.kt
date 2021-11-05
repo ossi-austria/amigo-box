@@ -103,6 +103,7 @@ class CallFragment : Fragment() {
                             onAccept = callViewModel::accept,
                             onCancel = callViewModel::cancel,
                             onDeny = callViewModel::deny,
+                            onFinnish = callViewModel::finish,
                         )
                     }
                 } else {
@@ -137,6 +138,7 @@ fun CallFragmentComposable(
     onAccept: () -> Unit,
     onCancel: () -> Unit,
     onDeny: () -> Unit,
+    onFinnish: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -220,11 +222,9 @@ fun CallFragmentComposable(
                         IconButtonSmall(
                             resourceId = R.drawable.ic_decline_call,
                             backgroundColor = MaterialTheme.colors.onSecondary,
-                            fillColor = MaterialTheme.colors.error
+                            fillColor = MaterialTheme.colors.error,
+                            onClick = onFinnish
                         )
-                        {
-                            onCancel
-                        }
                         Text(
                             text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.end_the_call),
                             style = MaterialTheme.typography.h4,
@@ -243,10 +243,7 @@ fun CallFragmentComposable(
                                 resourceId = R.drawable.ic_decline_call,
                                 backgroundColor = MaterialTheme.colors.onSecondary,
                                 fillColor = MaterialTheme.colors.error
-                            )
-                            {
-                                onCancel
-                            }
+                            ) { onCancel() }
                             Text(
                                 text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.end_the_call),
                                 style = MaterialTheme.typography.h4,
@@ -260,9 +257,7 @@ fun CallFragmentComposable(
                             resourceId = R.drawable.ic_phone_call,
                             backgroundColor = MaterialTheme.colors.onSecondary,
                             fillColor = MaterialTheme.colors.secondary
-                        ) {
-                            onAccept
-                        }
+                        ) { onAccept() }
                         Text(
                             text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.accept_the_call),
                             style = MaterialTheme.typography.h4,
@@ -273,9 +268,7 @@ fun CallFragmentComposable(
                             resourceId = R.drawable.ic_decline_call,
                             backgroundColor = MaterialTheme.colors.onSecondary,
                             fillColor = MaterialTheme.colors.error
-                        ) {
-                            onDeny
-                        }
+                        ) { onDeny() }
                         Text(
                             text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.decline_the_call),
                             style = MaterialTheme.typography.h4,
@@ -304,7 +297,7 @@ fun CallFragmentComposablePreview_outgoing() {
     )
     val callViewState = CallViewState.Calling(call, true)
     AmigoThemeLight {
-        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {})
+        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}) {}
     }
 }
 
@@ -320,7 +313,7 @@ fun CallFragmentComposablePreview_incoming() {
     )
     val callViewState = CallViewState.Calling(call, false)
     AmigoThemeLight {
-        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {})
+        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}) {}
     }
 }
 
@@ -336,6 +329,6 @@ fun CallFragmentComposablePreview_started() {
     )
     val callViewState = CallViewState.Started(call, false)
     AmigoThemeLight {
-        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {})
+        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}) {}
     }
 }
