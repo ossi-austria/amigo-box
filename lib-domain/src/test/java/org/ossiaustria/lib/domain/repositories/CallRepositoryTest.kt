@@ -59,7 +59,7 @@ internal class CallRepositoryTest : AbstractRepositoryTest<CallEntity, Call>() {
                     senderId = personId,
                     receiverId = personId,
                     callType = CallType.VIDEO,
-                    callState = CallState.CREATED,
+                    callState = CallState.CALLING,
                     startedAt = null,
                     finishedAt = Date()
                 ),
@@ -68,7 +68,7 @@ internal class CallRepositoryTest : AbstractRepositoryTest<CallEntity, Call>() {
                     senderId = personId,
                     receiverId = personId,
                     callType = CallType.VIDEO,
-                    callState = CallState.CREATED,
+                    callState = CallState.CALLING,
                     startedAt = null,
                     finishedAt = Date()
                 ),
@@ -82,7 +82,7 @@ internal class CallRepositoryTest : AbstractRepositoryTest<CallEntity, Call>() {
                     senderId = personId,
                     receiverId = personId,
                     callType = CallType.VIDEO,
-                    callState = CallState.CREATED,
+                    callState = CallState.CALLING,
                     startedAt = Date(),
                     finishedAt = Date(),
                     createdAt = Date()

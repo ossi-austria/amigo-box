@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import org.ossiaustria.amigobox.BoxViewModel
 import org.ossiaustria.lib.domain.models.Call
+import org.ossiaustria.lib.domain.services.CallEvent
 import org.ossiaustria.lib.domain.services.IncomingEventCallback
 import org.ossiaustria.lib.domain.services.IncomingEventCallbackService
 import timber.log.Timber
@@ -19,6 +20,9 @@ class IncomingEventsViewModel(
     private val _notifiedCall: MutableLiveData<Call> = MutableLiveData()
     val notifiedCall: LiveData<Call> = _notifiedCall
 
+    private val _notifiedCallEvent: MutableLiveData<CallEvent> = MutableLiveData()
+    val notifiedCallEvent: LiveData<CallEvent> = _notifiedCallEvent
+
     fun startListening() = viewModelScope.launch {
         incomingEventCallbackService.observe(object : IncomingEventCallback {
             override fun onSuccess(call: Call) {
@@ -27,6 +31,11 @@ class IncomingEventsViewModel(
 
             override fun onError(e: Throwable?) {
                 Timber.e(e)
+            }
+
+            override fun onJitsiCallEvent(callEvent: CallEvent) {
+                Timber.i("onJitsiCallEvent: $callEvent")
+                _notifiedCallEvent.postValue(callEvent)
             }
         })
     }

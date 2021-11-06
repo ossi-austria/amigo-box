@@ -11,11 +11,11 @@ import org.ossiaustria.lib.domain.repositories.CallRepository
 import java.util.*
 
 interface CallService : SendableService<Call> {
-    fun accept(call: Call): Flow<Resource<Call>>
-    fun deny(call: Call): Flow<Resource<Call>>
-    fun cancel(call: Call): Flow<Resource<Call>>
-    fun finish(call: Call): Flow<Resource<Call>>
-    fun createCall(person: Person, callType: CallType): Flow<Resource<Call>>
+    suspend fun accept(call: Call): Resource<Call>
+    suspend fun deny(call: Call): Resource<Call>
+    suspend fun cancel(call: Call): Resource<Call>
+    suspend fun finish(call: Call): Resource<Call>
+    suspend fun createCall(person: Person, callType: CallType): Resource<Call>
 }
 
 class CallServiceImpl(
@@ -26,25 +26,35 @@ class CallServiceImpl(
 
     private val wrapper = SendableServiceWrapper<Call>(ioDispatcher)
 
-    override fun createCall(person: Person, callType: CallType): Flow<Resource<Call>> =
-        wrapper.getOne {
-            callApi.createCall(callType.toString(), person.id)
+    override suspend fun createCall(person: Person, callType: CallType): Resource<Call> =
+        try {
+            Resource.success(callApi.createCall(callType.toString(), person.id))
+        } catch (e: Exception) {
+            Resource.failure(e)
         }
 
-    override fun accept(call: Call): Flow<Resource<Call>> = wrapper.getOne {
-        callApi.acceptCall(call.id)
+    override suspend fun accept(call: Call): Resource<Call> = try {
+        Resource.success(callApi.acceptCall(call.id))
+    } catch (e: Exception) {
+        Resource.failure(e)
     }
 
-    override fun deny(call: Call): Flow<Resource<Call>> = wrapper.getOne {
-        callApi.denyCall(call.id)
+    override suspend fun deny(call: Call): Resource<Call> = try {
+        Resource.success(callApi.denyCall(call.id))
+    } catch (e: Exception) {
+        Resource.failure(e)
     }
 
-    override fun cancel(call: Call): Flow<Resource<Call>> = wrapper.getOne {
-        callApi.cancelCall(call.id)
+    override suspend fun cancel(call: Call): Resource<Call> = try {
+        Resource.success(callApi.cancelCall(call.id))
+    } catch (e: Exception) {
+        Resource.failure(e)
     }
 
-    override fun finish(call: Call): Flow<Resource<Call>> = wrapper.getOne {
-        callApi.finishCall(call.id)
+    override suspend fun finish(call: Call): Resource<Call> = try {
+        Resource.success(callApi.finishCall(call.id))
+    } catch (e: Exception) {
+        Resource.failure(e)
     }
 
     override fun getOne(id: UUID): Flow<Resource<Call>> =

@@ -2,11 +2,10 @@ package org.ossiaustria.lib.domain.services
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Call
-import org.ossiaustria.lib.domain.modules.UserContext
 import org.ossiaustria.lib.domain.repositories.CallRepository
 import timber.log.Timber
 import java.util.*
@@ -49,14 +48,19 @@ data class AmigoCloudEvent(
     }
 }
 
+enum class CallEvent {
+    PARTICIPANT_JOINED,
+    FINISHED,
+}
+
 interface IncomingEventCallback {
     fun onSuccess(call: Call)
     fun onError(e: Throwable?)
+    fun onJitsiCallEvent(callEvent: CallEvent)
 }
 
 class IncomingEventCallbackServiceImpl(
     ioDispatcher: CoroutineDispatcher,
-    private val userContext: UserContext,
     private val callRepository: CallRepository
 ) : IncomingEventCallbackService {
 
@@ -69,18 +73,22 @@ class IncomingEventCallbackServiceImpl(
 
     override fun informTerminated() {
         Timber.i("informTerminated")
+        incomingEventCallback?.onJitsiCallEvent(CallEvent.FINISHED)
     }
 
     override fun informJoined() {
         Timber.i("informJoined")
+        incomingEventCallback?.onJitsiCallEvent(CallEvent.PARTICIPANT_JOINED)
     }
 
     override fun informParticipantJoined() {
         Timber.i("informParticipantJoined")
+        incomingEventCallback?.onJitsiCallEvent(CallEvent.PARTICIPANT_JOINED)
     }
 
     override fun informParticipantLeft() {
         Timber.i("informParticipantLeft")
+        incomingEventCallback?.onJitsiCallEvent(CallEvent.FINISHED)
     }
 
     override fun observe(function: IncomingEventCallback) {
@@ -94,7 +102,7 @@ class IncomingEventCallbackServiceImpl(
     override fun handleEvent(cloudEvent: AmigoCloudEvent): Boolean {
         return if (cloudEvent.type == AmigoCloudEventType.CALL && incomingEventCallback != null) {
             scope.launch {
-                callRepository.getCall(cloudEvent.entityId, true).collect {
+                callRepository.getCall(cloudEvent.entityId, true).collectLatest {
                     if (it is Resource.Success) {
                         incomingEventCallback?.onSuccess(it.value)
                     } else if (it is Resource.Failure) {

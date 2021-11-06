@@ -37,10 +37,13 @@ import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
+import org.ossiaustria.amigobox.ui.commons.HomeButtonRow
 import org.ossiaustria.amigobox.ui.commons.IconButtonSmall
+import org.ossiaustria.amigobox.ui.commons.Toasts
 import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.enums.CallState
 import org.ossiaustria.lib.domain.models.enums.CallType
+import org.ossiaustria.lib.domain.services.CallEvent
 import java.util.UUID.randomUUID
 
 class CallFragment : Fragment() {
@@ -67,21 +70,27 @@ class CallFragment : Fragment() {
         incomingEventsViewModel.startListening()
 
         callViewModel.state.observe(viewLifecycleOwner) {
-            if (it.isActive == true) {
+            if (it is CallViewState.Started) {
                 val token = callViewModel.getToken()
                 if (token != null) {
                     navigator.toJitsiCall(it.call.id.toString(), token)
                 } else {
-                    Toast.makeText(context, "Cannot use Call, no token ? ", Toast.LENGTH_SHORT)
-                        .show()
+                    Toasts.showLong(requireContext(), "Cannot use Call, no token ? ")
                 }
-            } else if (it.call.callState == CallState.FINISHED) {
+            } else if (it is CallViewState.Finished) {
+                Toasts.showLong(requireContext(), "BACK!")
                 navigator.back()
             }
         }
 
         incomingEventsViewModel.notifiedCall.observe(viewLifecycleOwner) {
             callViewModel.onObservedCallChanged(it)
+        }
+
+        incomingEventsViewModel.notifiedCallEvent.observe(viewLifecycleOwner) {
+            if (it == CallEvent.FINISHED) {
+                callViewModel.finish()
+            }
         }
     }
 
@@ -103,7 +112,8 @@ class CallFragment : Fragment() {
                             onAccept = callViewModel::accept,
                             onCancel = callViewModel::cancel,
                             onDeny = callViewModel::deny,
-                            onFinnish = callViewModel::finish,
+                            onFinish = callViewModel::finish,
+                            onBack = ::back
                         )
                     }
                 } else {
@@ -112,21 +122,18 @@ class CallFragment : Fragment() {
                         contentAlignment = Alignment.Center
                     ) {
                         when {
-                            partner == null -> {
-                                Text("Person nicht erreichbar.")
-                            }
-                            state is CallViewState.Failure -> {
-                                Text(text = (state as CallViewState.Failure).error.toString())
-                            }
-                            else -> {
-                                Text("Loading..")
-                            }
+                            partner == null -> Text("Person nicht erreichbar.")
+                            state is CallViewState.Failure -> Text(text = (state as CallViewState.Failure).error.toString())
+                            else -> Text("Loading..")
                         }
                     }
                 }
             }
-
         }
+    }
+
+    fun back() {
+        navigator.back()
     }
 }
 
@@ -138,29 +145,20 @@ fun CallFragmentComposable(
     onAccept: () -> Unit,
     onCancel: () -> Unit,
     onDeny: () -> Unit,
-    onFinnish: () -> Unit,
+    onFinish: () -> Unit,
+    onBack: () -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-        Row(
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(UIConstants.HomeButtonRow.HEIGHT)
-                .padding(
-                    end = UIConstants.HomeButtonRow.TOP_PADDING,
-                    top = UIConstants.HomeButtonRow.TOP_PADDING
-                )
-        ) {
+        HomeButtonRow {
             IconButtonSmall(
                 resourceId = R.drawable.ic_help_icon,
                 backgroundColor = MaterialTheme.colors.secondary,
                 fillColor = MaterialTheme.colors.primary
-            )
-            {
+            ) {
                 //TODO:Help screens
             }
         }
@@ -170,7 +168,6 @@ fun CallFragmentComposable(
                 .fillMaxWidth()
                 .height(UIConstants.CallFragmentConstants.MIDDLE_ROW_HEIGHT)
         ) {
-
             ProfileImage(
                 partnerAvatarUrl,
                 contentScale = ContentScale.Crop
@@ -198,8 +195,21 @@ fun CallFragmentComposable(
                     color = MaterialTheme.colors.onPrimary
                 )
                 Text(
-                    if (callViewState.outgoing) stringResource(R.string.calling_text)
-                    else stringResource(R.string.wants_to_talk_to_you_text),
+                    if (callViewState is CallViewState.Calling) {
+                        if (callViewState.outgoing) stringResource(R.string.calling_text)
+                        else stringResource(R.string.wants_to_talk_to_you_text)
+                    } else if (callViewState is CallViewState.Finished) {
+                        stringResource(R.string.call_finished)
+                    } else if (callViewState is CallViewState.Cancelled) {
+                        stringResource(R.string.call_cancelled)
+                    } else if (callViewState is CallViewState.Timeout) {
+                        stringResource(R.string.call_timeout)
+                    } else if (callViewState is CallViewState.Failure) {
+                        callViewState.error?.toString() ?: "Failure"
+                    } else {
+                        ""
+                    },
+
                     style = MaterialTheme.typography.body1,
                     color = MaterialTheme.colors.onPrimary
                 )
@@ -213,32 +223,27 @@ fun CallFragmentComposable(
                         start = UIConstants.CallFragmentConstants.COLUMN_START_PADDING
                     )
             ) {
-                if (callViewState.isActive == true) {
-                    //finnish the call
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    if (callViewState is CallViewState.Started) {
+                        //finish the call
                         IconButtonSmall(
                             resourceId = R.drawable.ic_decline_call,
                             backgroundColor = MaterialTheme.colors.onSecondary,
                             fillColor = MaterialTheme.colors.error,
-                            onClick = onFinnish
-                        )
+                        ) { onFinish() }
                         Text(
                             text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.end_the_call),
                             style = MaterialTheme.typography.h4,
                             color = MaterialTheme.colors.onPrimary,
                             textAlign = TextAlign.Center
                         )
-                    }
-                } else {
-                    if (callViewState.outgoing) {
-                        //cancle the call
-                        Column(
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
+                    } else if (callViewState is CallViewState.Calling) {
+                        if (callViewState.outgoing) {
+                            //cancel the call
+
                             IconButtonSmall(
                                 resourceId = R.drawable.ic_decline_call,
                                 backgroundColor = MaterialTheme.colors.onSecondary,
@@ -250,39 +255,51 @@ fun CallFragmentComposable(
                                 color = MaterialTheme.colors.onPrimary,
                                 textAlign = TextAlign.Center
                             )
+
+                        } else {
+                            //accept or deny the incoming call
+                            IconButtonSmall(
+                                resourceId = R.drawable.ic_phone_call,
+                                backgroundColor = MaterialTheme.colors.onSecondary,
+                                fillColor = MaterialTheme.colors.secondary
+                            ) { onAccept() }
+                            Text(
+                                text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.accept_the_call),
+                                style = MaterialTheme.typography.h4,
+                                color = MaterialTheme.colors.onPrimary,
+                                textAlign = TextAlign.Center
+                            )
+                            IconButtonSmall(
+                                resourceId = R.drawable.ic_decline_call,
+                                backgroundColor = MaterialTheme.colors.onSecondary,
+                                fillColor = MaterialTheme.colors.error
+                            ) { onDeny() }
+                            Text(
+                                text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.decline_the_call),
+                                style = MaterialTheme.typography.h4,
+                                color = MaterialTheme.colors.onPrimary,
+                                textAlign = TextAlign.Center
+                            )
                         }
                     } else {
-                        //accept or deny the incoming call
+
                         IconButtonSmall(
-                            resourceId = R.drawable.ic_phone_call,
+                            resourceId = R.drawable.ic_home_icon,
                             backgroundColor = MaterialTheme.colors.onSecondary,
-                            fillColor = MaterialTheme.colors.secondary
-                        ) { onAccept() }
+                            fillColor = MaterialTheme.colors.primary
+                        ) { onBack() }
                         Text(
-                            text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.accept_the_call),
+                            text = stringResource(R.string.back_home_description),
                             style = MaterialTheme.typography.h4,
                             color = MaterialTheme.colors.onPrimary,
                             textAlign = TextAlign.Center
                         )
-                        IconButtonSmall(
-                            resourceId = R.drawable.ic_decline_call,
-                            backgroundColor = MaterialTheme.colors.onSecondary,
-                            fillColor = MaterialTheme.colors.error
-                        ) { onDeny() }
-                        Text(
-                            text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.decline_the_call),
-                            style = MaterialTheme.typography.h4,
-                            color = MaterialTheme.colors.onPrimary,
-                            textAlign = TextAlign.Center
-                        )
+
                     }
                 }
             }
-
         }
-
     }
-
 }
 
 @Preview(showBackground = true)
@@ -297,7 +314,7 @@ fun CallFragmentComposablePreview_outgoing() {
     )
     val callViewState = CallViewState.Calling(call, true)
     AmigoThemeLight {
-        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}) {}
+        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}, {}) {}
     }
 }
 
@@ -313,7 +330,7 @@ fun CallFragmentComposablePreview_incoming() {
     )
     val callViewState = CallViewState.Calling(call, false)
     AmigoThemeLight {
-        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}) {}
+        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}, {}) {}
     }
 }
 
@@ -329,6 +346,6 @@ fun CallFragmentComposablePreview_started() {
     )
     val callViewState = CallViewState.Started(call, false)
     AmigoThemeLight {
-        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}) {}
+        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}, {}) {}
     }
 }
