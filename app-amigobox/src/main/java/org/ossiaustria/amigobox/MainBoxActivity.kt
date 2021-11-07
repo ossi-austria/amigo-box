@@ -71,7 +71,6 @@ class MainBoxActivity : AppCompatActivity() {
             }
         }
 
-        incomingEventsViewModel.startListening()
         incomingEventsViewModel.notifiedCall.observe(this) {
             navigator.toCallFragment(it)
         }
@@ -135,8 +134,5 @@ class MainBoxActivity : AppCompatActivity() {
         handleNfcIntent(intent)
     }
 
-    private fun nfcAction() {
-        navigator.toAlbums()
-    }
 }
 

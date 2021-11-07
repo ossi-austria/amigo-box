@@ -55,12 +55,17 @@ class ImageGalleryFragment : Fragment() {
         val album = Navigator.getAlbum(requireArguments())
 
 
+
         setContent {
-            GalleryScreen(
-                album,
-                viewModel,
-                ::toAlbums,
-            )
+            if (album != null) {
+                GalleryScreen(
+                    album,
+                    viewModel,
+                    ::toAlbums,
+                )
+            } else {
+                Text("Album not provided!")
+            }
         }
     }
 

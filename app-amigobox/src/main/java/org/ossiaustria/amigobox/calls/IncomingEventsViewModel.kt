@@ -23,21 +23,23 @@ class IncomingEventsViewModel(
     private val _notifiedCallEvent: MutableLiveData<CallEvent> = MutableLiveData()
     val notifiedCallEvent: LiveData<CallEvent> = _notifiedCallEvent
 
-    fun startListening() = viewModelScope.launch {
-        incomingEventCallbackService.observe(object : IncomingEventCallback {
-            override fun onSuccess(call: Call) {
-                _notifiedCall.postValue(call)
-            }
+    init {
+        viewModelScope.launch {
+            incomingEventCallbackService.observe(object : IncomingEventCallback {
+                override fun onSuccess(call: Call) {
+                    _notifiedCall.postValue(call)
+                }
 
-            override fun onError(e: Throwable?) {
-                Timber.e(e)
-            }
+                override fun onError(e: Throwable?) {
+                    Timber.e(e)
+                }
 
-            override fun onJitsiCallEvent(callEvent: CallEvent) {
-                Timber.i("onJitsiCallEvent: $callEvent")
-                _notifiedCallEvent.postValue(callEvent)
-            }
-        })
+                override fun onJitsiCallEvent(callEvent: CallEvent) {
+                    Timber.i("onJitsiCallEvent: $callEvent")
+                    _notifiedCallEvent.postValue(callEvent)
+                }
+            })
+        }
     }
 
     override fun onCleared() {

@@ -31,6 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
@@ -52,6 +54,7 @@ class CallFragment : Fragment() {
     private val incomingEventsViewModel by viewModel<IncomingEventsViewModel>()
 
     val navigator: Navigator by inject()
+    val phoneSoundManager: PhoneSoundManager by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,16 +64,23 @@ class CallFragment : Fragment() {
 
         if (call != null) {
             callViewModel.prepareIncomingCall(call)
+            Navigator.setCall(requireArguments(), null)
         } else if (person != null) {
             callViewModel.createNewOutgoingCall(person)
+            Navigator.setPerson(requireArguments(), null)
         } else {
             Toast.makeText(context, "Call or Person are both null!", Toast.LENGTH_LONG).show()
         }
 
-        incomingEventsViewModel.startListening()
-
         callViewModel.state.observe(viewLifecycleOwner) {
-            if (it is CallViewState.Started) {
+            if (it is CallViewState.Calling) {
+                if (it.outgoing) {
+                    phoneSoundManager.playOutgoing()
+                } else {
+                    phoneSoundManager.playIncoming()
+                }
+            } else if (it is CallViewState.Started) {
+                phoneSoundManager.stopAll()
                 val token = callViewModel.getToken()
                 if (token != null) {
                     navigator.toJitsiCall(it.call.id.toString(), token)
@@ -78,8 +88,11 @@ class CallFragment : Fragment() {
                     Toasts.showLong(requireContext(), "Cannot use Call, no token ? ")
                 }
             } else if (it is CallViewState.Finished) {
+                phoneSoundManager.stopAll()
                 Toasts.showLong(requireContext(), "BACK!")
                 navigator.back()
+            } else {
+                phoneSoundManager.stopAll()
             }
         }
 
@@ -91,6 +104,10 @@ class CallFragment : Fragment() {
             if (it == CallEvent.FINISHED) {
                 callViewModel.finish()
             }
+        }
+
+        GlobalScope.launch {
+            phoneSoundManager.prepare(requireContext())
         }
     }
 
@@ -134,6 +151,11 @@ class CallFragment : Fragment() {
 
     fun back() {
         navigator.back()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        phoneSoundManager.release()
     }
 }
 

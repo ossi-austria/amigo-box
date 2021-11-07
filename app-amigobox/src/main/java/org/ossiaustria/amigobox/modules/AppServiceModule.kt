@@ -1,6 +1,7 @@
 package org.ossiaustria.amigobox.modules
 
 import org.koin.dsl.module
+import org.ossiaustria.amigobox.calls.PhoneSoundManager
 import org.ossiaustria.amigobox.ui.loading.LoginCleanupDaoService
 import org.ossiaustria.amigobox.ui.loading.SynchronisationService
 import org.ossiaustria.lib.domain.services.LoginCleanupService
@@ -19,4 +20,6 @@ val appServiceModule = module {
             get(), get(), get(), get(),
         )
     }
+
+    factory { PhoneSoundManager() }
 }

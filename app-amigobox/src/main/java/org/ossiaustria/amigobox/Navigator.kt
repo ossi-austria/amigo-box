@@ -85,15 +85,15 @@ class Navigator() {
         const val PARAM_CALL = "CALL"
 
         fun getPerson(bundle: Bundle) = bundle.getSerializable(PARAM_PERSON) as Person?
-        fun setPerson(bundle: Bundle, person: Person) =
+        fun setPerson(bundle: Bundle, person: Person?) =
             bundle.putSerializable(PARAM_PERSON, person)
 
-        fun getAlbum(bundle: Bundle) = bundle.getSerializable(PARAM_ALBUM) as Album
-        fun setAlbum(bundle: Bundle, album: Album) =
+        fun getAlbum(bundle: Bundle) = bundle.getSerializable(PARAM_ALBUM) as Album?
+        fun setAlbum(bundle: Bundle, album: Album?) =
             bundle.putSerializable(PARAM_ALBUM, album)
 
         fun getCall(bundle: Bundle) = bundle.getSerializable(PARAM_CALL) as Call?
-        fun setCall(bundle: Bundle, call: Call) =
+        fun setCall(bundle: Bundle, call: Call?) =
             bundle.putSerializable(PARAM_CALL, call)
 
     }
