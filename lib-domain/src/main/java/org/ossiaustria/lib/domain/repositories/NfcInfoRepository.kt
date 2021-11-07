@@ -17,10 +17,10 @@ import java.util.*
 interface NfcInfoRepository {
 
     @FlowPreview
-        fun getAllNfcTags(refresh: Boolean = false): Flow<Resource<List<NfcInfo>>>
+    fun getAllNfcTags(refresh: Boolean = false): Flow<Resource<List<NfcInfo>>>
 
     @FlowPreview
-        fun getNfcTag(id: UUID, refresh: Boolean = false): Flow<Resource<NfcInfo>>
+    fun getNfcTag(id: UUID, refresh: Boolean = false): Flow<Resource<NfcInfo>>
 }
 
 internal class NfcInfoRepositoryImpl(
@@ -28,7 +28,10 @@ internal class NfcInfoRepositoryImpl(
     private val nfcInfoDao: NfcInfoDao,
     dispatcherProvider: DispatcherProvider
 ) : NfcInfoRepository,
-    SingleAndCollectionStore<NfcInfoEntity, NfcInfoEntity, NfcInfo>(nfcInfoDao, dispatcherProvider) {
+    SingleAndCollectionStore<NfcInfoEntity, NfcInfoEntity, NfcInfo>(
+        nfcInfoDao,
+        dispatcherProvider
+    ) {
 
     override suspend fun fetchOne(id: UUID): NfcInfo = nfcInfoApi.getOne(id)
     override suspend fun defaultFetchAll(): List<NfcInfo> = nfcInfoApi.getAllAccessibleNfcs()
@@ -49,14 +52,14 @@ internal class NfcInfoRepositoryImpl(
     override fun defaultReadAll(): Flow<List<NfcInfoEntity>> = nfcInfoDao.findAll()
 
     @FlowPreview
-        override fun getAllNfcTags(refresh: Boolean): Flow<Resource<List<NfcInfo>>> = flow {
+    override fun getAllNfcTags(refresh: Boolean): Flow<Resource<List<NfcInfo>>> = flow {
         listTransform(
             defaultCollectionStore.stream(newRequest(key = "all", refresh = refresh))
         )
     }
 
     @FlowPreview
-        override fun getNfcTag(id: UUID, refresh: Boolean): Flow<Resource<NfcInfo>> = flow {
+    override fun getNfcTag(id: UUID, refresh: Boolean): Flow<Resource<NfcInfo>> = flow {
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))
         )
