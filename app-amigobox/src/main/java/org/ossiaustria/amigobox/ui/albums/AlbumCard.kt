@@ -19,7 +19,7 @@ import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
 import org.ossiaustria.lib.domain.models.Album
 
 @Composable
-fun LoadAlbumCardContent(album: Album, previewImageUrl: String) {
+fun LoadAlbumCardContent(album: Album, previewImageUrl: String?) {
     AlbumCardThumbnail(previewImageUrl)
     AlbumCardTitle(album)
     Image(
@@ -51,7 +51,7 @@ fun AlbumCardTitle(album: Album) {
 }
 
 @Composable
-fun AlbumCardThumbnail(previewImageUrl: String) {
+fun AlbumCardThumbnail(previewImageUrl: String?) {
     Row(
         modifier = Modifier
             .height(ListCard.AVATAR_IMAGE_HEIGHT)

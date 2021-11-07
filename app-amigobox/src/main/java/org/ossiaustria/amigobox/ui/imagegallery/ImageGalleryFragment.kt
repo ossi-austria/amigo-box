@@ -1,5 +1,6 @@
 package org.ossiaustria.amigobox.ui.imagegallery
 
+import NotFoundImage
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,7 +39,7 @@ import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.albums.album1
 import org.ossiaustria.amigobox.ui.commons.NavigationButton
 import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
-import org.ossiaustria.lib.domain.models.Album
+import org.ossiaustria.lib.domain.models.Multimedia
 import timber.log.Timber
 
 class ImageGalleryFragment : Fragment() {
@@ -54,12 +55,10 @@ class ImageGalleryFragment : Fragment() {
     ): View = ComposeView(requireContext()).apply {
         val album = Navigator.getAlbum(requireArguments())
 
-
-
         setContent {
             if (album != null) {
                 GalleryScreen(
-                    album,
+                    album.itemsWithMedia,
                     viewModel,
                     ::toAlbums,
                 )
@@ -85,7 +84,7 @@ class ImageGalleryFragment : Fragment() {
 
 @Composable
 fun GalleryScreen(
-    album: Album,
+    items: List<Multimedia>,
     viewModel: ImageGalleryViewModel,
     toAlbums: () -> Unit,
 ) {
@@ -97,7 +96,7 @@ fun GalleryScreen(
 
     MaterialTheme {
         GalleryFragmentComposable(
-            album,
+            items,
             toAlbums,
             navigationState,
             currentIndex,
@@ -115,7 +114,7 @@ fun GalleryScreen(
 
 @Composable
 fun GalleryFragmentComposable(
-    album: Album,
+    items: List<Multimedia>,
     toAlbums: () -> Unit,
     navigationState: GalleryNavState?,
     currentIndex: Int?,
@@ -129,7 +128,7 @@ fun GalleryFragmentComposable(
     setNavigationState: (GalleryNavState) -> Unit
 ) {
     ImageBox(
-        album,
+        items,
         cancelTimer,
         currentIndex,
         toAlbums,
@@ -146,7 +145,7 @@ fun GalleryFragmentComposable(
         navigationState,
         setNavigationState,
         pauseTimer,
-        album,
+        items,
         time
     )
 }
@@ -161,7 +160,7 @@ fun GalleryFragmentComposable(
 fun PreviewGalleryFragmentComposable() {
 
     GalleryFragmentComposable(
-        album1,
+        album1.itemsWithMedia,
         toAlbums = {},
         navigationState = GalleryNavState.STOP,
         currentIndex = 1,
@@ -178,7 +177,7 @@ fun PreviewGalleryFragmentComposable() {
 
 @Composable
 fun ImageBox(
-    album: Album,
+    items: List<Multimedia>,
     cancelTimer: () -> Unit,
     currentIndex: Int?,
     toAlbums: () -> Unit,
@@ -195,24 +194,29 @@ fun ImageBox(
             modifier = Modifier.fillMaxSize(),
             state = listState
         ) {
-            items(items = album.items, itemContent = { item ->
+            items(items = items, itemContent = { item ->
 
                 Column(
                     modifier = Modifier.fillParentMaxWidth()
                 ) {
-                    NetworkImage(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clickable(onClick = {
-                            }),
+                    val mediaUrl = item.absoluteMediaUrl()
+                    if (mediaUrl != null) {
 
-                        url = item.filename,
-                        contentScale = ContentScale.Fit
-                    )
+                        NetworkImage(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clickable(onClick = {}),
+
+                            url = mediaUrl,
+                            contentScale = ContentScale.Fit
+                        )
+                    } else {
+                        NotFoundImage()
+                    }
                 }
             })
             coroutineScope.launch {
-                goToImage(cancelTimer, listState, currentIndex, album, toAlbums)
+                goToImage(cancelTimer, listState, currentIndex, items, toAlbums)
             }
             handleImages(setGalleryIndex, setAutoState, time, currentIndex, autoState)
         }
@@ -228,7 +232,7 @@ fun NavButtonsBox(
     navigationState: GalleryNavState?,
     setNavigationState: (GalleryNavState) -> Unit,
     pauseTimer: () -> Unit,
-    album: Album,
+    items: List<Multimedia>,
     time: String
 ) {
     Box(
@@ -242,7 +246,7 @@ fun NavButtonsBox(
             navigationState,
             setNavigationState,
             pauseTimer,
-            album
+            items,
         )
         TimerTextRow(time)
     }
@@ -257,7 +261,7 @@ fun ButtonsRow(
     navigationState: GalleryNavState?,
     setNavigationState: (GalleryNavState) -> Unit,
     pauseTimer: () -> Unit,
-    album: Album
+    items: List<Multimedia>,
 ) {
     Row(
         modifier = Modifier
@@ -302,7 +306,7 @@ fun ButtonsRow(
                     setGalleryIndex,
                     startTimer,
                     currentIndex,
-                    album,
+                    items,
                     navigationState
                 )
             },
@@ -332,12 +336,12 @@ suspend fun goToImage(
     cancelTimer: () -> Unit,
     listState: LazyListState,
     index: Int?,
-    album: Album,
+    items: List<Multimedia>,
     toAlbums: () -> Unit
 ) {
 
     if (index != null) {
-        if ((index == album.items.size)) {
+        if ((index == items.size)) {
             cancelTimer()
             toAlbums()
         }
@@ -357,11 +361,11 @@ fun nextPressed(
     setGalleryIndex: (Int) -> Unit,
     startTimer: () -> Unit,
     currentIndex: Int?,
-    album: Album,
+    items: List<Multimedia>,
     navigationState: GalleryNavState?
 ) {
     Timber.w("next pressed!!")
-    if (currentIndex != null && currentIndex < album.items.size) {
+    if (currentIndex != null && currentIndex < items.size) {
         //Timber.w("Ablbum size: " + album.items.size.toString())
         cancelTimer()
         setGalleryIndex(currentIndex + 1)

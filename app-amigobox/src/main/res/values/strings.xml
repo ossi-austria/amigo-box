@@ -35,7 +35,7 @@
     <string name="next_image_button_description">Nächstes Bild</string>
     <string name="start_diashow_button_description">Diashow starten</string>
     <string name="stop_diashow_button_description">Diashow anhalten</string>
-    <string name="help_button_description">Brauchst su Hilfe?</string>
+    <string name="help_button_description">Brauchst du Hilfe?</string>
     <string name="albums_headline">Fotos und Alben</string>
     <string name="album_usage_description">Tippe auf ein Bild, um das Album zu öffnen</string>
     <string name="previous_scroll_navigation_btn">Vorherige Seite</string>

@@ -77,8 +77,7 @@ class MainBoxActivity : AppCompatActivity() {
 
         nfcViewModel.state.observe(this) { resource ->
             if (resource.isSuccess) {
-                val currentState = resource.valueOrNull()
-                when (currentState) {
+                when (val currentState = resource.valueOrNull()) {
                     is NfcViewModelState.OpenAlbum -> nfcViewModel.openAlbum(
                         currentState.album,
                         navigator

@@ -6,11 +6,11 @@ import org.ossiaustria.amigobox.R
 
 class PhoneSoundManager {
 
-    private var callingSound: MediaPlayer? = null
+    private var outgoingSound: MediaPlayer? = null
     private var incomingSound: MediaPlayer? = null
 
     fun prepare(context: Context) {
-        callingSound = MediaPlayer.create(context, R.raw.outgoing).apply {
+        outgoingSound = MediaPlayer.create(context, R.raw.outgoing).apply {
             setVolume(OUTGOING_SOUND_VOLUME, OUTGOING_SOUND_VOLUME)
         }
         incomingSound = MediaPlayer.create(context, R.raw.incoming).apply {
@@ -20,26 +20,28 @@ class PhoneSoundManager {
 
     fun playOutgoing() {
         incomingSound?.stop()
-        callingSound?.isLooping = true
-        callingSound?.start()
+        outgoingSound?.isLooping = true
+        outgoingSound?.start()
     }
 
     fun playIncoming() {
-        callingSound?.stop()
+        outgoingSound?.stop()
         incomingSound?.isLooping = true
         incomingSound?.start()
     }
 
     fun release() {
-        callingSound?.release()
+        outgoingSound?.stop()
+        incomingSound?.stop()
+        outgoingSound?.release()
         incomingSound?.release()
-        callingSound = null
+        outgoingSound = null
         incomingSound = null
     }
 
     fun stopAll() {
         incomingSound?.stop()
-        callingSound?.stop()
+        outgoingSound?.stop()
     }
 
     companion object {
