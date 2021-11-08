@@ -32,7 +32,7 @@ internal class CallDaoTest : SendableDaoTest<CallEntity, CallEntity, CallDao>() 
             senderId = randomUUID(),
             receiverId = randomUUID(),
             callType = CallType.AUDIO,
-            callState = CallState.CREATED,
+            callState = CallState.CALLING,
             startedAt = Date(),
             finishedAt = null
         )

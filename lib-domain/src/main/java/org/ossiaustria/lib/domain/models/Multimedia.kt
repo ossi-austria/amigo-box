@@ -1,5 +1,6 @@
 package org.ossiaustria.lib.domain.models
 
+import org.ossiaustria.lib.domain.BuildConfig
 import org.ossiaustria.lib.domain.models.enums.MultimediaType
 import java.io.Serializable
 import java.util.*
@@ -26,4 +27,8 @@ data class Multimedia(
     val size: Long? = null,
     val albumId: UUID? = null,
 
-    ) : Serializable
+    ) : Serializable {
+    fun absoluteMediaUrl() = if (filename.isNotBlank()) {
+        BuildConfig.API_ENDPOINT + "multimedias/$id/public/$filename"
+    } else null
+}

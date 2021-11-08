@@ -6,7 +6,9 @@ enum class CallType {
 }
 
 enum class CallState {
-    CREATED, CALLING,
+    @Deprecated("Use CALLING instead")
+    CREATED,
+    CALLING,
     CANCELLED, DENIED, TIMEOUT,
     ACCEPTED, STARTED,
     FINISHED,

@@ -75,7 +75,6 @@ fun AlbumsScreen(viewModel: AlbumsViewModel) {
                 albums,
                 viewModel::backToHome,
                 viewModel::toAlbum,
-                viewModel::getThumbnail
             )
         }
     }
@@ -86,7 +85,6 @@ fun AlbumsFragmentComposable(
     albums: List<Album>,
     backToHome: () -> Unit,
     toAlbum: (Album) -> Unit,
-    getAlbumThumbnail: (Album) -> String,
 ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Row(
@@ -184,7 +182,7 @@ fun AlbumsFragmentComposable(
                         horizontalAlignment = Alignment.Start,
                         modifier = Modifier.background(MaterialTheme.colors.background)
                     ) {
-                        LoadAlbumCardContent(album, getAlbumThumbnail(album))
+                        LoadAlbumCardContent(album, album.thumbnail)
                     }
                 }
             }
@@ -234,6 +232,6 @@ fun AlbumsFragmentComposable(
 @Composable
 fun AlbumsFragmentComposablePreview() {
     MaterialTheme {
-        AlbumsFragmentComposable(MOCK_ALBUMS, {}, {}, { "url" })
+        AlbumsFragmentComposable(MOCK_ALBUMS, {}, {})
     }
 }
