@@ -13,4 +13,8 @@ data class Album(
     val createdAt: Date = Date(),
     val updatedAt: Date? = null
 
-) : Serializable
+) : Serializable {
+    val itemsWithMedia = items.filter { it.filename.isNotBlank() }
+
+    val thumbnail = itemsWithMedia.firstOrNull()?.absoluteMediaUrl()
+}

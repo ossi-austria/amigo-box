@@ -3,6 +3,7 @@ package org.ossiaustria.amigobox.calls
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.jraska.livedata.test
 import io.mockk.MockKAnnotations
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.FlowPreview
@@ -76,9 +77,9 @@ internal class CallViewModelTest {
         every { groupRepository.getGroup(eq(groupId)) } returns flowOf(Resource.success(group))
         every { userContext.person() } returns analoguePerson
         every { userContext.personId() } returns analoguePerson.id
-        every { callService.accept(any()) } answers {
+        coEvery { callService.accept(any()) } answers {
             val call = it.invocation.args.first() as Call
-            flowOf(Resource.success(call.copy(callState = CallState.ACCEPTED)))
+            Resource.success(call.copy(callState = CallState.ACCEPTED))
         }
     }
 
@@ -97,8 +98,8 @@ internal class CallViewModelTest {
     @Test
     fun `createNewOutgoingCall should set outgoing call state`() = runBlockingTest {
         val resultingCall = mockOutgoingCall()
-        every { callService.createCall(eq(digitalPerson), any()) } returns
-            flowOf(Resource.Success(resultingCall))
+        coEvery { callService.createCall(eq(digitalPerson), any()) } returns
+            Resource.Success(resultingCall)
 
         subject.createNewOutgoingCall(digitalPerson)
 
@@ -115,8 +116,8 @@ internal class CallViewModelTest {
         subject.prepareIncomingCall(call)
 
         val resultingCall = call.copy(startedAt = Date(), callState = CallState.ACCEPTED)
-        every { callService.accept(eq(call)) } returns
-            flowOf(Resource.Success(resultingCall))
+        coEvery { callService.accept(eq(call)) } returns
+            Resource.Success(resultingCall)
 
         subject.accept()
 
@@ -131,8 +132,8 @@ internal class CallViewModelTest {
         subject.prepareIncomingCall(call)
 
         val resultingCall = call.copy(startedAt = Date(), callState = CallState.CANCELLED)
-        every { callService.deny(eq(call)) } returns
-            flowOf(Resource.Success(resultingCall))
+        coEvery { callService.deny(eq(call)) } returns
+            Resource.Success(resultingCall)
 
         subject.deny()
 
@@ -144,13 +145,13 @@ internal class CallViewModelTest {
     @Test
     fun `cancel should cancel Outgoing Call`() = runBlockingTest {
         val call = mockOutgoingCall()
-        every { callService.createCall(eq(digitalPerson), any()) } returns
-            flowOf(Resource.Success(call))
+        coEvery { callService.createCall(eq(digitalPerson), any()) } returns
+            Resource.Success(call)
         subject.createNewOutgoingCall(digitalPerson)
 
         val resultingCall = call.copy(startedAt = null, callState = CallState.CANCELLED)
-        every { callService.cancel(eq(call)) } returns
-            flowOf(Resource.Success(resultingCall))
+        coEvery { callService.cancel(eq(call)) } returns
+            Resource.Success(resultingCall)
 
         subject.cancel()
 

@@ -71,15 +71,13 @@ class MainBoxActivity : AppCompatActivity() {
             }
         }
 
-        incomingEventsViewModel.startListening()
         incomingEventsViewModel.notifiedCall.observe(this) {
             navigator.toCallFragment(it)
         }
 
         nfcViewModel.state.observe(this) { resource ->
             if (resource.isSuccess) {
-                val currentState = resource.valueOrNull()
-                when (currentState) {
+                when (val currentState = resource.valueOrNull()) {
                     is NfcViewModelState.OpenAlbum -> nfcViewModel.openAlbum(
                         currentState.album,
                         navigator
@@ -135,8 +133,5 @@ class MainBoxActivity : AppCompatActivity() {
         handleNfcIntent(intent)
     }
 
-    private fun nfcAction() {
-        navigator.toAlbums()
-    }
 }
 

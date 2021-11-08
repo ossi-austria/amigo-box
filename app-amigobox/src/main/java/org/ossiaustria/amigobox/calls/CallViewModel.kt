@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.ossiaustria.amigobox.BoxViewModel
 import org.ossiaustria.lib.domain.common.Resource
@@ -35,23 +35,23 @@ class CallViewModel(
 
     fun prepareIncomingCall(call: Call) = viewModelScope.launch {
         _state.postValue(CallViewState.Calling(call, false))
-        refreshPerson(call.senderId)
+        runRefreshingPerson(call.senderId)
     }
 
     fun createNewOutgoingCall(person: Person) = viewModelScope.launch {
-        callService.createCall(person, CallType.VIDEO).collect { resource ->
-            if (resource is Resource.Success) {
-                activeCall = resource.value
-                _state.postValue(CallViewState.Calling(resource.value, true))
-            } else if (resource is Resource.Failure) {
-                Timber.e("acceptIncomingCall: ${resource.throwable}")
-            }
+        val resource = callService.createCall(person, CallType.VIDEO)
+        if (resource is Resource.Success) {
+            activeCall = resource.value
+            _state.postValue(CallViewState.Calling(resource.value, true))
+        } else if (resource is Resource.Failure) {
+            Timber.e("acceptIncomingCall: ${resource.throwable}")
         }
-        refreshPerson(person.id)
+
+        runRefreshingPerson(person.id)
     }
 
-    private suspend fun refreshPerson(personId: UUID) {
-        groupRepository.getGroup(userContext.person()!!.groupId, true).collect { resource ->
+    private suspend fun runRefreshingPerson(personId: UUID) {
+        groupRepository.getGroup(userContext.person()!!.groupId, true).collectLatest { resource ->
             if (resource.isSuccess) {
                 _partner.postValue(resource.valueOrNull()?.members?.find { it.id == personId })
             } else if (resource is Resource.Failure) {
@@ -82,42 +82,41 @@ class CallViewModel(
     fun accept() = viewModelScope.launch {
         val callState = state.value
         if (callState is CallViewState.Calling && !callState.outgoing) {
-            callService.accept(callState.call).collect {
-                if (it is Resource.Success) {
-                    activeCall = it.value
-                    _state.postValue(callState.start(it.value))
-                } else if (it is Resource.Failure) {
-                    _state.postValue(callState.error(it.throwable))
-                    Timber.e("accept: ${it.throwable}")
-                }
+            val resource = callService.accept(callState.call)
+            if (resource is Resource.Success) {
+                activeCall = resource.value
+                _state.postValue(callState.start(resource.value))
+            } else if (resource is Resource.Failure) {
+                _state.postValue(callState.error(resource.throwable))
+                Timber.e("accept: ${resource.throwable}")
             }
+
         }
     }
 
     fun deny() = viewModelScope.launch {
         val callState = state.value
         if (callState is CallViewState.Calling && !callState.outgoing) {
-            callService.deny(callState.call).collect {
-                if (it is Resource.Success) {
-                    _state.postValue(callState.cancel(it.value))
-                } else if (it is Resource.Failure) {
-                    _state.postValue(callState.error(it.throwable))
-                    Timber.e("accept: ${it.throwable}")
-                }
+            val resource = callService.deny(callState.call)
+            if (resource is Resource.Success) {
+                _state.postValue(callState.cancel(resource.value))
+            } else if (resource is Resource.Failure) {
+                _state.postValue(callState.error(resource.throwable))
+                Timber.e("accept: ${resource.throwable}")
             }
+
         }
     }
 
     fun cancel() = viewModelScope.launch {
         val callState = state.value
         if (callState is CallViewState.Calling && callState.outgoing) {
-            callService.cancel(callState.call).collect {
-                if (it is Resource.Success) {
-                    _state.postValue(callState.cancel(it.value))
-                } else if (it is Resource.Failure) {
-                    _state.postValue(callState.error(it.throwable))
-                    Timber.e("accept: ${it.throwable}")
-                }
+            val resource = callService.cancel(callState.call)
+            if (resource is Resource.Success) {
+                _state.postValue(callState.cancel(resource.value))
+            } else if (resource is Resource.Failure) {
+                _state.postValue(callState.error(resource.throwable))
+                Timber.e("accept: ${resource.throwable}")
             }
         }
     }
@@ -125,11 +124,12 @@ class CallViewModel(
     fun finish() = viewModelScope.launch {
         val callState = state.value
         if (callState is CallViewState.Started) {
-            callService.finish(callState.call).collect {
-                if (it is Resource.Success) {
-                    _state.postValue(callState.finish(it.value))
-                }
-            }
+            val resource = callService.finish(callState.call)
+            //Server needs fix for this 400 response
+//                if (it is Resource.Success) {
+            _state.postValue(callState.finish(callState.call))
+//                }
+
         }
     }
 

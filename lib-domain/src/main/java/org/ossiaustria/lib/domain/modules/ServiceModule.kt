@@ -22,7 +22,7 @@ val serviceModule = module {
     single<AuthService> { AuthServiceImpl(get(), get(), get(), get(), get()) }
     single<MessageService> { MockMessageServiceImpl(get(), get()) }
     single<AlbumShareService> { MockAlbumShareServiceImpl(get(), get()) }
-    single<IncomingEventCallbackService> { IncomingEventCallbackServiceImpl(get(), get(), get()) }
+    single<IncomingEventCallbackService> { IncomingEventCallbackServiceImpl(get(), get()) }
     single<CallService> { CallServiceImpl(get(), get(), get()) }
     single<MultimediaService> { MockMultimediaServiceImpl(get(), get()) }
     single<TimelineService> { TimelineServiceImpl(get(), get(), get(), get()) }
