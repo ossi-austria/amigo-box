@@ -25,7 +25,7 @@ fun ProfileImage(
     url: String?,
     @StringRes altTextRes: Int? = null,
     altText: String? = null,
-    contentScale: ContentScale = ContentScale.FillBounds,
+    contentScale: ContentScale = ContentScale.Crop,
     onClick: () -> Unit = {}
 ) {
     val painter = if (!url.isNullOrBlank()) {
