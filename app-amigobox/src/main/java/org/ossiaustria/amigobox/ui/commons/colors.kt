@@ -7,3 +7,5 @@ val textColor = Color(0xFF00292E)
 val white = Color.White
 val orange = Color(0xFFFFBA5F)
 val darkBlue = Color(0xFF075760)
+val darkBlueVariance = Color(0x00070780)
+val redVariance = Color(0xFFFF5F5F)
