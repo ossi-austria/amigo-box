@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,6 +38,7 @@ import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.albums.album1
+import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
 import org.ossiaustria.amigobox.ui.commons.NavigationButton
 import org.ossiaustria.amigobox.ui.commons.NavigationButtonType
 import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
@@ -58,11 +60,15 @@ class ImageGalleryFragment : Fragment() {
 
         setContent {
             if (album != null) {
-                GalleryScreen(
-                    album.itemsWithMedia,
-                    viewModel,
-                    ::toAlbums,
-                )
+                AmigoThemeLight {
+                    Surface(color = MaterialTheme.colors.secondary) {
+                        GalleryScreen(
+                            album.itemsWithMedia,
+                            viewModel,
+                            ::toAlbums,
+                        )
+                    }
+                }
             } else {
                 Text("Album not provided!")
             }
@@ -95,8 +101,8 @@ fun GalleryScreen(
     val time by viewModel.time.observeAsState(CountdownFormat.TIME_COUNTDOWN.formatTime())
     val autoState by viewModel.autoState.observeAsState()
 
-    MaterialTheme {
-        GalleryFragmentComposable(
+
+    GalleryFragmentComposable(
             items,
             toAlbums,
             navigationState,
@@ -110,7 +116,6 @@ fun GalleryScreen(
             viewModel::setAutoState,
             viewModel::setNavigationState
         )
-    }
 }
 
 @Composable
