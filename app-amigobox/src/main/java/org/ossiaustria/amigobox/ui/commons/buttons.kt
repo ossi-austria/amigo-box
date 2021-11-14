@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
+import org.ossiaustria.amigobox.ui.autoplay.GalleryNavState
 
 @Composable
 fun MaterialButton(
@@ -68,23 +69,134 @@ fun MaterialButtonPreview() {
 @Composable
 fun NavigationButton(
     text: String,
-    colors: ButtonColors = ButtonDefaults.outlinedButtonColors(
-        contentColor = MaterialTheme.colors.primary,
-    ),
+    type: NavigationButtonType,
+    onClick: () -> Unit,
+    itemIndex: Int?,
+    listSize: Int
+) {
+
+    val scrollButtonRowModifier = Modifier
+        .height(UIConstants.ScrollNavigationButton.ROW_HEIGHT)
+        .background(MaterialTheme.colors.secondary)
+
+    val imageModifier = Modifier
+        .size(UIConstants.ScrollNavigationButton.IMAGE_SIZE)
+        .padding(end = UIConstants.ScrollNavigationButton.IMAGE_PADDING)
+
+    Card(
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .height(UIConstants.ScrollNavigationButton.CARD_HEIGHT)
+            .width(UIConstants.ScrollNavigationButton.CARD_WIDTH),
+        elevation = UIConstants.ScrollableCardList.CARD_ELEVATION,
+        contentColor = navigationTextColor(type, itemIndex, listSize),
+    ) {
+        when (type) {
+            NavigationButtonType.PREVIOUS ->
+                Row(
+                    modifier = scrollButtonRowModifier,
+                    Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_arrow_left),
+                        contentDescription = null,
+                        modifier = imageModifier,
+                        colorFilter = ColorFilter.tint(
+                            navigationTextColor(type, itemIndex, listSize),
+                            BlendMode.SrcIn
+                        ),
+                    )
+                    Text(
+                        text = text,
+                        style = MaterialTheme.typography.h4,
+                    )
+                }
+            NavigationButtonType.NEXT ->
+                Row(
+                    modifier = scrollButtonRowModifier,
+                    Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = text,
+                        style = MaterialTheme.typography.h4,
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_arrow_right),
+                        contentDescription = null,
+                        modifier = imageModifier,
+                        colorFilter = ColorFilter.tint(
+                            navigationTextColor(type, itemIndex, listSize),
+                            BlendMode.SrcIn
+                        ),
+                    )
+                }
+
+        }
+    }
+}
+
+@Composable
+fun StartAndPauseButton(
+    text: String,
+    state: GalleryNavState?,
     onClick: () -> Unit
 ) {
-    OutlinedButton(
-        onClick = onClick,
-        colors = colors,
+    Card(
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .height(UIConstants.ScrollNavigationButton.CARD_HEIGHT)
+            .width(UIConstants.ScrollNavigationButton.BUTTON_WIDTH)
+            .clip(RoundedCornerShape(UIConstants.BigButtons.ROUNDED_CORNER))
+            .background(MaterialTheme.colors.primary),
+        elevation = UIConstants.ScrollableCardList.CARD_ELEVATION,
     ) {
-        Text(text = text)
-    }
+        Row(
+            modifier = Modifier
+                .height(UIConstants.ScrollNavigationButton.ROW_HEIGHT)
+                .background(MaterialTheme.colors.primary),
+            Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            when (state) {
+                GalleryNavState.PLAY ->
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_pause),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(UIConstants.ScrollNavigationButton.IMAGE_SIZE)
+                            .padding(end = UIConstants.ScrollNavigationButton.IMAGE_PADDING),
+                        colorFilter = ColorFilter.tint(
+                            MaterialTheme.colors.onPrimary,
+                            BlendMode.SrcIn
+                        ),
+                    )
+                GalleryNavState.STOP ->
 
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_play),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(UIConstants.ScrollNavigationButton.PLAY_IMAGE_SIZE)
+                            .padding(end = UIConstants.ScrollNavigationButton.IMAGE_PADDING),
+                        colorFilter = ColorFilter.tint(
+                            MaterialTheme.colors.onPrimary,
+                            BlendMode.SrcIn
+                        ),
+                    )
+            }
+            Text(
+                text = text,
+                style = MaterialTheme.typography.h4,
+            )
+        }
+    }
 }
 
 @Composable
 fun ScrollNavigationButton(
-    type: ScrollButtonType,
+    type: NavigationButtonType,
     text: String,
     scrollState: ScrollState,
     onClick: () -> Unit,
@@ -106,7 +218,7 @@ fun ScrollNavigationButton(
         contentColor = scrollTextColor(type, scrollState),
     ) {
         when (type) {
-            ScrollButtonType.PREVIOUS ->
+            NavigationButtonType.PREVIOUS ->
                 Row(
                     modifier = scrollButtonRowModifier,
                     Arrangement.Center,
@@ -126,7 +238,7 @@ fun ScrollNavigationButton(
                         style = MaterialTheme.typography.h4,
                     )
                 }
-            ScrollButtonType.NEXT ->
+            NavigationButtonType.NEXT ->
                 Row(
                     modifier = scrollButtonRowModifier,
                     Arrangement.Center,
@@ -151,22 +263,22 @@ fun ScrollNavigationButton(
 }
 
 @Composable
-fun scrollTextColor(type: ScrollButtonType, scrollState: ScrollState): Color {
-    if (type == ScrollButtonType.PREVIOUS) {
+fun scrollTextColor(type: NavigationButtonType, scrollState: ScrollState): Color {
+    if (type == NavigationButtonType.PREVIOUS) {
         if (scrollState.value == 0) {
             return Color.Gray
         } else return MaterialTheme.colors.secondary
-    } else if (type == ScrollButtonType.NEXT) {
+    } else if (type == NavigationButtonType.NEXT) {
         if (scrollState.value == scrollState.maxValue) {
             return Color.Gray
         } else return MaterialTheme.colors.secondary
     } else {
         return MaterialTheme.colors.secondary
     }
-
 }
 
-enum class ScrollButtonType {
+
+enum class NavigationButtonType {
     PREVIOUS, NEXT
 }
 

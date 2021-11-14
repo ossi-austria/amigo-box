@@ -41,7 +41,7 @@ import org.ossiaustria.amigobox.ui.UIConstants.NavigationButtonRow
 import org.ossiaustria.amigobox.ui.UIConstants.ScrollButton
 import org.ossiaustria.amigobox.ui.UIConstants.ScrollableCardList
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
-import org.ossiaustria.amigobox.ui.commons.ScrollButtonType
+import org.ossiaustria.amigobox.ui.commons.NavigationButtonType
 import org.ossiaustria.amigobox.ui.commons.ScrollNavigationButton
 import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 import org.ossiaustria.lib.domain.models.Album
@@ -205,7 +205,7 @@ fun AlbumsFragmentComposable(
 
             // Backwards
             ScrollNavigationButton(
-                type = ScrollButtonType.PREVIOUS,
+                type = NavigationButtonType.PREVIOUS,
                 text = stringResource(R.string.previous_scroll_navigation_btn),
                 scrollState = scrollState,
             ) {
@@ -216,7 +216,7 @@ fun AlbumsFragmentComposable(
 
             // Forwards
             ScrollNavigationButton(
-                type = ScrollButtonType.NEXT,
+                type = NavigationButtonType.NEXT,
                 text = stringResource(R.string.next_scroll_navigation_btn),
                 scrollState = scrollState
             ) {

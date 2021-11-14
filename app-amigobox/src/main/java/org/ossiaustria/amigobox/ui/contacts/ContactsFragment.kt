@@ -36,7 +36,7 @@ import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
-import org.ossiaustria.amigobox.ui.commons.ScrollButtonType
+import org.ossiaustria.amigobox.ui.commons.NavigationButtonType
 import org.ossiaustria.amigobox.ui.commons.ScrollNavigationButton
 import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 import org.ossiaustria.lib.domain.models.Person
@@ -196,7 +196,7 @@ fun ContactsFragmentContent(
 
             // Backwards
             ScrollNavigationButton(
-                type = ScrollButtonType.PREVIOUS,
+                type = NavigationButtonType.PREVIOUS,
                 text = stringResource(R.string.previous_scroll_navigation_btn),
                 scrollState = scrollState,
             ) {
@@ -207,7 +207,7 @@ fun ContactsFragmentContent(
 
             // Forwards
             ScrollNavigationButton(
-                type = ScrollButtonType.NEXT,
+                type = NavigationButtonType.NEXT,
                 text = stringResource(R.string.next_scroll_navigation_btn),
                 scrollState = scrollState
             ) {

@@ -15,7 +15,7 @@ import org.ossiaustria.amigobox.ui.imagegallery.ImageGalleryViewModel
 val viewModelsModule = module {
     viewModel { AlbumsViewModel(get(), get()) }
     viewModel { OnboardingViewModel(get(), get(), get(), get()) }
-    viewModel { TimelineViewModel(get(), get()) }
+    viewModel { TimelineViewModel(get(), get(), get(), get()) }
     viewModel { ContactsViewModel(get(), get()) }
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { ImageGalleryViewModel(get()) }
