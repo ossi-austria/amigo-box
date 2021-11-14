@@ -4,50 +4,161 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.ossiaustria.amigobox.databinding.TimelineFragmentBinding
-import timber.log.Timber
+import org.ossiaustria.amigobox.Navigator
+import org.ossiaustria.amigobox.ui.autoplay.AutoState
+import org.ossiaustria.amigobox.ui.autoplay.AutoplayCommons
+import org.ossiaustria.amigobox.ui.autoplay.CountdownFormat
+import org.ossiaustria.amigobox.ui.autoplay.GalleryNavState
+import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
+import org.ossiaustria.amigobox.ui.imagegallery.formatTime
+import org.ossiaustria.lib.domain.models.Album
+import org.ossiaustria.lib.domain.models.Person
+import org.ossiaustria.lib.domain.models.Sendable
+import java.util.*
+import kotlin.time.ExperimentalTime
 
 class TimelineFragment : Fragment() {
 
     // Retrieve OnboardingViewModel via injection
     private val viewModel by viewModel<TimelineViewModel>()
 
-    // Use "ViewBinding" to load the view nicely
-    private lateinit var binding: TimelineFragmentBinding
+    val navigator: Navigator by inject()
 
-    private val adapter = TimelineAdapter()
-
+    @ExperimentalTime
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        //use ViewBinding to inflate
-        binding = TimelineFragmentBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View = ComposeView(requireContext()).apply {
+        setContent {
+            TimelineScreen(
+                viewModel,
+                navigator::toHome,
+                navigator::toImageGallery,
+                navigator::toCallFragment
+            )
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // access view directly via ViewBinding
-        binding.sendablesView.adapter = adapter
-        binding.sendablesView.layoutManager = LinearLayoutManager(view.context)
-    }
-
-    override fun onResume() {
-        super.onResume()
         viewModel.loadAllSendables()
-        // activate observers
-        viewModel.sendables.observe(viewLifecycleOwner) { list ->
-            adapter.setSendables(list)
-            Timber.i("Loaded list: ${list.size}")
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.sendables.removeObservers(viewLifecycleOwner)
+        viewModel.loadPersons()
+        // init stuff
+        viewModel.initTimer()
     }
 }
+
+@ExperimentalTime
+@Composable
+fun TimelineScreen(
+    viewModel: TimelineViewModel,
+    toHome: () -> Unit,
+    toAlbum: (Album) -> Unit,
+    toCall: (Person) -> Unit,
+) {
+
+    AmigoThemeLight {
+        Surface(color = MaterialTheme.colors.secondary) {
+
+            val autoplay = AutoplayCommons()
+
+            val navigationState by viewModel.navigationState.observeAsState(GalleryNavState.PLAY)
+            val currentIndex by viewModel.currentGalleryIndex.observeAsState()
+            val time by viewModel.time.observeAsState(CountdownFormat.TIME_COUNTDOWN.formatTime())
+            val autoState by viewModel.autoState.observeAsState()
+            val centerPerson = viewModel.centerPerson
+            val list by viewModel.sendables.observeAsState(emptyList())
+
+            TimelineContent(
+                toHome,
+                toAlbum,
+                list,
+                viewModel::cancelTimer,
+                currentIndex,
+                viewModel::setGalleryIndex,
+                viewModel::setAutoState,
+                time,
+                autoState,
+                viewModel::startTimer,
+                navigationState,
+                viewModel::setNavigationState,
+                viewModel::pauseTimer,
+                centerPerson,
+                toCall,
+                viewModel::findPerson,
+                viewModel::findName,
+                autoplay
+            )
+        }
+    }
+}
+
+@ExperimentalTime
+@Composable
+fun TimelineContent(
+    toHome: () -> Unit,
+    toAlbum: (Album) -> Unit,
+    sendables: List<Sendable>,
+    cancelTimer: () -> Unit,
+    currentIndex: Int?,
+    setGalleryIndex: (Int) -> Unit,
+    setAutoState: (AutoState) -> Unit,
+    time: String,
+    autoState: AutoState?,
+    startTimer: () -> Unit,
+    navigationState: GalleryNavState?,
+    setNavigationState: (GalleryNavState) -> Unit,
+    pauseTimer: () -> Unit,
+    centerPerson: Person?,
+    toCall: (Person) -> Unit,
+    findPerson: (UUID) -> Person?,
+    findName: (UUID) -> String?,
+    autoplay: AutoplayCommons
+) {
+    Box {
+        InnerDynamicBox(
+            sendables,
+            toAlbum,
+            toHome,
+            cancelTimer,
+            currentIndex,
+            setGalleryIndex,
+            setAutoState,
+            time,
+            autoState,
+            centerPerson,
+            toCall,
+            findPerson,
+            findName,
+            autoplay
+        )
+    }
+    Box {
+        OuterStaticBox(
+            toHome,
+            cancelTimer,
+            setGalleryIndex,
+            startTimer,
+            currentIndex,
+            navigationState,
+            setNavigationState,
+            pauseTimer,
+            sendables,
+            centerPerson,
+            findName,
+            autoplay
+        )
+    }
+}
+

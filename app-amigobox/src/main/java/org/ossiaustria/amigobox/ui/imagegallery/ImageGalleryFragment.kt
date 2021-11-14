@@ -38,6 +38,7 @@ import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.albums.album1
 import org.ossiaustria.amigobox.ui.commons.NavigationButton
+import org.ossiaustria.amigobox.ui.commons.NavigationButtonType
 import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
 import org.ossiaustria.lib.domain.models.Multimedia
 import timber.log.Timber
@@ -282,23 +283,31 @@ fun ButtonsRow(
                     navigationState
                 )
             },
-            text = "Vorheriges Bild"
+            text = stringResource(R.string.previous_image_button_description),
+            type = NavigationButtonType.PREVIOUS,
+            itemIndex = currentIndex,
+            listSize = items.size
         )
-        NavigationButton(
-            onClick = {
-                startStopPressed(
-                    startTimer,
-                    setNavigationState,
-                    pauseTimer,
-                    navigationState
-                )
-            },
-            text = playButtonText(
-                navigationState,
-                stringResource(R.string.start_diashow_button_description),
-                stringResource(R.string.stop_diashow_button_description)
-            )
-        )
+
+        /*   StartAndPauseButton(
+               text = playButtonText(
+                   navigationState,
+                   stringResource(R.string.start_diashow_button_description),
+                   stringResource(R.string.stop_diashow_button_description)
+               ),
+               state = navigationState,
+               itemIndex = currentIndex,
+               listSize = items.size,
+           ) {
+               startStopPressed(
+                   startTimer,
+                   setNavigationState,
+                   pauseTimer,
+                   navigationState
+               )
+           }
+
+         */
         NavigationButton(
             onClick = {
                 nextPressed(
@@ -310,7 +319,10 @@ fun ButtonsRow(
                     navigationState
                 )
             },
-            text = stringResource(R.string.next_image_button_description)
+            text = stringResource(R.string.next_image_button_description),
+            type = NavigationButtonType.NEXT,
+            itemIndex = currentIndex,
+            listSize = items.size
         )
     }
 }
