@@ -125,7 +125,12 @@ fun PersonDetailFragmentComposable(
         }
         Row(
             Modifier
-                .padding(UIConstants.PersonDetailFragment.SEC_ROW_PADDING)
+                .padding(
+                    start = UIConstants.PersonDetailFragment.SEC_ROW_PADDING_START,
+                    end = UIConstants.PersonDetailFragment.SEC_ROW_PADDING,
+                    top = UIConstants.PersonDetailFragment.SEC_ROW_PADDING,
+                    bottom = UIConstants.PersonDetailFragment.SEC_ROW_PADDING
+                )
         ) {
 
             ProfileImage(
