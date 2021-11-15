@@ -22,32 +22,32 @@ class UIConstants {
 
     object ListFragment {
         val HEADER_PADDING_START = 40.dp
-        val HEADER_PADDING_TOP = 4.dp
+        val HEADER_PADDING_TOP = 0.dp
         val HEADER_PADDING_BOTTOM = 4.dp
-        val HEADER_HEIGHT = 64.dp
+        val HEADER_HEIGHT = 56.dp
         val DESCRIPTION_PADDING_START = 40.dp
-        val DESCRIPTION_PADDING_TOP = 4.dp
+        val DESCRIPTION_PADDING_TOP = 0.dp
         val DESCRIPTION_HEIGHT = 40.dp
     }
 
     object ScrollableCardList {
         val PADDING_START = 40.dp
-        val PADDING_TOP = 8.dp
+        val PADDING_TOP = 4.dp
         val CARD_PADDING = 8.dp
         val CARD_ELEVATION = 0.dp
     }
 
     object HomeButtonRow {
         val END_PADDING = 40.dp
-        val TOP_PADDING = 16.dp
+        val TOP_PADDING = 8.dp
         val HEIGHT = 88.dp
     }
 
     object NavigationButtonRow {
         val PADDING_START = 40.dp
         val PADDING_END = 40.dp
-        val PADDING_BOTTOM = 16.dp
-        val CONTACTS_PADDING_TOP = 32.dp
+        val PADDING_BOTTOM = 24.dp
+        val CONTACTS_PADDING_TOP = 8.dp
         val PADDING_TOP = 16.dp
         val HEIGHT = 40.dp
     }
@@ -76,8 +76,8 @@ class UIConstants {
 
     object HomeFragment {
         val PADDING_START = 40.dp
-        val DESCRIPTION_PADDING_TOP = 8.dp
-        val DESCRIPTION_PADDING_BOTTOM = 24.dp
+        val DESCRIPTION_PADDING_TOP = 4.dp
+        val DESCRIPTION_PADDING_BOTTOM = 16.dp
         val HEADER_PADDING_TOP = 40.dp
     }
 
@@ -99,12 +99,14 @@ class UIConstants {
 
     object ProfileImage {
         val IMAGE_SIZE = 280.dp
+        val IMAGE_PADDING_START = 40.dp
         val IMAGE_PADDING = 24.dp
         val BORDER_WIDTH = 2.dp
     }
 
     object PersonDetailFragment {
         val SEC_ROW_PADDING = 16.dp
+        val SEC_ROW_PADDING_START = 40.dp
         val COLUMN_PADDING = 80.dp
         val CALL_BUTTON_WIDTH = 320.dp
         val ALBUM_BUTTON_WIDTH = 440.dp
@@ -136,7 +138,7 @@ class UIConstants {
 
     }
     object CallFragmentConstants {
-        val MIDDLE_ROW_HEIGHT = 350.dp
+        val MIDDLE_ROW_HEIGHT = 280.dp
         val BOTTOM_ROW_HEIGHT = 200.dp // TODO static Size might be dangerous for that Row
         val COLUMN_WIDTH = 400.dp
         val COLUMN_START_PADDING = 160.dp

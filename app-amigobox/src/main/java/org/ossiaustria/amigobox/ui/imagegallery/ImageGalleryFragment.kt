@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -39,6 +41,7 @@ import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.albums.album1
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
+import org.ossiaustria.amigobox.ui.commons.IconButtonSmall
 import org.ossiaustria.amigobox.ui.commons.NavigationButton
 import org.ossiaustria.amigobox.ui.commons.NavigationButtonType
 import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
@@ -66,6 +69,7 @@ class ImageGalleryFragment : Fragment() {
                             album.itemsWithMedia,
                             viewModel,
                             ::toAlbums,
+                            ::toHome,
                         )
                     }
                 }
@@ -87,6 +91,10 @@ class ImageGalleryFragment : Fragment() {
         navigator.toAlbums()
     }
 
+    fun toHome() {
+        navigator.back()
+    }
+
 }
 
 @Composable
@@ -94,6 +102,7 @@ fun GalleryScreen(
     items: List<Multimedia>,
     viewModel: ImageGalleryViewModel,
     toAlbums: () -> Unit,
+    toHome: () -> Unit,
 ) {
 
     val navigationState by viewModel.navigationState.observeAsState()
@@ -103,25 +112,27 @@ fun GalleryScreen(
 
 
     GalleryFragmentComposable(
-            items,
-            toAlbums,
-            navigationState,
-            currentIndex,
-            time,
-            autoState,
-            viewModel::cancelTimer,
-            viewModel::startTimer,
-            viewModel::pauseTimer,
-            viewModel::setGalleryIndex,
-            viewModel::setAutoState,
-            viewModel::setNavigationState
-        )
+        items,
+        toAlbums,
+        toHome,
+        navigationState,
+        currentIndex,
+        time,
+        autoState,
+        viewModel::cancelTimer,
+        viewModel::startTimer,
+        viewModel::pauseTimer,
+        viewModel::setGalleryIndex,
+        viewModel::setAutoState,
+        viewModel::setNavigationState
+    )
 }
 
 @Composable
 fun GalleryFragmentComposable(
     items: List<Multimedia>,
     toAlbums: () -> Unit,
+    toHome: () -> Unit,
     navigationState: GalleryNavState?,
     currentIndex: Int?,
     time: String,
@@ -133,6 +144,10 @@ fun GalleryFragmentComposable(
     setAutoState: (AutoState) -> Unit,
     setNavigationState: (GalleryNavState) -> Unit
 ) {
+    //TODO: Home and Help buttons are not clickable
+    HomeAndHelpRow(
+        toHome
+    )
     ImageBox(
         items,
         cancelTimer,
@@ -156,6 +171,35 @@ fun GalleryFragmentComposable(
     )
 }
 
+@Composable
+fun HomeAndHelpRow(toHome: () -> Unit) {
+    Row(
+        Modifier
+            .padding(
+                top = UIConstants.HomeButtonRow.TOP_PADDING,
+                end = UIConstants.HomeButtonRow.END_PADDING
+            )
+            .fillMaxWidth()
+            .height(UIConstants.HomeButtonRow.HEIGHT),
+        horizontalArrangement = Arrangement.End
+    ) {
+        IconButtonSmall(
+            resourceId = R.drawable.ic_home_icon,
+            backgroundColor = MaterialTheme.colors.secondary,
+            fillColor = MaterialTheme.colors.surface,
+        ) {
+            toHome()
+        }
+        IconButtonSmall(
+            resourceId = R.drawable.ic_help_icon,
+            backgroundColor = MaterialTheme.colors.secondary,
+            fillColor = MaterialTheme.colors.primary,
+        ) {
+            //TODO: Add help screens
+        }
+    }
+}
+
 @Preview(
     name = "whole Screen Preview",
     device = Devices.AUTOMOTIVE_1024p,
@@ -168,6 +212,7 @@ fun PreviewGalleryFragmentComposable() {
     GalleryFragmentComposable(
         album1.itemsWithMedia,
         toAlbums = {},
+        toHome = {},
         navigationState = GalleryNavState.STOP,
         currentIndex = 1,
         time = "05:00",
@@ -239,8 +284,9 @@ fun NavButtonsBox(
     setNavigationState: (GalleryNavState) -> Unit,
     pauseTimer: () -> Unit,
     items: List<Multimedia>,
-    time: String
-) {
+    time: String,
+
+    ) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -254,7 +300,7 @@ fun NavButtonsBox(
             pauseTimer,
             items,
         )
-        TimerTextRow(time)
+        // TimerTextRow(time)
     }
 }
 
@@ -268,16 +314,21 @@ fun ButtonsRow(
     setNavigationState: (GalleryNavState) -> Unit,
     pauseTimer: () -> Unit,
     items: List<Multimedia>,
+
 ) {
     Row(
         modifier = Modifier
             .padding(
                 start = UIConstants.ScrollableCardList.PADDING_START,
-                top = UIConstants.ScrollableCardList.PADDING_TOP
+                top = UIConstants.ScrollableCardList.PADDING_TOP,
+                bottom = UIConstants.ScrollableCardList.PADDING_TOP
             )
             .fillMaxSize(),
         horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
     ) {
+
+        //TODO: change to autoplayCommons
         NavigationButton(
             onClick = {
                 previousPressed(
@@ -294,25 +345,24 @@ fun ButtonsRow(
             listSize = items.size
         )
 
-        /*   StartAndPauseButton(
-               text = playButtonText(
-                   navigationState,
-                   stringResource(R.string.start_diashow_button_description),
-                   stringResource(R.string.stop_diashow_button_description)
-               ),
-               state = navigationState,
-               itemIndex = currentIndex,
-               listSize = items.size,
-           ) {
-               startStopPressed(
-                   startTimer,
-                   setNavigationState,
-                   pauseTimer,
-                   navigationState
-               )
-           }
-
+        /* StartAndPauseButton(
+             text = playButtonText(
+                 navigationState,
+                 stringResource(R.string.start_diashow_button_description),
+                 stringResource(R.string.stop_diashow_button_description)
+             ),
+             state = navigationState
+         ) {
+             startStopPressed(
+                 startTimer,
+                 setNavigationState,
+                 pauseTimer,
+                 navigationState
+             )
+         }
          */
+
+
         NavigationButton(
             onClick = {
                 nextPressed(
