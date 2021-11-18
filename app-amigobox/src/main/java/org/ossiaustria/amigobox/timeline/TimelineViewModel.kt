@@ -1,7 +1,6 @@
 package org.ossiaustria.amigobox.timeline
 
 import android.os.CountDownTimer
-import androidx.collection.arraySetOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -17,7 +16,6 @@ import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.models.Sendable
-import org.ossiaustria.lib.domain.models.enums.CallState
 import org.ossiaustria.lib.domain.modules.UserContext
 import org.ossiaustria.lib.domain.repositories.GroupRepository
 import org.ossiaustria.lib.domain.services.ServiceMocks
@@ -39,10 +37,10 @@ class TimelineViewModel(
     userContext: UserContext
 ) : BoxViewModel(ioDispatcher) {
 
+    val centerPerson = userContext.person()
+
     private val _sendables: MutableLiveData<List<Sendable>> = MutableLiveData(emptyList())
     val sendables: LiveData<List<Sendable>> = _sendables
-
-    private var sendablesCache: Set<Sendable> = arraySetOf()
 
     private val _navigationState = MutableLiveData(GalleryNavState.PLAY)
     val navigationState: MutableLiveData<GalleryNavState> = _navigationState
@@ -53,51 +51,26 @@ class TimelineViewModel(
     private val _currentGalleryIndex = MutableLiveData(0)
     val currentGalleryIndex: MutableLiveData<Int> = _currentGalleryIndex
 
-    // Timer variables
-    private var countDownTimer: CountDownTimer? = null
-
     private val _time = MutableLiveData(CountdownFormat.TIME_COUNTDOWN.formatTime())
     val time: LiveData<String> = _time
 
-    // not yet needed but can be used to track progress
-    private val _progress = MutableLiveData(1.00F)
-    val progress: LiveData<Float> = _progress
+    private var _personsIdMap: Map<UUID, Person> = emptyMap()
 
-    private val _isPlaying = MutableLiveData(false)
-    val isPlaying: LiveData<Boolean> = _isPlaying
-
-    // from repository
-    private val _sendablePerson: MutableLiveData<Person> = MutableLiveData()
-    val sendablePerson: LiveData<Person> = _sendablePerson
-
-    private val _personsMap: MutableLiveData<Map<UUID, String>> = MutableLiveData()
-    val personsMap: LiveData<Map<UUID, String>> = _personsMap
-
-    private val _personsList: MutableLiveData<List<Person>> = MutableLiveData()
-    val personsList: LiveData<List<Person>> = _personsList
-
-    val centerPerson = userContext.person()
-
-    fun onResume() {
-        sendablesCache = arraySetOf()
-    }
+    // Timer variables
+    private var countDownTimer: CountDownTimer? = null
 
     fun loadAllSendables() {
-        //resest Sendables List and sendablesCache
+        //reset Sendables List and sendablesCache
         _sendables.value = emptyList()
-        sendablesCache = emptySet()
 
         //fetch Sendables from Repository
         viewModelScope.launch(ioDispatcher) {
             timelineService.findWithPersons(ServiceMocks.MY_PERSON_ID, ServiceMocks.HER_PERSON_ID)
                 .collect { resource ->
                     if (resource is Resource.Success) {
-                        sendablesCache = sendablesCache.toMutableSet()
-                            .apply { addAll(resource.value) }
-                            .sortedBy { it.retrievedAt }
-                            .toSet()
-                        //filtering sendables and posting them here
-                        _sendables.postValue(filterSendables(sendablesCache.toList()))
+                        _sendables.postValue(
+                            filterPresentableSendables(resource.value)
+                                .sortedBy { it.retrievedAt })
                     }
                 }
         }
@@ -106,32 +79,23 @@ class TimelineViewModel(
     fun loadPersons() {
         viewModelScope.launch {
             groupRepository.getAllGroups(true).collect { resource ->
-                if (resource.isSuccess && !resource.valueOrNull().isNullOrEmpty()) {
-                    val groups = resource.valueOrNull()
-                    groups?.firstOrNull()?.members?.let {
-                        createMap(it)
-                        _personsList.value = it
+                if (resource is Resource.Success && !resource.value.isNullOrEmpty()) {
+                    val groups = resource.value
+                    groups.firstOrNull()?.members?.let {
+                        createMaps(it)
                     }
-                } else {
-                    createMap(emptyList())
-                    _personsList.value = emptyList()
                 }
             }
         }
     }
 
-    fun findName(personId: UUID): String? = personsMap.value?.get(personId)
+    fun findName(personId: UUID): String? = _personsIdMap[personId]?.name
 
-    private fun createMap(personsList: List<Person>) {
-        _personsMap.value = personsList.map { it.id to it.name }.toMap()
+    private fun createMaps(personsList: List<Person>) {
+        _personsIdMap = personsList.map { it.id to it }.toMap()
     }
 
-    fun findPerson(personId: UUID): Person? {
-        val person = _personsList.value?.firstOrNull {
-            it.id == personId
-        }
-        return person
-    }
+    fun findPerson(personId: UUID): Person? = _personsIdMap[personId]
 
     // set states with following methods
     fun setNavigationState(navState: GalleryNavState) {
@@ -152,8 +116,6 @@ class TimelineViewModel(
     }
 
     fun startTimer() {
-
-        _isPlaying.value = true
         countDownTimer = object : CountDownTimer(CountdownFormat.TIME_COUNTDOWN, 1000) {
 
             override fun onTick(millisRemaining: Long) {
@@ -176,20 +138,12 @@ class TimelineViewModel(
         text: String,
         progress: Float
     ) {
-        _isPlaying.value = isPlaying
         _time.value = text
-        _progress.value = progress
     }
 
-    private fun filterSendables(list: List<Sendable>): List<Sendable> {
-        val sendables = list.filter {
-            when (it) {
-                is Call -> (it.callState == CallState.TIMEOUT ||
-                    it.callState == CallState.FINISHED)
-                else -> true
-            }
-        }
-        return sendables
+    private fun filterPresentableSendables(sendables: List<Sendable>) = sendables.filter {
+        if (it is Call) it.isDone()
+        else true
     }
 
     fun initTimer() {

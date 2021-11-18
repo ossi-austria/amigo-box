@@ -1,6 +1,5 @@
 package org.ossiaustria.lib.domain.api
 
-import okhttp3.RequestBody
 import org.ossiaustria.lib.domain.models.Message
 import retrofit2.http.GET
 import retrofit2.http.Multipart
@@ -24,8 +23,7 @@ interface MessageApi {
     @POST("messages")
     suspend fun createMultimediaMessage(
         @Part("receiverId") receiverId: UUID,
-        @Part("text") text: UUID,
-        @Part("file\"; filename=\"file") file: RequestBody?
+        @Part("text") text: UUID
     ): Message
 
     /**
@@ -38,7 +36,7 @@ interface MessageApi {
     @POST("messages")
     suspend fun createMessage(
         @Part("receiverId") receiverId: UUID,
-        @Part("text") text: UUID,
+        @Part("text") text: String,
     ): Message
 
     /**

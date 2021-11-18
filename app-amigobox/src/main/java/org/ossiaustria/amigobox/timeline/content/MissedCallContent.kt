@@ -26,14 +26,16 @@ import org.ossiaustria.lib.domain.models.Person
 import java.util.*
 import kotlin.time.ExperimentalTime
 
+// TODO: CallContent and MissedCallContent have the same children Composables
+// Either: a) have just one composable for all states, or reuse sub-components (extract Composables to private files)
+// FIXME: I would prefer a)
 @ExperimentalTime
 @Composable
 fun MissedCallContent(
     call: Call,
-    toCall: (Person) -> Unit,
-    findName: (UUID) -> String?,
+    centerPerson: Person,
     findPerson: (UUID) -> Person?,
-    centerPerson: Person?
+    toCall: (Person) -> Unit
 ) {
     // missed call when CallStatus is MISSED and Receiver is this person
     Row(
@@ -64,14 +66,12 @@ fun MissedCallContent(
         Column {
             var textName = stringResource(id = R.string.unknown_person)
 
-            if (centerPerson != null) {
-                val nameSender = findName(call.senderId)
-                val nameReceiver = findName(call.receiverId)
-                if (centerPerson.id == call.receiverId && nameSender != null) {
-                    textName = nameSender.toString()
-                } else if (centerPerson.id == call.senderId && nameReceiver != null) {
-                    textName = nameReceiver.toString()
-                }
+            val nameSender = findPerson(call.senderId)?.name
+            val nameReceiver = findPerson(call.receiverId)?.name
+            if (centerPerson.id == call.receiverId && nameSender != null) {
+                textName = nameSender.toString()
+            } else if (centerPerson.id == call.senderId && nameReceiver != null) {
+                textName = nameReceiver.toString()
             }
             Text(
                 modifier = Modifier.padding(
@@ -104,10 +104,9 @@ fun MissedCallContentPreview() {
     PreviewTheme {
         MissedCallContent(
             ContentMocks.call,
-            {},
-            { ContentMocks.otherPerson.name },
+            ContentMocks.centerPerson,
             { ContentMocks.otherPerson },
-            ContentMocks.centerPerson
+            {}
         )
     }
 }

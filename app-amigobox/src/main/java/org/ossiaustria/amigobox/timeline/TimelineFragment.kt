@@ -78,28 +78,29 @@ fun TimelineScreen(
             val time by viewModel.time.observeAsState(CountdownFormat.TIME_COUNTDOWN.formatTime())
             val autoState by viewModel.autoState.observeAsState()
             val centerPerson = viewModel.centerPerson
-            val list by viewModel.sendables.observeAsState(emptyList())
+            val sendables by viewModel.sendables.observeAsState(emptyList())
 
-            TimelineContent(
-                toHome,
-                toAlbum,
-                list,
-                viewModel::cancelTimer,
-                currentIndex,
-                viewModel::setGalleryIndex,
-                viewModel::setAutoState,
-                time,
-                autoState,
-                viewModel::startTimer,
-                navigationState,
-                viewModel::setNavigationState,
-                viewModel::pauseTimer,
-                centerPerson,
-                toCall,
-                viewModel::findPerson,
-                viewModel::findName,
-                autoplay
-            )
+            if (centerPerson != null) {
+                TimelineContent(
+                    toHome,
+                    toAlbum,
+                    sendables,
+                    viewModel::cancelTimer,
+                    currentIndex,
+                    viewModel::setGalleryIndex,
+                    viewModel::setAutoState,
+                    time,
+                    autoState,
+                    viewModel::startTimer,
+                    navigationState,
+                    viewModel::setNavigationState,
+                    viewModel::pauseTimer,
+                    centerPerson,
+                    toCall,
+                    viewModel::findPerson,
+                    autoplay
+                )
+            }
         }
     }
 }
@@ -120,10 +121,9 @@ fun TimelineContent(
     navigationState: GalleryNavState?,
     setNavigationState: (GalleryNavState) -> Unit,
     pauseTimer: () -> Unit,
-    centerPerson: Person?,
+    centerPerson: Person,
     toCall: (Person) -> Unit,
     findPerson: (UUID) -> Person?,
-    findName: (UUID) -> String?,
     autoplay: AutoplayCommons
 ) {
     Box {
@@ -140,7 +140,6 @@ fun TimelineContent(
             centerPerson,
             toCall,
             findPerson,
-            findName,
             autoplay
         )
     }
@@ -156,7 +155,7 @@ fun TimelineContent(
             pauseTimer,
             sendables,
             centerPerson,
-            findName,
+            findPerson,
             autoplay
         )
     }

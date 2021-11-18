@@ -1,6 +1,10 @@
 package org.ossiaustria.lib.domain.models
 
 import org.ossiaustria.lib.domain.models.enums.CallState
+import org.ossiaustria.lib.domain.models.enums.CallState.CANCELLED
+import org.ossiaustria.lib.domain.models.enums.CallState.DENIED
+import org.ossiaustria.lib.domain.models.enums.CallState.FINISHED
+import org.ossiaustria.lib.domain.models.enums.CallState.TIMEOUT
 import org.ossiaustria.lib.domain.models.enums.CallType
 import java.io.Serializable
 import java.util.*
@@ -24,4 +28,7 @@ data class Call(
         val endTime = finishedAt ?: Date()
         endTime.time - startedAt.time
     } else null
+
+    fun isDone(): Boolean = listOf(CANCELLED, DENIED, TIMEOUT, FINISHED)
+        .contains(callState)
 }

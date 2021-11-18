@@ -22,6 +22,7 @@ import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.autoplay.AutoplayCommons
 import org.ossiaustria.amigobox.ui.autoplay.GalleryNavState
+import org.ossiaustria.amigobox.ui.autoplay.TimerNavigationButtonsRow
 import org.ossiaustria.amigobox.ui.commons.AmigoStyle
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
 import org.ossiaustria.amigobox.ui.commons.TimeUtils
@@ -52,8 +53,8 @@ fun OuterStaticBox(
      - size: Int
      */
     sendables: List<Sendable>,
-    centerPerson: Person?,
-    findName: (UUID) -> String?,
+    centerPerson: Person,
+    findPerson: (UUID) -> Person?,
     autoplay: AutoplayCommons
 ) {
     //This is the static Background Box
@@ -96,33 +97,13 @@ fun OuterStaticBox(
                             )
                         )
 
-                        var textNewItem = stringResource(R.string.new_xxx)
-                        var textName = stringResource(R.string.unknown_person)
-                        val senderName = findName(sendable.senderId)
-                        when (sendable) {
-                            is AlbumShare -> {
-                                textNewItem = stringResource(R.string.new_album)
-                                if (senderName != null) {
-                                    textName = senderName.toString()
-                                }
-                            }
-                            is Call -> {
-                                textNewItem = stringResource(R.string.new_call)
-                                if (centerPerson != null) {
-                                    val findName1 =
-                                        findName(sendable.otherPersonId(centerPerson.id))
-                                    if (findName1 != null) {
-                                        textName = findName1.toString()
-                                    }
-                                }
-                            }
-                            is Message -> {
-                                textNewItem = stringResource(R.string.new_message)
-                                if (senderName != null) {
-                                    textName = senderName.toString()
-                                }
-                            }
-                        }
+                        val textNewItem = stringNewSendableItem(sendable)
+                        val senderName = findPerson(sendable.senderId)?.name
+                        val otherPersonName =
+                            findPerson(sendable.otherPersonId(centerPerson.id))?.name
+                        val textName = if (sendable is Call && otherPersonName != null) {
+                            otherPersonName
+                        } else senderName ?: stringResource(R.string.unknown_person)
                         Text(
                             text = stringResource(R.string.from, textNewItem, textName),
                             Modifier.padding(
@@ -136,7 +117,7 @@ fun OuterStaticBox(
             HomeHelpButtonColumn(toHome)
         }
 
-        autoplay.TimerNavigationButtonsRow(
+        TimerNavigationButtonsRow(
             cancelTimer,
             setGalleryIndex,
             startTimer,
@@ -144,9 +125,18 @@ fun OuterStaticBox(
             navigationState,
             setNavigationState,
             pauseTimer,
-            sendables
+            sendables.size,
+            autoplay
         )
     }
+}
+
+@Composable
+fun stringNewSendableItem(sendable: Sendable) = when (sendable) {
+    is AlbumShare -> stringResource(R.string.new_album)
+    is Call -> stringResource(R.string.new_call)
+    is Message -> stringResource(R.string.new_message)
+    else -> stringResource(R.string.new_xxx)
 }
 
 @ExperimentalTime
@@ -181,7 +171,7 @@ fun OuterStaticBoxPreview() {
             currentIndex = 1,
             setGalleryIndex = {},
             centerPerson = person,
-            findName = { "name" },
+            findPerson = { person },
             setNavigationState = {},
             navigationState = GalleryNavState.STOP,
             pauseTimer = {},

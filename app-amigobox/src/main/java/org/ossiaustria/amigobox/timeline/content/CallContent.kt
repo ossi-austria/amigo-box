@@ -24,6 +24,7 @@ import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 import org.ossiaustria.amigobox.ui.commons.durationToString
 import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.Person
+import org.ossiaustria.lib.domain.models.enums.CallState
 import java.util.*
 import kotlin.time.ExperimentalTime
 
@@ -31,12 +32,10 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun CallContent(
     call: Call,
-    toCall: (Person) -> Unit,
-    centerPerson: Person?,
+    centerPerson: Person,
     findPerson: (UUID) -> Person?,
-    findName: (UUID) -> String?
+    toCall: (Person) -> Unit,
 ) {
-    // then CallStatus is ACTIVE
     Row(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -73,23 +72,26 @@ fun CallContent(
             )
             var textName = stringResource(id = R.string.unknown_person)
 
-            if (centerPerson != null) {
-                val nameSender = findName(call.senderId)
-                val nameReceiver = findName(call.receiverId)
-                if (centerPerson.id == call.receiverId && nameSender != null) {
-                    textName = nameSender.toString()
-                } else if (centerPerson.id == call.senderId && nameReceiver != null) {
-                    textName = nameReceiver.toString()
-                }
+            val nameSender = findPerson(call.senderId)?.name
+            val nameReceiver = findPerson(call.receiverId)?.name
+            if (centerPerson.id == call.receiverId && nameSender != null) {
+                textName = nameSender
+            } else if (centerPerson.id == call.senderId && nameReceiver != null) {
+                textName = nameReceiver
             }
 
-
-            Text(
-                text = stringResource(
+            val text = if (call.callState == CallState.FINISHED) {
+                stringResource(
                     R.string.you_had_a_call,
                     durationToString(call.duration),
                     textName
-                ),
+                )
+            } else {
+                // TODO: Add other states?
+                "${call.callState}"
+            }
+            Text(
+                text = text,
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(
                     bottom = UIConstants.TimelineFragment.BOTTOM_PADDING
@@ -104,14 +106,7 @@ fun CallContent(
                 topStart = true,
                 buttonWidth = UIConstants.TimelineFragment.BUTTON_WIDTH
             ) {
-                if (centerPerson != null) {
-                    if (centerPerson.id == call.receiverId) {
-                        findPerson(call.senderId)?.let { toCall(it) }
-
-                    } else if (centerPerson.id == call.senderId) {
-                        findPerson(call.receiverId)?.let { toCall(it) }
-                    }
-                }
+                findPerson(call.otherPersonId(centerPerson.id))?.let { toCall(it) }
             }
         }
     }
@@ -124,10 +119,9 @@ fun CallContentPreview() {
     PreviewTheme {
         CallContent(
             ContentMocks.call,
-            {},
             ContentMocks.centerPerson,
             { ContentMocks.otherPerson },
-            { ContentMocks.otherPerson.name },
+            {},
         )
     }
 }
