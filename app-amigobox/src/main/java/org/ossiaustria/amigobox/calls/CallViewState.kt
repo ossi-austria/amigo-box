@@ -35,7 +35,7 @@ sealed class CallViewState(
         CallViewState(call, outgoing) {
         fun finish(call: Call): CallViewState = Finished(call, outgoing)
         // TODO: add again after server fix
-        //            .also {
+//            .also {
 //                if (call.callState != CallState.FINISHED)
 //                    throw IllegalStateException("'Finished' is not valid for ${call.callState}")
 //            }

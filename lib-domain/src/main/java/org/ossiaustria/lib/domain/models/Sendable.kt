@@ -9,4 +9,10 @@ interface Sendable {
     val retrievedAt: Date?
     val senderId: UUID
     val receiverId: UUID
+
+    fun otherPersonId(centerPersonId: UUID): UUID =
+        if (receiverId == centerPersonId) {
+            senderId
+        } else receiverId
+
 }

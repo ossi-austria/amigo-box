@@ -2,118 +2,59 @@ package org.ossiaustria.lib.domain.services
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.runBlocking
+import org.ossiaustria.lib.domain.api.MessageApi
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Message
 import org.ossiaustria.lib.domain.repositories.MessageRepository
-import org.ossiaustria.lib.domain.services.ServiceMocks.HER_PERSON_ID
-import org.ossiaustria.lib.domain.services.ServiceMocks.MY_PERSON_ID
-import timber.log.Timber
 import java.util.*
-import java.util.UUID.randomUUID
-
-val Int.even: Boolean
-    get() = this % 2 == 0
-
 
 interface MessageService : SendableService<Message> {
-    fun createMessage(senderId: UUID, receiverId: UUID, text: String): Flow<Resource<Message>>
-
-    fun markAsSent(id: UUID): Flow<Resource<Message>>
-    fun markAsRetrieved(id: UUID): Flow<Resource<Message>>
+    suspend fun createMessage(senderId: UUID, receiverId: UUID, text: String): Resource<Message>
+    suspend fun markAsRetrieved(id: UUID): Resource<Message>
 }
 
 class MockMessageServiceImpl(
     private val ioDispatcher: CoroutineDispatcher,
     private val messageRepository: MessageRepository,
+    private val messageApi: MessageApi
 ) : MessageService {
 
     private val wrapper = SendableServiceWrapper<Message>(ioDispatcher)
 
-    private fun mockMessage(
-        id: UUID = randomUUID(),
-        senderId: UUID = HER_PERSON_ID,
-        receiverId: UUID = MY_PERSON_ID,
-        text: String = "mock message",
-        createdAt: Date = Date(),
-        sendAt: Date? = Date(),
-        retrievedAt: Date? = Date(),
-    ) = Message(
-        id = id,
-        createdAt = createdAt,
-        sentAt = sendAt,
-        retrievedAt = retrievedAt,
-        senderId = senderId,
-        receiverId = receiverId,
-        text = text
-    )
-
-    override fun createMessage(
+    override suspend fun createMessage(
         senderId: UUID,
         receiverId: UUID,
         text: String
-    ): Flow<Resource<Message>> = flow {
-        emit(Resource.loading())
-        emit(
-            Resource.success(
-                mockMessage(senderId = MY_PERSON_ID, receiverId = HER_PERSON_ID, retrievedAt = null)
-            )
-        )
-    }.catch {
-        Timber.e(it)
-        emit(Resource.failure(it))
-    }.flowOn(ioDispatcher)
-
-    override fun getOne(id: UUID): Flow<Resource<Message>> = wrapper.getOne {
-        mockMessage()
-    }
-
-    override fun getAll(): Flow<Resource<List<Message>>> = wrapper.getAll {
-        runBlocking {
-            messageRepository.getAllMessages().toList().flatMap { it.valueOrNull()!! }
+    ): Resource<Message> =
+        try {
+            Resource.success(messageApi.createMessage(receiverId = receiverId, text = text))
+        } catch (e: Exception) {
+            Resource.failure(e)
         }
-//        (1..200).map {
-//            val senderId = if (it.even) MY_PERSON_ID else HER_PERSON_ID
-//            val receiverId = if (it.even) HER_PERSON_ID else MY_PERSON_ID
-//            mockMessage(text = "message $it", senderId = senderId, receiverId = receiverId)
-//        }
-    }
+
+    override suspend fun markAsRetrieved(id: UUID): Resource<Message> =
+        try {
+            Resource.success(messageApi.markAsRetrieved(id))
+        } catch (e: Exception) {
+            Resource.failure(e)
+        }
+
+    override fun getOne(id: UUID): Flow<Resource<Message>> =
+        messageRepository.getMessage(id)
+
+    override fun getAll(): Flow<Resource<List<Message>>> =
+        messageRepository.getAllMessages(true)
 
     override fun findWithPersons(
         senderId: UUID?,
         receiverId: UUID?
     ): Flow<Resource<List<Message>>> =
-        wrapper.getAll {
-            (1..4).map {
-                mockMessage(
-                    senderId = senderId ?: MY_PERSON_ID,
-                    receiverId = receiverId ?: HER_PERSON_ID
-                )
-            }
-        }
+        messageRepository.getAllMessages(true)
 
     override fun findWithSender(senderId: UUID): Flow<Resource<List<Message>>> =
-        wrapper.getAll {
-            (1..4).map { mockMessage(senderId = senderId) }
-        }
+        messageRepository.getAllMessages(true)
 
     override fun findWithReceiver(receiverId: UUID): Flow<Resource<List<Message>>> =
-        wrapper.getAll {
-            (1..4).map { mockMessage(receiverId = receiverId) }
-        }
-
-    override fun markAsSent(id: UUID): Flow<Resource<Message>> =
-        wrapper.markAsSent {
-            mockMessage(id = id, senderId = id, sendAt = Date())
-        }
-
-    override fun markAsRetrieved(id: UUID): Flow<Resource<Message>> =
-        wrapper.markAsRetrieved {
-            mockMessage(id = id, senderId = id, retrievedAt = Date())
-        }
+        messageRepository.getAllMessages(true)
 
 }

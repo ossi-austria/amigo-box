@@ -1,7 +1,6 @@
 package org.ossiaustria.amigobox.ui
 
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 class UIConstants {
 
@@ -26,12 +25,9 @@ class UIConstants {
         val HEADER_PADDING_TOP = 4.dp
         val HEADER_PADDING_BOTTOM = 4.dp
         val HEADER_HEIGHT = 64.dp
-        val HEADER_FONT_SIZE = 40.sp
-
         val DESCRIPTION_PADDING_START = 40.dp
         val DESCRIPTION_PADDING_TOP = 4.dp
         val DESCRIPTION_HEIGHT = 40.dp
-        val DESCRIPTION_FONT_SIZE = 16.sp
     }
 
     object ScrollableCardList {
@@ -50,7 +46,7 @@ class UIConstants {
     object NavigationButtonRow {
         val PADDING_START = 40.dp
         val PADDING_END = 40.dp
-        val PADDING_BOTTOM = 8.dp
+        val PADDING_BOTTOM = 16.dp
         val CONTACTS_PADDING_TOP = 32.dp
         val PADDING_TOP = 16.dp
         val HEIGHT = 40.dp
@@ -120,8 +116,25 @@ class UIConstants {
         val ROW_HEIGHT = 40.dp
         val IMAGE_SIZE = 32.dp
         val IMAGE_PADDING = 4.dp
+        val BUTTON_WIDTH = 220.dp
+        val PLAY_IMAGE_SIZE = 24.dp
     }
 
+
+    object TimelineFragment {
+        val INDEX_BOX_HEIGHT = 32.dp
+        val INDEX_BOX_WIDTH = 96.dp
+        val HOME_HELP_BTN_COLUMN_WIDTH = 480.dp
+        val SENDABLE_CARD_SPACER_PADDING = 150.dp
+        val BUTTON_WIDTH = 200.dp
+        val IMAGE_SIZE = 184.dp
+        val PROFIL_IMAGE_COLUMN_PADDING_START = 64.dp
+        val PROFIL_IMAGE_COLUMN_PADDING_END = 8.dp
+        val CONTENT_TEXT_PADDING_TOP = 40.dp
+        val CONTENT_TEXT_PADDING_BOTTOM = 8.dp
+        val BOTTOM_PADDING = 16.dp
+
+    }
     object CallFragmentConstants {
         val MIDDLE_ROW_HEIGHT = 350.dp
         val BOTTOM_ROW_HEIGHT = 200.dp // TODO static Size might be dangerous for that Row

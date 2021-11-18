@@ -21,7 +21,6 @@ import org.ossiaustria.lib.domain.services.AuthService
 import org.ossiaustria.lib.domain.services.CallService
 import org.ossiaustria.lib.domain.services.LoginCleanupService
 import org.ossiaustria.lib.domain.services.MessageService
-import org.ossiaustria.lib.domain.services.MultimediaService
 import org.ossiaustria.lib.domain.services.TimelineService
 import org.robolectric.RobolectricTestRunner
 
@@ -32,7 +31,6 @@ class ServicesModuleTest : KoinTest {
     private val messageService: MessageService by inject()
     private val albumShareService: AlbumShareService by inject()
     private val callService: CallService by inject()
-    private val multimediaService: MultimediaService by inject()
     private val timelineService: TimelineService by inject()
 
     @get:Rule
@@ -64,7 +62,6 @@ class ServicesModuleTest : KoinTest {
             assertNotNull(messageService)
             assertNotNull(albumShareService)
             assertNotNull(callService)
-            assertNotNull(multimediaService)
             assertNotNull(timelineService)
         }
 
