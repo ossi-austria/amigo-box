@@ -28,10 +28,9 @@ import kotlin.time.ExperimentalTime
 fun SendableCard(
     sendable: Sendable,
     toAlbum: (Album) -> Unit,
-    centerPerson: Person?,
+    centerPerson: Person,
     toCall: (Person) -> Unit,
     findPerson: (UUID) -> Person?,
-    findName: (UUID) -> String?
 ) {
     Card(
         modifier = Modifier
@@ -47,21 +46,23 @@ fun SendableCard(
             when (sendable) {
                 is AlbumShare -> AlbumShareContent(sendable, toAlbum)
                 is Call -> {
-                    if (centerPerson != null) {
-                        if ((sendable.callState == CallState.TIMEOUT) && (sendable.receiverId == centerPerson.id)) {
-                            MissedCallContent(sendable, toCall, findName, findPerson, centerPerson)
-                        } else if (sendable.callState == CallState.FINISHED) {
-                            CallContent(
-                                sendable,
-                                toCall,
-                                centerPerson,
-                                findPerson,
-                                findName
-                            )
-                        }
+                    if ((sendable.callState == CallState.TIMEOUT) && (sendable.receiverId == centerPerson.id)) {
+                        MissedCallContent(
+                            sendable,
+                            centerPerson,
+                            findPerson,
+                            toCall
+                        )
+                    } else {
+                        CallContent(
+                            sendable,
+                            centerPerson,
+                            findPerson,
+                            toCall
+                        )
                     }
                 }
-                is Message -> MessageContent(sendable, findName)
+                is Message -> MessageContent(sendable, findPerson)
             }
         }
     }

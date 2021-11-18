@@ -35,10 +35,9 @@ fun InnerDynamicBox(
     setAutoState: (AutoState) -> Unit,
     time: String,
     autoState: AutoState?,
-    centerPerson: Person?,
+    centerPerson: Person,
     toCall: (Person) -> Unit,
     findPerson: (UUID) -> Person?,
-    findName: (UUID) -> String?,
     autoplay: AutoplayCommons
 ) {
     val listState = rememberLazyListState()
@@ -58,7 +57,6 @@ fun InnerDynamicBox(
                         centerPerson,
                         toCall,
                         findPerson,
-                        findName
                     )
                 }
             })
@@ -120,7 +118,6 @@ fun InnerDynamicBoxPreview() {
             centerPerson = person,
             toCall = {},
             findPerson = { person },
-            findName = { "name" },
             autoplay = AutoplayCommons()
         )
     }

@@ -19,10 +19,11 @@ import androidx.compose.ui.res.stringResource
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.lib.domain.models.Message
+import org.ossiaustria.lib.domain.models.Person
 import java.util.*
 
 @Composable
-fun MessageContent(message: Message, findName: (UUID) -> String?) {
+fun MessageContent(message: Message, findPerson: (UUID) -> Person?) {
     Row(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -50,9 +51,9 @@ fun MessageContent(message: Message, findName: (UUID) -> String?) {
         }
         Column {
             var textName = stringResource(R.string.unknown_person)
-            val name = findName(message.senderId)
+            val name = findPerson(message.senderId)?.name
             if (name != null) {
-                textName = name.toString()
+                textName = name
             }
             Text(
                 text = stringResource(R.string.message_from, textName),

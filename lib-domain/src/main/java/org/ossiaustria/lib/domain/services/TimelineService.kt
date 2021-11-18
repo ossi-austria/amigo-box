@@ -16,7 +16,6 @@ class TimelineServiceImpl(
     val albumShareService: AlbumShareService,
     val callService: CallService,
     val messageService: MessageService,
-    val multimediaService: MultimediaService,
 ) : TimelineService {
 
         override fun findWithPersons(

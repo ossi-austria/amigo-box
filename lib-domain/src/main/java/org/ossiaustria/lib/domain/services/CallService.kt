@@ -1,6 +1,5 @@
 package org.ossiaustria.lib.domain.services
 
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import org.ossiaustria.lib.domain.api.CallApi
 import org.ossiaustria.lib.domain.common.Resource
@@ -19,12 +18,9 @@ interface CallService : SendableService<Call> {
 }
 
 class CallServiceImpl(
-    ioDispatcher: CoroutineDispatcher,
     private val callRepository: CallRepository,
     private val callApi: CallApi,
 ) : CallService {
-
-    private val wrapper = SendableServiceWrapper<Call>(ioDispatcher)
 
     override suspend fun createCall(person: Person, callType: CallType): Resource<Call> =
         try {
