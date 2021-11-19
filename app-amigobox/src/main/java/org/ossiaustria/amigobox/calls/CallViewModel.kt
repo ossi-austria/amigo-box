@@ -33,11 +33,20 @@ class CallViewModel(
 
     private var activeCall: Call? = null
 
+    /**
+     * INCOMING calls are passed to this per FCM logic.
+     * Prepare State and load Call & Person via Service
+     */
     fun prepareIncomingCall(call: Call) = viewModelScope.launch {
         _state.postValue(CallViewState.Calling(call, false))
         runRefreshingPerson(call.senderId)
     }
 
+    /**
+     *  OUTGOING call ist created for a provided Person.
+     *
+     *  NOTE: The call has to saved to reuse the Jitsi JWT token later on!
+     */
     fun createNewOutgoingCall(person: Person) = viewModelScope.launch {
         val resource = callService.createCall(person, CallType.VIDEO)
         if (resource is Resource.Success) {
@@ -60,6 +69,13 @@ class CallViewModel(
         }
     }
 
+    /**
+     * Needed for both INCOMING & OUTGOING
+     * Could happen at any time, but usually will happen when the other party performs an operation
+     * like: ACCEPT, CANCEL, DENY, FINISH
+     *
+     * This will use CallViewModel and trigger a state change, see callViewModel.state
+     */
     fun onObservedCallChanged(newCall: Call) {
         val currentState = _state.value
 
@@ -68,19 +84,23 @@ class CallViewModel(
             viewModelScope.launch {
                 callService.deny(newCall)
             }
+            return
         }
 
-
+        /**
+         * Handle state changes via CallState. Transitions are limited and current CallViewState to be Calling or Started.
+         *
+         * NOTE: There is a CallViewState STARTED, but not CallState STARTED (because it is ACCEPTED)
+         */
         if (currentState is CallViewState.Calling) {
             _state.value = when (newCall.callState) {
                 CallState.ACCEPTED -> currentState.start(newCall)
-                CallState.STARTED -> currentState.start(newCall)
                 CallState.DENIED -> currentState.cancel(newCall)
                 CallState.CANCELLED -> currentState.cancel(newCall)
                 CallState.TIMEOUT -> currentState.timeout(newCall)
                 else -> currentState
             }
-        } else if (currentState is CallViewState.Started && newCall.callState == CallState.FINISHED) {
+        } else if (currentState is CallViewState.Accepted && newCall.callState == CallState.FINISHED) {
             _state.value = currentState.finish(newCall)
         } else {
             Timber.w("No support for $currentState and $newCall, do nothing")
@@ -131,7 +151,7 @@ class CallViewModel(
 
     fun finish() = viewModelScope.launch {
         val callState = state.value
-        if (callState is CallViewState.Started) {
+        if (callState is CallViewState.Accepted) {
             val resource = callService.finish(callState.call)
             //Server needs fix for this 400 response
 //                if (it is Resource.Success) {

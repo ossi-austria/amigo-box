@@ -11,14 +11,39 @@ import timber.log.Timber
 import java.io.Serializable
 import java.util.*
 
+/**
+ * Handles all FCM CloudEvents and local Jitsi Broadcast events
+ */
 interface IncomingEventCallbackService {
+
     fun informWillJoin()
+
+    /**
+     * Caller or Callee terminated JitsiCall
+     */
     fun informTerminated()
     fun informJoined()
     fun informParticipantJoined()
+
+    /**
+     * Caller or Callee left JitsiCall
+     */
     fun informParticipantLeft()
     fun observe(function: IncomingEventCallback)
     fun stopObserving()
+
+    /**
+     * This method performs the necessary checks to know, whether we can run in foreground (have connected ViewModels and UI)
+     * or we start from background or even a killed state.
+     *
+     * With *fallbackAction* it is asserted, that any time something is executed.
+     * Either
+     *   a) A IncomingEventsViewModel is connected and has Observers -> notifiedCall will be published
+     *   b) IncomingEventsViewModel will not handle the call, then *fallbackAction* is going to be executed.
+     *
+     * @param cloudEvent AmigoCloudEvent is a parsed FCM event which has necessary Data
+     * @param fallbackAction Is an action which can handle the Call when on background
+     */
     fun handleCloudEventCall(cloudEvent: AmigoCloudEvent, fallbackAction: (Call) -> Unit)
 }
 
@@ -55,7 +80,14 @@ enum class CallEvent {
 }
 
 interface IncomingEventCallback {
+    /**
+     * @return true indicates that this Event was properly handled by an Observer
+     */
     fun onSuccess(call: Call): Boolean
+
+    /**
+     * @return true indicates that this Event was properly handled by an Observer
+     */
     fun onJitsiCallEvent(callEvent: CallEvent): Boolean
 }
 
@@ -65,7 +97,7 @@ class IncomingEventCallbackServiceImpl(
 ) : IncomingEventCallbackService {
 
     private val scope = CoroutineScope(ioDispatcher)
-    var incomingEventCallback: IncomingEventCallback? = null
+    private var incomingEventCallback: IncomingEventCallback? = null
 
     override fun informWillJoin() {
         Timber.i("informWillJoin")
@@ -76,19 +108,21 @@ class IncomingEventCallbackServiceImpl(
         incomingEventCallback?.onJitsiCallEvent(CallEvent.FINISHED)
     }
 
+    override fun informParticipantLeft() {
+        Timber.i("informParticipantLeft")
+        incomingEventCallback?.onJitsiCallEvent(CallEvent.FINISHED)
+    }
+
+    // Currently not important.
     override fun informJoined() {
         Timber.i("informJoined")
         incomingEventCallback?.onJitsiCallEvent(CallEvent.PARTICIPANT_JOINED)
     }
 
+    // Currently not important.
     override fun informParticipantJoined() {
         Timber.i("informParticipantJoined")
         incomingEventCallback?.onJitsiCallEvent(CallEvent.PARTICIPANT_JOINED)
-    }
-
-    override fun informParticipantLeft() {
-        Timber.i("informParticipantLeft")
-        incomingEventCallback?.onJitsiCallEvent(CallEvent.FINISHED)
     }
 
     override fun observe(function: IncomingEventCallback) {
@@ -103,6 +137,7 @@ class IncomingEventCallbackServiceImpl(
         Timber.i("Handle cloudEvent: $cloudEvent")
         Timber.i("Handle cloudEvent: ${cloudEvent.type}, incomingEventCallback != null: ${incomingEventCallback != null}")
 
+        // Download Call: needed for everything.
         val callResource = runBlocking(scope.coroutineContext) {
             callRepository.getCall(cloudEvent.entityId, true).first { it !is Resource.Loading }
         }
@@ -110,8 +145,12 @@ class IncomingEventCallbackServiceImpl(
             is Resource.Success -> {
                 val call = callResource.value
                 Timber.i("Handle cloudEvent: Resource.Success: $call")
-                val completedByObservers = incomingEventCallback?.onSuccess(call) ?: false
-                if (!completedByObservers) {
+                val hasBeenCompletedByObservers = incomingEventCallback?.onSuccess(call) ?: false
+                /**
+                 * When no Observer was connected, e.g. when App is in Background or was killed,
+                 * we need to perform the fallbackAction (start Activity!)
+                 */
+                if (!hasBeenCompletedByObservers) {
                     fallbackAction(call)
                 }
             }

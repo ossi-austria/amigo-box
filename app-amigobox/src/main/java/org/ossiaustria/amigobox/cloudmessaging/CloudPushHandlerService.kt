@@ -22,6 +22,10 @@ class CloudPushHandlerService(
         Timber.tag(TAG).i("New FCM token: $newToken")
     }
 
+    /**
+     * Transform FCM Data Message (important: HAS to be a Data Message),
+     * into an "AmigoCloudEvent" and emits the Event to incomingEventsViewModel OR starts the AmigoBox activity
+     */
     fun onMessageReceived(message: RemoteMessage) {
         Timber.tag(TAG).i("New message received: $message")
         Timber.tag(TAG).i(message.data.toString())
@@ -33,6 +37,7 @@ class CloudPushHandlerService(
                     startActivityForCall(appContext, it)
                 }
             } else {
+                // TODO: need improvements, could look similar to CALL
                 val intent = Intent(appContext, MainBoxActivity::class.java)
                 createMessage(intent, cloudEvent)
             }

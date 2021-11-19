@@ -2,10 +2,8 @@ package org.ossiaustria.amigobox
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.net.Uri
 import android.nfc.NfcAdapter
 import android.os.Bundle
-import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -53,18 +51,7 @@ class MainBoxActivity : AppCompatActivity() {
 
         handleCallIntents(intent)
 
-//        setupPermissions()
-    }
-
-    private fun setupPermissions() {
-        val intent = Intent(
-            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-            Uri.parse("package:" + BuildConfig.APPLICATION_ID)
-        )
-        startActivityForResult(
-            intent,
-            ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE
-        )
+        // FIXME: Add Permission util again and ask for ACTION_MANAGE_OVERLAY_PERMISSION
     }
 
     override fun onResume() {
