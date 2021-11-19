@@ -289,25 +289,6 @@ fun ButtonsRow(
             listSize = items.size
         )
 
-        /*   StartAndPauseButton(
-               text = playButtonText(
-                   navigationState,
-                   stringResource(R.string.start_diashow_button_description),
-                   stringResource(R.string.stop_diashow_button_description)
-               ),
-               state = navigationState,
-               itemIndex = currentIndex,
-               listSize = items.size,
-           ) {
-               startStopPressed(
-                   startTimer,
-                   setNavigationState,
-                   pauseTimer,
-                   navigationState
-               )
-           }
-
-         */
         NavigationButton(
             onClick = {
                 nextPressed(

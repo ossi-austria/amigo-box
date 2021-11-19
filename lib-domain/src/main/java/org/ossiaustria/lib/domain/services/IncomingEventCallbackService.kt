@@ -2,12 +2,13 @@ package org.ossiaustria.lib.domain.services
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.repositories.CallRepository
 import timber.log.Timber
+import java.io.Serializable
 import java.util.*
 
 interface IncomingEventCallbackService {
@@ -16,9 +17,9 @@ interface IncomingEventCallbackService {
     fun informJoined()
     fun informParticipantJoined()
     fun informParticipantLeft()
-    fun handleEvent(cloudEvent: AmigoCloudEvent): Boolean
     fun observe(function: IncomingEventCallback)
     fun stopObserving()
+    fun handleCloudEventCall(cloudEvent: AmigoCloudEvent, fallbackAction: (Call) -> Unit)
 }
 
 enum class AmigoCloudEventType {
@@ -31,7 +32,7 @@ data class AmigoCloudEvent(
     val entityId: UUID,
     val receiverId: UUID,
     val action: String,
-) {
+) : Serializable {
 
     companion object {
         fun fromMap(map: Map<String, String>): AmigoCloudEvent? = try {
@@ -54,9 +55,8 @@ enum class CallEvent {
 }
 
 interface IncomingEventCallback {
-    fun onSuccess(call: Call)
-    fun onError(e: Throwable?)
-    fun onJitsiCallEvent(callEvent: CallEvent)
+    fun onSuccess(call: Call): Boolean
+    fun onJitsiCallEvent(callEvent: CallEvent): Boolean
 }
 
 class IncomingEventCallbackServiceImpl(
@@ -99,21 +99,26 @@ class IncomingEventCallbackServiceImpl(
         incomingEventCallback = null
     }
 
-    override fun handleEvent(cloudEvent: AmigoCloudEvent): Boolean {
-        return if (cloudEvent.type == AmigoCloudEventType.CALL && incomingEventCallback != null) {
-            scope.launch {
-                callRepository.getCall(cloudEvent.entityId, true).collectLatest {
-                    if (it is Resource.Success) {
-                        incomingEventCallback?.onSuccess(it.value)
-                    } else if (it is Resource.Failure) {
-                        Timber.e(it.throwable, "Error during handling $cloudEvent")
-                        incomingEventCallback?.onError(it.throwableOrNull())
-                    }
+    override fun handleCloudEventCall(cloudEvent: AmigoCloudEvent, fallbackAction: (Call) -> Unit) {
+        Timber.i("Handle cloudEvent: $cloudEvent")
+        Timber.i("Handle cloudEvent: ${cloudEvent.type}, incomingEventCallback != null: ${incomingEventCallback != null}")
+
+        val callResource = runBlocking(scope.coroutineContext) {
+            callRepository.getCall(cloudEvent.entityId, true).first { it !is Resource.Loading }
+        }
+        when (callResource) {
+            is Resource.Success -> {
+                val call = callResource.value
+                Timber.i("Handle cloudEvent: Resource.Success: $call")
+                val completedByObservers = incomingEventCallback?.onSuccess(call) ?: false
+                if (!completedByObservers) {
+                    fallbackAction(call)
                 }
             }
-            true
-        } else {
-            false
+            is Resource.Failure -> {
+                Timber.w("Handle cloudEvent: Cannot retrieve call of ")
+                Timber.e(callResource.throwable, "Error during handling $cloudEvent")
+            }
         }
     }
 

@@ -26,17 +26,16 @@ class IncomingEventsViewModel(
     init {
         viewModelScope.launch {
             incomingEventCallbackService.observe(object : IncomingEventCallback {
-                override fun onSuccess(call: Call) {
+                override fun onSuccess(call: Call): Boolean {
                     _notifiedCall.postValue(call)
+                    return _notifiedCall.hasActiveObservers() || notifiedCall.hasActiveObservers()
                 }
 
-                override fun onError(e: Throwable?) {
-                    Timber.e(e)
-                }
-
-                override fun onJitsiCallEvent(callEvent: CallEvent) {
+                override fun onJitsiCallEvent(callEvent: CallEvent): Boolean {
                     Timber.i("onJitsiCallEvent: $callEvent")
                     _notifiedCallEvent.postValue(callEvent)
+                    return _notifiedCallEvent.hasActiveObservers() || notifiedCallEvent.hasActiveObservers()
+
                 }
             })
         }
@@ -45,6 +44,11 @@ class IncomingEventsViewModel(
     override fun onCleared() {
         incomingEventCallbackService.stopObserving()
         super.onCleared()
+    }
+
+    fun clearCall() {
+        _notifiedCall.value = null
+        _notifiedCallEvent.value = null
     }
 
 }

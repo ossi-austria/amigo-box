@@ -63,6 +63,14 @@ class CallViewModel(
     fun onObservedCallChanged(newCall: Call) {
         val currentState = _state.value
 
+        if (currentState?.call != null && currentState.call.id != newCall.id) {
+            Timber.w("Currently, a call is active, and a new Call cannot be accepted")
+            viewModelScope.launch {
+                callService.deny(newCall)
+            }
+        }
+
+
         if (currentState is CallViewState.Calling) {
             _state.value = when (newCall.callState) {
                 CallState.ACCEPTED -> currentState.start(newCall)

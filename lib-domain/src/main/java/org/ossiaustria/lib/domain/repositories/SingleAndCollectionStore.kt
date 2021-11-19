@@ -161,7 +161,7 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
         flow: Flow<StoreResponse<List<DOMAIN>>>
     ) {
         flow.flowOn(dispatcherProvider.io()).collect { response ->
-            transformResponseToOutcome(response, onNoNewData = { Resource.loading() })
+            transformResponseToOutcome(response, onNoNewData = { Resource.success(emptyList()) })
         }
     }
 }
