@@ -21,17 +21,17 @@ val MyTypography = Typography(
     h1 = TextStyle(
         fontFamily = Sans,
         fontWeight = FontWeight.W400,
-        fontSize = 72.sp
+        fontSize = 64.sp
     ),
     h2 = TextStyle(
         fontFamily = Sans,
         fontWeight = FontWeight.W400,
-        fontSize = 64.sp
+        fontSize = 56.sp
     ),
     h3 = TextStyle(
         fontFamily = Sans,
         fontWeight = FontWeight.W400,
-        fontSize = 53.sp
+        fontSize = 48.sp
     ),
     caption = TextStyle(
         fontFamily = Karla,

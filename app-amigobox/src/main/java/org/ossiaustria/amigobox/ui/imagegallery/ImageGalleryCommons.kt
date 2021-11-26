@@ -2,9 +2,6 @@ package org.ossiaustria.amigobox.ui.imagegallery
 
 import java.util.concurrent.TimeUnit
 
-enum class GalleryNavState {
-    STOP, PLAY
-}
 
 enum class AutoState {
     CHANGE, CHANGED
