@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineDispatcher
 import org.ossiaustria.amigobox.BoxViewModel
+import org.ossiaustria.amigobox.ui.autoplay.GalleryNavState
 import org.ossiaustria.lib.domain.models.Album
 
 class ImageGalleryViewModel(
