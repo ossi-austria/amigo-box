@@ -2,6 +2,8 @@ package org.ossiaustria.amigobox
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
@@ -66,12 +68,12 @@ internal class NfcViewModelTest {
             val data = NfcHandler.NfcTagData("nfcRef")
             // prepare test
             val nfcInfo = mockNfcInfo()
-            every { nfcInfoService.findPerRef(eq("nfcRef")) } returns
-                flowOf(Resource.success(nfcInfo))
+            coEvery { nfcInfoService.findPerRef(eq("nfcRef")) } returns
+                Resource.success(nfcInfo)
 
             subject.processNfcTagData(data)
 
-            verify { nfcInfoService.findPerRef(eq("nfcRef")) }
+            coVerify { nfcInfoService.findPerRef(eq("nfcRef")) }
             assertEquals(nfcInfo, subject.nfcInfo.value?.valueOrNull())
         }
 

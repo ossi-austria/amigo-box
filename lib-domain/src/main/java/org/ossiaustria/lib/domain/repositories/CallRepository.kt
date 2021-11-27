@@ -17,7 +17,7 @@ interface CallRepository {
 
     fun getAllCalls(refresh: Boolean = false): Flow<Resource<List<Call>>>
 
-        fun getCall(id: UUID, refresh: Boolean = false): Flow<Resource<Call>>
+    fun getCall(id: UUID, refresh: Boolean = false): Flow<Resource<Call>>
 }
 
 internal class CallRepositoryImpl(

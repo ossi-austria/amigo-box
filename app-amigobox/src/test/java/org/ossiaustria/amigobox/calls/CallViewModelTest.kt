@@ -123,7 +123,7 @@ internal class CallViewModelTest {
 
         subject.state.test()
             .assertHasValue()
-            .assertValue(CallViewState.Started(resultingCall, false))
+            .assertValue(CallViewState.Accepted(resultingCall, false))
     }
 
     @Test

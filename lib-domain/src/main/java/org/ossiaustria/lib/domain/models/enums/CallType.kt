@@ -6,10 +6,10 @@ enum class CallType {
 }
 
 enum class CallState {
-    @Deprecated("Use CALLING instead")
-    CREATED,
-    CALLING,
-    CANCELLED, DENIED, TIMEOUT,
-    ACCEPTED, STARTED,
-    FINISHED,
+    CALLING, // Notification sent, should display Calling window
+    CANCELLED, // caller cancels
+    DENIED, // callee denies/cancels
+    ACCEPTED, // callee accepted
+    FINISHED, // caller/callee finishes
+    TIMEOUT, // timeout or technical timeout
 }

@@ -175,8 +175,7 @@ fun AlbumsFragmentComposable(
                             onClick = { toAlbum(album) }
                         ),
                     elevation = ScrollableCardList.CARD_ELEVATION,
-                )
-                {
+                ) {
                     Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.Start,
