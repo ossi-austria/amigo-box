@@ -17,7 +17,6 @@ class NfcHandler {
         // Check if intent has the action of a discovered NFC tag
         // with NDEF formatted contents
         if (checkIntent?.action == NfcAdapter.ACTION_TAG_DISCOVERED) {
-
             val rawByteArray = checkIntent.getByteArrayExtra(NfcAdapter.EXTRA_ID)
             return if (rawByteArray != null) {
                 val nfcTagId = extractNfcId(rawByteArray)
@@ -50,7 +49,6 @@ class NfcHandler {
                 return null
             }
         } else {
-            Timber.w("Intent has no NFC data attached")
             return null
         }
     }

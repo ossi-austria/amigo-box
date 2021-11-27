@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.calls.IncomingEventsViewModel
+import org.ossiaustria.amigobox.cloudmessaging.CloudPushHandlerService
 import org.ossiaustria.amigobox.nfc.NfcViewModel
 import org.ossiaustria.amigobox.nfc.NfcViewModelState
 import org.ossiaustria.lib.nfc.NfcHandler
@@ -17,6 +18,7 @@ import org.ossiaustria.lib.nfc.NfcHandler
 class MainBoxActivity : AppCompatActivity() {
 
     val navigator: Navigator by inject()
+    private val cloudPushHandlerService: CloudPushHandlerService by inject()
     private val nfcViewModel: NfcViewModel by viewModel()
     private val incomingEventsViewModel: IncomingEventsViewModel by viewModel()
 
@@ -48,6 +50,11 @@ class MainBoxActivity : AppCompatActivity() {
         }
 
         onCreateSetupNfcIntentHandling()
+
+        handleCallIntents(intent)
+
+        cloudPushHandlerService.bindToActivity(this)
+        // FIXME: Add Permission util again and ask for ACTION_MANAGE_OVERLAY_PERMISSION
     }
 
     override fun onResume() {
@@ -72,7 +79,10 @@ class MainBoxActivity : AppCompatActivity() {
         }
 
         incomingEventsViewModel.notifiedCall.observe(this) {
-            navigator.toCallFragment(it)
+            it?.let {
+                navigator.toCallFragment(it)
+                incomingEventsViewModel.clearCall()
+            }
         }
 
         nfcViewModel.state.observe(this) { resource ->
@@ -92,6 +102,15 @@ class MainBoxActivity : AppCompatActivity() {
                 }
             } else if (resource.isFailure) {
                 Toast.makeText(this, resource.toString(), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun handleCallIntents(intent: Intent) {
+        intent.extras?.let { bundle ->
+            Navigator.getCall(bundle)?.let { call ->
+                Navigator.setCall(bundle, null)
+                navigator.toCallFragment(call)
             }
         }
     }
@@ -131,7 +150,16 @@ class MainBoxActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleNfcIntent(intent)
+        handleCallIntents(intent)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        cloudPushHandlerService.unbind()
+    }
+
+    companion object {
+        const val ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 3456
+    }
 }
 

@@ -31,7 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
-import kotlinx.coroutines.GlobalScope
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -54,11 +54,15 @@ class CallFragment : Fragment() {
     private val incomingEventsViewModel by viewModel<IncomingEventsViewModel>()
 
     val navigator: Navigator by inject()
-    val phoneSoundManager: PhoneSoundManager by inject()
+    private val phoneSoundManager: PhoneSoundManager by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        /**
+         * Fragment will be started with Call for INCOMING Calls or
+         * Person for OUTGOING Calls to be created with a provided Person
+         */
         val call = Navigator.getCall(requireArguments())
         val person = Navigator.getPerson(requireArguments())
 
@@ -69,17 +73,27 @@ class CallFragment : Fragment() {
             callViewModel.createNewOutgoingCall(person)
             Navigator.setPerson(requireArguments(), null)
         } else {
+            val call1 = callViewModel.state.value?.call
             Toast.makeText(context, "Call or Person are both null!", Toast.LENGTH_LONG).show()
         }
 
+        /**
+         * INCOMING & OUTGOING calls can change at any time whether by server
+         * Timeout, Accept, Denying or Finishing or others
+         */
         callViewModel.state.observe(viewLifecycleOwner) {
             if (it is CallViewState.Calling) {
+                // play a Sound while Call is Calling and waiting
                 if (it.outgoing) {
                     phoneSoundManager.playOutgoing()
                 } else {
                     phoneSoundManager.playIncoming()
                 }
-            } else if (it is CallViewState.Started) {
+            } else if (it is CallViewState.Accepted) {
+                /**
+                 * Call started, because it was ACCEPTED by others or you,
+                 * And JitsiFragment must be created and started right now
+                 */
                 phoneSoundManager.stopAll()
                 val token = callViewModel.getToken()
                 if (token != null) {
@@ -89,24 +103,40 @@ class CallFragment : Fragment() {
                 }
             } else if (it is CallViewState.Finished) {
                 phoneSoundManager.stopAll()
-                Toasts.showLong(requireContext(), "BACK!")
+                Toasts.showLong(requireContext(), "Anruf beendet")
                 navigator.back()
             } else {
                 phoneSoundManager.stopAll()
             }
         }
 
+        /**
+         * Observe the FCM via "incomingEventsViewModel", needed for both INCOMING & OUTGOING
+         * Could happen at any time, but usually will happen when the other party performs an operation
+         * like: ACCEPT, CANCEL, DENY, FINISH
+         *
+         * This will use CallViewModel and trigger a state change, see callViewModel.state
+         */
         incomingEventsViewModel.notifiedCall.observe(viewLifecycleOwner) {
             callViewModel.onObservedCallChanged(it)
         }
 
+        /**
+         * Observe the JitsiActivity via LocalBroadCastmanager, needed for both INCOMING & OUTGOING
+         * Could happen at any time, but usually will happen when a change a Particiap Left oder joined,
+         * or you terminate the JitsiFragment.
+         *
+         * Just Finishes the Call
+         *
+         * This will use CallViewModel and trigger a state change, see callViewModel.state
+         */
         incomingEventsViewModel.notifiedCallEvent.observe(viewLifecycleOwner) {
             if (it == CallEvent.FINISHED) {
                 callViewModel.finish()
             }
         }
 
-        GlobalScope.launch {
+        incomingEventsViewModel.viewModelScope.launch {
             phoneSoundManager.prepare(requireContext())
         }
     }
@@ -139,7 +169,7 @@ class CallFragment : Fragment() {
                         contentAlignment = Alignment.Center
                     ) {
                         when {
-                            partner == null -> Text("Person nicht erreichbar.")
+                            state != null && partner == null -> Text("Person nicht erreichbar.")
                             state is CallViewState.Failure -> Text(text = (state as CallViewState.Failure).error.toString())
                             else -> Text("Loading..")
                         }
@@ -249,7 +279,7 @@ fun CallFragmentComposable(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    if (callViewState is CallViewState.Started) {
+                    if (callViewState is CallViewState.Accepted) {
                         //finish the call
                         IconButtonSmall(
                             resourceId = R.drawable.ic_decline_call,
@@ -304,7 +334,6 @@ fun CallFragmentComposable(
                             )
                         }
                     } else {
-
                         IconButtonSmall(
                             resourceId = R.drawable.ic_home_icon,
                             backgroundColor = MaterialTheme.colors.onSecondary,
@@ -316,7 +345,6 @@ fun CallFragmentComposable(
                             color = MaterialTheme.colors.onPrimary,
                             textAlign = TextAlign.Center
                         )
-
                     }
                 }
             }
@@ -362,11 +390,11 @@ fun CallFragmentComposablePreview_started() {
     val call = Call(
         randomUUID(),
         callType = CallType.AUDIO,
-        callState = CallState.STARTED,
+        callState = CallState.CANCELLED,
         senderId = randomUUID(),
         receiverId = randomUUID(),
     )
-    val callViewState = CallViewState.Started(call, false)
+    val callViewState = CallViewState.Accepted(call, false)
     AmigoThemeLight {
         CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}, {}) {}
     }

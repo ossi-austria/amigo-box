@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Album
-import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.NfcInfo
 import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.models.enums.NfcTagType
@@ -43,10 +43,9 @@ class NfcViewModel(
     fun processNfcTagData(nfcTagData: NfcHandler.NfcTagData) {
         val ref = nfcTagData.tagId
         viewModelScope.launch(ioDispatcher) {
-            nfcInfoService.findPerRef(ref).collectLatest { result ->
-                if (!result.isLoading) {
-                    _nfcInfo.postValue(result)
-                }
+            val result = nfcInfoService.findPerRef(ref)
+            if (!result.isLoading) {
+                _nfcInfo.postValue(result)
             }
         }
     }
@@ -63,24 +62,22 @@ class NfcViewModel(
 
     private suspend fun loadAlbum(linkedAlbumId: UUID?) {
         if (linkedAlbumId != null) {
-            albumRepository.getAlbum(linkedAlbumId).collectLatest {
-                if (it.isSuccess) {
-                    _state.postValue(Resource.success(NfcViewModelState.OpenAlbum(it.valueOrNull()!!)))
-                } else if (it.isFailure) {
-                    _state.postValue(Resource.failure("Cannot load Album"))
-                }
+            val resource = albumRepository.getAlbum(linkedAlbumId).take(2).last()
+            if (resource.isSuccess) {
+                _state.postValue(Resource.success(NfcViewModelState.OpenAlbum(resource.valueOrNull()!!)))
+            } else if (resource.isFailure) {
+                _state.postValue(Resource.failure("Cannot load Album"))
             }
         }
     }
 
     private suspend fun loadPerson(linkedPersonId: UUID?) {
         if (linkedPersonId != null) {
-            personRepository.getPerson(linkedPersonId).collectLatest {
-                if (it.isSuccess) {
-                    _state.postValue(Resource.success(NfcViewModelState.CallPerson(it.valueOrNull()!!)))
-                } else if (it.isFailure) {
-                    _state.postValue(Resource.failure("Cannot load Person"))
-                }
+            val resource = personRepository.getPerson(linkedPersonId).take(2).last()
+            if (resource.isSuccess) {
+                _state.postValue(Resource.success(NfcViewModelState.CallPerson(resource.valueOrNull()!!)))
+            } else if (resource.isFailure) {
+                _state.postValue(Resource.failure("Cannot load Person"))
             }
         }
     }
@@ -91,9 +88,5 @@ class NfcViewModel(
 
     fun callPerson(linkedPerson: Person, navigator: Navigator) {
         navigator.toCallFragment(linkedPerson)
-    }
-
-    fun retrieveCall(call: Call, navigator: Navigator) {
-        navigator.toCallFragment(call)
     }
 }

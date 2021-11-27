@@ -21,6 +21,10 @@ data class Person(
 
     // {{baseUrl}}/v1/persons/:id/public/:key
     fun absoluteAvatarUrl() = if (!avatarUrl.isNullOrBlank()) {
-        BuildConfig.API_ENDPOINT + "persons/$id/public/$avatarUrl"
+        if (avatarUrl.contains("://")) {
+            avatarUrl
+        } else {
+            BuildConfig.API_ENDPOINT + "persons/$id/public/$avatarUrl"
+        }
     } else null
 }
