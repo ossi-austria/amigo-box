@@ -45,7 +45,8 @@ class TimelineFragment : Fragment() {
                 viewModel,
                 navigator::toHome,
                 navigator::toImageGallery,
-                navigator::toCallFragment
+                navigator::toCallFragment,
+                navigator::back
             )
         }
     }
@@ -66,6 +67,7 @@ fun TimelineScreen(
     toHome: () -> Unit,
     toAlbum: (Album) -> Unit,
     toCall: (Person) -> Unit,
+    back: () -> Unit
 ) {
 
     AmigoThemeLight {
@@ -98,7 +100,8 @@ fun TimelineScreen(
                     centerPerson,
                     toCall,
                     viewModel::findPerson,
-                    autoplay
+                    autoplay,
+                    back
                 )
             }
         }
@@ -124,13 +127,13 @@ fun TimelineContent(
     centerPerson: Person,
     toCall: (Person) -> Unit,
     findPerson: (UUID) -> Person?,
-    autoplay: AutoplayCommons
+    autoplay: AutoplayCommons,
+    back: () -> Unit
 ) {
     Box {
         InnerDynamicBox(
             sendables,
             toAlbum,
-            toHome,
             cancelTimer,
             currentIndex,
             setGalleryIndex,
@@ -140,7 +143,8 @@ fun TimelineContent(
             centerPerson,
             toCall,
             findPerson,
-            autoplay
+            autoplay,
+            back
         )
     }
     Box {

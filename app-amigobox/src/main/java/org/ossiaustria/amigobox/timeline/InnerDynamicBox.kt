@@ -28,7 +28,6 @@ import kotlin.time.ExperimentalTime
 fun InnerDynamicBox(
     sendables: List<Sendable>,
     toAlbum: (Album) -> Unit,
-    toHome: () -> Unit,
     cancelTimer: () -> Unit,
     currentIndex: Int?,
     setGalleryIndex: (Int) -> Unit,
@@ -38,7 +37,8 @@ fun InnerDynamicBox(
     centerPerson: Person,
     toCall: (Person) -> Unit,
     findPerson: (UUID) -> Person?,
-    autoplay: AutoplayCommons
+    autoplay: AutoplayCommons,
+    back: () -> Unit
 ) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -67,7 +67,7 @@ fun InnerDynamicBox(
                 listState,
                 currentIndex,
                 sendables,
-                toHome
+                back
             )
         }
         autoplay.handleSendables(
@@ -108,7 +108,6 @@ fun InnerDynamicBoxPreview() {
         InnerDynamicBox(
             sendables = sendables,
             toAlbum = {},
-            toHome = {},
             cancelTimer = {},
             currentIndex = 1,
             setGalleryIndex = {},
@@ -118,7 +117,8 @@ fun InnerDynamicBoxPreview() {
             centerPerson = person,
             toCall = {},
             findPerson = { person },
-            autoplay = AutoplayCommons()
+            autoplay = AutoplayCommons(),
+            back = {}
         )
     }
 }
