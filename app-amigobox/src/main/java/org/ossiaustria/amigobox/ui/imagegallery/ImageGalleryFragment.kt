@@ -6,7 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -79,7 +86,7 @@ class ImageGalleryFragment : Fragment() {
     }
 
     fun toAlbums() {
-        navigator.toAlbums()
+        navigator.back()
     }
 
     fun toHome() {
@@ -160,7 +167,6 @@ fun GalleryFragmentComposable(
             setNavigationState,
             pauseTimer,
             items,
-            time,
             autoplay
     )
 }
@@ -171,14 +177,14 @@ fun HomeAndHelpRow(toHome: () -> Unit) {
             .fillMaxSize())
     {
         Row(
-                Modifier
-                        .padding(
-                                top = UIConstants.HomeButtonRow.TOP_PADDING,
-                                end = UIConstants.HomeButtonRow.END_PADDING
-                        )
-                        .fillMaxWidth()
-                        .height(UIConstants.HomeButtonRow.HEIGHT),
-                horizontalArrangement = Arrangement.End
+            Modifier
+                .padding(
+                    top = UIConstants.HomeButtonRow.TOP_PADDING,
+                    end = UIConstants.HomeButtonRow.END_PADDING
+                )
+                .fillMaxWidth()
+                .height(UIConstants.HomeButtonRow.HEIGHT),
+            horizontalArrangement = Arrangement.End
         ) {
             IconButtonSmall(
                     resourceId = R.drawable.ic_home_icon,
@@ -253,12 +259,12 @@ fun ImageBox(
                     if (mediaUrl != null) {
 
                         NetworkImage(
-                                modifier = Modifier
-                                        .fillMaxSize()
-                                        .clickable(onClick = {}),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clickable(onClick = {}),
 
-                                url = mediaUrl,
-                                contentScale = ContentScale.Fit
+                            url = mediaUrl,
+                            contentScale = ContentScale.Fit
                         )
                     } else {
                         NotFoundImage()
@@ -283,7 +289,6 @@ fun NavButtonsBox(
         setNavigationState: (GalleryNavState) -> Unit,
         pauseTimer: () -> Unit,
         items: List<Multimedia>,
-        time: String,
         autoplay: AutoplayCommons,
 
         ) {
