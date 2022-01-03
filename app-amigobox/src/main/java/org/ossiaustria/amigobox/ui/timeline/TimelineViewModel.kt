@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.timeline
+package org.ossiaustria.amigobox.ui.timeline
 
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData

@@ -9,10 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.ossiaustria.amigobox.calls.IncomingEventsViewModel
 import org.ossiaustria.amigobox.cloudmessaging.CloudPushHandlerService
 import org.ossiaustria.amigobox.nfc.NfcViewModel
 import org.ossiaustria.amigobox.nfc.NfcViewModelState
+import org.ossiaustria.amigobox.ui.calls.IncomingEventsViewModel
 import org.ossiaustria.lib.nfc.NfcHandler
 
 class MainBoxActivity : AppCompatActivity() {

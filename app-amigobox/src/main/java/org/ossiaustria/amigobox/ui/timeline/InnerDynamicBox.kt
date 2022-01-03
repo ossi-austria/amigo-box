@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.timeline
+package org.ossiaustria.amigobox.ui.timeline
 
 import SendableCard
 import androidx.compose.foundation.layout.Column

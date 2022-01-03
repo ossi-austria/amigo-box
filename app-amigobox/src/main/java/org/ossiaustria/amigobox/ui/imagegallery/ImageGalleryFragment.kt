@@ -6,14 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -35,14 +30,11 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
-import org.ossiaustria.amigobox.R
-import org.ossiaustria.amigobox.ui.UIConstants
-import org.ossiaustria.amigobox.ui.albums.album1
 import org.ossiaustria.amigobox.ui.autoplay.AutoplayCommons
 import org.ossiaustria.amigobox.ui.autoplay.GalleryNavState
 import org.ossiaustria.amigobox.ui.autoplay.TimerNavigationButtonsRow
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
-import org.ossiaustria.amigobox.ui.commons.IconButtonSmall
+import org.ossiaustria.amigobox.ui.commons.HomeButtonsRow
 import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
 import org.ossiaustria.lib.domain.models.Multimedia
 
@@ -53,9 +45,9 @@ class ImageGalleryFragment : Fragment() {
     val navigator: Navigator by inject()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         val album = Navigator.getAlbum(requireArguments())
 
@@ -63,11 +55,26 @@ class ImageGalleryFragment : Fragment() {
             if (album != null) {
                 AmigoThemeLight {
                     Surface(color = MaterialTheme.colors.secondary) {
-                        GalleryScreen(
-                                album.itemsWithMedia,
-                                viewModel,
-                                ::toAlbums,
-                                ::toHome,
+                        val autoplay = AutoplayCommons()
+                        val navigationState by viewModel.navigationState.observeAsState()
+                        val currentIndex by viewModel.currentGalleryIndex.observeAsState()
+                        val time by viewModel.time.observeAsState(CountdownFormat.TIME_COUNTDOWN.formatTime())
+                        val autoState by viewModel.autoState.observeAsState()
+                        GalleryFragmentComposable(
+                            album.itemsWithMedia,
+                            ::toAlbums,
+                            ::toHome,
+                            navigationState,
+                            currentIndex,
+                            time,
+                            autoState,
+                            viewModel::cancelTimer,
+                            viewModel::startTimer,
+                            viewModel::pauseTimer,
+                            viewModel::setGalleryIndex,
+                            viewModel::setAutoState,
+                            viewModel::setNavigationState,
+                            autoplay
                         )
                     }
                 }
@@ -96,164 +103,97 @@ class ImageGalleryFragment : Fragment() {
 }
 
 @Composable
-fun GalleryScreen(
-        items: List<Multimedia>,
-        viewModel: ImageGalleryViewModel,
-        toAlbums: () -> Unit,
-        toHome: () -> Unit,
-) {
-    val autoplay = AutoplayCommons()
-
-    val navigationState by viewModel.navigationState.observeAsState()
-    val currentIndex by viewModel.currentGalleryIndex.observeAsState()
-    val time by viewModel.time.observeAsState(CountdownFormat.TIME_COUNTDOWN.formatTime())
-    val autoState by viewModel.autoState.observeAsState()
-
-
-    GalleryFragmentComposable(
-            items,
-            toAlbums,
-            toHome,
-            navigationState,
-            currentIndex,
-            time,
-            autoState,
-            viewModel::cancelTimer,
-            viewModel::startTimer,
-            viewModel::pauseTimer,
-            viewModel::setGalleryIndex,
-            viewModel::setAutoState,
-            viewModel::setNavigationState,
-            autoplay
-    )
-}
-
-@Composable
 fun GalleryFragmentComposable(
-        items: List<Multimedia>,
-        toAlbums: () -> Unit,
-        toHome: () -> Unit,
-        navigationState: GalleryNavState?,
-        currentIndex: Int?,
-        time: String,
-        autoState: AutoState?,
-        cancelTimer: () -> Unit,
-        startTimer: () -> Unit,
-        pauseTimer: () -> Unit,
-        setGalleryIndex: (Int) -> Unit,
-        setAutoState: (AutoState) -> Unit,
-        setNavigationState: (GalleryNavState) -> Unit,
-        autoplay: AutoplayCommons
+    items: List<Multimedia>,
+    toAlbums: () -> Unit,
+    toHome: () -> Unit,
+    navigationState: GalleryNavState?,
+    currentIndex: Int?,
+    time: String,
+    autoState: AutoState?,
+    cancelTimer: () -> Unit,
+    startTimer: () -> Unit,
+    pauseTimer: () -> Unit,
+    setGalleryIndex: (Int) -> Unit,
+    setAutoState: (AutoState) -> Unit,
+    setNavigationState: (GalleryNavState) -> Unit,
+    autoplay: AutoplayCommons
 ) {
     ImageBox(
-            items,
-            cancelTimer,
-            currentIndex,
-            toAlbums,
-            setGalleryIndex,
-            setAutoState,
-            time,
-            autoState
+        items,
+        cancelTimer,
+        currentIndex,
+        toAlbums,
+        setGalleryIndex,
+        setAutoState,
+        time,
+        autoState
     )
-    HomeAndHelpRow(
-            toHome
-    )
-    NavButtonsBox(
-            cancelTimer,
-            setGalleryIndex,
-            startTimer,
-            currentIndex,
-            navigationState,
-            setNavigationState,
-            pauseTimer,
-            items,
-            autoplay
-    )
-}
+    HomeButtonsRow(onClickBack = toHome)
 
-@Composable
-fun HomeAndHelpRow(toHome: () -> Unit) {
-    Box(modifier = Modifier
-            .fillMaxSize())
-    {
-        Row(
-            Modifier
-                .padding(
-                    top = UIConstants.HomeButtonRow.TOP_PADDING,
-                    end = UIConstants.HomeButtonRow.END_PADDING
-                )
-                .fillMaxWidth()
-                .height(UIConstants.HomeButtonRow.HEIGHT),
-            horizontalArrangement = Arrangement.End
-        ) {
-            IconButtonSmall(
-                    resourceId = R.drawable.ic_home_icon,
-                    backgroundColor = MaterialTheme.colors.secondary,
-                    fillColor = MaterialTheme.colors.surface,
-            ) {
-                toHome()
-            }
-            IconButtonSmall(
-                    resourceId = R.drawable.ic_help_icon,
-                    backgroundColor = MaterialTheme.colors.secondary,
-                    fillColor = MaterialTheme.colors.primary,
-            ) {
-                //TODO: Add help screens
-            }
-        }
-    }
+    TimerNavigationButtonsRow(
+        cancelTimer,
+        setGalleryIndex,
+        startTimer,
+        currentIndex,
+        navigationState,
+        setNavigationState,
+        pauseTimer,
+        items.size,
+        autoplay
+    )
 }
 
 @Preview(
-        name = "whole Screen Preview",
-        device = Devices.AUTOMOTIVE_1024p,
-        widthDp = 720,
-        heightDp = 360
+    name = "whole Screen Preview",
+    device = Devices.AUTOMOTIVE_1024p,
+    widthDp = 720,
+    heightDp = 360
 )
 @Composable
 fun PreviewGalleryFragmentComposable() {
 
     GalleryFragmentComposable(
-            album1.itemsWithMedia,
-            toAlbums = {},
-            toHome = {},
-            navigationState = GalleryNavState.STOP,
-            currentIndex = 1,
-            time = "05:00",
-            autoState = AutoState.CHANGED,
-            cancelTimer = {},
-            startTimer = {},
-            pauseTimer = {},
-            setGalleryIndex = {},
-            setAutoState = {},
-            setNavigationState = {},
-            autoplay = AutoplayCommons()
+        listOf(),
+        toAlbums = {},
+        toHome = {},
+        navigationState = GalleryNavState.STOP,
+        currentIndex = 1,
+        time = "05:00",
+        autoState = AutoState.CHANGED,
+        cancelTimer = {},
+        startTimer = {},
+        pauseTimer = {},
+        setGalleryIndex = {},
+        setAutoState = {},
+        setNavigationState = {},
+        autoplay = AutoplayCommons()
     )
 }
 
 @Composable
 fun ImageBox(
-        items: List<Multimedia>,
-        cancelTimer: () -> Unit,
-        currentIndex: Int?,
-        toAlbums: () -> Unit,
-        setGalleryIndex: (Int) -> Unit,
-        setAutoState: (AutoState) -> Unit,
-        time: String,
-        autoState: AutoState?
+    items: List<Multimedia>,
+    cancelTimer: () -> Unit,
+    currentIndex: Int?,
+    toAlbums: () -> Unit,
+    setGalleryIndex: (Int) -> Unit,
+    setAutoState: (AutoState) -> Unit,
+    time: String,
+    autoState: AutoState?
 ) {
     Box {
         val listState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
 
         LazyRow(
-                modifier = Modifier.fillMaxSize(),
-                state = listState
+            modifier = Modifier.fillMaxSize(),
+            state = listState
         ) {
             items(items = items, itemContent = { item ->
 
                 Column(
-                        modifier = Modifier.fillParentMaxWidth()
+                    modifier = Modifier.fillParentMaxWidth()
                 ) {
                     val mediaUrl = item.absoluteMediaUrl()
                     if (mediaUrl != null) {
@@ -279,44 +219,12 @@ fun ImageBox(
     }
 }
 
-@Composable
-fun NavButtonsBox(
-        cancelTimer: () -> Unit,
-        setGalleryIndex: (Int) -> Unit,
-        startTimer: () -> Unit,
-        currentIndex: Int?,
-        navigationState: GalleryNavState?,
-        setNavigationState: (GalleryNavState) -> Unit,
-        pauseTimer: () -> Unit,
-        items: List<Multimedia>,
-        autoplay: AutoplayCommons,
-
-        ) {
-    Box(
-            modifier = Modifier.fillMaxSize()
-    ) {
-
-        TimerNavigationButtonsRow(
-                cancelTimer,
-                setGalleryIndex,
-                startTimer,
-                currentIndex,
-                navigationState,
-                setNavigationState,
-                pauseTimer,
-                items.size,
-                autoplay
-        )
-
-    }
-}
-
 suspend fun goToImage(
-        cancelTimer: () -> Unit,
-        listState: LazyListState,
-        index: Int?,
-        items: List<Multimedia>,
-        toAlbums: () -> Unit
+    cancelTimer: () -> Unit,
+    listState: LazyListState,
+    index: Int?,
+    items: List<Multimedia>,
+    toAlbums: () -> Unit
 ) {
 
     if (index != null) {
@@ -334,11 +242,11 @@ fun initTimer(viewModel: ImageGalleryViewModel) {
 }
 
 fun handleImages(
-        setGalleryIndex: (Int) -> Unit,
-        setAutoState: (AutoState) -> Unit,
-        time: String,
-        currentIndex: Int?,
-        autoState: AutoState?
+    setGalleryIndex: (Int) -> Unit,
+    setAutoState: (AutoState) -> Unit,
+    time: String,
+    currentIndex: Int?,
+    autoState: AutoState?
 ) {
     if ((time == "00:00") and (autoState == AutoState.CHANGE)) {
         if (currentIndex != null) {

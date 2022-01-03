@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.calls
+package org.ossiaustria.amigobox.ui.calls
 
 import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.enums.CallState

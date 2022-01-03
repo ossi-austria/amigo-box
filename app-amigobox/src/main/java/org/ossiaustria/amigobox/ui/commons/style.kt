@@ -8,16 +8,8 @@ import androidx.compose.ui.unit.dp
 
 object AmigoStyle {
 
-    object Dim {
-        val A = 2.dp
-        val B = 4.dp
-        val C = 8.dp
-        val D = 16.dp
-    }
-
     object Images {
-
         @Composable
-        fun roundBorders() = Modifier.clip(RoundedCornerShape(size = Dim.D))
+        fun roundBorders() = Modifier.clip(RoundedCornerShape(size = 16.dp))
     }
 }

@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.calls
+package org.ossiaustria.amigobox.ui.calls
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -129,7 +129,7 @@ fun ControlButton(
     color: Color = MaterialTheme.colors.primary
 ) {
     TextAndIconButton(
-        resourceId = iconResId,
+        iconId = iconResId,
         text = stringResource(textResId),
         backgroundColor = color,
         onClick = onClick

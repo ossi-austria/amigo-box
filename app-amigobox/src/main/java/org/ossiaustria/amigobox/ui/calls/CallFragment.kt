@@ -1,33 +1,22 @@
-package org.ossiaustria.amigobox.calls
+package org.ossiaustria.amigobox.ui.calls
 
-import ProfileImage
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -35,19 +24,10 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
-import org.ossiaustria.amigobox.R
-import org.ossiaustria.amigobox.ui.UIConstants
-import org.ossiaustria.amigobox.ui.commons.AmigoColors
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
-import org.ossiaustria.amigobox.ui.commons.HomeButtonRow
-import org.ossiaustria.amigobox.ui.commons.IconButtonSmall
 import org.ossiaustria.amigobox.ui.commons.Toasts
-import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.enums.CallState
-import org.ossiaustria.lib.domain.models.enums.CallType
 import org.ossiaustria.lib.domain.services.CallEvent
-import org.ossiaustria.lib.jitsi.ui.JitsiWebrtcJsWebView
-import java.util.UUID.randomUUID
 
 class CallFragment : Fragment() {
 
@@ -203,140 +183,3 @@ class CallFragment : Fragment() {
     }
 }
 
-@ExperimentalAnimationApi
-@Composable
-fun CallFragmentComposable(
-    jitsiListener: JitsiWebrtcJsWebView.Listener?,
-    partnerName: String,
-    partnerAvatarUrl: String?,
-    callViewState: CallViewState,
-    jitsiCommand: JitsiCallComposableCommand?,
-    onAccept: () -> Unit,
-    onCancel: () -> Unit,
-    onDeny: () -> Unit,
-    onFinish: () -> Unit,
-    onBack: () -> Unit,
-    onToggleAudio: () -> Unit,
-) {
-
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(AmigoColors.mistyOcean)
-    ) {
-
-        val callState = callViewState.call.callState
-        JitsiCallComposable(
-            jitsiListener,
-            callViewState.call.id.toString(),
-            callViewState.call.token,
-            jitsiCommand
-        )
-
-        if (callState != CallState.ACCEPTED) {
-            ProfileImage(
-                partnerAvatarUrl,
-                contentScale = ContentScale.Crop
-            )
-        }
-
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-
-            HomeButtonRow {
-                Spacer(modifier = Modifier.size(UIConstants.SmallButtons.BUTTON_SIZE))
-                Box(Modifier.weight(1F), contentAlignment = Alignment.Center) {
-                    Text(
-                        text = partnerName,
-                        style = MaterialTheme.typography.h3,
-                        color = MaterialTheme.colors.onPrimary
-                    )
-                }
-                IconButtonSmall(
-                    resourceId = R.drawable.ic_help_icon,
-                    backgroundColor = MaterialTheme.colors.surface,
-                    fillColor = MaterialTheme.colors.primary
-                ) {
-                    //TODO:Help screens
-                }
-            }
-            CallBottomControl(
-                callViewState,
-                onAccept,
-                onCancel,
-                onDeny,
-                onFinish,
-                onBack,
-                onToggleAudio
-            )
-        }
-    }
-}
-
-@ExperimentalAnimationApi
-@Preview(showBackground = true)
-@Composable
-fun CallFragmentComposablePreview_outgoing() {
-    val call = Call(
-        randomUUID(),
-        callType = CallType.AUDIO,
-        callState = CallState.CALLING,
-        senderId = randomUUID(),
-        receiverId = randomUUID(),
-    )
-    val callViewState = CallViewState.Calling(call, true)
-    AmigoThemeLight {
-        CallFragmentComposable(null, "Lukas", "", callViewState,
-            JitsiCallComposableCommand.Prepare, {}, {}, {}, {}, {}) {}
-    }
-}
-
-@ExperimentalAnimationApi
-@Preview(showBackground = true)
-@Composable
-fun CallFragmentComposablePreview_incoming() {
-    val call = Call(
-        randomUUID(),
-        callType = CallType.AUDIO,
-        callState = CallState.CALLING,
-        senderId = randomUUID(),
-        receiverId = randomUUID(),
-    )
-    val callViewState = CallViewState.Calling(call, false)
-    AmigoThemeLight {
-        CallFragmentComposable(
-            null, "Lukas",
-            "",
-            callViewState,
-            JitsiCallComposableCommand.Prepare,
-            {}, {}, {}, {}, {}) {}
-    }
-}
-
-@ExperimentalAnimationApi
-@Preview(showBackground = true)
-@Composable
-fun CallFragmentComposablePreview_started() {
-    val call = Call(
-        randomUUID(),
-        callType = CallType.AUDIO,
-        callState = CallState.CANCELLED,
-        senderId = randomUUID(),
-        receiverId = randomUUID(),
-    )
-    val callViewState = CallViewState.Accepted(call, false, false)
-    AmigoThemeLight {
-        CallFragmentComposable(
-            null, "Lukas",
-            "",
-            callViewState,
-            JitsiCallComposableCommand.Prepare,
-            {}, {}, {}, {}, {}) {}
-    }
-}

@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.timeline.content
+package org.ossiaustria.amigobox.ui.timeline.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border

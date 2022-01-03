@@ -1,7 +1,6 @@
 package org.ossiaustria.amigobox
 
 import org.ossiaustria.lib.domain.auth.Account
-import org.ossiaustria.lib.domain.auth.TokenResult
 import org.ossiaustria.lib.domain.models.Album
 import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.models.enums.MemberType
@@ -14,16 +13,6 @@ object EntityMocks {
         return Account(
             id = id,
             email = email
-        )
-    }
-
-    fun tokenResult(token: String = "token", subject: String = "subject"): TokenResult {
-        return TokenResult(
-            token = token,
-            subject = subject,
-            issuedAt = Date(),
-            expiration = Date(),
-            issuer = "test",
         )
     }
 

@@ -12,9 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
-import org.ossiaustria.amigobox.ui.commons.NavigationButton
-import org.ossiaustria.amigobox.ui.commons.NavigationButtonType
-import org.ossiaustria.amigobox.ui.commons.StartAndPauseButton
+import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 
 @Composable
 fun TimerNavigationButtonsRow(
@@ -25,7 +23,8 @@ fun TimerNavigationButtonsRow(
     navigationState: GalleryNavState?,
     setNavigationState: (GalleryNavState) -> Unit,
     pauseTimer: () -> Unit,
-    size: Int, autoplayCommons: AutoplayCommons
+    size: Int,
+    autoplayCommons: AutoplayCommons
 ) {
     Row(
         modifier = Modifier
@@ -40,11 +39,9 @@ fun TimerNavigationButtonsRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom
     ) {
-        NavigationButton(
+        TextAndIconButton(
+            iconId = R.drawable.ic_arrow_left,
             text = stringResource(R.string.previous_picture_button),
-            type = NavigationButtonType.PREVIOUS,
-            itemIndex = currentIndex,
-            listSize = size,
             onClick = {
                 autoplayCommons.previousPressed(
                     cancelTimer,
@@ -54,29 +51,27 @@ fun TimerNavigationButtonsRow(
                     navigationState
                 )
             }
-
         )
-        StartAndPauseButton(
-            text = autoplayCommons.playButtonText(
-                navigationState,
-                stringResource(R.string.start_diashow_button_description),
+        val isPlaying = navigationState == GalleryNavState.PLAY
+        TextAndIconButton(
+            bottomStart = false,
+            iconId = if (isPlaying) R.drawable.ic_play else R.drawable.ic_pause,
+            text = if (isPlaying) {
                 stringResource(R.string.stop_diashow_button_description)
-            ),
-            state = navigationState,
-        ) {
-            autoplayCommons.startStopPressed(
-                startTimer,
-                setNavigationState,
-                pauseTimer,
-                navigationState
-            )
-        }
-
-        NavigationButton(
+            } else stringResource(R.string.start_diashow_button_description),
+            onClick = {
+                autoplayCommons.startStopPressed(
+                    startTimer,
+                    setNavigationState,
+                    pauseTimer,
+                    navigationState
+                )
+            }
+        )
+        TextAndIconButton(
+            iconId = null,
+            endIconId = R.drawable.ic_arrow_right,
             text = stringResource(R.string.next_image_button_description),
-            type = NavigationButtonType.NEXT,
-            itemIndex = currentIndex,
-            listSize = size,
             onClick = {
                 autoplayCommons.nextPressed(
                     cancelTimer,

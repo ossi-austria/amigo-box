@@ -19,11 +19,11 @@ import org.koin.test.mock.MockProviderRule
 import org.koin.test.mock.declareMock
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.onboarding.OnboardingViewModel
-import org.ossiaustria.amigobox.timeline.TimelineViewModel
 import org.ossiaustria.amigobox.ui.albums.AlbumsViewModel
 import org.ossiaustria.amigobox.ui.contacts.ContactsViewModel
 import org.ossiaustria.amigobox.ui.home.HomeViewModel
 import org.ossiaustria.amigobox.ui.imagegallery.ImageGalleryViewModel
+import org.ossiaustria.amigobox.ui.timeline.TimelineViewModel
 import org.ossiaustria.lib.domain.modules.apiModule
 import org.ossiaustria.lib.domain.modules.databaseModule
 import org.ossiaustria.lib.domain.modules.dispatcherModule

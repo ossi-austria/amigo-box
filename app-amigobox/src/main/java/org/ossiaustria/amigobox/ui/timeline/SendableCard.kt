@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import org.ossiaustria.amigobox.timeline.content.AlbumShareContent
-import org.ossiaustria.amigobox.timeline.content.CallContent
-import org.ossiaustria.amigobox.timeline.content.MessageContent
-import org.ossiaustria.amigobox.timeline.content.MissedCallContent
 import org.ossiaustria.amigobox.ui.UIConstants
+import org.ossiaustria.amigobox.ui.timeline.content.AlbumShareContent
+import org.ossiaustria.amigobox.ui.timeline.content.CallContent
+import org.ossiaustria.amigobox.ui.timeline.content.MessageContent
+import org.ossiaustria.amigobox.ui.timeline.content.MissedCallContent
 import org.ossiaustria.lib.domain.models.Album
 import org.ossiaustria.lib.domain.models.AlbumShare
 import org.ossiaustria.lib.domain.models.Call

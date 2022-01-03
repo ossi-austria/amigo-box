@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.timeline.content
+package org.ossiaustria.amigobox.ui.timeline.content
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
@@ -28,13 +28,12 @@ fun AlbumShareContent(
         modifier = Modifier.padding(bottom = UIConstants.TimelineFragment.BOTTOM_PADDING)
     )
     TextAndIconButton(
-        resourceId = R.drawable.ic_image_light,
+        iconId = R.drawable.ic_image_light,
         text = stringResource(R.string.open_album_button),
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = MaterialTheme.colors.onPrimary,
         bottomStart = false,
         topStart = true,
-        buttonWidth = UIConstants.TimelineFragment.BUTTON_WIDTH
     ) {
         if (albumShare.album.items.isNotEmpty()) {
             toAlbum(albumShare.album)
