@@ -1,5 +1,6 @@
 package org.ossiaustria.amigobox.ui.commons
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -19,10 +20,8 @@ fun HomeButtonRow(
         modifier = Modifier
             .fillMaxWidth()
             .height(UIConstants.HomeButtonRow.HEIGHT)
-            .padding(
-                end = UIConstants.HomeButtonRow.TOP_PADDING,
-                top = UIConstants.HomeButtonRow.TOP_PADDING
-            ),
+            .background(AmigoColors.white)
+            .padding(UIConstants.HomeButtonRow.TOP_PADDING),
         content = content
     )
 }

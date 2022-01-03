@@ -277,7 +277,6 @@ fun scrollTextColor(type: NavigationButtonType, scrollState: ScrollState): Color
     }
 }
 
-
 enum class NavigationButtonType {
     PREVIOUS, NEXT
 }
@@ -286,7 +285,8 @@ enum class NavigationButtonType {
 fun IconButtonSmall(
     @DrawableRes resourceId: Int,
     backgroundColor: Color,
-    fillColor: Color,
+    fillColor: Color = MaterialTheme.colors.primary,
+    textColor: Color = MaterialTheme.colors.onPrimary,
     onClick: () -> Unit
 ) {
     Card(
@@ -297,7 +297,7 @@ fun IconButtonSmall(
         elevation = UIConstants.ScrollableCardList.CARD_ELEVATION
 
     ) {
-        IconButtonShape(Modifier, fillColor, backgroundColor)
+        IconButtonShape(Modifier, fillColor)
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -319,12 +319,10 @@ fun IconButtonSmall(
 fun IconButtonShape(
     modifier: Modifier,
     fillColor: Color,
-    backgroundColor: Color
 ) {
     Canvas(
         modifier = modifier
-            .size(UIConstants.SmallButtons.BUTTON_SIZE)
-            .background(backgroundColor),
+            .size(UIConstants.SmallButtons.BUTTON_SIZE),
         onDraw = {
             drawCircle(
                 color = fillColor,
@@ -343,9 +341,9 @@ fun IconButtonShape(
 @Composable
 fun TextAndIconButton(
     @DrawableRes resourceId: Int,
-    buttonDescription: String,
-    backgroundColor: Color,
-    contentColor: Color,
+    text: String,
+    backgroundColor: Color = MaterialTheme.colors.primary,
+    contentColor: Color = MaterialTheme.colors.onPrimary,
     bottomStart: Boolean = true,
     topStart: Boolean = false,
     buttonWidth: Dp = UIConstants.BigButtons.BUTTON_WIDTH,
@@ -385,8 +383,7 @@ fun TextAndIconButton(
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
 
         ) {
             Image(
@@ -405,7 +402,7 @@ fun TextAndIconButton(
             Text(
                 modifier = Modifier
                     .padding(UIConstants.BigButtons.ICON_PADDING),
-                text = buttonDescription,
+                text = text,
                 style = MaterialTheme.typography.body2,
                 color = contentColor,
             )

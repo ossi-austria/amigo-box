@@ -53,8 +53,6 @@ dependencies {
     implementation(Libs.appcompat)
     implementation(Libs.material)
 
-    implementation(Libs.jitsiMeetSdk) { transitive = true }
-
     implementation(Libs.coroutinesAndroid)
     implementation(Libs.coroutinesCore)
     implementation(Libs.Lifecycle.viewmodel)

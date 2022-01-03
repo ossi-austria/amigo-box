@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!--    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>-->
+    <!--    <script src="https://meet.jit.si/libs/lib-jitsi-meet.min.js"></script>-->
+    <script src='https://meet.jit.si/external_api.js'></script>
+
+</head>
+
+<body style="height: 100%; width: 100%;margin: 0">
+<script language="javascript">
+
+var connection = null;
+var room = null;
+var api = null;
+
+function connect(serverDomain, jitsiRoom, jwtToken, measuredWidth,measuredHeight) {
+    console.log("AMIGO-JITSI connect: ", serverDomain, jitsiRoom, jwtToken, measuredHeight);
+    var options = {
+        roomName: jitsiRoom,
+        width: measuredWidth,
+        height: measuredHeight,
+        jwt: jwtToken,
+        parentNode: document.querySelector('#container'),
+        configOverwrite: {
+            disableDeepLinking: true
+        },
+        interfaceConfigOverwrite: {
+            filmStripOnly: true
+        }
+    }
+    api = new JitsiMeetExternalAPI(serverDomain, options);
+    JITSI.onConnectionSuccess();
+    triggerStatusRefresh()
+}
+
+function triggerStatusRefresh() {
+    console.log("AMIGO-JITSI getStatus: ");
+
+    api.isAudioMuted().then(muted => { JITSI.refreshAudioMuted(muted); });
+    api.isVideoMuted().then(muted => { JITSI.refreshVideoMuted(muted); });
+    var getNumberOfParticipants = api.getNumberOfParticipants();
+    JITSI.refreshParticipantsCount(getNumberOfParticipants);
+}
+
+
+function hangup() {
+    console.log("AMIGO-JITSI hangup: ");
+    api.executeCommand('hangup');
+}
+function toggleAudio() {
+    console.log("AMIGO-JITSI toggleAudio: ");
+    api.executeCommand('toggleAudio');
+}
+function executeCommand(command) {
+    console.log("AMIGO-JITSI mute: ",command);
+    api.executeCommand(command);
+}
+
+function onConnectionSuccess() {
+    JITSI.onConnectionSuccess();
+}
+
+function onConnectionFailed() {
+    JITSI.onConnectionFailed();
+}
+
+
+
+
+</script>
+<div id="container" style="height: 100%; width: 100%;margin: 0"></div>
+</body>
+</html>

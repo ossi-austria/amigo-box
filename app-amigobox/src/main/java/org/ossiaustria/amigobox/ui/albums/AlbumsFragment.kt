@@ -100,7 +100,7 @@ fun AlbumsFragmentComposable(
             // Home Button
             TextAndIconButton(
                 resourceId = R.drawable.ic_home_icon,
-                buttonDescription = stringResource(id = R.string.back_home_description),
+                text = stringResource(id = R.string.back_home_description),
                 backgroundColor = MaterialTheme.colors.primary,
                 contentColor = MaterialTheme.colors.onPrimary,
                 bottomStart = true,
@@ -111,7 +111,7 @@ fun AlbumsFragmentComposable(
             }
             TextAndIconButton(
                 resourceId = R.drawable.ic_help_icon,
-                buttonDescription = stringResource(R.string.help_button_description),
+                text = stringResource(R.string.help_button_description),
                 backgroundColor = MaterialTheme.colors.surface,
                 contentColor = MaterialTheme.colors.onPrimary,
                 bottomStart = true,

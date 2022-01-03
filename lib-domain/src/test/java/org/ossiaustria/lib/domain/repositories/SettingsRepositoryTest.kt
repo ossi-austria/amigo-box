@@ -1,17 +1,14 @@
 package org.ossiaustria.lib.domain.repositories
 
-import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import androidx.test.platform.app.InstrumentationRegistry
-import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.android.ext.koin.androidContext
 import org.ossiaustria.lib.domain.FakeAndroidKeyStore
 import org.ossiaustria.lib.domain.auth.Account
 import org.ossiaustria.lib.domain.auth.TokenResult
@@ -42,6 +39,7 @@ internal class SettingsRepositoryTest() {
         subject = SettingsRepositoryImpl(context, cryptPrefs)
     }
 
+    // IMPORTANT: Can fail on windows!
     @Test
     fun `should write and read TokenResult accessToken from crypted store`() {
         val tokenResult = TokenResult("token", "subject", Date(), Date(), "issuer")
@@ -56,6 +54,7 @@ internal class SettingsRepositoryTest() {
         assertNotEquals("NONE", subject.cryptedPreferences.getString(KEY_ACCESS_TOKEN, "NONE"))
     }
 
+    // IMPORTANT: Can fail on windows!
     @Test
     fun `should write and read TokenResult refreshToken from crypted store`() {
         val tokenResult = TokenResult("token", "subject", Date(), Date(), "issuer")
@@ -70,6 +69,7 @@ internal class SettingsRepositoryTest() {
         assertNotEquals("NONE", subject.cryptedPreferences.getString(KEY_REFRESH_TOKEN, "NONE"))
     }
 
+    // IMPORTANT: Can fail on windows!
     @Test
     fun `should write and read Account from crypted store`() {
         val account = Account(randomUUID(), "email@example.org", "", Date())

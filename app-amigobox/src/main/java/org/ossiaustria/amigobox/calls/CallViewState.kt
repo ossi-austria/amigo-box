@@ -15,7 +15,7 @@ sealed class CallViewState(
      */
     data class Calling(override val call: Call, override val outgoing: Boolean) :
         CallViewState(call, outgoing) {
-        fun start(call: Call): CallViewState = Accepted(call, outgoing).also {
+        fun start(call: Call): CallViewState = Accepted(call, outgoing, false).also {
             if (call.callState != CallState.ACCEPTED)
                 throw IllegalStateException("'Accepted' is not valid for ${call.callState}")
         }
@@ -40,7 +40,11 @@ sealed class CallViewState(
     /**
      * A call was created and then ACCEPTED, by you or other person
      */
-    data class Accepted(override val call: Call, override val outgoing: Boolean) :
+    data class Accepted(
+        override val call: Call,
+        override val outgoing: Boolean,
+        val isMuted: Boolean
+    ) :
         CallViewState(call, outgoing) {
         fun finish(call: Call): CallViewState = Finished(call, outgoing)
         // TODO: add again after server fix
@@ -48,6 +52,10 @@ sealed class CallViewState(
 //            if (call.callState != CallState.FINISHED)
 //                throw IllegalStateException("'Finished' is not valid for ${call.callState}")
 //        }
+
+        fun toggledMuted(): Accepted {
+            return this.copy(isMuted = !this.isMuted)
+        }
     }
 
     /**

@@ -10,6 +10,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import org.ossiaustria.lib.commons.DispatcherProvider
@@ -164,4 +165,8 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
             transformResponseToOutcome(response, onNoNewData = { Resource.success(emptyList()) })
         }
     }
+}
+
+fun <T> Flow<T>.finished(): Flow<T> {
+    return this.filter { it !is Resource.Loading<*> }
 }

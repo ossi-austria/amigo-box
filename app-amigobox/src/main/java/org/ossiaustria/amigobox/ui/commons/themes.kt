@@ -2,7 +2,6 @@ package org.ossiaustria.amigobox.ui.commons
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
@@ -10,30 +9,22 @@ import androidx.compose.runtime.Composable
 @Composable
 fun AmigoThemeLight(content: @Composable () -> Unit) {
     MaterialTheme(
-        colors = LightColors,
+        colors = AmigoLightColors,
         typography = MyTypography,
         content = content
     )
 }
 
-val LightColors = lightColors(
-    primary = orange,
-    surface = white,
-    onPrimary = textColor,
-    secondary = darkBlue,
-    secondaryVariant = darkBlueVariance,
-    onSecondary = white,
-    background = lightGrey,
-    onBackground = textColor,
-    error = redVariance
-)
-val DarkColors = darkColors(
-    primary = orange,
-    surface = white,
-    onPrimary = textColor,
-    secondary = white,
-    background = darkBlue,
-    onBackground = white,
+val AmigoLightColors = lightColors(
+    surface = AmigoColors.white,
+    primary = AmigoColors.orange,
+    onPrimary = AmigoColors.darkNavySmoke,
+    secondary = AmigoColors.mistyOcean,
+    secondaryVariant = AmigoColors.mistyOcean,
+    onSecondary = AmigoColors.white,
+    background = AmigoColors.lightGrey,
+    onBackground = AmigoColors.charcoal,
+    error = AmigoColors.redVariance
 )
 
 @Composable

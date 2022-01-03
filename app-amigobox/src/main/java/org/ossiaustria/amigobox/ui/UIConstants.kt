@@ -138,10 +138,7 @@ class UIConstants {
 
     }
     object CallFragmentConstants {
-        val MIDDLE_ROW_HEIGHT = 280.dp
-        val BOTTOM_ROW_HEIGHT = 200.dp // TODO static Size might be dangerous for that Row
-        val COLUMN_WIDTH = 400.dp
-        val COLUMN_START_PADDING = 160.dp
+        val BOTTOM_ROW_HEIGHT = 180.dp
     }
 
 }
