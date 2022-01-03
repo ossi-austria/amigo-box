@@ -99,7 +99,7 @@ fun CallContent(
             )
             TextAndIconButton(
                 resourceId = R.drawable.ic_phone_call,
-                buttonDescription = stringResource(R.string.call_back_button),
+                text = stringResource(R.string.call_back_button),
                 backgroundColor = MaterialTheme.colors.primary,
                 contentColor = MaterialTheme.colors.onPrimary,
                 bottomStart = false,

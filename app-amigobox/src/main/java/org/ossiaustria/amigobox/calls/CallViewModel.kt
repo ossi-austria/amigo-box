@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.ossiaustria.amigobox.BoxViewModel
 import org.ossiaustria.lib.domain.common.Resource
@@ -14,7 +15,9 @@ import org.ossiaustria.lib.domain.models.enums.CallState
 import org.ossiaustria.lib.domain.models.enums.CallType
 import org.ossiaustria.lib.domain.modules.UserContext
 import org.ossiaustria.lib.domain.repositories.GroupRepository
+import org.ossiaustria.lib.domain.repositories.finished
 import org.ossiaustria.lib.domain.services.CallService
+import org.ossiaustria.lib.jitsi.ui.JitsiWebrtcJsWebView
 import timber.log.Timber
 import java.util.*
 
@@ -25,11 +28,24 @@ class CallViewModel(
     private val groupRepository: GroupRepository,
 ) : BoxViewModel(ioDispatcher) {
 
+    val jitsiListener: JitsiWebrtcJsWebView.Listener = object : JitsiWebrtcJsWebView.Listener {
+        override fun refreshParticipantsCount(count: Int) {}
+        override fun refreshAudioMuted(isAudioMuted: Boolean) {
+            _state.value?.let {
+                if (it is CallViewState.Accepted) {
+                    _state.postValue(it.copy(isMuted = isAudioMuted))
+                }
+            }
+        }
+    }
     private val _state: MutableLiveData<CallViewState> = MutableLiveData()
     private val _partner: MutableLiveData<Person> = MutableLiveData()
+    private val _jitsiCommand: MutableLiveData<JitsiCallComposableCommand> =
+        MutableLiveData(JitsiCallComposableCommand.Prepare)
 
     val state: LiveData<CallViewState> = _state
     val partner: LiveData<Person> = _partner
+    val jitsiCommand: LiveData<JitsiCallComposableCommand> = _jitsiCommand
 
     private var activeCall: Call? = null
 
@@ -38,8 +54,8 @@ class CallViewModel(
      * Prepare State and load Call & Person via Service
      */
     fun prepareIncomingCall(call: Call) = viewModelScope.launch {
-        _state.postValue(CallViewState.Calling(call, false))
         runRefreshingPerson(call.senderId)
+        _state.postValue(CallViewState.Calling(call, false))
     }
 
     /**
@@ -48,25 +64,32 @@ class CallViewModel(
      *  NOTE: The call has to saved to reuse the Jitsi JWT token later on!
      */
     fun createNewOutgoingCall(person: Person) = viewModelScope.launch {
+        runRefreshingPerson(person.id)
+
+        Timber.i("createCall: for person ${person}")
+
         val resource = callService.createCall(person, CallType.VIDEO)
         if (resource is Resource.Success) {
             activeCall = resource.value
+            Timber.i("createCall: ->  ${activeCall}")
             _state.postValue(CallViewState.Calling(resource.value, true))
         } else if (resource is Resource.Failure) {
             Timber.e("acceptIncomingCall: ${resource.throwable}")
         }
-
-        runRefreshingPerson(person.id)
     }
 
     private suspend fun runRefreshingPerson(personId: UUID) {
-        groupRepository.getGroup(userContext.person()!!.groupId, true).collectLatest { resource ->
-            if (resource.isSuccess) {
-                _partner.postValue(resource.valueOrNull()?.members?.find { it.id == personId })
-            } else if (resource is Resource.Failure) {
-                Timber.e("refreshPerson: could not fetch group -> ${resource.throwable}")
-            }
+        Timber.i("runRefreshingPerson: search for  -> ${personId}")
+
+        val resource =
+            groupRepository.getGroup(userContext.person()!!.groupId, true).finished().first()
+        if (resource.isSuccess) {
+            Timber.i("runRefreshingPerson: refreshed group")
+            _partner.postValue(resource.valueOrNull()?.members?.find { it.id == personId })
+        } else if (resource is Resource.Failure) {
+            Timber.e("refreshPerson: could not fetch group -> ${resource.throwable}")
         }
+
     }
 
     /**
@@ -100,8 +123,14 @@ class CallViewModel(
                 CallState.TIMEOUT -> currentState.timeout(newCall)
                 else -> currentState
             }
+            if (newCall.callState == CallState.ACCEPTED) {
+                emitJitsiCommand(JitsiCallComposableCommand.EnterRoom)
+            }
+
         } else if (currentState is CallViewState.Accepted && newCall.callState == CallState.FINISHED) {
             _state.value = currentState.finish(newCall)
+            emitJitsiCommand(JitsiCallComposableCommand.Finish)
+
         } else {
             Timber.w("No support for $currentState and $newCall, do nothing")
         }
@@ -114,11 +143,12 @@ class CallViewModel(
             if (resource is Resource.Success) {
                 activeCall = resource.value
                 _state.postValue(callState.start(resource.value))
+                emitJitsiCommand(JitsiCallComposableCommand.EnterRoom)
+
             } else if (resource is Resource.Failure) {
                 _state.postValue(callState.error(resource.throwable))
                 Timber.e("accept: ${resource.throwable}")
             }
-
         }
     }
 
@@ -132,7 +162,6 @@ class CallViewModel(
                 _state.postValue(callState.error(resource.throwable))
                 Timber.e("accept: ${resource.throwable}")
             }
-
         }
     }
 
@@ -142,6 +171,8 @@ class CallViewModel(
             val resource = callService.cancel(callState.call)
             if (resource is Resource.Success) {
                 _state.postValue(callState.cancel(resource.value))
+                emitJitsiCommand(JitsiCallComposableCommand.Finish)
+
             } else if (resource is Resource.Failure) {
                 _state.postValue(callState.error(resource.throwable))
                 Timber.e("accept: ${resource.throwable}")
@@ -157,9 +188,19 @@ class CallViewModel(
 //                if (it is Resource.Success) {
             _state.postValue(callState.finish(callState.call))
 //                }
+            emitJitsiCommand(JitsiCallComposableCommand.Finish)
 
         }
     }
+
+    fun onToggleAudio() = emitJitsiCommand(JitsiCallComposableCommand.ToggleAudio)
+
+    private fun emitJitsiCommand(jitsiCallComposableCommand: JitsiCallComposableCommand) =
+        viewModelScope.launch {
+            _jitsiCommand.value = jitsiCallComposableCommand
+            delay(500)
+            _jitsiCommand.value = null
+        }
 
     fun getToken(): String? = if (activeCall != null) {
         activeCall?.token!!

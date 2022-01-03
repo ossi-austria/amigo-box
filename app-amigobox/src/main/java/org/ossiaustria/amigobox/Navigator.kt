@@ -1,18 +1,13 @@
 package org.ossiaustria.amigobox
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import org.ossiaustria.lib.domain.models.Album
 import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.Person
-import org.ossiaustria.lib.domain.services.AmigoCloudEvent
-import org.ossiaustria.lib.jitsi.ui.AmigoSingleJitsiActivity
-import org.ossiaustria.lib.jitsi.ui.AmigoSingleJitsiActivity.Companion.PARAM_JITSI_TOKEN
-import org.ossiaustria.lib.jitsi.ui.AmigoSingleJitsiActivity.Companion.PARAM_JITSI_URL
 
-class Navigator() {
+class Navigator {
 
     private lateinit var navController: NavController
     private var activity: AppCompatActivity? = null
@@ -32,13 +27,6 @@ class Navigator() {
 
     fun toTimeline() {
         navController.navigate(R.id.timelineFragment)
-    }
-
-    fun toJitsiCall(url: String, token: String) {
-        activity?.startActivity(Intent(activity, AmigoSingleJitsiActivity::class.java).apply {
-            putExtra(PARAM_JITSI_URL, url)
-            putExtra(PARAM_JITSI_TOKEN, token)
-        })
     }
 
     fun toPersonDetail(person: Person) {
@@ -84,7 +72,6 @@ class Navigator() {
         const val PARAM_ALBUM = "ALBUM"
         const val PARAM_PERSON = "PERSON"
         const val PARAM_CALL = "CALL"
-        const val PARAM_CLOUD_EVENT = "CLOUD_EVENT"
 
         fun getPerson(bundle: Bundle) = bundle.getSerializable(PARAM_PERSON) as Person?
         fun setPerson(bundle: Bundle, person: Person?) =
@@ -97,12 +84,6 @@ class Navigator() {
         fun getCall(bundle: Bundle) = bundle.getSerializable(PARAM_CALL) as Call?
         fun setCall(bundle: Bundle, call: Call?) =
             bundle.putSerializable(PARAM_CALL, call)
-
-        fun getCloudEvent(bundle: Bundle) =
-            bundle.getSerializable(PARAM_CLOUD_EVENT) as AmigoCloudEvent?
-
-        fun setCloudEvent(bundle: Bundle, amigoCloudEvent: AmigoCloudEvent?) =
-            bundle.putSerializable(PARAM_CLOUD_EVENT, amigoCloudEvent)
 
     }
 }

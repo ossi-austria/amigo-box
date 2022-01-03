@@ -29,7 +29,7 @@ fun AlbumShareContent(
     )
     TextAndIconButton(
         resourceId = R.drawable.ic_image_light,
-        buttonDescription = stringResource(R.string.open_album_button),
+        text = stringResource(R.string.open_album_button),
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = MaterialTheme.colors.onPrimary,
         bottomStart = false,

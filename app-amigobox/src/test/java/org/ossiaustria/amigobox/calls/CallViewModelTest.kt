@@ -74,7 +74,9 @@ internal class CallViewModelTest {
             groupRepository
         )
 
-        every { groupRepository.getGroup(eq(groupId)) } returns flowOf(Resource.success(group))
+        every { groupRepository.getGroup(eq(groupId), eq(true)) } returns flowOf(
+            Resource.success(group)
+        )
         every { userContext.person() } returns analoguePerson
         every { userContext.personId() } returns analoguePerson.id
         coEvery { callService.accept(any()) } answers {
@@ -123,7 +125,7 @@ internal class CallViewModelTest {
 
         subject.state.test()
             .assertHasValue()
-            .assertValue(CallViewState.Accepted(resultingCall, false))
+            .assertValue(CallViewState.Accepted(resultingCall, false, false))
     }
 
     @Test

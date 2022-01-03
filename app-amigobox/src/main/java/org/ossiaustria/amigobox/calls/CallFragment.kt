@@ -6,38 +6,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
+import org.ossiaustria.amigobox.ui.commons.AmigoColors
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
 import org.ossiaustria.amigobox.ui.commons.HomeButtonRow
 import org.ossiaustria.amigobox.ui.commons.IconButtonSmall
@@ -46,6 +46,7 @@ import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.enums.CallState
 import org.ossiaustria.lib.domain.models.enums.CallType
 import org.ossiaustria.lib.domain.services.CallEvent
+import org.ossiaustria.lib.jitsi.ui.JitsiWebrtcJsWebView
 import java.util.UUID.randomUUID
 
 class CallFragment : Fragment() {
@@ -73,7 +74,7 @@ class CallFragment : Fragment() {
             callViewModel.createNewOutgoingCall(person)
             Navigator.setPerson(requireArguments(), null)
         } else {
-            val call1 = callViewModel.state.value?.call
+//            val call1 = callViewModel.state.value?.call
             Toast.makeText(context, "Call or Person are both null!", Toast.LENGTH_LONG).show()
         }
 
@@ -97,7 +98,7 @@ class CallFragment : Fragment() {
                 phoneSoundManager.stopAll()
                 val token = callViewModel.getToken()
                 if (token != null) {
-                    navigator.toJitsiCall(it.call.id.toString(), token)
+                    //                navigator.toJitsiCall(it.call.id.toString(), token)
                 } else {
                     Toasts.showLong(requireContext(), "Cannot use Call, no token ? ")
                 }
@@ -141,25 +142,38 @@ class CallFragment : Fragment() {
         }
     }
 
+    @ExperimentalAnimationApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         setContent {
+
             AmigoThemeLight {
                 val state by callViewModel.state.observeAsState(null)
                 val partner by callViewModel.partner.observeAsState(null)
+                val jitsiListener = callViewModel.jitsiListener
+                val jitsiCommand by callViewModel.jitsiCommand.observeAsState(null)
+                LaunchedEffect(state) {
+                    delay(3000)
+                    state?.let {
+                        callViewModel.onObservedCallChanged(it.call.copy(callState = CallState.ACCEPTED))
+                    }
+                }
                 if (partner != null && state != null) {
                     Surface(color = MaterialTheme.colors.secondary) {
                         CallFragmentComposable(
+                            jitsiListener,
                             partner!!.name,
                             partner!!.absoluteAvatarUrl(),
                             state!!,
+                            jitsiCommand,
                             onAccept = callViewModel::accept,
                             onCancel = callViewModel::cancel,
                             onDeny = callViewModel::deny,
                             onFinish = callViewModel::finish,
+                            onToggleAudio = callViewModel::onToggleAudio,
                             onBack = ::back
                         )
                     }
@@ -189,169 +203,83 @@ class CallFragment : Fragment() {
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
 fun CallFragmentComposable(
+    jitsiListener: JitsiWebrtcJsWebView.Listener?,
     partnerName: String,
     partnerAvatarUrl: String?,
     callViewState: CallViewState,
+    jitsiCommand: JitsiCallComposableCommand?,
     onAccept: () -> Unit,
     onCancel: () -> Unit,
     onDeny: () -> Unit,
     onFinish: () -> Unit,
     onBack: () -> Unit,
+    onToggleAudio: () -> Unit,
 ) {
-    Column(
+
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxSize()
+            .background(AmigoColors.mistyOcean)
     ) {
-        HomeButtonRow {
-            IconButtonSmall(
-                resourceId = R.drawable.ic_help_icon,
-                backgroundColor = MaterialTheme.colors.secondary,
-                fillColor = MaterialTheme.colors.primary
-            ) {
-                //TODO:Help screens
-            }
-        }
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(UIConstants.CallFragmentConstants.MIDDLE_ROW_HEIGHT)
-        ) {
+
+        val callState = callViewState.call.callState
+        JitsiCallComposable(
+            jitsiListener,
+            callViewState.call.id.toString(),
+            callViewState.call.token,
+            jitsiCommand
+        )
+
+        if (callState != CallState.ACCEPTED) {
             ProfileImage(
                 partnerAvatarUrl,
                 contentScale = ContentScale.Crop
             )
         }
 
-        Row(
+
+        Column(
             modifier = Modifier
-                .height(UIConstants.CallFragmentConstants.BOTTOM_ROW_HEIGHT)
                 .fillMaxWidth()
-                .background(color = MaterialTheme.colors.onSecondary),
-            horizontalArrangement = Arrangement.SpaceBetween
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(
-                modifier = Modifier
-                    .width(UIConstants.CallFragmentConstants.COLUMN_WIDTH)
-                    .padding(
-                        start = UIConstants.Defaults.OUTER_PADDING,
-                        top = UIConstants.Defaults.INNER_PADDING
-                    )
-            ) {
-                Text(
-                    text = partnerName,
-                    style = MaterialTheme.typography.h3,
-                    color = MaterialTheme.colors.onPrimary
-                )
-                Text(
-                    if (callViewState is CallViewState.Calling) {
-                        if (callViewState.outgoing) stringResource(R.string.calling_text)
-                        else stringResource(R.string.wants_to_talk_to_you_text)
-                    } else if (callViewState is CallViewState.Finished) {
-                        stringResource(R.string.call_finished)
-                    } else if (callViewState is CallViewState.Cancelled) {
-                        stringResource(R.string.call_cancelled)
-                    } else if (callViewState is CallViewState.Timeout) {
-                        stringResource(R.string.call_timeout)
-                    } else if (callViewState is CallViewState.Failure) {
-                        callViewState.error?.toString() ?: "Failure"
-                    } else {
-                        ""
-                    },
 
-                    style = MaterialTheme.typography.body1,
-                    color = MaterialTheme.colors.onPrimary
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .width(UIConstants.CallFragmentConstants.COLUMN_WIDTH)
-                    .padding(
-                        top = UIConstants.Defaults.INNER_PADDING,
-                        end = UIConstants.Defaults.INNER_PADDING,
-                        start = UIConstants.CallFragmentConstants.COLUMN_START_PADDING
+            HomeButtonRow {
+                Spacer(modifier = Modifier.size(UIConstants.SmallButtons.BUTTON_SIZE))
+                Box(Modifier.weight(1F), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = partnerName,
+                        style = MaterialTheme.typography.h3,
+                        color = MaterialTheme.colors.onPrimary
                     )
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                }
+                IconButtonSmall(
+                    resourceId = R.drawable.ic_help_icon,
+                    backgroundColor = MaterialTheme.colors.surface,
+                    fillColor = MaterialTheme.colors.primary
                 ) {
-                    if (callViewState is CallViewState.Accepted) {
-                        //finish the call
-                        IconButtonSmall(
-                            resourceId = R.drawable.ic_decline_call,
-                            backgroundColor = MaterialTheme.colors.onSecondary,
-                            fillColor = MaterialTheme.colors.error,
-                        ) { onFinish() }
-                        Text(
-                            text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.end_the_call),
-                            style = MaterialTheme.typography.h4,
-                            color = MaterialTheme.colors.onPrimary,
-                            textAlign = TextAlign.Center
-                        )
-                    } else if (callViewState is CallViewState.Calling) {
-                        if (callViewState.outgoing) {
-                            //cancel the call
-
-                            IconButtonSmall(
-                                resourceId = R.drawable.ic_decline_call,
-                                backgroundColor = MaterialTheme.colors.onSecondary,
-                                fillColor = MaterialTheme.colors.error
-                            ) { onCancel() }
-                            Text(
-                                text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.end_the_call),
-                                style = MaterialTheme.typography.h4,
-                                color = MaterialTheme.colors.onPrimary,
-                                textAlign = TextAlign.Center
-                            )
-
-                        } else {
-                            //accept or deny the incoming call
-                            IconButtonSmall(
-                                resourceId = R.drawable.ic_phone_call,
-                                backgroundColor = MaterialTheme.colors.onSecondary,
-                                fillColor = MaterialTheme.colors.secondary
-                            ) { onAccept() }
-                            Text(
-                                text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.accept_the_call),
-                                style = MaterialTheme.typography.h4,
-                                color = MaterialTheme.colors.onPrimary,
-                                textAlign = TextAlign.Center
-                            )
-                            IconButtonSmall(
-                                resourceId = R.drawable.ic_decline_call,
-                                backgroundColor = MaterialTheme.colors.onSecondary,
-                                fillColor = MaterialTheme.colors.error
-                            ) { onDeny() }
-                            Text(
-                                text = stringResource(R.string.tap_to) + "\n" + stringResource(R.string.decline_the_call),
-                                style = MaterialTheme.typography.h4,
-                                color = MaterialTheme.colors.onPrimary,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    } else {
-                        IconButtonSmall(
-                            resourceId = R.drawable.ic_home_icon,
-                            backgroundColor = MaterialTheme.colors.onSecondary,
-                            fillColor = MaterialTheme.colors.primary
-                        ) { onBack() }
-                        Text(
-                            text = stringResource(R.string.back_home_description),
-                            style = MaterialTheme.typography.h4,
-                            color = MaterialTheme.colors.onPrimary,
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                    //TODO:Help screens
                 }
             }
+            CallBottomControl(
+                callViewState,
+                onAccept,
+                onCancel,
+                onDeny,
+                onFinish,
+                onBack,
+                onToggleAudio
+            )
         }
     }
 }
 
+@ExperimentalAnimationApi
 @Preview(showBackground = true)
 @Composable
 fun CallFragmentComposablePreview_outgoing() {
@@ -364,10 +292,12 @@ fun CallFragmentComposablePreview_outgoing() {
     )
     val callViewState = CallViewState.Calling(call, true)
     AmigoThemeLight {
-        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}, {}) {}
+        CallFragmentComposable(null, "Lukas", "", callViewState,
+            JitsiCallComposableCommand.Prepare, {}, {}, {}, {}, {}) {}
     }
 }
 
+@ExperimentalAnimationApi
 @Preview(showBackground = true)
 @Composable
 fun CallFragmentComposablePreview_incoming() {
@@ -380,10 +310,16 @@ fun CallFragmentComposablePreview_incoming() {
     )
     val callViewState = CallViewState.Calling(call, false)
     AmigoThemeLight {
-        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}, {}) {}
+        CallFragmentComposable(
+            null, "Lukas",
+            "",
+            callViewState,
+            JitsiCallComposableCommand.Prepare,
+            {}, {}, {}, {}, {}) {}
     }
 }
 
+@ExperimentalAnimationApi
 @Preview(showBackground = true)
 @Composable
 fun CallFragmentComposablePreview_started() {
@@ -394,8 +330,13 @@ fun CallFragmentComposablePreview_started() {
         senderId = randomUUID(),
         receiverId = randomUUID(),
     )
-    val callViewState = CallViewState.Accepted(call, false)
+    val callViewState = CallViewState.Accepted(call, false, false)
     AmigoThemeLight {
-        CallFragmentComposable("Lukas", "", callViewState, {}, {}, {}, {}) {}
+        CallFragmentComposable(
+            null, "Lukas",
+            "",
+            callViewState,
+            JitsiCallComposableCommand.Prepare,
+            {}, {}, {}, {}, {}) {}
     }
 }
