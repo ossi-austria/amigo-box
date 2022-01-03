@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -36,10 +35,12 @@ import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
+import org.ossiaustria.amigobox.ui.commons.HomeButtonsRow
 import org.ossiaustria.amigobox.ui.commons.NavigationButtonType
 import org.ossiaustria.amigobox.ui.commons.ScrollNavigationButton
-import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 import org.ossiaustria.lib.domain.models.Person
+import org.ossiaustria.lib.domain.models.enums.MemberType
+import java.util.*
 
 class ContactsFragment : Fragment() {
 
@@ -81,62 +82,22 @@ fun ContactsFragmentContent(
     backToHome: () -> Unit,
     toContact: (Person) -> Unit
 ) {
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    top = UIConstants.HomeButtonRow.TOP_PADDING,
-                    end = UIConstants.HomeButtonRow.END_PADDING
-                )
-                .height(UIConstants.HomeButtonRow.HEIGHT),
-            horizontalArrangement = Arrangement.End
-        ) {
-            // Home Button
-            TextAndIconButton(
-                resourceId = R.drawable.ic_home_icon,
-                text = stringResource(id = R.string.back_home_description),
-                backgroundColor = MaterialTheme.colors.primary,
-                contentColor = MaterialTheme.colors.onPrimary,
-                bottomStart = true,
-                topStart = false,
-                buttonWidth = UIConstants.BigButtons.BUTTON_WIDTH
-            ) {
-                backToHome()
-            }
-            TextAndIconButton(
-                resourceId = R.drawable.ic_help_icon,
-                text = stringResource(R.string.help_button_description),
-                backgroundColor = MaterialTheme.colors.surface,
-                contentColor = MaterialTheme.colors.onPrimary,
-                bottomStart = true,
-                topStart = false,
-                buttonWidth = UIConstants.BigButtons.BUTTON_WIDTH
-            ) {
-                //TODO: add help screens
-            }
-        }
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(UIConstants.ListFragment.HEADER_PADDING_START)
+    ) {
+        HomeButtonsRow(onClickBack = backToHome)
         // Header
         Text(
-            modifier = Modifier
-                .padding(
-                    start = UIConstants.ListFragment.HEADER_PADDING_START,
-                    top = UIConstants.ListFragment.HEADER_PADDING_TOP,
-                    bottom = UIConstants.ListFragment.HEADER_PADDING_BOTTOM
-                )
-                .height(UIConstants.ListFragment.HEADER_HEIGHT),
+            modifier = Modifier.padding(UIConstants.Defaults.INNER_PADDING),
             text = stringResource(R.string.contacts_headline),
             style = MaterialTheme.typography.h3
         )
 
         // Text Description
         Row(
-            modifier = Modifier
-                .padding(
-                    start = UIConstants.ListFragment.DESCRIPTION_PADDING_START,
-                    top = UIConstants.ListFragment.DESCRIPTION_PADDING_TOP
-                )
-                .height(UIConstants.ListFragment.DESCRIPTION_HEIGHT)
+            modifier = Modifier.padding(UIConstants.Defaults.INNER_PADDING),
         ) {
             Text(
                 text = stringResource(R.string.contacts_usage_description),
@@ -149,10 +110,7 @@ fun ContactsFragmentContent(
 
         Row(
             modifier = Modifier
-                .padding(
-                    start = UIConstants.ScrollableCardList.PADDING_START,
-                    top = UIConstants.ScrollableCardList.PADDING_TOP
-                )
+                .padding(UIConstants.Defaults.INNER_PADDING)
                 .horizontalScroll(scrollState)
 
         ) {
@@ -162,12 +120,9 @@ fun ContactsFragmentContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(UIConstants.ScrollableCardList.CARD_PADDING)
-                        .clickable(
-                            onClick = { toContact(person) }
-                        ),
+                        .clickable { toContact(person) },
                     elevation = UIConstants.ScrollableCardList.CARD_ELEVATION,
-                )
-                {
+                ) {
                     Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.Start,
@@ -183,13 +138,7 @@ fun ContactsFragmentContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    start = UIConstants.NavigationButtonRow.PADDING_START,
-                    end = UIConstants.NavigationButtonRow.PADDING_END,
-                    bottom = UIConstants.NavigationButtonRow.PADDING_BOTTOM,
-                    top = UIConstants.NavigationButtonRow.CONTACTS_PADDING_TOP
-                )
-                .height(UIConstants.NavigationButtonRow.HEIGHT),
+                .padding(UIConstants.Defaults.INNER_PADDING),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom
         ) {
@@ -228,4 +177,32 @@ fun ContactsFragmentContentPreview() {
         { },
         { },
     )
+}
+
+private object ContactsSourceMockData {
+
+    private val groupId = UUID.randomUUID()
+
+    val lukas = createPersonMock("Lukas", "lukas@tum.de")
+
+    fun listOfPeopleWithImages(): MutableList<Person> {
+        return mutableListOf(
+            lukas,
+            createPersonMock("Michl", "michl@tum.de"),
+            createPersonMock("Moni", "moni@tum.de"),
+            createPersonMock("Peter", "peter@tum.de"),
+            createPersonMock("Flo", "flo@tum.de"),
+        )
+    }
+
+    fun createPersonMock(name: String, email: String) =
+        Person(
+            UUID.randomUUID(),
+            name,
+            groupId,
+            MemberType.MEMBER,
+            "https://thispersondoesnotexist.com/image",
+            email
+        )
+
 }

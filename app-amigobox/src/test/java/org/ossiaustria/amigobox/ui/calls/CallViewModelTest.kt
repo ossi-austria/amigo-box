@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.calls
+package org.ossiaustria.amigobox.ui.calls
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.jraska.livedata.test

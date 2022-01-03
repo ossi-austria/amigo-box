@@ -44,7 +44,6 @@ import org.ossiaustria.amigobox.onboarding.OnboardingState
 import org.ossiaustria.amigobox.onboarding.OnboardingViewModel
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
-import org.ossiaustria.amigobox.ui.commons.MaterialButton
 import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 import org.ossiaustria.amigobox.ui.commons.textResString
 import timber.log.Timber
@@ -207,7 +206,8 @@ fun LoadingFragmentContent(
                             keyboardActions = KeyboardActions(
                                 onDone = { keyboardController?.hide() }),
                         )
-                        MaterialButton(
+                        TextAndIconButton(
+                            iconId = null,
                             onClick = { loginPerToken(loginToken) },
                             enabled = loginTokenEnabled,
                             text = textResString(R.string.onboarding_login_button),

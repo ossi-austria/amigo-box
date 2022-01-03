@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.calls
+package org.ossiaustria.amigobox.ui.calls
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable

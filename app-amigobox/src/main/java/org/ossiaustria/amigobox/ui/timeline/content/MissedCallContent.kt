@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.timeline.content
+package org.ossiaustria.amigobox.ui.timeline.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -21,21 +21,23 @@ import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.PreviewTheme
 import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
-import org.ossiaustria.amigobox.ui.commons.durationToString
 import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.Person
-import org.ossiaustria.lib.domain.models.enums.CallState
 import java.util.*
 import kotlin.time.ExperimentalTime
 
+// TODO: CallContent and MissedCallContent have the same children Composables
+// Either: a) have just one composable for all states, or reuse sub-components (extract Composables to private files)
+// FIXME: I would prefer a)
 @ExperimentalTime
 @Composable
-fun CallContent(
+fun MissedCallContent(
     call: Call,
     centerPerson: Person,
     findPerson: (UUID) -> Person?,
-    toCall: (Person) -> Unit,
+    toCall: (Person) -> Unit
 ) {
+    // missed call when CallStatus is MISSED and Receiver is this person
     Row(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -62,51 +64,33 @@ fun CallContent(
             )
         }
         Column {
-            Text(
-                modifier = Modifier.padding(
-                    bottom = UIConstants.TimelineFragment.CONTENT_TEXT_PADDING_BOTTOM,
-                    top = UIConstants.TimelineFragment.CONTENT_TEXT_PADDING_TOP
-                ),
-                text = stringResource(R.string.good_talk),
-                style = MaterialTheme.typography.caption
-            )
             var textName = stringResource(id = R.string.unknown_person)
 
             val nameSender = findPerson(call.senderId)?.name
             val nameReceiver = findPerson(call.receiverId)?.name
             if (centerPerson.id == call.receiverId && nameSender != null) {
-                textName = nameSender
+                textName = nameSender.toString()
             } else if (centerPerson.id == call.senderId && nameReceiver != null) {
-                textName = nameReceiver
-            }
-
-            val text = if (call.callState == CallState.FINISHED) {
-                stringResource(
-                    R.string.you_had_a_call,
-                    durationToString(call.duration),
-                    textName
-                )
-            } else {
-                // TODO: Add other states?
-                "${call.callState}"
+                textName = nameReceiver.toString()
             }
             Text(
-                text = text,
-                style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(
-                    bottom = UIConstants.TimelineFragment.BOTTOM_PADDING
-                )
+                    bottom = UIConstants.TimelineFragment.CONTENT_TEXT_PADDING_BOTTOM,
+                    top = UIConstants.TimelineFragment.CONTENT_TEXT_PADDING_TOP
+                ),
+                text = stringResource(R.string.you_missed_a_call_from, textName),
+                style = MaterialTheme.typography.caption
             )
+
             TextAndIconButton(
-                resourceId = R.drawable.ic_phone_call,
+                iconId = R.drawable.ic_phone_call,
                 text = stringResource(R.string.call_back_button),
                 backgroundColor = MaterialTheme.colors.primary,
                 contentColor = MaterialTheme.colors.onPrimary,
                 bottomStart = false,
                 topStart = true,
-                buttonWidth = UIConstants.TimelineFragment.BUTTON_WIDTH
             ) {
-                findPerson(call.otherPersonId(centerPerson.id))?.let { toCall(it) }
+                findPerson(call.senderId)?.let { toCall(it) }
             }
         }
     }
@@ -115,13 +99,13 @@ fun CallContent(
 @ExperimentalTime
 @Composable
 @Preview
-fun CallContentPreview() {
+fun MissedCallContentPreview() {
     PreviewTheme {
-        CallContent(
+        MissedCallContent(
             ContentMocks.call,
             ContentMocks.centerPerson,
             { ContentMocks.otherPerson },
-            {},
+            {}
         )
     }
 }

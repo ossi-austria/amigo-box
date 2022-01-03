@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.timeline.content
+package org.ossiaustria.amigobox.ui.timeline.content
 
 import org.ossiaustria.lib.domain.models.Album
 import org.ossiaustria.lib.domain.models.AlbumShare

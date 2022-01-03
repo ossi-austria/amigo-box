@@ -32,7 +32,7 @@ import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.onboarding.OnboardingViewModel
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
-import org.ossiaustria.amigobox.ui.commons.MaterialButton
+import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 
 class HomeFragment : Fragment() {
 
@@ -121,7 +121,8 @@ fun HomeFragmentComposable(
             ) { openNotifications() }
         }
         Spacer(modifier = Modifier.weight(1.0f)) // fill height with spacer
-        MaterialButton(
+        TextAndIconButton(
+            iconId = null,
             modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.End),

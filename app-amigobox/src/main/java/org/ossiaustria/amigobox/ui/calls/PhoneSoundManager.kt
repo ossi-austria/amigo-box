@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.calls
+package org.ossiaustria.amigobox.ui.calls
 
 import android.content.Context
 import android.media.MediaPlayer

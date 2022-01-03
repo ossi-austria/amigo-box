@@ -24,17 +24,6 @@ class AutoplayCommons {
         }
     }
 
-    fun playButtonText(
-        galleryNavState: GalleryNavState?,
-        textStart: String,
-        textStop: String
-    ): String {
-        return when (galleryNavState) {
-            GalleryNavState.PLAY -> textStop
-            else -> textStart
-        }
-    }
-
     fun nextPressed(
         cancelTimer: () -> Unit,
         setGalleryIndex: (Int) -> Unit,

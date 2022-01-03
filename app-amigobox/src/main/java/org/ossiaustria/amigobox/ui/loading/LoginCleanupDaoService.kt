@@ -21,6 +21,7 @@ class LoginCleanupDaoService(
     private val nfcInfoDao: NfcInfoDao,
     private val personDao: PersonDao,
 ) : LoginCleanupService {
+
     override suspend fun cleanup() {
         Timber.w("cleanup! Delete all locally stored data")
         albumDao.deleteAll()

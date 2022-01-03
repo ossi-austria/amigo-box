@@ -1,4 +1,4 @@
-package org.ossiaustria.amigobox.timeline
+package org.ossiaustria.amigobox.ui.timeline
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -23,8 +23,8 @@ import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.autoplay.AutoplayCommons
 import org.ossiaustria.amigobox.ui.autoplay.GalleryNavState
 import org.ossiaustria.amigobox.ui.autoplay.TimerNavigationButtonsRow
-import org.ossiaustria.amigobox.ui.commons.AmigoStyle
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
+import org.ossiaustria.amigobox.ui.commons.HomeButtonsRow
 import org.ossiaustria.amigobox.ui.commons.TimeUtils
 import org.ossiaustria.lib.domain.models.AlbumShare
 import org.ossiaustria.lib.domain.models.Call
@@ -59,6 +59,7 @@ fun OuterStaticBox(
 ) {
     //This is the static Background Box
     Column(modifier = Modifier.fillMaxSize()) {
+
         Row(modifier = Modifier.fillMaxWidth()) {
             val listSize = sendables.size
             Column(
@@ -69,14 +70,11 @@ fun OuterStaticBox(
                 // Text showing which Sendable is shown from List
                 if (!sendables.isNullOrEmpty()) {
                     if ((currentIndex != null) && (currentIndex != sendables.size)) {
+                        // " 127 / 175"
                         Text(
                             text = (currentIndex + 1).toString() + "/" + listSize.toString(),
                             Modifier
-                                .padding(
-                                    top = AmigoStyle.Dim.D,
-                                    start = AmigoStyle.Dim.D,
-                                    bottom = AmigoStyle.Dim.C
-                                )
+                                .padding(16.dp)
                                 .background(MaterialTheme.colors.primary, shape = CircleShape)
                                 .height(UIConstants.TimelineFragment.INDEX_BOX_HEIGHT)
                                 .width(UIConstants.TimelineFragment.INDEX_BOX_WIDTH),
@@ -86,15 +84,13 @@ fun OuterStaticBox(
                         )
                         // TODO: dont rely on list, if you just need one item
                         val sendable = sendables[currentIndex]
+                        // " 16. Dezemver 2021 - 01 Uhr"
                         Text(
                             text = stringResource(
                                 R.string.fullDateString,
                                 TimeUtils.fullDate(sendable.createdAt)
                             ),
-                            Modifier.padding(
-                                start = AmigoStyle.Dim.D,
-                                bottom = AmigoStyle.Dim.A
-                            )
+                            Modifier.padding(16.dp)
                         )
 
                         val textNewItem = stringNewSendableItem(sendable)
@@ -104,17 +100,15 @@ fun OuterStaticBox(
                         val textName = if (sendable is Call && otherPersonName != null) {
                             otherPersonName
                         } else senderName ?: stringResource(R.string.unknown_person)
+                        // " Neuer Anruf von Ulrich User"
                         Text(
                             text = stringResource(R.string.from, textNewItem, textName),
-                            Modifier.padding(
-                                start = AmigoStyle.Dim.D,
-                                bottom = AmigoStyle.Dim.A
-                            )
+                            Modifier.padding(8.dp)
                         )
                     }
                 }
             }
-            HomeHelpButtonColumn(toHome)
+            HomeButtonsRow(onClickBack = toHome)
         }
 
         TimerNavigationButtonsRow(
