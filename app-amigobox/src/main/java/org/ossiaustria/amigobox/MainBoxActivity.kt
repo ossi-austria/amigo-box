@@ -7,20 +7,30 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.cloudmessaging.CloudPushHandlerService
 import org.ossiaustria.amigobox.nfc.NfcViewModel
 import org.ossiaustria.amigobox.nfc.NfcViewModelState
-import org.ossiaustria.amigobox.ui.calls.IncomingEventsViewModel
+import org.ossiaustria.lib.domain.services.events.IncomingEventCallbackService
 import org.ossiaustria.lib.nfc.NfcHandler
 
 class MainBoxActivity : AppCompatActivity() {
 
     val navigator: Navigator by inject()
     private val cloudPushHandlerService: CloudPushHandlerService by inject()
+    private val incomingEventCallbackService: IncomingEventCallbackService by inject()
     private val nfcViewModel: NfcViewModel by viewModel()
-    private val incomingEventsViewModel: IncomingEventsViewModel by viewModel()
+    private val ioDispatcher: CoroutineDispatcher by inject()
+    private val scope = CoroutineScope(ioDispatcher)
+    private var job: Job? = null
 
     // NFC adapter for checking NFC state in the device
     private var nfcAdapter: NfcAdapter? = null
@@ -78,13 +88,12 @@ class MainBoxActivity : AppCompatActivity() {
             }
         }
 
-        incomingEventsViewModel.notifiedCall.observe(this) {
-            it?.let {
-                navigator.toCallFragment(it)
-                incomingEventsViewModel.clearCall()
-            }
+        job = scope.launch {
+            incomingEventCallbackService.callEventFlow
+                .onEach { navigator.toCallFragment(it) }
+                .onCompletion { cause -> if (cause == null) println("Flow is completed successfully") }
+                .catch { cause -> println("Exception $cause happened") }
         }
-
         nfcViewModel.state.observe(this) { resource ->
             if (resource.isSuccess) {
                 when (val currentState = resource.valueOrNull()) {
@@ -120,6 +129,8 @@ class MainBoxActivity : AppCompatActivity() {
 
         nfcAdapter?.disableForegroundDispatch(this)
         nfcViewModel.state.removeObservers(this)
+
+        job?.cancel()
     }
 
     private fun onCreateSetupNfcIntentHandling() {

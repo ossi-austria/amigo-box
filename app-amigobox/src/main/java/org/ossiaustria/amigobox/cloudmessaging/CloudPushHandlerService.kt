@@ -7,10 +7,11 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.RemoteMessage
 import org.ossiaustria.amigobox.MainBoxActivity
 import org.ossiaustria.amigobox.Navigator
+import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Call
-import org.ossiaustria.lib.domain.services.AmigoCloudEvent
-import org.ossiaustria.lib.domain.services.AmigoCloudEventType
-import org.ossiaustria.lib.domain.services.IncomingEventCallbackService
+import org.ossiaustria.lib.domain.services.events.AmigoCloudEvent
+import org.ossiaustria.lib.domain.services.events.AmigoCloudEventType
+import org.ossiaustria.lib.domain.services.events.IncomingEventCallbackService
 import timber.log.Timber
 
 class CloudPushHandlerService(
@@ -42,8 +43,14 @@ class CloudPushHandlerService(
         val cloudEvent = AmigoCloudEvent.fromMap(message.data)
         if (cloudEvent != null) {
             if (cloudEvent.type == AmigoCloudEventType.CALL) {
-                incomingEventCallbackService.handleCloudEventCall(cloudEvent) {
-                    startActivityForCall(appContext, it)
+                val handled = incomingEventCallbackService.handleCloudEventCall(cloudEvent)
+                if (!handled) {
+                    val callResource = incomingEventCallbackService.handleCall(cloudEvent.entityId)
+                    if (callResource is Resource.Success) {
+                        if (!callResource.value.isDone()) {
+                            startActivityForCall(appContext, callResource.value)
+                        }
+                    }
                 }
             } else {
                 // TODO: need improvements, could look similar to CALL
@@ -54,7 +61,7 @@ class CloudPushHandlerService(
     }
 
     private fun startActivityForCall(appContext: Context, call: Call) {
-        Timber.tag(TAG).i("startActivityForCall: $call")
+        Timber.tag(TAG).i("startActivityForCall: $call, $mainBoxActivity")
 
         val intent = if (mainBoxActivity != null) {
             Intent(mainBoxActivity, MainBoxActivity::class.java)
