@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -21,8 +20,7 @@ fun HomeButtonsRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(UIConstants.Defaults.INNER_PADDING)
-            .height(UIConstants.HomeButtonRow.HEIGHT),
+            .padding(UIConstants.Defaults.INNER_PADDING),
         horizontalArrangement = Arrangement.End
     ) {
         Spacer(Modifier.weight(1F))

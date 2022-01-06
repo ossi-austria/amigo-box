@@ -15,6 +15,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.ossiaustria.amigobox.R
+import org.ossiaustria.amigobox.ui.UIConstants.Defaults.CARD_WIDTH
+import org.ossiaustria.amigobox.ui.UIConstants.Defaults.TEXT_PADDING
 import org.ossiaustria.amigobox.ui.UIConstants.ListCard
 import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
 
@@ -22,11 +24,14 @@ import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
 fun LoadPersonCardContent(name: String, url: String?) {
     Row(
         modifier = Modifier
-            .height(ListCard.AVATAR_IMAGE_HEIGHT)
-            .width(ListCard.CARD_WIDTH),
+            .width(CARD_WIDTH),
     ) {
         if (url.isNullOrBlank()) {
-            NotFoundImage()
+            NotFoundImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(ListCard.IMAGE_HEIGHT),
+            )
             // https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200
         } else {
             NetworkImage(
@@ -40,12 +45,8 @@ fun LoadPersonCardContent(name: String, url: String?) {
     }
     Row(
         modifier = Modifier
-            .padding(
-                start = ListCard.TEXT_PADDING,
-                end = ListCard.TEXT_PADDING,
-                bottom = ListCard.TEXT_PADDING,
-            )
-            .width(ListCard.CARD_WIDTH),
+            .padding(TEXT_PADDING)
+            .width(CARD_WIDTH),
     ) {
         Text(
             text = name,
@@ -56,7 +57,7 @@ fun LoadPersonCardContent(name: String, url: String?) {
         painterResource(id = R.drawable.ic_rectangle_264),
         modifier = Modifier
             .height(ListCard.RECT_HEIGHT)
-            .padding(start = ListCard.TEXT_PADDING),
+            .padding(start = TEXT_PADDING),
         contentDescription = null
     )
 }

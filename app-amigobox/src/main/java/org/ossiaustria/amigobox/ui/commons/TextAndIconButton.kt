@@ -45,6 +45,7 @@ fun TextAndIconButton(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .padding(8.dp)
+            .clickable(onClick = onClick, enabled = enabled)
             .height(UIConstants.BigButtons.BUTTON_HEIGHT)
             .clip(
                 RoundedCornerShape(
@@ -55,7 +56,6 @@ fun TextAndIconButton(
                 )
             )
             .background(color = backgroundColor)
-            .clickable(onClick = onClick, enabled = enabled)
             .padding(10.dp),
 
         ) {

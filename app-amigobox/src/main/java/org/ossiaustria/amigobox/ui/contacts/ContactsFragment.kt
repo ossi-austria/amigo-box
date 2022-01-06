@@ -34,6 +34,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
+import org.ossiaustria.amigobox.ui.UIConstants.Defaults.OUTER_PADDING
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
 import org.ossiaustria.amigobox.ui.commons.HomeButtonsRow
 import org.ossiaustria.amigobox.ui.commons.NavigationButtonType
@@ -85,7 +86,7 @@ fun ContactsFragmentContent(
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(UIConstants.ListFragment.HEADER_PADDING_START)
+            .padding(OUTER_PADDING)
     ) {
         HomeButtonsRow(onClickBack = backToHome)
         // Header
@@ -119,9 +120,9 @@ fun ContactsFragmentContent(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(UIConstants.ScrollableCardList.CARD_PADDING)
+                        .padding(UIConstants.Defaults.INNER_PADDING)
                         .clickable { toContact(person) },
-                    elevation = UIConstants.ScrollableCardList.CARD_ELEVATION,
+                    elevation = UIConstants.Defaults.CARD_ELEVATION,
                 ) {
                     Column(
                         verticalArrangement = Arrangement.Center,

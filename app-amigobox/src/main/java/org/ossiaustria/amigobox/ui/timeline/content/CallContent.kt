@@ -1,22 +1,19 @@
 package org.ossiaustria.amigobox.ui.timeline.content
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import ProfileImage
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.PreviewTheme
@@ -25,10 +22,10 @@ import org.ossiaustria.amigobox.ui.commons.durationToString
 import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.models.enums.CallState
+import org.ossiaustria.lib.domain.models.enums.CallType
 import java.util.*
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
+@ExperimentalCoilApi
 @Composable
 fun CallContent(
     call: Call,
@@ -37,36 +34,18 @@ fun CallContent(
     toCall: (Person) -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(
-            modifier = Modifier.padding(
-                start = UIConstants.TimelineFragment.PROFIL_IMAGE_COLUMN_PADDING_START,
-                end = UIConstants.TimelineFragment.PROFIL_IMAGE_COLUMN_PADDING_END
-            )
-        ) {
-            //TODO: temporary solution for design only, should use profilImage and url to upload profile picture
-            Image(
-                painter = painterResource(id = R.drawable.image_gusti_amigo),
-                contentDescription = null,
+        val person = findPerson(call.senderId)
+        Column(Modifier.padding(16.dp)) {
+            ProfileImage(
+                url = person?.absoluteAvatarUrl(),
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(UIConstants.TimelineFragment.IMAGE_SIZE)
-                    .padding(UIConstants.ProfileImage.IMAGE_PADDING)
-                    .clip(CircleShape)
-                    .border(
-                        UIConstants.ProfileImage.BORDER_WIDTH,
-                        MaterialTheme.colors.surface,
-                        CircleShape
-                    )
             )
         }
-        Column {
+        Column(Modifier.padding(vertical = UIConstants.TimelineFragment.PADDING)) {
             Text(
-                modifier = Modifier.padding(
-                    bottom = UIConstants.TimelineFragment.CONTENT_TEXT_PADDING_BOTTOM,
-                    top = UIConstants.TimelineFragment.CONTENT_TEXT_PADDING_TOP
-                ),
                 text = stringResource(R.string.good_talk),
                 style = MaterialTheme.typography.caption
             )
@@ -94,7 +73,7 @@ fun CallContent(
                 text = text,
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(
-                    bottom = UIConstants.TimelineFragment.BOTTOM_PADDING
+                    vertical = UIConstants.TimelineFragment.PADDING
                 )
             )
             TextAndIconButton(
@@ -111,16 +90,24 @@ fun CallContent(
     }
 }
 
-@ExperimentalTime
+@ExperimentalCoilApi
 @Composable
 @Preview
 fun CallContentPreview() {
     PreviewTheme {
+        val call = Call(
+            id = UUID.randomUUID(),
+            senderId = ContentMocks.otherPerson.id,
+            receiverId = ContentMocks.centerPerson.id,
+            callType = CallType.VIDEO,
+            callState = CallState.ACCEPTED,
+            startedAt = Date()
+        )
         CallContent(
-            ContentMocks.call,
-            ContentMocks.centerPerson,
-            { ContentMocks.otherPerson },
-            {},
+            call = call,
+            centerPerson = ContentMocks.centerPerson,
+            findPerson = { ContentMocks.otherPerson },
+            toCall = {}
         )
     }
 }
