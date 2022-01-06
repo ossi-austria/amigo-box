@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -93,8 +92,7 @@ fun CallFragmentComposable(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(UIConstants.Defaults.INNER_PADDING)
-                        .height(UIConstants.HomeButtonRow.HEIGHT),
+                        .padding(UIConstants.Defaults.INNER_PADDING),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {

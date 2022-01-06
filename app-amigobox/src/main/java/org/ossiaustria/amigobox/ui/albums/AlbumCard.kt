@@ -14,7 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import org.ossiaustria.amigobox.R
-import org.ossiaustria.amigobox.ui.UIConstants.ListCard
+import org.ossiaustria.amigobox.ui.UIConstants.Defaults.CARD_WIDTH
+import org.ossiaustria.amigobox.ui.UIConstants.Defaults.TEXT_PADDING
+import org.ossiaustria.amigobox.ui.UIConstants.ListCard.AVATAR_IMAGE_HEIGHT
+import org.ossiaustria.amigobox.ui.UIConstants.ListCard.IMAGE_HEIGHT
+import org.ossiaustria.amigobox.ui.UIConstants.ListCard.RECT_HEIGHT
 import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
 import org.ossiaustria.lib.domain.models.Album
 
@@ -25,8 +29,8 @@ fun LoadAlbumCardContent(album: Album, previewImageUrl: String?) {
     Image(
         painterResource(id = R.drawable.ic_rectangle_264),
         modifier = Modifier
-            .height(ListCard.RECT_HEIGHT)
-            .padding(start = ListCard.TEXT_PADDING),
+            .height(RECT_HEIGHT)
+            .padding(start = TEXT_PADDING),
         contentDescription = null
     )
 }
@@ -35,12 +39,8 @@ fun LoadAlbumCardContent(album: Album, previewImageUrl: String?) {
 fun AlbumCardTitle(album: Album) {
     Row(
         modifier = Modifier
-            .padding(
-                start = ListCard.TEXT_PADDING,
-                end = ListCard.TEXT_PADDING,
-                bottom = ListCard.TEXT_PADDING
-            )
-            .width(ListCard.CARD_WIDTH)
+            .padding(TEXT_PADDING)
+            .width(CARD_WIDTH)
     ) {
         Text(
             text = album.name,
@@ -54,8 +54,8 @@ fun AlbumCardTitle(album: Album) {
 fun AlbumCardThumbnail(previewImageUrl: String?) {
     Row(
         modifier = Modifier
-            .height(ListCard.AVATAR_IMAGE_HEIGHT)
-            .width(ListCard.CARD_WIDTH)
+            .height(AVATAR_IMAGE_HEIGHT)
+            .width(CARD_WIDTH)
     ) {
         if (previewImageUrl.isNullOrBlank()) {
             NotFoundImage()
@@ -64,7 +64,7 @@ fun AlbumCardThumbnail(previewImageUrl: String?) {
             NetworkImage(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(ListCard.IMAGE_HEIGHT),
+                    .height(IMAGE_HEIGHT),
                 url = previewImageUrl,
                 contentScale = ContentScale.Crop
             )

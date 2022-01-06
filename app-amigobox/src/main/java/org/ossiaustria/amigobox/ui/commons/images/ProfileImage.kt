@@ -47,8 +47,6 @@ fun ProfileImage(
                 CircleShape
             )
             .clickable(onClick = onClick)
-
     )
-
 }
 

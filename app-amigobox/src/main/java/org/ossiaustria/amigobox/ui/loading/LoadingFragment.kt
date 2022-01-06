@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -135,8 +136,10 @@ fun LoadingFragmentContent(
     ) {
         Card(
             modifier = Modifier
-                .width(UIConstants.Defaults.BOX_WIDTH)
+                .width(460.dp)
                 .height(IntrinsicSize.Min)
+                .padding(24.dp)
+
         ) {
             if (state is OnboardingState.IsLoggedIn) {
                 Loading()

@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -38,17 +36,12 @@ fun AlbumsFragmentComposable(
     backToHome: () -> Unit,
     toAlbum: (Album) -> Unit,
 ) {
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+    Column {
         HomeButtonsRow(onClickBack = backToHome)
         // Header
         Row(
             modifier = Modifier
-                .padding(
-                    start = UIConstants.ListFragment.HEADER_PADDING_START,
-                    top = UIConstants.ListFragment.HEADER_PADDING_TOP,
-                    bottom = UIConstants.ListFragment.HEADER_PADDING_BOTTOM
-                )
-                .height(UIConstants.ListFragment.HEADER_HEIGHT)
+                .padding(UIConstants.Defaults.OUTER_PADDING)
         ) {
             Text(
                 text = stringResource(R.string.albums_headline),
@@ -59,11 +52,7 @@ fun AlbumsFragmentComposable(
         // Text Description
         Row(
             modifier = Modifier
-                .padding(
-                    start = UIConstants.ListFragment.DESCRIPTION_PADDING_START,
-                    top = UIConstants.ListFragment.DESCRIPTION_PADDING_TOP
-                )
-                .height(UIConstants.ListFragment.DESCRIPTION_HEIGHT)
+                .padding(UIConstants.Defaults.OUTER_PADDING)
         ) {
             Text(
                 text = stringResource(R.string.album_usage_description),
@@ -77,10 +66,7 @@ fun AlbumsFragmentComposable(
 
         Row(
             modifier = Modifier
-                .padding(
-                    start = UIConstants.ScrollableCardList.PADDING_START,
-                    top = UIConstants.ScrollableCardList.PADDING_TOP
-                )
+                .padding(UIConstants.Defaults.TEXT_PADDING)
                 .horizontalScroll(scrollState)
 
         ) {
@@ -89,11 +75,11 @@ fun AlbumsFragmentComposable(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(UIConstants.ScrollableCardList.CARD_PADDING)
+                        .padding(UIConstants.Defaults.INNER_PADDING)
                         .clickable(
                             onClick = { toAlbum(album) }
                         ),
-                    elevation = UIConstants.ScrollableCardList.CARD_ELEVATION,
+                    elevation = UIConstants.Defaults.CARD_ELEVATION,
                 ) {
                     Column(
                         verticalArrangement = Arrangement.Center,
@@ -115,8 +101,7 @@ fun AlbumsFragmentComposable(
                     end = UIConstants.NavigationButtonRow.PADDING_END,
                     bottom = UIConstants.NavigationButtonRow.PADDING_BOTTOM,
                     top = UIConstants.NavigationButtonRow.PADDING_TOP
-                )
-                .height(UIConstants.NavigationButtonRow.HEIGHT),
+                ),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom
         ) {
