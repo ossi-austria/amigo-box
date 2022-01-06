@@ -5,7 +5,7 @@ import com.google.firebase.messaging.RemoteMessage
 import timber.log.Timber
 
 
-class DefaultFirebaseMessagingService() : FirebaseMessagingService() {
+class DefaultFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(newToken: String) {
         Timber.tag(TAG).i("New FCM token: $newToken")

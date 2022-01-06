@@ -116,21 +116,22 @@ class CallViewModel(
          * NOTE: There is a CallViewState STARTED, but not CallState STARTED (because it is ACCEPTED)
          */
         if (currentState is CallViewState.Calling) {
-            _state.value = when (newCall.callState) {
-                CallState.ACCEPTED -> currentState.start(newCall)
-                CallState.DENIED -> currentState.cancel(newCall)
-                CallState.CANCELLED -> currentState.cancel(newCall)
-                CallState.TIMEOUT -> currentState.timeout(newCall)
-                else -> currentState
-            }
+            _state.postValue(
+                when (newCall.callState) {
+                    CallState.ACCEPTED -> currentState.start(newCall)
+                    CallState.DENIED -> currentState.cancel(newCall)
+                    CallState.CANCELLED -> currentState.cancel(newCall)
+                    CallState.TIMEOUT -> currentState.timeout(newCall)
+                    else -> currentState
+                }
+            )
             if (newCall.callState == CallState.ACCEPTED) {
                 emitJitsiCommand(JitsiCallComposableCommand.EnterRoom)
             }
 
         } else if (currentState is CallViewState.Accepted && newCall.callState == CallState.FINISHED) {
-            _state.value = currentState.finish(newCall)
+            _state.postValue(currentState.finish(newCall))
             emitJitsiCommand(JitsiCallComposableCommand.Finish)
-
         } else {
             Timber.w("No support for $currentState and $newCall, do nothing")
         }
@@ -197,9 +198,9 @@ class CallViewModel(
 
     private fun emitJitsiCommand(jitsiCallComposableCommand: JitsiCallComposableCommand) =
         viewModelScope.launch {
-            _jitsiCommand.value = jitsiCallComposableCommand
+            _jitsiCommand.postValue(jitsiCallComposableCommand)
             delay(500)
-            _jitsiCommand.value = null
+            _jitsiCommand.postValue(null)
         }
 
     fun getToken(): String? = if (activeCall != null) {

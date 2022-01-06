@@ -6,8 +6,6 @@ import org.ossiaustria.lib.domain.services.AuthService
 import org.ossiaustria.lib.domain.services.AuthServiceImpl
 import org.ossiaustria.lib.domain.services.CallService
 import org.ossiaustria.lib.domain.services.CallServiceImpl
-import org.ossiaustria.lib.domain.services.IncomingEventCallbackService
-import org.ossiaustria.lib.domain.services.IncomingEventCallbackServiceImpl
 import org.ossiaustria.lib.domain.services.MessageService
 import org.ossiaustria.lib.domain.services.MockAlbumShareServiceImpl
 import org.ossiaustria.lib.domain.services.MockMessageServiceImpl
@@ -15,6 +13,8 @@ import org.ossiaustria.lib.domain.services.NfcInfoService
 import org.ossiaustria.lib.domain.services.NfcInfoServiceImpl
 import org.ossiaustria.lib.domain.services.TimelineService
 import org.ossiaustria.lib.domain.services.TimelineServiceImpl
+import org.ossiaustria.lib.domain.services.events.IncomingEventCallbackService
+import org.ossiaustria.lib.domain.services.events.IncomingEventCallbackServiceImpl
 
 val serviceModule = module {
     single<AuthService> { AuthServiceImpl(get(), get(), get(), get(), get()) }
