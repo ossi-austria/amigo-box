@@ -1,0 +1,79 @@
+import org.ossiaustria.dependencies.AndroidVersion
+import org.ossiaustria.dependencies.Libs
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'de.mannodermaus.android-junit5'
+apply plugin: 'jacoco'
+apply plugin: 'com.yelp.codegen.plugin'
+
+android {
+
+    compileSdkVersion AndroidVersion.compileSdk
+
+    defaultConfig {
+        minSdkVersion AndroidVersion.minSdk
+        targetSdkVersion AndroidVersion.targetSdk
+        versionCode 1
+        versionName "0.0.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    kapt { correctErrorTypes true }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions { jvmTarget = '11' }
+    lintOptions {
+        disable "Instantiatable"
+    }
+    testOptions {
+        reportDir "${rootProject.buildDir}/test-reports"
+        resultsDir "${rootProject.buildDir}/test-results"
+        junitPlatform { instrumentationTests.integrityCheckEnabled = true }
+        unitTests { includeAndroidResources = true }
+    }
+}
+
+dependencies {
+
+    // Testing
+    testImplementation project(':lib-test-commons')
+    testImplementation(Libs.Test.jupiterApi)
+    testImplementation(Libs.Test.jupiterParams)
+//    testRuntimeOnly(Libs.Test.jupiterEngine)
+    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
+
+    testImplementation(Libs.Test.testRunner)
+    androidTestImplementation(Libs.Test.jupiterApi)
+    androidTestImplementation(Libs.Test.mannodermausAndroidTestCore)
+    androidTestRuntimeOnly(Libs.Test.mannodermausAndroidTestRunner)
+
+    testImplementation(Libs.Test.test)
+    testImplementation(Libs.Test.testExt)
+    testImplementation(Libs.Test.mockk)
+    testImplementation(Libs.Test.coroutinesTest)
+
+    androidTestImplementation(Libs.Test.mockkAndroid)
+    androidTestImplementation(Libs.Test.espressoCore)
+    androidTestImplementation(Libs.Test.espressoContrib)
+    androidTestImplementation(Libs.Test.barista)
+
+    androidTestImplementation(Libs.Test.testRunner)
+    androidTestImplementation(Libs.Test.testExt)
+    androidTestImplementation(Libs.Test.testRules)
+
+}

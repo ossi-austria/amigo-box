@@ -1,47 +1,13 @@
-import org.ossiaustria.dependencies.AndroidVersion
 import org.ossiaustria.dependencies.Libs
 
-plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'de.mannodermaus.android-junit5'
-    id 'jacoco'
-}
+apply from: "${rootProject.projectDir}/gradle/default-library-config.gradle"
+
 android {
-
-    compileSdkVersion AndroidVersion.compileSdk
-
-    defaultConfig {
-        minSdkVersion AndroidVersion.minSdk
-        targetSdkVersion AndroidVersion.targetSdk
-        versionCode 1
-        versionName "0.0.1"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
-    }
 
     buildTypes {
         debug {
-            minifyEnabled false
             aaptOptions.cruncherEnabled = false
         }
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-        }
-    }
-
-    testOptions {
-        reportDir "${rootProject.buildDir}/test-reports"
-        resultsDir "${rootProject.buildDir}/test-results"
-        junitPlatform { instrumentationTests.integrityCheckEnabled = true }
-        unitTests { includeAndroidResources = true }
-    }
-    kapt { correctErrorTypes true }
-    kotlinOptions { jvmTarget = '1.8' }
-    lintOptions {
-        disable "Instantiatable"
     }
 }
 
@@ -69,7 +35,8 @@ dependencies {
     implementation Libs.permissions
 
     // Testing
-    testImplementation project(':lib-test-commons')
+    implementation(Libs.Test.coroutinesTest)
+
     testImplementation(Libs.Test.jupiterApi)
     testImplementation(Libs.Test.jupiterParams)
     testRuntimeOnly(Libs.Test.jupiterVintageEngine)
@@ -82,7 +49,6 @@ dependencies {
     testImplementation(Libs.Test.test)
     testImplementation(Libs.Test.testExt)
     testImplementation(Libs.Test.robolectric)
-    implementation(Libs.Test.coroutinesTest)
     testImplementation(Libs.Lifecycle.coreTesting)
     testImplementation(Libs.Test.mockk)
 }

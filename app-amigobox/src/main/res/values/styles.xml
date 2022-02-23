@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="AmigoBox.TextAppearance" parent="TextAppearance.AppCompat" />
-
-    <style name="AmigoBox.TextAppearance.H1" parent="TextAppearance.AppCompat.Headline" />
-
-</resources>

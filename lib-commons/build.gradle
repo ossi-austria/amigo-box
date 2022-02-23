@@ -1,39 +1,9 @@
 import org.ossiaustria.dependencies.Libs
-import org.ossiaustria.dependencies.AndroidVersion
 
-plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'de.mannodermaus.android-junit5'
-    id 'jacoco'
-}
+apply from: "${rootProject.projectDir}/gradle/default-library-config.gradle"
+
 android {
 
-    compileSdkVersion AndroidVersion.compileSdk
-
-
-    defaultConfig {
-        minSdkVersion AndroidVersion.minSdk
-        targetSdkVersion AndroidVersion.targetSdk
-        versionCode 1
-        versionName "0.0.1"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
-    }
-
-    buildTypes {
-        debug {
-            minifyEnabled false
-        }
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-        }
-    }
-
-    kapt { correctErrorTypes true }
-    kotlinOptions { jvmTarget = '1.8' }
 }
 
 dependencies {
@@ -49,38 +19,9 @@ dependencies {
     implementation(Libs.Compose.foundation)
     implementation(Libs.Compose.animation)
     implementation(Libs.Compose.material)
-//    implementation(Libs.Compose.materialIconsCore)
-//    implementation(Libs.Compose.materialIconsExtended)
+
     implementation(Libs.Coil.coil)
     implementation(Libs.Coil.coilCompose)
-//    implementation(Libs.hiltAndroid)
-//    implementation(Libs.hiltCommon)
-//    implementation(Libs.hiltLifecycle)
-//    kapt(Libs.hiltAndroidCompiler)
-//    kapt(Libs.hiltCompiler)
 
-    // Testing
-    testImplementation(Libs.Test.jupiterApi)
-    testImplementation(Libs.Test.jupiterParams)
-//    testRuntimeOnly(Libs.Test.jupiterEngine)
-    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
-
-    testImplementation(Libs.Test.testRunner)
-    androidTestImplementation(Libs.Test.jupiterApi)
-    androidTestImplementation(Libs.Test.mannodermausAndroidTestCore)
-    androidTestRuntimeOnly(Libs.Test.mannodermausAndroidTestRunner)
-
-    testImplementation(Libs.Test.test)
-    testImplementation(Libs.Test.testExt)
-    implementation(Libs.Test.coroutinesTest)
-    testImplementation(Libs.Test.mockkAndroid)
-    androidTestImplementation(Libs.Test.mockkAndroid)
-
-    androidTestImplementation(Libs.Test.espressoCore)
-    androidTestImplementation(Libs.Test.espressoContrib)
-    androidTestImplementation(Libs.Test.barista)
-    androidTestImplementation(Libs.Test.testRunner)
-    androidTestImplementation(Libs.Test.testExt)
-    androidTestImplementation(Libs.Test.testRules)
 
 }
