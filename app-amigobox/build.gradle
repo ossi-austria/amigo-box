@@ -72,7 +72,7 @@ android {
 
 dependencies {
     implementation project(":lib-commons")
-    implementation project(":lib-domain")
+    implementation project(':base-domain')
     implementation project(":lib-nfc")
     implementation project(":lib-jitsi")
 

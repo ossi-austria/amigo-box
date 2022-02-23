@@ -47,7 +47,7 @@ android {
 
 dependencies {
 
-    api project(":lib-domain")
+    api project(':base-domain')
 
     implementation(Libs.timber)
     implementation(Libs.appcompat)
