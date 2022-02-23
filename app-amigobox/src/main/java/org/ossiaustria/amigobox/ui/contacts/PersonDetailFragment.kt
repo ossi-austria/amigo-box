@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -20,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import org.koin.android.ext.android.inject
+import org.ossiaustria.amigobox.MainBoxActivity
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
@@ -55,7 +58,9 @@ class PersonDetailFragment : Fragment() {
     private fun startCall() {
         val person = Navigator.getPerson(requireArguments())
         if (person != null) {
-            navigator.toCallFragment(person)
+            (activity as MainBoxActivity).checkPermissionsVideoCall {
+                navigator.toCallFragment(person)
+            }
         } else {
             Toasts.personNotFound(requireContext())
         }
@@ -92,7 +97,12 @@ fun PersonDetailFragmentComposable(
     toHome: () -> Unit,
 ) {
 
-    Column(Modifier.fillMaxSize()) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(UIConstants.Defaults.INNER_PADDING)
+            .verticalScroll(rememberScrollState())
+    ) {
         HomeButtonsRow(onClickBack = toHome)
         Row(
             Modifier

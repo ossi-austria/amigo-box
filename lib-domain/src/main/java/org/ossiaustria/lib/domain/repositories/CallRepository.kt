@@ -16,7 +16,6 @@ import java.util.*
 interface CallRepository {
 
     fun getAllCalls(refresh: Boolean = false): Flow<Resource<List<Call>>>
-
     fun getCall(id: UUID, refresh: Boolean = false): Flow<Resource<Call>>
 }
 
@@ -39,9 +38,7 @@ internal class CallRepositoryImpl(
     }
 
     override fun readItem(id: UUID): Flow<Call> =
-        withFlowItem(callDao.findById(id)) {
-            it.toCall()
-        }
+        withFlowItem(callDao.findById(id)) { it.toCall() }
 
     override fun defaultReadAll(): Flow<List<CallEntity>> = callDao.findAll()
 

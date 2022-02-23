@@ -103,11 +103,15 @@ class CallViewModel(
         val currentState = _state.value
 
         if (currentState?.call != null && currentState.call.id != newCall.id) {
-            Timber.w("Currently, a call is active, and a new Call cannot be accepted")
-            viewModelScope.launch {
-                callService.deny(newCall)
+            if (currentState.call.isNotActive()) {
+                Timber.i("Current call not active, taking new call")
+            } else {
+                Timber.w("Currently, a call is active, and a new Call cannot be accepted")
+                viewModelScope.launch {
+                    callService.deny(newCall)
+                }
+                return
             }
-            return
         }
 
         /**

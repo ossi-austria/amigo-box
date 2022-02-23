@@ -10,6 +10,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -85,8 +86,13 @@ fun ContactsFragmentContent(
 ) {
     Column(
         modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                start = OUTER_PADDING,
+                top = UIConstants.Defaults.INNER_PADDING,
+                end = UIConstants.Defaults.INNER_PADDING
+            )
             .verticalScroll(rememberScrollState())
-            .padding(OUTER_PADDING)
     ) {
         HomeButtonsRow(onClickBack = backToHome)
         // Header

@@ -26,6 +26,11 @@ class TimedSlideShowManager {
     private var countDownTimer: CountDownTimer? = null
 
     fun startTimer() {
+        _timerState.value = TimerState.PLAY
+        internalStartTimer()
+    }
+
+    private fun internalStartTimer() {
         countDownTimer?.cancel()
         countDownTimer = object : CountDownTimer(TIME_COUNTDOWN_MS, 1000) {
 
@@ -35,14 +40,16 @@ class TimedSlideShowManager {
 
             override fun onFinish() {
                 incrementIndex()
-                startTimer()
+                if (_timerState.value == TimerState.PLAY) {
+                    internalStartTimer()
+                }
             }
         }.start()
-        setNavigationState(TimerState.PLAY)
     }
 
     fun stopTimer() {
-        setNavigationState(TimerState.STOP)
+        _timerState.value = TimerState.STOP
+
         countDownTimer?.cancel()
         countDownTimer = null
     }
@@ -66,11 +73,6 @@ class TimedSlideShowManager {
         setGalleryIndex(min((_currentIndex.value ?: 0) + 1, size - 1))
     }
 
-    // set states with following methods
-    private fun setNavigationState(navState: TimerState) {
-        _timerState.value = navState
-    }
-
     private fun setGalleryIndex(currentGalleryIndex: Int) {
         _currentIndex.value = currentGalleryIndex
     }
@@ -80,6 +82,6 @@ class TimedSlideShowManager {
     }
 
     companion object {
-        const val TIME_COUNTDOWN_MS: Long = 5000L
+        const val TIME_COUNTDOWN_MS: Long = 15000L
     }
 }

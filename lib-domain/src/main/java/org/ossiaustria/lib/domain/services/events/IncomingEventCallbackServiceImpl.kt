@@ -33,14 +33,13 @@ class IncomingEventCallbackServiceImpl(
 
     override fun handleCloudEventCall(cloudEvent: AmigoCloudEvent): Boolean {
         Timber.i("Handle cloudEvent: $cloudEvent")
-        Timber.i("Handle cloudEvent: ${cloudEvent.type}")
         Timber.i("Handle cloudEvent subscriptionCount:${_callEventFlow.subscriptionCount.value}")
 
         // Download Call: needed for everything.
         val callResource = runBlocking(scope.coroutineContext) {
             callRepository.getCall(cloudEvent.entityId, true).first { it !is Resource.Loading }
         }
-        return when (callResource) {
+        when (callResource) {
             is Resource.Success -> {
                 val call = callResource.value
                 Timber.i("Handle cloudEvent: Resource.Success: $call")
@@ -49,11 +48,16 @@ class IncomingEventCallbackServiceImpl(
                  * we need to perform the fallbackAction (start Activity!)
                  */
                 return if (_callEventFlow.subscriptionCount.value > 0) {
+                    Timber.i("Observers connected: ${_callEventFlow.subscriptionCount.value}")
+
                     scope.launch {
                         _callEventFlow.emit(call)
                     }
                     true
-                } else false
+                } else {
+                    Timber.i("Observers not connected: perform the fallbackAction")
+                    false
+                }
             }
             is Resource.Failure -> {
                 Timber.w("Handle cloudEvent: Cannot retrieve call of ")

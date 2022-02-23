@@ -1,12 +1,24 @@
 package org.ossiaustria.amigobox
 
+import android.Manifest.permission.CAMERA
+import android.Manifest.permission.INTERNET
+import android.Manifest.permission.MODIFY_AUDIO_SETTINGS
+import android.Manifest.permission.NFC
+import android.Manifest.permission.RECORD_AUDIO
+import android.Manifest.permission.SYSTEM_ALERT_WINDOW
+import android.Manifest.permission.USE_FULL_SCREEN_INTENT
+import android.Manifest.permission.VIBRATE
 import android.app.PendingIntent
 import android.content.Intent
 import android.nfc.NfcAdapter
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import com.vmadalin.easypermissions.EasyPermissions
+import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -21,8 +33,9 @@ import org.ossiaustria.amigobox.nfc.NfcViewModel
 import org.ossiaustria.amigobox.nfc.NfcViewModelState
 import org.ossiaustria.lib.domain.services.events.IncomingEventCallbackService
 import org.ossiaustria.lib.nfc.NfcHandler
+import timber.log.Timber
 
-class MainBoxActivity : AppCompatActivity() {
+class MainBoxActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     val navigator: Navigator by inject()
     private val cloudPushHandlerService: CloudPushHandlerService by inject()
@@ -42,14 +55,10 @@ class MainBoxActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.main_activity)
         navigator.bind(
             activity = this,
-            navController = (
-                supportFragmentManager
-                    .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-                ).navController
+            navController = (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
         )
 
         ActivityHelper.prepareActivityForDeviceLock(this)
@@ -59,12 +68,21 @@ class MainBoxActivity : AppCompatActivity() {
             navigator.toLoading()
         }
 
-        onCreateSetupNfcIntentHandling()
-
-        handleCallIntents(intent)
-
         cloudPushHandlerService.bindToActivity(this)
-        // FIXME: Add Permission util again and ask for ACTION_MANAGE_OVERLAY_PERMISSION
+
+        adaptWindow()
+
+        checkPermissionsBasics {
+            onCreateSetupNfcIntentHandling()
+            checkPermissionsIncomingCall {}
+        }
+        handleCallIntents(intent)
+    }
+
+    private fun adaptWindow() {
+        supportActionBar?.hide()
+        this.window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        this.window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     }
 
     override fun onResume() {
@@ -119,7 +137,9 @@ class MainBoxActivity : AppCompatActivity() {
         intent.extras?.let { bundle ->
             Navigator.getCall(bundle)?.let { call ->
                 Navigator.setCall(bundle, null)
-                navigator.toCallFragment(call)
+                checkPermissionsVideoCall {
+                    navigator.toCallFragment(call)
+                }
             }
         }
     }
@@ -135,6 +155,7 @@ class MainBoxActivity : AppCompatActivity() {
 
     private fun onCreateSetupNfcIntentHandling() {
         // implement nfcAdapter Object
+
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
         // Read all tags when app is running and in the foreground
@@ -155,7 +176,6 @@ class MainBoxActivity : AppCompatActivity() {
         if (nfcInfo != null) {
             nfcViewModel.processNfcTagData(nfcInfo)
         }
-
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -169,8 +189,97 @@ class MainBoxActivity : AppCompatActivity() {
         cloudPushHandlerService.unbind()
     }
 
+    private fun checkPermissions(
+        requestCode: Int,
+        permissions: List<String>,
+        explanation: String,
+        block: () -> Unit
+    ) {
+        if (EasyPermissions.hasPermissions(this, *permissions.toTypedArray())) {
+            Timber.i("Permissions are given: $permissions")
+            block.invoke()
+        } else {
+            Timber.w("Permissions are missing: $permissions")
+
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(
+                this,
+                explanation,
+                requestCode,
+                *permissions.toTypedArray()
+            )
+        }
+    }
+
+    @AfterPermissionGranted(VIDEO_CALL_REQUEST_CODE)
+    fun checkPermissionsVideoCall(block: () -> Unit) {
+        checkPermissions(
+            VIDEO_CALL_REQUEST_CODE,
+            listOf(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS),
+            "Need for Video",
+            block
+        )
+    }
+
+    @AfterPermissionGranted(BASIC_REQUEST_CODE)
+    fun checkPermissionsBasics(block: () -> Unit) {
+        checkPermissions(
+            BASIC_REQUEST_CODE,
+            listOf(
+                INTERNET,
+                NFC,
+            ), "Need for Basics", block
+        )
+    }
+
+    @AfterPermissionGranted(INCOMING_CALL_REQUEST_CODE)
+    fun checkPermissionsIncomingCall(block: () -> Unit) {
+
+        val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            listOf(VIBRATE, USE_FULL_SCREEN_INTENT)
+        } else {
+            listOf(VIBRATE, SYSTEM_ALERT_WINDOW)
+        }
+
+        checkPermissions(
+            INCOMING_CALL_REQUEST_CODE,
+            permissions, "Need for Incoming Videos", block
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        // EasyPermissions handles the request result.
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        Timber.i("onPermissionsGranted: $requestCode :${perms.size}")
+        perms.forEach {
+            Timber.i("onPermissionsGranted: $requestCode -> $it")
+        }
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        Timber.d("onPermissionsDenied: $requestCode :${perms.size}")
+        perms.forEach {
+            Timber.i("onPermissionsDenied: $requestCode -> $it")
+        }
+        // (Optional) Check whether the user denied any permissions and checked "NEVER ASK AGAIN."
+        // This will display a dialog directing them to enable the permission in app settings.
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+//            SettingsDialog.Builder(this).build().show()
+        }
+    }
+
     companion object {
-        const val ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 3456
+        const val BASIC_REQUEST_CODE = 1010
+        const val VIDEO_CALL_REQUEST_CODE = 1020
+        const val INCOMING_CALL_REQUEST_CODE = 1030
     }
 }
 

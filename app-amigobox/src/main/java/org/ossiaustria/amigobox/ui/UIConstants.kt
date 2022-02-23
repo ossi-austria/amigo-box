@@ -1,7 +1,6 @@
 package org.ossiaustria.amigobox.ui
 
 import androidx.compose.ui.unit.dp
-import org.ossiaustria.amigobox.ui.UIConstants.Defaults.OUTER_PADDING
 
 class UIConstants {
 
@@ -17,13 +16,6 @@ class UIConstants {
         val AVATAR_IMAGE_HEIGHT = 200.dp
         val IMAGE_HEIGHT = 168.dp
         val RECT_HEIGHT = 4.dp
-    }
-
-    object NavigationButtonRow {
-        val PADDING_START = OUTER_PADDING
-        val PADDING_END = OUTER_PADDING
-        val PADDING_BOTTOM = 24.dp
-        val PADDING_TOP = 16.dp
     }
 
     object ScrollButton {

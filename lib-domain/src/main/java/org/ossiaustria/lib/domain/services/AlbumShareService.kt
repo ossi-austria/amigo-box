@@ -21,8 +21,9 @@ interface AlbumShareService : SendableService<AlbumShare> {
     fun markAsRetrieved(id: UUID): Flow<Resource<AlbumShare>>
 }
 
+@Deprecated("Replace with implementation")
 class MockAlbumShareServiceImpl(
-    private val ioDispatcher: CoroutineDispatcher,
+    ioDispatcher: CoroutineDispatcher,
     private val albumShareRepository: AlbumShareRepository,
 ) : AlbumShareService {
 
@@ -50,6 +51,7 @@ class MockAlbumShareServiceImpl(
         contentType = "",
         type = MultimediaType.IMAGE
     )
+
     private fun mockAlbumShare(
         id: UUID = randomUUID(),
         senderId: UUID = HER_PERSON_ID,

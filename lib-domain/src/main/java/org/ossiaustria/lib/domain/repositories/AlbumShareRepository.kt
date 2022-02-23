@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import org.ossiaustria.lib.commons.DispatcherProvider
 import org.ossiaustria.lib.domain.api.AlbumShareApi
 import org.ossiaustria.lib.domain.common.Resource
@@ -19,10 +20,8 @@ import timber.log.Timber
 import java.util.*
 
 interface AlbumShareRepository {
-
     fun getAllAlbumShares(refresh: Boolean = false): Flow<Resource<List<AlbumShare>>>
-
-        fun getAlbumShare(id: UUID, refresh: Boolean = false): Flow<Resource<AlbumShare>>
+    fun getAlbumShare(id: UUID, refresh: Boolean = false): Flow<Resource<AlbumShare>>
 }
 
 internal class AlbumShareRepositoryImpl(
@@ -47,14 +46,14 @@ internal class AlbumShareRepositoryImpl(
     }
 
     override fun readItem(id: UUID): Flow<AlbumShare> =
-        withFlowItem(albumShareDao.findById(id)) {
+        albumShareDao.findById(id).map {
             it.toAlbumShare()
         }
 
     override fun defaultReadAll(): Flow<List<AlbumShareEntityWithData>> = albumShareDao.findAll()
 
     @FlowPreview
-        override fun getAllAlbumShares(refresh: Boolean): Flow<Resource<List<AlbumShare>>> = flow {
+    override fun getAllAlbumShares(refresh: Boolean): Flow<Resource<List<AlbumShare>>> = flow {
         defaultCollectionStore.stream(newRequest("all", refresh))
             .flowOn(dispatcherProvider.io())
             .collect { response: StoreResponse<List<AlbumShare>> ->
@@ -63,7 +62,7 @@ internal class AlbumShareRepositoryImpl(
     }
 
     @FlowPreview
-        override fun getAlbumShare(id: UUID, refresh: Boolean): Flow<Resource<AlbumShare>> = flow {
+    override fun getAlbumShare(id: UUID, refresh: Boolean): Flow<Resource<AlbumShare>> = flow {
 
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))
