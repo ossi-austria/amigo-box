@@ -111,8 +111,7 @@ object Libs {
     const val navigationTest = "androidx.navigation:navigation-testing:$navigation_version"
 
 
-    const val permissions = "com.nabinbhandari.android:permissions:3.8"
-
+    const val permissions = "com.vmadalin:easypermissions-ktx:1.0.0"
 
     // Retrofit for HTTP and Json wrapping
     const val retrofit_version = "2.9.0"

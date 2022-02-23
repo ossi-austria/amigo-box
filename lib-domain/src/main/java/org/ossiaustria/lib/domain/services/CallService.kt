@@ -57,13 +57,13 @@ class CallServiceImpl(
         callRepository.getCall(id, true)
 
     override fun getAll(): Flow<Resource<List<Call>>> =
-        callRepository.getAllCalls(true)
+        callRepository.getAllCalls(false)
 
     override fun findWithPersons(
         senderId: UUID?,
         receiverId: UUID?
     ): Flow<Resource<List<Call>>> =
-        callRepository.getAllCalls(true)
+        callRepository.getAllCalls(false)
 
     override fun findWithSender(senderId: UUID): Flow<Resource<List<Call>>> =
         callRepository.getAllCalls()

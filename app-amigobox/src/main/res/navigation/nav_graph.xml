@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/loadingFragment">
 
-    <fragment
-        android:id="@+id/welcomeFragment"
-        android:name="org.ossiaustria.amigobox.ui.welcome.WelcomeFragment"
-        android:label="welcome_fragment"
-        tools:layout="@layout/welcome_fragment" />
     <fragment
         android:id="@+id/loadingFragment"
         android:name="org.ossiaustria.amigobox.ui.loading.LoadingFragment"

@@ -17,8 +17,6 @@ try {
     API_ENDPOINT = properties.getProperty('API_ENDPOINT')
 } catch (ignored) {}
 
-
-
 android {
 
     compileSdkVersion AndroidVersion.compileSdk

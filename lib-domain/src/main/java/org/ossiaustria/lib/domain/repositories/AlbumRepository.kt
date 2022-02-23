@@ -22,7 +22,7 @@ interface AlbumRepository {
 
     fun getAllAlbums(refresh: Boolean = false): Flow<Resource<List<Album>>>
 
-        fun getAlbum(id: UUID, refresh: Boolean = false): Flow<Resource<Album>>
+    fun getAlbum(id: UUID, refresh: Boolean = false): Flow<Resource<Album>>
 }
 
 internal class AlbumRepositoryImpl(
@@ -52,12 +52,10 @@ internal class AlbumRepositoryImpl(
         return albumDao.findById(id).map { it.toAlbum() }
     }
 
-    override fun defaultReadAll(): Flow<List<AlbumEntityWithData>> {
-        return albumDao.findAll()
-    }
+    override fun defaultReadAll(): Flow<List<AlbumEntityWithData>> = albumDao.findAll()
 
     @FlowPreview
-        override fun getAllAlbums(refresh: Boolean): Flow<Resource<List<Album>>> = flow {
+    override fun getAllAlbums(refresh: Boolean): Flow<Resource<List<Album>>> = flow {
         listTransform(
             defaultCollectionStore.stream(
                 newRequest(key = "all", refresh = refresh)
@@ -66,7 +64,7 @@ internal class AlbumRepositoryImpl(
     }
 
     @FlowPreview
-        override fun getAlbum(id: UUID, refresh: Boolean): Flow<Resource<Album>> = flow {
+    override fun getAlbum(id: UUID, refresh: Boolean): Flow<Resource<Album>> = flow {
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))
         )

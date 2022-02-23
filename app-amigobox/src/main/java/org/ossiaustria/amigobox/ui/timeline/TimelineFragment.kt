@@ -58,9 +58,8 @@ class TimelineFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loadAllSendables()
         viewModel.loadPersons()
-        viewModel.startTimer()
+        viewModel.loadAllSendables()
     }
 
     override fun onResume() {

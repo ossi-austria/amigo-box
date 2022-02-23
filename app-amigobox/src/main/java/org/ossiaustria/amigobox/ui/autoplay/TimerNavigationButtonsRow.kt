@@ -23,11 +23,7 @@ fun TimerNavigationButtonsRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                start = UIConstants.NavigationButtonRow.PADDING_START,
-                end = UIConstants.NavigationButtonRow.PADDING_END,
-                bottom = UIConstants.NavigationButtonRow.PADDING_BOTTOM
-            )
+            .padding(UIConstants.Defaults.INNER_PADDING)
             .fillMaxHeight(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom

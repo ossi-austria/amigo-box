@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ossiaustria.amigobox.TimedSlideshowViewModel
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Call
@@ -13,7 +15,6 @@ import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.models.Sendable
 import org.ossiaustria.lib.domain.modules.UserContext
 import org.ossiaustria.lib.domain.repositories.GroupRepository
-import org.ossiaustria.lib.domain.services.ServiceMocks
 import org.ossiaustria.lib.domain.services.TimelineService
 import java.util.*
 
@@ -45,15 +46,15 @@ class TimelineViewModel(
 
         //fetch Sendables from Repository
         viewModelScope.launch(ioDispatcher) {
-            timelineService.findWithPersons(ServiceMocks.MY_PERSON_ID, ServiceMocks.HER_PERSON_ID)
-                .collect { resource ->
-                    if (resource is Resource.Success) {
-                        val sortedBy =
-                            filterPresentableSendables(resource.value).sortedBy { it.retrievedAt }
-                        slideShowManager.size = sortedBy.size
-                        _sendables.postValue(sortedBy)
-                    }
-                }
+            val sendables = timelineService.findWithReceiver(centerPerson!!.id)
+            val sortedBy = filterPresentableSendables(sendables)
+                .sortedBy { it.sentAt }
+                .reversed()
+            slideShowManager.size = sortedBy.size
+            _sendables.postValue(sortedBy)
+            withContext(Dispatchers.Main) {
+                startTimer()
+            }
         }
     }
 

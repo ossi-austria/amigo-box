@@ -29,6 +29,9 @@ data class Call(
         endTime.time - startedAt.time
     } else null
 
-    fun isDone(): Boolean = listOf(CANCELLED, DENIED, TIMEOUT, FINISHED)
-        .contains(callState)
+    fun isNotActive(): Boolean = listOf(CANCELLED, DENIED, TIMEOUT, FINISHED).contains(callState)
+
+    fun isDone(): Boolean = callState == FINISHED
+    fun isAvoided(): Boolean = listOf(CANCELLED, DENIED, TIMEOUT).contains(callState)
+
 }

@@ -1,6 +1,5 @@
 package org.ossiaustria.lib.domain.services
 
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import org.ossiaustria.lib.domain.api.MessageApi
 import org.ossiaustria.lib.domain.common.Resource
@@ -13,13 +12,10 @@ interface MessageService : SendableService<Message> {
     suspend fun markAsRetrieved(id: UUID): Resource<Message>
 }
 
-class MockMessageServiceImpl(
-    private val ioDispatcher: CoroutineDispatcher,
+class MessageServiceImpl(
     private val messageRepository: MessageRepository,
     private val messageApi: MessageApi
 ) : MessageService {
-
-    private val wrapper = SendableServiceWrapper<Message>(ioDispatcher)
 
     override suspend fun createMessage(
         senderId: UUID,
@@ -43,7 +39,7 @@ class MockMessageServiceImpl(
         messageRepository.getMessage(id)
 
     override fun getAll(): Flow<Resource<List<Message>>> =
-        messageRepository.getAllMessages(true)
+        messageRepository.getAllMessages(false)
 
     override fun findWithPersons(
         senderId: UUID?,
@@ -52,9 +48,9 @@ class MockMessageServiceImpl(
         messageRepository.getAllMessages(true)
 
     override fun findWithSender(senderId: UUID): Flow<Resource<List<Message>>> =
-        messageRepository.getAllMessages(true)
+        messageRepository.getAllMessages(false)
 
     override fun findWithReceiver(receiverId: UUID): Flow<Resource<List<Message>>> =
-        messageRepository.getAllMessages(true)
+        messageRepository.getAllMessages(false)
 
 }
