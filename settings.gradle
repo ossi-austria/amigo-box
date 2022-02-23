@@ -3,8 +3,8 @@ include ':lib-test-commons'
 include ':base-domain'
 include ':lib-nfc'
 include ':lib-jitsi'
+include ':base-amigobox'
 include ':app-amigobox'
-//include ':app-nfcdemo'
-//include ':app-digitaluser'
 
-rootProject.name = "Amigo"
+
+rootProject.name = "amigobox"

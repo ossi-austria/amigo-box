@@ -14,7 +14,7 @@ object NotificationFactory {
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         var builder = NotificationCompat.Builder(context, context.getString(R.string.channel_message_id))
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setPriority(priority)
@@ -31,8 +31,8 @@ object NotificationFactory {
 
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        var builder = NotificationCompat.Builder(context, context.getString(R.string.channel_message_id))
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+        val builder = NotificationCompat.Builder(context, context.getString(R.string.channel_message_id))
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_MAX)

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="charcoal">#FF171717</color>
+    <color name="lightGrey">#FFF2F6F7</color>
+    <color name="mistyOcean">#FF075760</color>
+    <color name="darkNavySmoke">#FF00292E</color>
+    <color name="orange">#FFFFBA5F</color>
+    <color name="redVariance">#FFFF5F5F</color>
+    <color name="white">#FFFFFFFF</color>
+
+</resources>
