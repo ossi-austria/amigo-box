@@ -1,6 +1,5 @@
 package org.ossiaustria.amigobox.ui.timeline.content
 
-import ProfileImage
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import androidx.compose.foundation.layout.Box
@@ -23,6 +22,7 @@ import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 import org.ossiaustria.amigobox.ui.commons.images.NetworkImage
+import org.ossiaustria.amigobox.ui.commons.images.ProfileImage
 import org.ossiaustria.lib.domain.models.Message
 import org.ossiaustria.lib.domain.models.Person
 import java.util.*

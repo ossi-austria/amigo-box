@@ -1,3 +1,6 @@
+package org.ossiaustria.amigobox.ui.commons.images
+
+
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border

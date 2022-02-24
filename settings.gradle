@@ -6,11 +6,10 @@ include ':base-domain'
 include ':base-amigobox'
 include ':app-amigobox'
 
-if (enableAmigoProModules.toBoolean()) {
-    include ':app-amigobox-pro'
-    include ':pro-external-nfc'
-    project(':app-amigobox-pro').projectDir = new File('pro-modules/app-amigobox-pro')
-    project(':pro-external-nfc').projectDir = new File('pro-modules/pro-external-nfc')
+if (hasProperty("enableAmigoProModules") && enableAmigoProModules.toBoolean()) {
+    include ':pro-modules:app-amigobox-pro'
+    include ':pro-modules:lib-extra-nfc'
+    include ':pro-modules:lib-extra-nfc-lib'
 }
 
 rootProject.name = "amigobox"

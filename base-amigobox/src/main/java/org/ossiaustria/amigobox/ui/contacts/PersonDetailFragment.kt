@@ -1,6 +1,5 @@
 package org.ossiaustria.amigobox.ui.contacts
 
-import ProfileImage
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +29,7 @@ import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
 import org.ossiaustria.amigobox.ui.commons.HomeButtonsRow
 import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 import org.ossiaustria.amigobox.ui.commons.Toasts
+import org.ossiaustria.amigobox.ui.commons.images.ProfileImage
 import org.ossiaustria.lib.domain.models.Person
 
 class PersonDetailFragment : Fragment() {

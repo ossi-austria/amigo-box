@@ -35,7 +35,7 @@ import org.ossiaustria.lib.domain.services.events.IncomingEventCallbackService
 import org.ossiaustria.lib.nfc.NfcHandler
 import timber.log.Timber
 
-class MainBoxActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+open class MainBoxActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     val navigator: Navigator by inject()
     private val cloudPushHandlerService: CloudPushHandlerService by inject()
@@ -133,7 +133,7 @@ class MainBoxActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
         }
     }
 
-    private fun handleCallIntents(intent: Intent) {
+    fun handleCallIntents(intent: Intent) {
         intent.extras?.let { bundle ->
             Navigator.getCall(bundle)?.let { call ->
                 Navigator.setCall(bundle, null)
