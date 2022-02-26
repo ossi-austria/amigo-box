@@ -9,7 +9,6 @@ include ':app-amigobox'
 if (hasProperty("enableAmigoProModules") && enableAmigoProModules.toBoolean()) {
     include ':pro-modules:app-amigobox-pro'
     include ':pro-modules:lib-extra-nfc'
-    include ':pro-modules:lib-extra-nfc-lib'
 }
 
 rootProject.name = "amigobox"
