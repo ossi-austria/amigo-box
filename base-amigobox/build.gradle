@@ -2,70 +2,25 @@ import org.ossiaustria.dependencies.AndroidVersion
 import org.ossiaustria.dependencies.Libs
 import org.ossiaustria.dependencies.Versions
 
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'de.mannodermaus.android-junit5'
-    id 'androidx.navigation.safeargs.kotlin'
-    id 'com.google.gms.google-services'
-    id "com.github.ben-manes.versions"
-}
+apply from: "${rootProject.projectDir}/gradle/default-library-config.gradle"
+
 
 android {
 
     compileSdkVersion AndroidVersion.compileSdk
 
-    defaultConfig {
-        applicationId "org.ossiaustria.amigobox"
-        minSdkVersion AndroidVersion.minSdk
-        targetSdkVersion AndroidVersion.targetSdk
-        versionCode 1
-        versionName "0.0.1"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
-    }
-
-    buildTypes {
-        debug {
-            applicationIdSuffix ".debug"
-            minifyEnabled false
-            testCoverageEnabled true
-            aaptOptions.cruncherEnabled = false
-        }
-        release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-        }
-    }
-
     buildFeatures {
         viewBinding true
         compose true
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
-    testOptions {
-        reportDir "${rootProject.buildDir}/test-reports"
-        resultsDir "${rootProject.buildDir}/test-results"
-        junitPlatform { instrumentationTests.integrityCheckEnabled = true }
-        unitTests { includeAndroidResources = true }
     }
     composeOptions {
         kotlinCompilerExtensionVersion Versions.compose_version
     }
     kapt { correctErrorTypes true }
     kotlinOptions {
-        jvmTarget = '11'
         freeCompilerArgs += [
                 "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi"]
-    }
-    lintOptions {
-        disable "Instantiatable"
     }
 }
 
@@ -75,7 +30,6 @@ dependencies {
     implementation project(':base-domain')
     implementation project(":lib-nfc")
     implementation project(":lib-jitsi")
-    implementation project(":base-amigobox")
 
     implementation(Libs.timber)
     implementation(Libs.appcompat)
@@ -118,29 +72,10 @@ dependencies {
     implementation Libs.permissions
 
     // Testing
-    testImplementation project(':lib-test-commons')
-    testImplementation(Libs.Test.jupiterApi)
-    testImplementation(Libs.Test.jupiterParams)
-//    testRuntimeOnly(Libs.Test.jupiterEngine) //Junit5 still broken
-    testRuntimeOnly(Libs.Test.jupiterVintageEngine)
-
-    androidTestImplementation(Libs.Test.testRunner)
-    androidTestImplementation(Libs.Test.jupiterApi)
-    androidTestImplementation(Libs.Test.mannodermausAndroidTestCore)
-    androidTestRuntimeOnly(Libs.Test.mannodermausAndroidTestRunner)
-
     implementation(Libs.Test.coroutinesTest)
     implementation(Libs.Lifecycle.livedataTesting)
-    testImplementation(Libs.Test.test)
-    testImplementation(Libs.Test.testExt)
     testImplementation(Libs.Test.robolectric)
-    testImplementation(Libs.Test.coroutinesTest)
     testImplementation(Libs.Lifecycle.coreTesting)
-    testImplementation(Libs.Test.mockk)
 
-    androidTestImplementation(Libs.Test.mockkAndroid)
 
-    androidTestImplementation(Libs.Test.espressoCore)
-    androidTestImplementation(Libs.Test.espressoContrib)
-    androidTestImplementation(Libs.Test.barista)
 }

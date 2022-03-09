@@ -1,10 +1,14 @@
 include ':lib-commons'
 include ':lib-test-commons'
-include ':lib-domain'
 include ':lib-nfc'
 include ':lib-jitsi'
+include ':base-domain'
+include ':base-amigobox'
 include ':app-amigobox'
-//include ':app-nfcdemo'
-//include ':app-digitaluser'
 
-rootProject.name = "Amigo"
+if (hasProperty("enableAmigoProModules") && enableAmigoProModules.toBoolean()) {
+    include ':pro-modules:app-amigobox-pro'
+    include ':pro-modules:lib-extra-nfc'
+}
+
+rootProject.name = "amigobox"
