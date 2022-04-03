@@ -7,6 +7,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.RemoteMessage
 import org.ossiaustria.amigobox.MainBoxActivity
 import org.ossiaustria.amigobox.Navigator
+import org.ossiaustria.amigobox.R
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.services.events.AmigoCloudEvent
@@ -17,9 +18,9 @@ import timber.log.Timber
 class CloudPushHandlerService(
     private val appContext: Context,
     private val incomingEventCallbackService: IncomingEventCallbackService,
+    private val entryPointProvider: IntentEntryPointProvider,
 ) {
     private var mainBoxActivity: MainBoxActivity? = null
-
     fun onNewToken(newToken: String) {
         Timber.tag(TAG).i("New FCM token: $newToken")
     }
@@ -54,7 +55,8 @@ class CloudPushHandlerService(
                 }
             } else {
                 // TODO: need improvements, could look similar to CALL
-                val intent = Intent(appContext, MainBoxActivity::class.java)
+                val clazz = entryPointProvider.getMainClass()
+                val intent = Intent(appContext, clazz)
                 createMessage(intent, cloudEvent)
             }
         }
@@ -63,10 +65,11 @@ class CloudPushHandlerService(
     private fun startActivityForCall(appContext: Context, call: Call) {
         Timber.tag(TAG).i("startActivityForCall: $call, $mainBoxActivity")
 
+        val clazz = entryPointProvider.getMainClass()
         val intent = if (mainBoxActivity != null) {
-            Intent(mainBoxActivity, MainBoxActivity::class.java)
+            Intent(mainBoxActivity, clazz)
         } else {
-            Intent(appContext, MainBoxActivity::class.java).apply {
+            Intent(appContext, clazz).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
         }
@@ -84,8 +87,8 @@ class CloudPushHandlerService(
         NotificationFactory.createForMessage(
             appContext,
             intent = intent,
-            title = "Du hast eine neue Nachricht bekommen!",
-            text = "Du hast eine neue Nachricht bekommen!",
+            title = appContext.getString(R.string.notification_new_message),
+            text = appContext.getString(R.string.notification_new_message),
             priority = NotificationCompat.PRIORITY_HIGH
         )
     }

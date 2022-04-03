@@ -44,12 +44,8 @@ class PersonDetailFragment : Fragment() {
         val person = Navigator.getPerson(requireArguments())
         setContent {
             if (person != null) {
-                PersonDetailFragmentScreen(
-                    person,
-                    ::startCall, ::backToHome
-                )
+                PersonDetailFragmentScreen(person, ::startCall, ::backToHome)
             } else {
-                Text("No Person?")
                 Toasts.personNotFound(requireContext())
             }
         }

@@ -59,7 +59,7 @@ fun CallBottomControl(
                 } else if (callViewState is CallViewState.Timeout) {
                     stringResource(R.string.call_timeout)
                 } else if (callViewState is CallViewState.Failure) {
-                    callViewState.error?.toString() ?: "Failure"
+                    callViewState.error?.toString() ?:  stringResource(R.string.call_failure)
                 } else {
                     ""
                 },

@@ -69,7 +69,6 @@ fun CallFragmentComposable(
             )
         }
 
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()

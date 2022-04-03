@@ -13,7 +13,7 @@ object NotificationFactory {
 
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        var builder = NotificationCompat.Builder(context, context.getString(R.string.channel_message_id))
+        val builder = NotificationCompat.Builder(context, context.getString(R.string.channel_message_id))
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(text)

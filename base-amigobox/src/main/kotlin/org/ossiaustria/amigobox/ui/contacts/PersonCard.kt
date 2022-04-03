@@ -32,7 +32,6 @@ fun LoadPersonCardContent(name: String, url: String?) {
                     .fillMaxWidth()
                     .height(ListCard.IMAGE_HEIGHT),
             )
-            // https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200
         } else {
             NetworkImage(
                 modifier = Modifier

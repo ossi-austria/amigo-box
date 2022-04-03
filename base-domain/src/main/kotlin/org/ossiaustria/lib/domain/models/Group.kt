@@ -14,4 +14,10 @@ data class Group(
 
     val admins: List<Person> =
         members.filter { it.memberType == MemberType.ADMIN }
+
+    /**
+     * All members, who are not the ANALOGUE themselves, meaning "all others" but exluding the user
+     */
+    val digitals: List<Person> =
+        members.filter { it.memberType != MemberType.ANALOGUE }
 }

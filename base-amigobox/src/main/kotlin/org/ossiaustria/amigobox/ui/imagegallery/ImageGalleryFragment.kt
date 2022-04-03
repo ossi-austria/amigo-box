@@ -16,6 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.ui.autoplay.TimerState
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
+import org.ossiaustria.amigobox.ui.commons.LoadingWidget
 
 class ImageGalleryFragment : Fragment() {
 
@@ -48,7 +49,7 @@ class ImageGalleryFragment : Fragment() {
                             onStartStopPressed = viewModel::onStartStopPressed,
                         )
                     } else {
-                        Text("loading!")
+                        LoadingWidget()
                     }
                 }
             }

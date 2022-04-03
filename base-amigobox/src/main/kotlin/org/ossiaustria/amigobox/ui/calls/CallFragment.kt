@@ -16,6 +16,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -29,6 +30,7 @@ import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
+import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
 import org.ossiaustria.amigobox.ui.commons.Toasts
 import org.ossiaustria.lib.domain.services.events.IncomingEventCallbackService
@@ -151,9 +153,9 @@ class CallFragment : Fragment() {
                         contentAlignment = Alignment.Center
                     ) {
                         when {
-                            state != null && partner == null -> Text("Person nicht erreichbar.")
+                            state != null && partner == null -> Text(stringResource(id = R.string.person_not_available))
                             state is CallViewState.Failure -> Text(text = (state as CallViewState.Failure).error.toString())
-                            else -> Text("Loading..")
+                            else -> Text(stringResource(id = R.string.call_fragment_loading))
                         }
                     }
                 }

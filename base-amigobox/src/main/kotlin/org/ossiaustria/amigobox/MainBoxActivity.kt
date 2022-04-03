@@ -1,6 +1,7 @@
 package org.ossiaustria.amigobox
 
 import android.Manifest.permission.CAMERA
+import android.Manifest.permission.CAPTURE_AUDIO_OUTPUT
 import android.Manifest.permission.INTERNET
 import android.Manifest.permission.MODIFY_AUDIO_SETTINGS
 import android.Manifest.permission.NFC
@@ -72,6 +73,7 @@ open class MainBoxActivity : AppCompatActivity(), EasyPermissions.PermissionCall
 
         adaptWindow()
 
+        checkPermissionsVideoCall {}
         checkPermissionsBasics {
             onCreateSetupNfcIntentHandling()
             handleNfcIntent(intent)
@@ -88,21 +90,6 @@ open class MainBoxActivity : AppCompatActivity(), EasyPermissions.PermissionCall
 
     override fun onResume() {
         super.onResume()
-
-
-//        nfcViewModel.amigoNfcInfo.observe(this) { resource ->
-//            if (resource.isSuccess) {
-//                val nfcInfo = resource.valueOrNull()
-//                if (nfcInfo != null) {
-//                    // NFC Message is stored in nfcHandler.inNfcMessage
-//                    val message = "NFC detected: ${nfcInfo.name} ${nfcInfo.nfcRef} ${nfcInfo.type}"
-//                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-//                    nfcViewModel.handleNfcInfo(nfcInfo)
-//                } else {
-//                    Toast.makeText(this, "NFC-Tag ungültig", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
 
         job = scope.launch {
             incomingEventCallbackService.callEventFlow
@@ -129,7 +116,7 @@ open class MainBoxActivity : AppCompatActivity(), EasyPermissions.PermissionCall
                     Toast.makeText(this, "TagLost", Toast.LENGTH_LONG).show()
                 }
                 else -> {
-                    Toast.makeText(this, "else", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "resource $resource", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -137,16 +124,13 @@ open class MainBoxActivity : AppCompatActivity(), EasyPermissions.PermissionCall
         // Get all NDEF discovered intents
         // Makes sure the app gets all discovered NDEF messages as long as it's in the foreground.
         internalNfcWrapper.startDetecting(this)
-
     }
 
     private fun handleCallIntents(intent: Intent) {
         intent.extras?.let { bundle ->
             Navigator.getCall(bundle)?.let { call ->
                 Navigator.setCall(bundle, null)
-                checkPermissionsVideoCall {
-                    navigator.toCallFragment(call)
-                }
+                checkPermissionsVideoCall { navigator.toCallFragment(call) }
             }
         }
     }
@@ -202,6 +186,7 @@ open class MainBoxActivity : AppCompatActivity(), EasyPermissions.PermissionCall
                 requestCode,
                 *permissions.toTypedArray()
             )
+            block.invoke()
         }
     }
 
@@ -209,7 +194,7 @@ open class MainBoxActivity : AppCompatActivity(), EasyPermissions.PermissionCall
     fun checkPermissionsVideoCall(block: () -> Unit) {
         checkPermissions(
             VIDEO_CALL_REQUEST_CODE,
-            listOf(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS),
+            listOf(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS, CAPTURE_AUDIO_OUTPUT),
             "Need for Video",
             block
         )

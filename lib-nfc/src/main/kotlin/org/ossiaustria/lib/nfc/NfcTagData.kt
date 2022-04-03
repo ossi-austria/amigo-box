@@ -11,10 +11,10 @@ data class NfcTagData(
         fun extractNfcId(byteArray: ByteArray, maxLen: Int = byteArray.size): String {
             val uidStringBuffer = StringBuffer()
             for (i in 0 until maxLen) {
-                val hexValue = String.format("%02X", byteArray[i])
+                val hexValue = String.format("%02X:", byteArray[i])
                 uidStringBuffer.append(hexValue)
             }
-            return uidStringBuffer.toString()
+            return uidStringBuffer.removeSuffix(":").toString()
         }
     }
 }

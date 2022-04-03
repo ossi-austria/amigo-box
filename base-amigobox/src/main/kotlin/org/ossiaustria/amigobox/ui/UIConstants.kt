@@ -50,6 +50,13 @@ class UIConstants {
         val ROUNDED_CORNER = BUTTON_HEIGHT / 2
     }
 
+    object SmallButtons {
+        val ICON_SIZE = 32.dp
+        val PADDING = 4.dp
+        val BUTTON_HEIGHT = 48.dp
+        val ROUNDED_CORNER = 8.dp
+    }
+
     object ProfileImage {
         val IMAGE_SIZE = 280.dp
         val IMAGE_PADDING = 24.dp

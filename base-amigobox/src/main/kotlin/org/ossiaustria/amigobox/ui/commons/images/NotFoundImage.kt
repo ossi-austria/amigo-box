@@ -16,7 +16,7 @@ fun NotFoundImage(
 ) {
     Image(
         painter = painterResource(R.drawable.ic_image_light),
-        contentDescription = textResString(altText = "Image not found"),
+        contentDescription = textResString(altTextRes = R.string.images_not_found),
         modifier = modifier.then(AmigoStyle.Images.roundBorders()),
         contentScale = contentScale,
     )
