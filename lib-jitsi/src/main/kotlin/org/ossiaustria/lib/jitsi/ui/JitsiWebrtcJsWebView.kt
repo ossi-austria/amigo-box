@@ -1,8 +1,6 @@
 package org.ossiaustria.lib.jitsi.ui
 
-import android.annotation.TargetApi
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.webkit.CookieManager
@@ -39,10 +37,10 @@ class JitsiWebrtcJsWebView(context: Context, attrs: AttributeSet?) : WebView(con
         settings.loadsImagesAutomatically = true
         settings.blockNetworkLoads = false
         settings.textZoom = 70
-        settings.cacheMode = WebSettings.LOAD_NO_CACHE;
+        settings.cacheMode = WebSettings.LOAD_NO_CACHE
         settings.userAgentString =
-            "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/43.0.2357.65 Mobile Safari/537.36";
-        scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY;
+            "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/43.0.2357.65 Mobile Safari/537.36"
+        scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY
         isScrollbarFadingEnabled = true
 
         setWebContentsDebuggingEnabled(true)
@@ -50,9 +48,15 @@ class JitsiWebrtcJsWebView(context: Context, attrs: AttributeSet?) : WebView(con
         cookieManager.setAcceptThirdPartyCookies(this, true)
 
         this.webChromeClient = object : WebChromeClient() {
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun onPermissionRequest(request: PermissionRequest) {
-                request.grant(request.resources)
+                request.grant(
+                    arrayOf(
+                        PermissionRequest.RESOURCE_AUDIO_CAPTURE,
+                        PermissionRequest.RESOURCE_VIDEO_CAPTURE
+                    )
+                )
+                Timber.i("JitsiWebrtcJsWebView PermissionRequest $request")
+//                request.grant(request.resources)
             }
         }
 

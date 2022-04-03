@@ -23,7 +23,7 @@ fun ScrollNavigationButton(
             if (scrollState.value == 0) {
                 Spacer(Modifier)
             } else {
-                TextAndIconButton(
+                HelperButton(
                     iconId = R.drawable.ic_arrow_left,
                     text = text,
                     onClick = onClick
@@ -33,7 +33,7 @@ fun ScrollNavigationButton(
             if (scrollState.value == scrollState.maxValue) {
                 Spacer(Modifier)
             } else {
-                TextAndIconButton(
+                HelperButton(
                     iconId = null,
                     endIconId = R.drawable.ic_arrow_right,
                     text = text,

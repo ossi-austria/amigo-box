@@ -39,9 +39,6 @@ class NfcViewModel(
     private val personRepository: PersonRepository,
 ) : ViewModel() {
 
-//    private val _amigoNfcInfo: MutableLiveData<Resource<AmigoNfcInfo>> = MutableLiveData()
-//    val amigoNfcInfo: LiveData<Resource<AmigoNfcInfo>> = _amigoNfcInfo
-
     private val _nfcEvent: MutableLiveData<NfcViewModelEvent> = MutableLiveData()
     val nfcEvent: LiveData<NfcViewModelEvent> = _nfcEvent
 
@@ -65,7 +62,6 @@ class NfcViewModel(
                 else -> Failure("Cannot process nfcEvent: $nfcEvent")
             }
             _nfcEvent.postValue(amigoNfcEvent)
-//            _amigoNfcInfo.postValue(Resource.failure("NfcTagData cannot be used: $nfcEvent"))
         }
     }
 

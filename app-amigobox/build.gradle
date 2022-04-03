@@ -24,6 +24,7 @@ android {
         versionName "0.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
+        resConfigs "en","de","hu"
     }
 
     buildTypes {

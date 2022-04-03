@@ -36,6 +36,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
@@ -78,12 +80,10 @@ class LoadingFragment : Fragment() {
 
         viewModel.state.observe(viewLifecycleOwner) {
             Timber.i("$it")
-            if (it is OnboardingState.IsLoggedIn) {
-                navigator.toHome()
-            } else if (it is OnboardingState.LoginSuccess) {
-                navigator.toHome()
-            } else {
-                Timber.i("$it")
+            when (it) {
+                is OnboardingState.IsLoggedIn -> navigator.toHome()
+                is OnboardingState.LoginSuccess -> navigator.toHome()
+                else -> Timber.i("$it")
             }
         }
     }
@@ -134,7 +134,9 @@ fun LoadingFragmentContent(
 ) {
 
     Box(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center,
     ) {
         Card(
@@ -154,8 +156,8 @@ fun LoadingFragmentContent(
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier.padding(UIConstants.Defaults.INNER_PADDING)
                 ) {
-                    var email by rememberSaveable { mutableStateOf("analogue@example.org") }
-                    var password by rememberSaveable { mutableStateOf("password") }
+                    var email by rememberSaveable { mutableStateOf("master-group-admin@example.org") }
+                    var password by rememberSaveable { mutableStateOf("weisser-audi") }
                     var loginToken by rememberSaveable { mutableStateOf("") }
 
                     val keyboardController = LocalSoftwareKeyboardController.current
@@ -190,7 +192,11 @@ fun LoadingFragmentContent(
                         isError = isError,
                         label = { stringResource(R.string.onboarding_password_label) },
                         onValueChange = { password = it },
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        visualTransformation = PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done,
+                            keyboardType = KeyboardType.Password
+                        ),
                         keyboardActions = KeyboardActions(
                             onDone = { keyboardController?.hide() }),
                     )
@@ -202,7 +208,6 @@ fun LoadingFragmentContent(
                         onClick = { login(email, password) }
                     )
                     if (loginTokenAuthMethodEnabled) {
-                        Text(".. oder per Token")
                         TextField(
                             modifier = Modifier.fillMaxWidth(),
                             value = loginToken,

@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
-import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
+import org.ossiaustria.amigobox.ui.commons.HelperButton
 
 @Composable
 fun TimerNavigationButtonsRow(
@@ -28,21 +28,20 @@ fun TimerNavigationButtonsRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom
     ) {
-        TextAndIconButton(
+        HelperButton(
             iconId = R.drawable.ic_arrow_left,
             text = stringResource(R.string.previous_picture_button),
             onClick = onPreviousPressed
         )
         val isPlaying = timerState == TimerState.PLAY
-        TextAndIconButton(
-            bottomStart = false,
+        HelperButton(
             iconId = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play,
             text = if (isPlaying) {
                 stringResource(R.string.stop_diashow_button_description)
             } else stringResource(R.string.start_diashow_button_description),
             onClick = onStartStopPressed
         )
-        TextAndIconButton(
+        HelperButton(
             iconId = null,
             endIconId = R.drawable.ic_arrow_right,
             text = stringResource(R.string.next_image_button_description),

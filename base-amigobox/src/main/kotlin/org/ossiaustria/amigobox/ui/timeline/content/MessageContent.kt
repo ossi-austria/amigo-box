@@ -97,7 +97,10 @@ fun MessageContent(message: Message, findPerson: (UUID) -> Person?) {
                     vertical = UIConstants.Defaults.INNER_PADDING
                 )
             )
-            TextAndIconButton(iconId = R.drawable.ic_microphone, text = "Vorlesen") {
+            TextAndIconButton(
+                iconId = R.drawable.ic_microphone,
+                text = stringResource(id = R.string.message_read_aloud)
+            ) {
                 speaker.speak(message.text)
             }
         }

@@ -1,0 +1,82 @@
+<resources>
+    <string name="app_name">OSSI AmigoBox</string>
+    <string name="channel_calls_name">AmigoBox - Anrufe</string>
+    <string name="channel_calls_description">Anrufe aus deiner Gruppe</string>
+    <string name="channel_message_name">AmigoBox - Nachrichten</string>
+    <string name="channel_message_description">Nachrichten aus deiner Gruppe</string>
+    <string name="channel_events_name">AmigoBox - Informationen</string>
+    <string name="channel_events_description">Information zu deiner AmigoBox</string>
+
+    <string name="notification_new_message">Du hast eine neue Nachricht bekommen!</string>
+
+    <string name="onboarding_login_label">Per E-Mail anmelden</string>
+    <string name="onboarding_login_token_label">Per Token anmelden</string>
+    <string name="onboarding_email_label">E-Mail</string>
+    <string name="onboarding_password_label">Passwort</string>
+    <string name="onboarding_login_button">Anmelden</string>
+
+    <string name="person_detail_call_button">%s anrufen</string>
+    <string name="person_detail_albums_button">Alben von %s ansehen</string>
+
+    <string name="home_greeting_var">Guten Morgen, %s!</string>
+    <string name="home_subtitle">Tippe auf eine Kachel oder schiebe eine AMIGO-Karte ein um zu starten</string>
+    <string name="home_menu_open_contacts">Kontaktliste öffnen</string>
+    <string name="home_logout">Abmelden</string>
+
+
+    <string name="Albums_button_description">Fotos und Alben ansehen</string>
+    <string name="Messages_button_description">Alle Nachrichten ansehen</string>
+    <string name="back_home_description">Zurück zum Start</string>
+
+    <string name="previous_image_button_description">Vorheriges Bild</string>
+    <string name="next_image_button_description">Nächstes Bild</string>
+    <string name="start_diashow_button_description">Diashow starten</string>
+    <string name="stop_diashow_button_description">Diashow anhalten</string>
+    <string name="open_album_button">Album öffnen</string>
+    <string name="message_from">Nachricht von %1$s</string>
+    <string name="message_read_aloud">Vorlesen</string>
+    <string name="call_from">Anruf von\u0020</string>
+    <string name="you_missed_a_call_from">Du hast einen Anruf von %1$s verpasst</string>
+    <string name="you_had_a_call">Du hast %1$s Minuten mit %2$s telefoniert</string>
+    <string name="missed">\u0020verpasst</string>
+    <string name="new_message">Neue Nachricht</string>
+    <string name="new_album">Neues Album</string>
+    <string name="new_call">Neuer Anruf</string>
+    <string name="new_xxx">Neues XXX</string>
+    <string name="from">%1$s von %2$s</string>
+    <string name="at">"\u0020um\u0020"</string>
+    <string name="o_clock">"\u0020Uhr"</string>
+    <string name="call_back_button">Zurückrufen</string>
+    <string name="unknown_person">Person unbekannt</string>
+    <string name="good_talk">Ihr hattet einen netten Plausch</string>
+    <string name="unknown_duration">\u0020unbekannte Dauer</string>
+
+    <string name="help_button_description">Brauchst du Hilfe?</string>
+    <string name="albums_headline">Fotos und Alben</string>
+    <string name="album_usage_description">Tippe auf ein Bild, um das Album zu öffnen</string>
+    <string name="previous_scroll_navigation_btn">Vorherige Seite</string>
+    <string name="next_scroll_navigation_btn">Nächste Seite</string>
+    <string name="contacts_headline">Kontaktliste</string>
+    <string name="contacts_usage_description">Tippe auf eine Person um weitere Funktionen zu sehen</string>
+    <string name="calling_text">Wird angerufen…</string>
+    <string name="wants_to_talk_to_you_text">möchte mit dir reden</string>
+    <string name="call_finished">Anruf beendet.</string>
+    <string name="call_timeout">Anruf abgelaufen.</string>
+    <string name="call_cancelled">Anruf abgebrochen.</string>
+    <string name="call_failure">Anruf fehlgeschlagen…</string>
+    <string name="person_not_available">Person nicht erreichbar.</string>
+    <string name="call_fragment_loading">Loading…</string>
+
+    <string name="images_not_found">Image not found</string>
+    <string name="person_not_found">Person konnte nicht angerufen werden</string>
+
+    <string name="end_the_call">Gespräch beenden</string>
+    <string name="accept_the_call">Anruf annehmen</string>
+    <string name="decline_the_call">Anruf ablehnen</string>
+    <string name="set_microphone_off">Mikrofon stummschalten</string>
+    <string name="set_microphone_on">Mikrofon einschalten</string>
+
+    <string name="previous_picture_button">Vorheriges Bild</string>
+    <string name="fullDateString">%1$s Uhr</string>
+
+</resources>

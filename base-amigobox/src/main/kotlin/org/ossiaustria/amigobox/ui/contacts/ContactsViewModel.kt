@@ -23,7 +23,7 @@ class ContactsViewModel(
             groupRepository.getAllGroups(true).collect {
                 if (it.isSuccess && !it.valueOrNull().isNullOrEmpty()) {
                     val groups = it.valueOrNull()
-                    groups?.firstOrNull()?.members?.let { _persons.value = it }
+                    groups?.firstOrNull()?.digitals?.let { _persons.value = it }
                 } else {
                     _persons.value = emptyList()
                 }
@@ -36,6 +36,8 @@ class ContactsViewModel(
     }
 
     fun toContact(person: Person) {
-        navigator.toPersonDetail(person)
+//        navigator.toPersonDetail(person)
+        // For UX text, directly call person
+        navigator.toCallFragment(person)
     }
 }

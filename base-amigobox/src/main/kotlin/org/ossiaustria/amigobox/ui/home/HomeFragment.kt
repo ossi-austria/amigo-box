@@ -32,7 +32,7 @@ import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.onboarding.OnboardingViewModel
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
-import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
+import org.ossiaustria.amigobox.ui.commons.HelperButton
 
 class HomeFragment : Fragment() {
 
@@ -117,15 +117,15 @@ fun HomeFragmentComposable(
             CreateHomeButton(
                 R.drawable.ic_chat_light,
                 stringResource(R.string.Messages_button_description),
-                true
+                false // was true
             ) { openNotifications() }
         }
         Spacer(modifier = Modifier.weight(1.0f)) // fill height with spacer
-        TextAndIconButton(
+        HelperButton(
             iconId = null,
             modifier = Modifier
                 .padding(16.dp)
-                .align(Alignment.End),
+                .align(Alignment.Start),
             onClick = { logout() },
             text = stringResource(R.string.home_logout)
         )

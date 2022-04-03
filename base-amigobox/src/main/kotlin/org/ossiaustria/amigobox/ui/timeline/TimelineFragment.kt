@@ -75,6 +75,5 @@ class TimelineFragment : Fragment() {
         super.onPause()
         viewModel.timerState.removeObservers(viewLifecycleOwner)
     }
-
 }
 
