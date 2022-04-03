@@ -1,8 +1,8 @@
-# AmiboBox Android Tablet App
+# AmigoBox Android Tablet App
 
 Licensed with MIT Public Licence.
 
-Developed by OSSI Austria as a prototyp for the Netidee-funded project AMIGO.
+Developed by OSSI Austria as a prototype for the netidee-funded project AMIGO.
 
 # Thanks and Attribution
 
