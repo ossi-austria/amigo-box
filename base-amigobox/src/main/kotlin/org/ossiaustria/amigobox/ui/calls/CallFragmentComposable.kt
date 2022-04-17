@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.AmigoColors
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
@@ -62,10 +63,34 @@ fun CallFragmentComposable(
         )
 
         if (callState != CallState.ACCEPTED) {
-            ProfileImage(
-                partnerAvatarUrl,
-                contentScale = ContentScale.Crop
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                ProfileImage(
+                    partnerAvatarUrl,
+                    contentScale = ContentScale.Crop
+                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (callViewState.outgoing) {
+                        //cancel the call
+                        BigControlButton(
+                            R.drawable.ic_decline_call, R.string.end_the_call, onCancel,
+                            color = MaterialTheme.colors.error
+                        )
+                    } else {
+                        //accept or deny the incoming call
+                        BigControlButton(
+                            R.drawable.ic_phone_call, R.string.accept_the_call, onAccept,
+                            color = AmigoColors.mistyOcean
+                        )
+                        BigControlButton(
+                            R.drawable.ic_decline_call, R.string.decline_the_call, onDeny,
+                            color = MaterialTheme.colors.error
+                        )
+                    }
+                }
+            }
         }
 
         Column(

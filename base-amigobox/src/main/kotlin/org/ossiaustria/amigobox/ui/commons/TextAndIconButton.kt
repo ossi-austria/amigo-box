@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
@@ -37,6 +38,7 @@ fun TextAndIconButton(
     bottomStart: Boolean = true,
     @DrawableRes endIconId: Int? = null,
     enabled: Boolean = true,
+    padding: Dp = 12.dp,
     onClick: () -> Unit
 ) {
 
@@ -46,7 +48,6 @@ fun TextAndIconButton(
         modifier = modifier
             .padding(8.dp)
             .clickable(onClick = onClick, enabled = enabled)
-            .height(UIConstants.BigButtons.BUTTON_HEIGHT)
             .clip(
                 RoundedCornerShape(
                     topStart = if (topStart) 0.dp else UIConstants.BigButtons.ROUNDED_CORNER,
@@ -56,7 +57,7 @@ fun TextAndIconButton(
                 )
             )
             .background(color = backgroundColor)
-            .padding(10.dp),
+            .padding(padding),
 
         ) {
         if (iconId != null)

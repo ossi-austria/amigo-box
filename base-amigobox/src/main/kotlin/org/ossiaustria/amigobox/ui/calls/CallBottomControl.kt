@@ -98,21 +98,6 @@ fun CallBottomControl(
                     onFinish,
                     color = MaterialTheme.colors.error
                 )
-            } else if (callViewState is CallViewState.Calling) {
-                if (callViewState.outgoing) {
-                    //cancel the call
-                    ControlButton(
-                        R.drawable.ic_decline_call, R.string.end_the_call, onCancel,
-                        color = MaterialTheme.colors.error
-                    )
-                } else {
-                    //accept or deny the incoming call
-                    ControlButton(R.drawable.ic_phone_call, R.string.accept_the_call, onAccept)
-                    ControlButton(
-                        R.drawable.ic_decline_call, R.string.decline_the_call, onDeny,
-                        color = MaterialTheme.colors.error
-                    )
-                }
             }
         }
     }
@@ -131,5 +116,21 @@ fun ControlButton(
         text = stringResource(textResId),
         backgroundColor = color,
         onClick = onClick
+    )
+}
+
+@Composable
+fun BigControlButton(
+    @DrawableRes iconResId: Int,
+    @StringRes textResId: Int,
+    onClick: () -> Unit,
+    color: Color = MaterialTheme.colors.primary
+) {
+    TextAndIconButton(
+        iconId = iconResId,
+        text = stringResource(textResId),
+        backgroundColor = color,
+        onClick = onClick,
+        padding = 40.dp
     )
 }
