@@ -156,8 +156,8 @@ fun LoadingFragmentContent(
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier.padding(UIConstants.Defaults.INNER_PADDING)
                 ) {
-                    var email by rememberSaveable { mutableStateOf("master-group-admin@example.org") }
-                    var password by rememberSaveable { mutableStateOf("weisser-audi") }
+                    var email by rememberSaveable { mutableStateOf("analogue@example.org") }
+                    var password by rememberSaveable { mutableStateOf("password") }
                     var loginToken by rememberSaveable { mutableStateOf("") }
 
                     val keyboardController = LocalSoftwareKeyboardController.current

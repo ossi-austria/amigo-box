@@ -3,9 +3,13 @@ package org.ossiaustria.amigobox
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import org.ossiaustria.lib.domain.models.Album
 import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.Person
+import timber.log.Timber
 
 class Navigator {
 
@@ -19,6 +23,14 @@ class Navigator {
 
     fun back() {
         navController.popBackStack()
+    }
+
+    suspend fun autoBack(delay: Long = DELAY_MEDIUM) {
+        delay(delay)
+        Timber.d("autoBack after 3000s")
+        withContext(Dispatchers.Main) {
+            navController.popBackStack()
+        }
     }
 
     fun toLoading() {
@@ -72,6 +84,9 @@ class Navigator {
         const val PARAM_ALBUM = "ALBUM"
         const val PARAM_PERSON = "PERSON"
         const val PARAM_CALL = "CALL"
+
+        const val DELAY_MEDIUM = 3000L
+        const val DELAY_LONG = 5000L
 
         fun getPerson(bundle: Bundle) = bundle.getSerializable(PARAM_PERSON) as Person?
         fun setPerson(bundle: Bundle, person: Person?) =

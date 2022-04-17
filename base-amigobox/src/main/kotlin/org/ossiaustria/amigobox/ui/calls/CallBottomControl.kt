@@ -29,7 +29,6 @@ fun CallBottomControl(
     onCancel: () -> Unit,
     onDeny: () -> Unit,
     onFinish: () -> Unit,
-    onBack: () -> Unit,
     onToggleAudio: () -> Unit,
 ) {
     Row(
@@ -59,13 +58,14 @@ fun CallBottomControl(
                 } else if (callViewState is CallViewState.Timeout) {
                     stringResource(R.string.call_timeout)
                 } else if (callViewState is CallViewState.Failure) {
-                    callViewState.error?.toString() ?:  stringResource(R.string.call_failure)
+                    callViewState.error?.toString() ?: stringResource(R.string.call_failure)
                 } else {
                     ""
                 },
 
                 style = MaterialTheme.typography.body1,
-                color = MaterialTheme.colors.onPrimary
+                color = MaterialTheme.colors.onPrimary,
+                modifier = Modifier.padding(vertical = UIConstants.Defaults.INNER_PADDING)
             )
         }
 
@@ -113,8 +113,6 @@ fun CallBottomControl(
                         color = MaterialTheme.colors.error
                     )
                 }
-            } else {
-                ControlButton(R.drawable.ic_home_icon, R.string.back_home_description, onBack)
             }
         }
     }

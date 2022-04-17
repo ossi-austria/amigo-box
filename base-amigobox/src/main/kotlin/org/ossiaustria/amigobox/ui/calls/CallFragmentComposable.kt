@@ -43,7 +43,6 @@ fun CallFragmentComposable(
     onCancel: () -> Unit,
     onDeny: () -> Unit,
     onFinish: () -> Unit,
-    onBack: () -> Unit,
     onToggleAudio: () -> Unit,
 ) {
 
@@ -104,7 +103,6 @@ fun CallFragmentComposable(
                 onCancel,
                 onDeny,
                 onFinish,
-                onBack,
                 onToggleAudio
             )
         }
@@ -125,7 +123,7 @@ fun CallFragmentComposablePreview_outgoing() {
     val callViewState = CallViewState.Calling(call, true)
     AmigoThemeLight {
         CallFragmentComposable(null, "Lukas", "", callViewState,
-            JitsiCallComposableCommand.Prepare, {}, {}, {}, {}, {}) {}
+            JitsiCallComposableCommand.Prepare, {}, {}, {}, {}) {}
     }
 }
 
@@ -147,7 +145,7 @@ fun CallFragmentComposablePreview_incoming() {
             "",
             callViewState,
             JitsiCallComposableCommand.Prepare,
-            {}, {}, {}, {}, {}) {}
+            {}, {}, {}, {}) {}
     }
 }
 
@@ -169,6 +167,6 @@ fun CallFragmentComposablePreview_started() {
             "",
             callViewState,
             JitsiCallComposableCommand.Prepare,
-            {}, {}, {}, {}, {}) {}
+            {}, {}, {}, {}) {}
     }
 }
