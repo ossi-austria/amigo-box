@@ -22,7 +22,7 @@
     <string name="person_detail_call_button">Call %s</string>
     <string name="person_detail_albums_button">View albums of %s</string>
 
-    <string name="home_greeting_var">Good morning %s!</string>
+    <string name="home_greeting_var">Hello %s!</string>
     <string name="home_subtitle">Tap on a tile or insert an Amigo-Card to start</string>
     <string name="home_menu_open_contacts">Open contact list</string>
     <string name="home_logout">Log out</string>

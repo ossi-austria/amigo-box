@@ -18,7 +18,7 @@
     <string name="person_detail_call_button">%s anrufen</string>
     <string name="person_detail_albums_button">Alben von %s ansehen</string>
 
-    <string name="home_greeting_var">Guten Morgen, %s!</string>
+    <string name="home_greeting_var">Hallo, %s!</string>
     <string name="home_subtitle">Tippe auf eine Kachel oder lege eine Amigo-Karte auf um zu starten</string>
     <string name="home_menu_open_contacts">Kontaktliste öffnen</string>
     <string name="home_logout">Abmelden</string>
