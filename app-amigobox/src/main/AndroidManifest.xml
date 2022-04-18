@@ -3,18 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.ossiaustria.amigobox">
 
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.VIDEO_CAPTURE" />
-    <uses-permission android:name="android.permission.AUDIO_CAPTURE" />
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -22,11 +10,6 @@
         android:name="android.hardware.camera.autofocus"
         android:required="false" />
 
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.TTS_SERVICE" />
-        </intent>
-    </queries>
     <application
         android:name=".BoxApplication"
         android:allowBackup="true"
@@ -37,10 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OSSIAmigoBox"
         tools:replace="android:label">
-        <activity
+
+    <activity
             android:name=".MainBoxActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="userLandscape"
             android:showOnLockScreen="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

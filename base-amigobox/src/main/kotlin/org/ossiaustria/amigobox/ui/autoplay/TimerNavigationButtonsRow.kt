@@ -15,6 +15,7 @@ import org.ossiaustria.amigobox.ui.commons.HelperButton
 
 @Composable
 fun TimerNavigationButtonsRow(
+    currentIndex: Int = 0,
     timerState: TimerState,
     onPreviousPressed: () -> Unit,
     onNextPressed: () -> Unit,
@@ -31,7 +32,8 @@ fun TimerNavigationButtonsRow(
         HelperButton(
             iconId = R.drawable.ic_arrow_left,
             text = stringResource(R.string.previous_picture_button),
-            onClick = onPreviousPressed
+            onClick = onPreviousPressed,
+            enabled = currentIndex > 0
         )
         val isPlaying = timerState == TimerState.PLAY
         HelperButton(
@@ -45,7 +47,8 @@ fun TimerNavigationButtonsRow(
             iconId = null,
             endIconId = R.drawable.ic_arrow_right,
             text = stringResource(R.string.next_image_button_description),
-            onClick = onNextPressed
+            onClick = onNextPressed,
+            enabled = timerState != TimerState.FINISHED
         )
     }
 }

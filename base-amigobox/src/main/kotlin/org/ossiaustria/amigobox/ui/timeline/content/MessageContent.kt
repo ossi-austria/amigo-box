@@ -1,7 +1,5 @@
 package org.ossiaustria.amigobox.ui.timeline.content
 
-import android.content.Context
-import android.speech.tts.TextToSpeech
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import coil.annotation.ExperimentalCoilApi
 import org.ossiaustria.amigobox.R
@@ -27,33 +24,13 @@ import org.ossiaustria.lib.domain.models.Message
 import org.ossiaustria.lib.domain.models.Person
 import java.util.*
 
-class AdHocSpeaker(context: Context) : TextToSpeech.OnInitListener {
-    private val textToSpeech = TextToSpeech(context, this, "com.google.android.tts")
-    private var prepared = false
-
-    // TODO: Choose gender
-    override fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
-            textToSpeech.language = Locale.GERMAN
-            textToSpeech.setSpeechRate(0.8f)
-            val voices = textToSpeech.voices
-            val filter = voices.filter { it.locale == Locale.GERMANY }
-            textToSpeech.voice = filter.random()
-            prepared = true
-        }
-    }
-
-    fun speak(text: CharSequence) {
-        if (prepared) {
-            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
-        }
-    }
-}
-
 @ExperimentalCoilApi
 @Composable
-fun MessageContent(message: Message, findPerson: (UUID) -> Person?) {
-    val speaker = AdHocSpeaker(LocalContext.current)
+fun MessageContent(
+    message: Message,
+    findPerson: (UUID) -> Person?,
+    handleMessage: (Message) -> Unit
+) {
     val person = findPerson(message.senderId)
     Row(
         modifier = Modifier.fillMaxSize()
@@ -101,7 +78,7 @@ fun MessageContent(message: Message, findPerson: (UUID) -> Person?) {
                 iconId = R.drawable.ic_microphone,
                 text = stringResource(id = R.string.message_read_aloud)
             ) {
-                speaker.speak(message.text)
+                handleMessage(message)
             }
         }
     }

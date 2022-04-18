@@ -15,4 +15,6 @@ interface Sendable {
             senderId
         } else receiverId
 
+    val time: Date
+        get() = retrievedAt ?: sentAt ?: createdAt
 }

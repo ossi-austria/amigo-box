@@ -47,16 +47,13 @@ fun TimelineContentHeader(
                 )
             }
             Text(
-                stringResource(
-                    R.string.fullDateString,
-                    TimeUtils.fullDate(sendable.createdAt)
-                ),
+                stringResource(R.string.fullDateString, TimeUtils.fullDate(sendable.time)),
                 Modifier.padding(8.dp)
             )
             val otherPersonName =
                 findPerson(sendable.otherPersonId(centerPerson.id))?.name ?: ""
             Text(
-                text = stringResource(R.string.from, stringForSendable(sendable), otherPersonName),
+                text = stringForSendable(sendable, otherPersonName),
                 Modifier.padding(8.dp)
             )
         }

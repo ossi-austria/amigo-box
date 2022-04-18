@@ -45,11 +45,8 @@ fun CallContent(
             )
         }
         Column(Modifier.padding(vertical = UIConstants.TimelineFragment.PADDING)) {
-            Text(
-                text = stringResource(R.string.good_talk),
-                style = MaterialTheme.typography.caption
-            )
-            var textName = stringResource(id = R.string.unknown_person)
+
+        var textName = stringResource(id = R.string.unknown_person)
 
             val nameSender = findPerson(call.senderId)?.name
             val nameReceiver = findPerson(call.receiverId)?.name

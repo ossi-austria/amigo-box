@@ -35,17 +35,12 @@
     <string name="open_album_button">Album öffnen</string>
     <string name="message_from">Nachricht von %1$s</string>
     <string name="message_read_aloud">Vorlesen</string>
-    <string name="call_from">Anruf von\u0020</string>
     <string name="you_missed_a_call_from">Du hast einen Anruf von %1$s verpasst</string>
     <string name="you_had_a_call">Du hast %1$s Minuten mit %2$s telefoniert</string>
     <string name="missed">\u0020verpasst</string>
-    <string name="new_message">Neue Nachricht</string>
-    <string name="new_album">Neues Album</string>
-    <string name="new_call">Neuer Anruf</string>
-    <string name="new_xxx">Neues XXX</string>
-    <string name="from">%1$s von %2$s</string>
-    <string name="at">"\u0020um\u0020"</string>
-    <string name="o_clock">"\u0020Uhr"</string>
+    <string name="message_by">Nachricht von %1$s</string>
+    <string name="album_by">Album von %1$s</string>
+    <string name="call_by">Anruf mit %1$s</string>
     <string name="call_back_button">Zurückrufen</string>
     <string name="unknown_person">Person unbekannt</string>
     <string name="good_talk">Ihr hattet einen netten Plausch</string>
@@ -78,6 +73,6 @@
     <string name="set_microphone_on">Mikrofon einschalten</string>
 
     <string name="previous_picture_button">Vorheriges Bild</string>
-    <string name="fullDateString">Nächste Seite</string>
+    <string name="fullDateString">%1$s</string>
 
 </resources>

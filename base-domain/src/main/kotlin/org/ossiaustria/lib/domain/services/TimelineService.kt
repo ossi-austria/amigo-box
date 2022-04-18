@@ -43,7 +43,7 @@ class TimelineServiceImpl(
         val calls =
             callService.findWithReceiver(receiverId)
                 .finished()
-                .mapNotNull { it.valueOrNull() }.first()
+                .mapNotNull { it.valueOrNull() }.first().filter { it.isDone() }
         return listOf(messages, calls).flatten()
     }
 

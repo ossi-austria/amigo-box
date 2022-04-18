@@ -17,6 +17,8 @@ fun SendableContent(
     toAlbum: (Album) -> Unit,
     toCall: (Person) -> Unit,
     findPerson: (UUID) -> Person?,
+    handleMessage: (Message) -> Unit
+
 ) {
     when (sendable) {
         is AlbumShare -> AlbumShareContent(sendable, toAlbum)
@@ -28,7 +30,7 @@ fun SendableContent(
                 toCall
             )
         }
-        is Message -> MessageContent(sendable, findPerson)
+        is Message -> MessageContent(sendable, findPerson, handleMessage)
     }
 }
 

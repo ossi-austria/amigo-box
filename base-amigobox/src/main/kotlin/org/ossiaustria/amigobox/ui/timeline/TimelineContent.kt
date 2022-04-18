@@ -44,6 +44,8 @@ fun TimelineContent(
     onPreviousPressed: () -> Unit,
     onNextPressed: () -> Unit,
     onStartStopPressed: () -> Unit,
+    handleMessage: (Message) -> Unit
+
 ) {
     Column(
         modifier = Modifier
@@ -89,6 +91,7 @@ fun TimelineContent(
                         toAlbum = toAlbum,
                         toCall = toCall,
                         findPerson = findPerson,
+                        handleMessage = handleMessage
                     )
                 }
             })
@@ -99,6 +102,7 @@ fun TimelineContent(
     }
     // bottom bar
     TimerNavigationButtonsRow(
+        currentIndex = currentIndex,
         timerState = timerState,
         onPreviousPressed = onPreviousPressed,
         onNextPressed = onNextPressed,
@@ -107,9 +111,9 @@ fun TimelineContent(
 }
 
 @Composable
-fun stringForSendable(sendable: Sendable) = when (sendable) {
-    is AlbumShare -> stringResource(R.string.new_album)
-    is Call -> stringResource(R.string.new_call)
-    is Message -> stringResource(R.string.new_message)
-    else -> stringResource(R.string.new_xxx)
+fun stringForSendable(sendable: Sendable, personName: String) = when (sendable) {
+    is AlbumShare -> stringResource(R.string.album_by, personName)
+    is Call -> stringResource(R.string.call_by, personName)
+    is Message -> stringResource(R.string.message_by, personName)
+    else -> ""
 }

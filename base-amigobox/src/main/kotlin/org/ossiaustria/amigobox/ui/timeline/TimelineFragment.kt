@@ -15,12 +15,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.ui.autoplay.TimerState
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
+import org.ossiaustria.amigobox.ui.timeline.content.AdHocSpeaker
+import org.ossiaustria.lib.domain.models.Message
 
 class TimelineFragment : Fragment() {
 
     private val viewModel by viewModel<TimelineViewModel>()
 
     val navigator: Navigator by inject()
+    lateinit var speaker: AdHocSpeaker
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,9 +34,9 @@ class TimelineFragment : Fragment() {
             AmigoThemeLight {
                 Surface(color = MaterialTheme.colors.secondary) {
 
+                    val centerPerson = viewModel.centerPerson
                     val timerState by viewModel.timerState.observeAsState(TimerState.STOP)
                     val currentIndex by viewModel.currentIndex.observeAsState(0)
-                    val centerPerson = viewModel.centerPerson
                     val sendables by viewModel.sendables.observeAsState(emptyList())
 
                     if (centerPerson != null) {
@@ -49,6 +52,7 @@ class TimelineFragment : Fragment() {
                             onPreviousPressed = viewModel::onPreviousPressed,
                             onNextPressed = viewModel::onNextPressed,
                             onStartStopPressed = viewModel::onStartStopPressed,
+                            handleMessage = ::readMessage
                         )
                     }
                 }
@@ -56,10 +60,15 @@ class TimelineFragment : Fragment() {
         }
     }
 
+    private fun readMessage(message: Message) {
+        speaker.speak(message.text)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadPersons()
         viewModel.loadAllSendables()
+        speaker = AdHocSpeaker(requireContext())
     }
 
     override fun onResume() {

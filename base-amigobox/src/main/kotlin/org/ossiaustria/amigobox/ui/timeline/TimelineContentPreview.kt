@@ -47,6 +47,7 @@ fun TimelineContentPreview() {
             onPreviousPressed = {},
             onNextPressed = {},
             onStartStopPressed = {},
+            handleMessage = {},
         )
     }
 }
