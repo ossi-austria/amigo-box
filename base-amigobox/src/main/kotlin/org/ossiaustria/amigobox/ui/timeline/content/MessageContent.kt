@@ -31,20 +31,20 @@ fun MessageContent(
     findPerson: (UUID) -> Person?,
     handleMessage: (Message) -> Unit
 ) {
-    val person = findPerson(message.senderId)
     Row(
         modifier = Modifier.fillMaxSize()
     ) {
+        val person = findPerson(message.senderId)
         Box(
             modifier = Modifier.padding(UIConstants.Defaults.INNER_PADDING),
             contentAlignment = Alignment.Center
         ) {
-            if (message.multimedia != null && message.multimedia!!.absoluteMediaUrl() != null) {
+            if (message.multimedia != null && message.multimedia?.absoluteMediaUrl() != null) {
                 NetworkImage(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(UIConstants.ListCard.IMAGE_HEIGHT),
-                    url = message.multimedia!!.absoluteMediaUrl() ?: "",
+                    url = message.multimedia?.absoluteMediaUrl() ?: "",
                     contentScale = ContentScale.Crop
                 )
             } else {
@@ -55,18 +55,6 @@ fun MessageContent(
             }
         }
         Column {
-            var textName = stringResource(R.string.unknown_person)
-            val name = person?.name
-            if (name != null) {
-                textName = name
-            }
-            Text(
-                text = stringResource(R.string.message_from, textName),
-                style = MaterialTheme.typography.caption,
-                modifier = Modifier.padding(
-                    vertical = UIConstants.Defaults.INNER_PADDING
-                )
-            )
             Text(
                 text = message.text.trim(),
                 style = MaterialTheme.typography.body1,

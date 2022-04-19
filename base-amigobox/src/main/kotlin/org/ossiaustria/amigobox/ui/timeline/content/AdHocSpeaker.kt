@@ -14,7 +14,7 @@ class AdHocSpeaker(context: Context) : TextToSpeech.OnInitListener {
         try {
             if (status == TextToSpeech.SUCCESS) {
                 textToSpeech.language = Locale.GERMAN
-                textToSpeech.setSpeechRate(0.8f)
+                textToSpeech.setSpeechRate(1.0F)
                 val voices = textToSpeech.voices
                 val filter = voices.filter { it.locale == Locale.GERMANY }
                 textToSpeech.voice = filter.random()

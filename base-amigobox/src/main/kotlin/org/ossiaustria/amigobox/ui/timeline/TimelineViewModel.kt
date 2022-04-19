@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ossiaustria.amigobox.TimedSlideshowViewModel
 import org.ossiaustria.lib.domain.common.Resource
-import org.ossiaustria.lib.domain.models.Call
 import org.ossiaustria.lib.domain.models.Person
 import org.ossiaustria.lib.domain.models.Sendable
 import org.ossiaustria.lib.domain.modules.UserContext
@@ -41,7 +40,7 @@ class TimelineViewModel(
         //fetch Sendables from Repository
         viewModelScope.launch(ioDispatcher) {
             val sendables = timelineService.findWithReceiver(centerPerson!!.id)
-            val sortedBy = filterPresentableSendables(sendables)
+            val sortedBy = sendables
                 .sortedBy { it.sentAt }
                 .reversed()
             slideShowManager.size = sortedBy.size
@@ -53,7 +52,7 @@ class TimelineViewModel(
     }
 
     fun loadPersons() {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             groupRepository.getAllGroups(true).collect { resource ->
                 if (resource is Resource.Success && !resource.value.isNullOrEmpty()) {
                     val groups = resource.value
@@ -69,13 +68,5 @@ class TimelineViewModel(
 
     private fun createMaps(personsList: List<Person>) {
         _personsIdMap = personsList.map { it.id to it }.toMap()
-    }
-
-    /**
-     * Filter sendables, mostly calls: just show Calls which are finished.
-     */
-    private fun filterPresentableSendables(sendables: List<Sendable>) = sendables.filter {
-        if (it is Call) it.isDone()
-        else true
     }
 }

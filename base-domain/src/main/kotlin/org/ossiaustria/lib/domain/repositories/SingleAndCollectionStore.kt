@@ -69,7 +69,7 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
     protected abstract suspend fun fetchOne(id: UUID): DOMAIN
     protected abstract suspend fun defaultFetchAll(): List<DOMAIN>
 
-        @FlowPreview
+    @FlowPreview
     protected val singleStore: Store<UUID, DOMAIN> = StoreBuilder.from(
         fetcher = Fetcher.of { key: UUID -> fetchOne(key) },
         sourceOfTruth = SourceOfTruth.of(
@@ -80,14 +80,14 @@ abstract class SingleAndCollectionStore<ENTITY : AbstractEntity, WRAPPER, DOMAIN
         )
     ).build()
 
-        @FlowPreview
+    @FlowPreview
     protected val defaultCollectionStore: Store<String, List<DOMAIN>> = buildCollectionStore(
         fetchApi = ::defaultFetchAll,
         readDao = ::defaultReadAll,
         transform = ::transform
     )
 
-        @FlowPreview
+    @FlowPreview
     protected fun <KEY : Any> buildCollectionStore(
         fetchApi: suspend () -> List<DOMAIN>,
         readDao: () -> Flow<List<WRAPPER>>,

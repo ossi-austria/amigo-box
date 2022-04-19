@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -55,14 +56,9 @@ fun TimelineContent(
     ) {
 
         // top bar
-        Row(modifier = Modifier.fillMaxWidth()) {
-            TimelineContentHeader(
-                modifier = Modifier.weight(1F),
-                currentIndex = currentIndex,
-                centerPerson = centerPerson,
-                sendables = sendables,
-                findPerson = findPerson
-            )
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            TimelineHeaderCounter(currentIndex, sendables)
+            Spacer(modifier = Modifier.weight(1F))
             TextAndIconButton(
                 iconId = R.drawable.ic_home_icon,
                 text = stringResource(id = R.string.back_home_description),
@@ -72,6 +68,10 @@ fun TimelineContent(
             )
             DefaultHelpButton()
         }
+        if (sendables.isNotEmpty()) {
+            TimelineHeaderTitle(sendables[currentIndex], findPerson, centerPerson)
+        }
+
         // center main content
         val listState = rememberLazyListState()
         LazyRow(
