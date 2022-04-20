@@ -2,13 +2,11 @@ package org.ossiaustria.lib.nfc
 
 import android.app.Activity
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.nfc.NfcAdapter
 import timber.log.Timber
 
-interface NfcWrapper {
-}
+interface NfcWrapper
 
 class InternalNfcWrapper : NfcWrapper {
 
@@ -43,7 +41,7 @@ class InternalNfcWrapper : NfcWrapper {
         }
         // Get all NDEF discovered intents
         // Makes sure the app gets all discovered NDEF messages as long as it's in the foreground.
-        nfcAdapter!!.enableForegroundDispatch(activity, nfcPendingIntent, null, null)
+        nfcAdapter?.enableForegroundDispatch(activity, nfcPendingIntent, null, null)
     }
 
     fun stopDetecting(activity: Activity) {

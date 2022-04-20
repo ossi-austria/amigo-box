@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -44,6 +45,8 @@ fun TimelineContent(
     onPreviousPressed: () -> Unit,
     onNextPressed: () -> Unit,
     onStartStopPressed: () -> Unit,
+    handleMessage: (Message) -> Unit
+
 ) {
     Column(
         modifier = Modifier
@@ -53,14 +56,9 @@ fun TimelineContent(
     ) {
 
         // top bar
-        Row(modifier = Modifier.fillMaxWidth()) {
-            TimelineContentHeader(
-                modifier = Modifier.weight(1F),
-                currentIndex = currentIndex,
-                centerPerson = centerPerson,
-                sendables = sendables,
-                findPerson = findPerson
-            )
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            TimelineHeaderCounter(currentIndex, sendables)
+            Spacer(modifier = Modifier.weight(1F))
             TextAndIconButton(
                 iconId = R.drawable.ic_home_icon,
                 text = stringResource(id = R.string.back_home_description),
@@ -70,6 +68,10 @@ fun TimelineContent(
             )
             DefaultHelpButton()
         }
+        if (sendables.isNotEmpty()) {
+            TimelineHeaderTitle(sendables[currentIndex], findPerson, centerPerson)
+        }
+
         // center main content
         val listState = rememberLazyListState()
         LazyRow(
@@ -89,6 +91,7 @@ fun TimelineContent(
                         toAlbum = toAlbum,
                         toCall = toCall,
                         findPerson = findPerson,
+                        handleMessage = handleMessage
                     )
                 }
             })
@@ -99,6 +102,7 @@ fun TimelineContent(
     }
     // bottom bar
     TimerNavigationButtonsRow(
+        currentIndex = currentIndex,
         timerState = timerState,
         onPreviousPressed = onPreviousPressed,
         onNextPressed = onNextPressed,
@@ -107,9 +111,9 @@ fun TimelineContent(
 }
 
 @Composable
-fun stringForSendable(sendable: Sendable) = when (sendable) {
-    is AlbumShare -> stringResource(R.string.new_album)
-    is Call -> stringResource(R.string.new_call)
-    is Message -> stringResource(R.string.new_message)
-    else -> stringResource(R.string.new_xxx)
+fun stringForSendable(sendable: Sendable, personName: String) = when (sendable) {
+    is AlbumShare -> stringResource(R.string.album_by, personName)
+    is Call -> stringResource(R.string.call_by, personName)
+    is Message -> stringResource(R.string.message_by, personName)
+    else -> ""
 }

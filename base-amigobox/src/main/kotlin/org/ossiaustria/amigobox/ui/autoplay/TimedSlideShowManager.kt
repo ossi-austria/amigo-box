@@ -66,8 +66,11 @@ class TimedSlideShowManager {
         setGalleryIndex(max((_currentIndex.value ?: 0) - 1, 0))
     }
 
+    fun isAtBeginning() = (_currentIndex.value == 0)
+    fun isAtEnd() = _currentIndex.value ?: 0 >= size - 1
+
     fun incrementIndex() {
-        if (_currentIndex.value ?: 0 >= size - 1) {
+        if (isAtEnd()) {
             _timerState.value = TimerState.FINISHED
         }
         setGalleryIndex(min((_currentIndex.value ?: 0) + 1, size - 1))

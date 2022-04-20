@@ -22,7 +22,7 @@
     <string name="person_detail_call_button">Call %s</string>
     <string name="person_detail_albums_button">View albums of %s</string>
 
-    <string name="home_greeting_var">Good morning %s!</string>
+    <string name="home_greeting_var">Hello %s!</string>
     <string name="home_subtitle">Tap on a tile or insert an Amigo-Card to start</string>
     <string name="home_menu_open_contacts">Open contact list</string>
     <string name="home_logout">Log out</string>
@@ -40,21 +40,16 @@
     <string name="open_album_button">Open album</string>
     <string name="message_from">Message from %1$s</string>
     <string name="message_read_aloud">Read out</string>
-    <string name="call_from">Call from\\u0020</string>
     <string name="you_missed_a_call_from">You missed a call from %1$s</string>
     <string name="you_had_a_call">You talked %1$s minutes with %2$s</string>
     <string name="missed">\\u0020missed</string>
-    <string name="new_message">New message</string>
-    <string name="new_album">New album</string>
-    <string name="new_call">New call</string>
-    <string name="new_xxx">Neues XXX</string>
-    <string name="from">%1$s of %2$s</string>
-    <string name="at">"\u0020um\u0020"</string>
-    <string name="o_clock">"\u0020Uhr"</string>
+    <string name="message_by">Message from %1$s</string>
+    <string name="album_by">Album of %1$s</string>
+    <string name="call_by">Call with %1$s</string>
     <string name="call_back_button">Call back</string>
     <string name="unknown_person">Person unknown</string>
     <string name="good_talk">You had a nice chat</string>
-    <string name="unknown_duration">\\u0020unknown duration</string>
+    <string name="unknown_duration">\\u0020 -:-</string>
 
     <string name="help_button_description">Do you need help?</string>
     <string name="albums_headline">Photos and albums</string>

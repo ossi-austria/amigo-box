@@ -91,12 +91,19 @@ class CallFragment : Fragment() {
                 } else {
                     Toasts.showLong(requireContext(), "Cannot use Call, no token ? ")
                 }
-            } else if (it is CallViewState.Finished) {
-                phoneSoundManager.stopAll()
-                Toasts.showLong(requireContext(), "Anruf beendet")
-                navigator.back()
             } else {
                 phoneSoundManager.stopAll()
+                val textRes = when (it) {
+                    is CallViewState.Finished -> R.string.call_finished
+                    is CallViewState.Cancelled -> R.string.call_cancelled
+                    is CallViewState.Failure -> R.string.call_failure
+                    is CallViewState.Timeout -> R.string.call_timeout
+                    else -> R.string.call_cancelled
+                }
+                Toasts.showLong(requireContext(), requireContext().getString(textRes))
+                scope.launch {
+                    navigator.autoBack()
+                }
             }
         }
 
@@ -144,7 +151,6 @@ class CallFragment : Fragment() {
                             onDeny = callViewModel::deny,
                             onFinish = callViewModel::finish,
                             onToggleAudio = callViewModel::onToggleAudio,
-                            onBack = ::back
                         )
                     }
                 } else {

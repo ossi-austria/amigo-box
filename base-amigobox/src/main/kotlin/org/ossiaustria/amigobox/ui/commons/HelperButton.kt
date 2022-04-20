@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
@@ -42,6 +43,7 @@ fun HelperButton(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
+            .alpha(if (enabled) 1F else 0F)
             .padding(8.dp)
             .clickable(onClick = onClick, enabled = enabled)
             .clip(RoundedCornerShape(UIConstants.SmallButtons.ROUNDED_CORNER))

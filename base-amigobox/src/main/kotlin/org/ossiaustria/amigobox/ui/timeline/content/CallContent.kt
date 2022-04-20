@@ -1,7 +1,9 @@
 package org.ossiaustria.amigobox.ui.timeline.content
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -11,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import org.ossiaustria.amigobox.R
 import org.ossiaustria.amigobox.ui.UIConstants
@@ -34,46 +35,32 @@ fun CallContent(
     toCall: (Person) -> Unit,
 ) {
     Row(
-        modifier = Modifier,
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.fillMaxSize()
     ) {
-        val person = findPerson(call.senderId)
-        Column(Modifier.padding(16.dp)) {
+        val otherPerson = findPerson(call.otherPersonId(centerPerson.id))
+        Box(
+            modifier = Modifier.padding(UIConstants.Defaults.INNER_PADDING),
+            contentAlignment = Alignment.Center
+        ) {
             ProfileImage(
-                url = person?.absoluteAvatarUrl(),
+                url = otherPerson?.absoluteAvatarUrl(),
                 contentScale = ContentScale.Crop,
             )
         }
-        Column(Modifier.padding(vertical = UIConstants.TimelineFragment.PADDING)) {
-            Text(
-                text = stringResource(R.string.good_talk),
-                style = MaterialTheme.typography.caption
+        Column {
+
+            val textName = otherPerson?.name ?: stringResource(id = R.string.unknown_person)
+
+            val text = stringResource(
+                R.string.you_had_a_call,
+                durationToString(call.duration),
+                textName
             )
-            var textName = stringResource(id = R.string.unknown_person)
-
-            val nameSender = findPerson(call.senderId)?.name
-            val nameReceiver = findPerson(call.receiverId)?.name
-            if (centerPerson.id == call.receiverId && nameSender != null) {
-                textName = nameSender
-            } else if (centerPerson.id == call.senderId && nameReceiver != null) {
-                textName = nameReceiver
-            }
-
-            val text = if (call.callState == CallState.FINISHED) {
-                stringResource(
-                    R.string.you_had_a_call,
-                    durationToString(call.duration),
-                    textName
-                )
-            } else {
-                // TODO: Add other states?
-                "${call.callState}"
-            }
             Text(
                 text = text,
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(
-                    vertical = UIConstants.TimelineFragment.PADDING
+                    vertical = UIConstants.Defaults.INNER_PADDING
                 )
             )
             TextAndIconButton(

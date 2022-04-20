@@ -22,6 +22,7 @@ fun GalleryFragmentComposable(
     HomeButtonsRow(onClickBack = toHome)
 
     TimerNavigationButtonsRow(
+        currentIndex = currentIndex,
         timerState = timerState,
         onPreviousPressed = onPreviousPressed,
         onNextPressed = onNextPressed,
