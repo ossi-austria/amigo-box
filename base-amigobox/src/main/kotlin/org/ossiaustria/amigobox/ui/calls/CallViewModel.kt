@@ -188,7 +188,7 @@ class CallViewModel(
     fun finish() = viewModelScope.launch {
         val callState = state.value
         if (callState is CallViewState.Accepted) {
-            val resource = callService.finish(callState.call)
+            callService.finish(callState.call)
             //Server needs fix for this 400 response
 //                if (it is Resource.Success) {
             _state.postValue(callState.finish(callState.call))
@@ -204,7 +204,7 @@ class CallViewModel(
         viewModelScope.launch {
             _jitsiCommand.postValue(jitsiCallComposableCommand)
             delay(500)
-            _jitsiCommand.postValue(null)
+            _jitsiCommand.postValue(JitsiCallComposableCommand.Null)
         }
 
     fun getToken(): String? = if (activeCall != null) {

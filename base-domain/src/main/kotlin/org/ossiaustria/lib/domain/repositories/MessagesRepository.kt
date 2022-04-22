@@ -19,9 +19,13 @@ import java.util.*
 
 interface MessageRepository {
 
+    @FlowPreview
     fun getAllMessages(refresh: Boolean = false): Flow<Resource<List<Message>>>
+
+    @FlowPreview
     fun getReceived(refresh: Boolean = false): Flow<Resource<List<Message>>>
 
+    @FlowPreview
     fun getMessage(id: UUID, refresh: Boolean = false): Flow<Resource<Message>>
 }
 

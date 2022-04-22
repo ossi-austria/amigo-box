@@ -9,11 +9,12 @@ import org.ossiaustria.amigobox.ui.commons.PreviewTheme
 import org.ossiaustria.lib.jitsi.ui.JitsiWebrtcJsWebView
 import timber.log.Timber
 
-sealed class JitsiCallComposableCommand() {
+sealed class JitsiCallComposableCommand {
     object Prepare : JitsiCallComposableCommand()
     object EnterRoom : JitsiCallComposableCommand()
     object Finish : JitsiCallComposableCommand()
     object ToggleAudio : JitsiCallComposableCommand()
+    object Null : JitsiCallComposableCommand()
 }
 
 @Composable

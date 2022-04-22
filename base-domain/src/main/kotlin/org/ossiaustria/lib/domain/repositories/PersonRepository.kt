@@ -16,9 +16,11 @@ import java.util.*
 
 interface PersonRepository {
 
+    @FlowPreview
     fun getAllPersons(refresh: Boolean = false): Flow<Resource<List<Person>>>
 
-        fun getPerson(id: UUID, refresh: Boolean = false): Flow<Resource<Person>>
+    @FlowPreview
+    fun getPerson(id: UUID, refresh: Boolean = false): Flow<Resource<Person>>
 }
 
 internal class PersonRepositoryImpl(
@@ -47,14 +49,14 @@ internal class PersonRepositoryImpl(
     override fun defaultReadAll(): Flow<List<PersonEntity>> = personDao.findAll()
 
     @FlowPreview
-        override fun getAllPersons(refresh: Boolean): Flow<Resource<List<Person>>> = flow {
+    override fun getAllPersons(refresh: Boolean): Flow<Resource<List<Person>>> = flow {
         listTransform(
             defaultCollectionStore.stream(newRequest(key = "all", refresh = refresh))
         )
     }
 
     @FlowPreview
-        override fun getPerson(id: UUID, refresh: Boolean): Flow<Resource<Person>> = flow {
+    override fun getPerson(id: UUID, refresh: Boolean): Flow<Resource<Person>> = flow {
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))
         )

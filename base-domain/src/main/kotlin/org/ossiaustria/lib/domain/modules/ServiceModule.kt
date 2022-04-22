@@ -17,7 +17,7 @@ import org.ossiaustria.lib.domain.services.events.IncomingEventCallbackService
 import org.ossiaustria.lib.domain.services.events.IncomingEventCallbackServiceImpl
 
 val serviceModule = module {
-    single<AuthService> { AuthServiceImpl(get(), get(), get(), get(), get()) }
+    single<AuthService> { AuthServiceImpl(get(), get(), get(), get()) }
     single<MessageService> { MessageServiceImpl(get(), get()) }
     single<AlbumShareService> { MockAlbumShareServiceImpl(get(), get()) }
     single<IncomingEventCallbackService> { IncomingEventCallbackServiceImpl(get(), get()) }

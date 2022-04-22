@@ -56,7 +56,6 @@ class MockAlbumShareServiceImpl(
         id: UUID = randomUUID(),
         senderId: UUID = HER_PERSON_ID,
         receiverId: UUID = MY_PERSON_ID,
-        text: String = "mock message",
         createdAt: Date = Date(),
         sendAt: Date? = Date(),
         retrievedAt: Date? = Date(),

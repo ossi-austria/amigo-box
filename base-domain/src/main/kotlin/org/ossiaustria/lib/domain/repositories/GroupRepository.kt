@@ -20,8 +20,10 @@ import java.util.*
 
 interface GroupRepository {
 
+    @FlowPreview
     fun getAllGroups(refresh: Boolean = false): Flow<Resource<List<Group>>>
 
+    @FlowPreview
     fun getGroup(id: UUID, refresh: Boolean = false): Flow<Resource<Group>>
 }
 

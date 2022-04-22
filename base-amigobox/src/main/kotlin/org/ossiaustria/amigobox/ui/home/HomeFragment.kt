@@ -29,10 +29,10 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.ossiaustria.amigobox.Navigator
 import org.ossiaustria.amigobox.R
-import org.ossiaustria.amigobox.onboarding.OnboardingViewModel
 import org.ossiaustria.amigobox.ui.UIConstants
 import org.ossiaustria.amigobox.ui.commons.AmigoThemeLight
 import org.ossiaustria.amigobox.ui.commons.HelperButton
+import org.ossiaustria.amigobox.ui.loading.OnboardingViewModel
 
 class HomeFragment : Fragment() {
 
@@ -124,7 +124,7 @@ fun HomeFragmentComposable(
         HelperButton(
             iconId = null,
             modifier = Modifier
-                .padding(16.dp)
+                .padding(8.dp)
                 .align(Alignment.Start),
             onClick = { logout() },
             text = stringResource(R.string.home_logout)

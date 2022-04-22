@@ -30,7 +30,7 @@ class AlbumsViewModel(
         viewModelScope.launch {
             albumRepository.getAllAlbums().collectLatest { resource ->
                 if (resource.isSuccess && !resource.valueOrNull().isNullOrEmpty()) {
-                    _albums.value = resource.valueOrNull()
+                    _albums.value = resource.valueOrNull() ?: emptyList()
                 } else {
                     _albums.value = emptyList()
                 }

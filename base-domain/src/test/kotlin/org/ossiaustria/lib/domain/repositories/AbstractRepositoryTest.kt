@@ -5,7 +5,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.withTimeout
 import org.junit.After

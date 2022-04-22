@@ -20,8 +20,10 @@ import java.util.*
 
 interface AlbumRepository {
 
+    @FlowPreview
     fun getAllAlbums(refresh: Boolean = false): Flow<Resource<List<Album>>>
 
+    @FlowPreview
     fun getAlbum(id: UUID, refresh: Boolean = false): Flow<Resource<Album>>
 }
 

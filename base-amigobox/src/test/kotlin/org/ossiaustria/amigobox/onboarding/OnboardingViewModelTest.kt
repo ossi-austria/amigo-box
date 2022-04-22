@@ -1,37 +1,38 @@
 package org.ossiaustria.amigobox.onboarding
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.jraska.livedata.test
 import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.rules.TestRule
 import org.ossiaustria.amigobox.EntityMocks
+import org.ossiaustria.amigobox.ui.loading.OnboardingState
+import org.ossiaustria.amigobox.ui.loading.OnboardingViewModel
 import org.ossiaustria.amigobox.ui.loading.SynchronisationService
-import org.ossiaustria.amigobox.ui.loading.ViewModelTest
+import org.ossiaustria.lib.commons.testing.TestCoroutineRule
 import org.ossiaustria.lib.domain.auth.Account
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.modules.UserContext
 import org.ossiaustria.lib.domain.services.AuthService
 
-/**
- * Example test for Viewmodel
- *
- * 1. use a InstantTaskExecutorRule when using LiveData!
- * 2. use a fakre main (see setupBeforeEach())
- * 3. use runBlockingTest for coroutines which wait a long time
- */
 @FlowPreview
-internal class OnboardingViewModelTest : ViewModelTest() {
+internal class OnboardingViewModelTest {
 
-    // let us call the test subject "subject"
-    // lateinit - must be defined in @Before method
     private lateinit var subject: OnboardingViewModel
     private lateinit var account: Account
+
+    @get:Rule
+    val coroutineRule = TestCoroutineRule()
+
+    @get:Rule
+    var rule: TestRule = InstantTaskExecutorRule()
 
     // Use @Mockk to create a dummy mocking class - see example and mockk.io
     @MockK
@@ -68,35 +69,34 @@ internal class OnboardingViewModelTest : ViewModelTest() {
      * Because we run coroutines (see viewModel!) we need to use "runBlockingTest"
      */
     @Test
-    fun `login should trigger state SUCCESS for successful login `() = runBlockingTest {
+    fun `login should trigger state SUCCESS for successful login `() = runTest {
         // prepare test
-        every {
+        coEvery {
             authService.login(any(), any())
-        } returns flow {
-            emit(Resource.success(account))
-        }
+        } returns Resource.success(account)
+
 
         subject.login("email", "password")
-        val value = subject.state.value
-        advanceTimeBy(10)
-        assertEquals(OnboardingState.LoginSuccess(account), value)
+        testScheduler.advanceUntilIdle()
+
+        subject.state.test().assertValue(OnboardingState.LoginSuccess(account))
     }
 
     /**
      * Because we run coroutines (see viewModel!) we need to use "runBlockingTest"
      */
     @Test
-    fun `login should trigger state FAILURE for failure login `() = runBlockingTest {
+    fun `login should trigger state FAILURE for failure login `() = runTest {
         // prepare test
-        every {
+        coEvery {
             authService.login(any(), any())
-        } returns flow {
-            emit(Resource.failure<Account>(Exception("Error")))
-        }
+        } returns
+            Resource.failure<Account>(Exception("Error"))
 
         // run test subject
         subject.login("email", "password")
-        advanceTimeBy(100)
+        testScheduler.advanceUntilIdle()
+
         assertTrue(subject.state.value is OnboardingState.LoginFailed)
     }
 }

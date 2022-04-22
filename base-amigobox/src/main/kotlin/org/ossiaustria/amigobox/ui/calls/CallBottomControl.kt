@@ -25,9 +25,6 @@ import org.ossiaustria.amigobox.ui.commons.TextAndIconButton
 @Composable
 fun CallBottomControl(
     callViewState: CallViewState,
-    onAccept: () -> Unit,
-    onCancel: () -> Unit,
-    onDeny: () -> Unit,
     onFinish: () -> Unit,
     onToggleAudio: () -> Unit,
 ) {

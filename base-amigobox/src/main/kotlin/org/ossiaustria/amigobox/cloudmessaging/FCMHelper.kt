@@ -3,7 +3,6 @@ package org.ossiaustria.amigobox.cloudmessaging
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.runBlocking
 import org.ossiaustria.lib.domain.services.AuthService
 import timber.log.Timber
@@ -34,7 +33,7 @@ class FCMHelper(private val authService: AuthService) {
     suspend fun tokenSuccessCallback(token: String?) {
         val msg = "new token: $token"
         if (token != null) {
-            authService.setFcmToken(token).last()
+            authService.setFcmToken(token)
         }
         Timber.d(msg)
     }

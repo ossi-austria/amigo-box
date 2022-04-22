@@ -2,7 +2,7 @@
 package org.ossiaustria.dependencies
 
 object Versions {
-    const val kotlin = "1.5.21"
-    const val compose_version = "1.0.2"
+    const val kotlin = "1.6.10"
+    const val compose_version = "1.1.1"
 
 }
