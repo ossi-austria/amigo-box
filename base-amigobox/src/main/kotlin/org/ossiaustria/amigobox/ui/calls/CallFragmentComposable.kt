@@ -124,9 +124,6 @@ fun CallFragmentComposable(
             }
             CallBottomControl(
                 callViewState,
-                onAccept,
-                onCancel,
-                onDeny,
                 onFinish,
                 onToggleAudio
             )

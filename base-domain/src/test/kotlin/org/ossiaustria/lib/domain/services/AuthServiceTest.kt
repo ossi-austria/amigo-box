@@ -6,7 +6,6 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -55,7 +54,6 @@ class AuthServiceTest {
         MockKAnnotations.init(this, relaxUnitFun = true)
         authService =
             AuthServiceImpl(
-                coroutineRule.dispatcher,
                 authApi,
                 settingsRepository,
                 userContext,
@@ -91,7 +89,7 @@ class AuthServiceTest {
     @Test
     fun `login should return Account when credentials are valid`() =
         runBlockingTest(coroutineRule.dispatcher) {
-            val result = authService.login("test@example.org", "password").first { !it.isLoading }
+            val result = authService.login("test@example.org", "password")
             assertTrue(result is Resource.Success)
             assertEquals(account, result.valueOrNull())
         }
@@ -99,7 +97,7 @@ class AuthServiceTest {
     @Test
     fun `login should store account and tokens when credentials are valid`() =
         runBlockingTest(coroutineRule.dispatcher) {
-            authService.login("test@example.org", "password").first { !it.isLoading }
+            authService.login("test@example.org", "password")
 
             verify { settingsRepository.account = eq(loginResult.account) }
             verify { settingsRepository.refreshToken = any() }
@@ -109,7 +107,7 @@ class AuthServiceTest {
     @Test
     fun `login should return FAILURE when credentials are invalid`() =
         runBlockingTest(coroutineRule.dispatcher) {
-            val result = authService.login("test@example.org", "wrong").first { !it.isLoading }
+            val result = authService.login("test@example.org", "wrong")
             assertNotNull(result)
             assertTrue(result is Resource.Failure)
         }
@@ -117,7 +115,7 @@ class AuthServiceTest {
     @Test
     fun `login should call loginCleanupService`() =
         runBlockingTest(coroutineRule.dispatcher) {
-            val result = authService.login("test@example.org", "password").first { !it.isLoading }
+            val result = authService.login("test@example.org", "password")
             coVerify { loginCleanupService.cleanup() }
         }
 
@@ -125,7 +123,7 @@ class AuthServiceTest {
     fun `register should return Account when new account was created`() =
         runBlockingTest(coroutineRule.dispatcher) {
             val result = authService.register("test@example.org", "password", "Full name")
-                .first { !it.isLoading }
+
             assertTrue(result is Resource.Success)
             assertEquals(account, result.valueOrNull())
         }
@@ -134,7 +132,7 @@ class AuthServiceTest {
     fun `register should return FAILURE when register request failed`() =
         runBlockingTest(coroutineRule.dispatcher) {
             val result =
-                authService.register("test@example.org", "", "Full name").first { !it.isLoading }
+                authService.register("test@example.org", "", "Full name")
             assertNotNull(result)
             assertTrue(result is Resource.Failure)
 
@@ -150,7 +148,7 @@ class AuthServiceTest {
                 authApi.refreshToken(eq(RefreshTokenRequest("token")))
             } returns mock
 
-            val result = authService.refreshAccessToken().first { !it.isLoading }
+            val result = authService.refreshAccessToken()
             assertTrue(result is Resource.Success)
             assertEquals(mock, result.valueOrNull())
             verify { settingsRepository.accessToken = eq(mock) }
@@ -161,7 +159,7 @@ class AuthServiceTest {
         runBlockingTest(coroutineRule.dispatcher) {
             coEvery { settingsRepository.refreshToken } returns null
 
-            val result = authService.refreshAccessToken().first { !it.isLoading }
+            val result = authService.refreshAccessToken()
             assertTrue(result is Resource.Failure)
         }
 
@@ -170,7 +168,7 @@ class AuthServiceTest {
         runBlockingTest(coroutineRule.dispatcher) {
             coEvery { authApi.refreshToken(any()) } throws IllegalArgumentException("RestReception")
 
-            val result = authService.refreshAccessToken().first { !it.isLoading }
+            val result = authService.refreshAccessToken()
             assertTrue(result is Resource.Failure)
         }
 
@@ -180,7 +178,7 @@ class AuthServiceTest {
 
             coEvery { authApi.whoami() } returns account
 
-            val result = authService.myAccount().first { !it.isLoading }
+            val result = authService.myAccount()
             assertTrue(result is Resource.Success)
             assertEquals(account, result.valueOrNull())
             verify { settingsRepository.account = eq(account) }
@@ -190,7 +188,7 @@ class AuthServiceTest {
     fun `myAccount should return FAILURE when unauthenticated`() =
         runBlockingTest(coroutineRule.dispatcher) {
             coEvery { authApi.whoami() } throws IllegalArgumentException("RestReception")
-            val result = authService.myAccount().first { !it.isLoading }
+            val result = authService.myAccount()
             assertNotNull(result)
             assertTrue(result is Resource.Failure)
         }

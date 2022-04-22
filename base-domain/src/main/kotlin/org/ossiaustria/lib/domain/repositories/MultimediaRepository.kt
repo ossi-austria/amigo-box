@@ -16,9 +16,11 @@ import java.util.*
 
 interface MultimediaRepository {
 
+    @FlowPreview
     fun getAllMultimedias(refresh: Boolean = false): Flow<Resource<List<Multimedia>>>
 
-        fun getMultimedia(id: UUID, refresh: Boolean = false): Flow<Resource<Multimedia>>
+    @FlowPreview
+    fun getMultimedia(id: UUID, refresh: Boolean = false): Flow<Resource<Multimedia>>
 }
 
 internal class MultimediaRepositoryImpl(
@@ -50,14 +52,14 @@ internal class MultimediaRepositoryImpl(
     override fun defaultReadAll(): Flow<List<MultimediaEntity>> = multimediaDao.findAll()
 
     @FlowPreview
-        override fun getAllMultimedias(refresh: Boolean): Flow<Resource<List<Multimedia>>> = flow {
+    override fun getAllMultimedias(refresh: Boolean): Flow<Resource<List<Multimedia>>> = flow {
         listTransform(
             defaultCollectionStore.stream(newRequest(key = "all", refresh = refresh))
         )
     }
 
     @FlowPreview
-        override fun getMultimedia(id: UUID, refresh: Boolean): Flow<Resource<Multimedia>> = flow {
+    override fun getMultimedia(id: UUID, refresh: Boolean): Flow<Resource<Multimedia>> = flow {
         itemTransform(
             singleStore.stream(newRequest(key = id, refresh = refresh))
         )

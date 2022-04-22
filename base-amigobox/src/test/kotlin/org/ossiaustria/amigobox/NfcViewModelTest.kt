@@ -8,13 +8,14 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.ossiaustria.amigobox.nfc.NfcViewModel
-import org.ossiaustria.amigobox.nfc.NfcViewModelEvent.*
+import org.ossiaustria.amigobox.nfc.NfcViewModelEvent.CallPerson
+import org.ossiaustria.amigobox.nfc.NfcViewModelEvent.OpenAlbum
 import org.ossiaustria.lib.commons.testing.TestCoroutineRule
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.models.Album
@@ -61,29 +62,28 @@ internal class NfcViewModelTest {
         )
     }
 
-
     @Test
-    fun `handleNfcInfo should load Album for OPEN_ALBUM`() =
-        runBlockingTest {
-            // prepare test
-            val nfcInfo = mockNfcInfo(tagType = NfcTagType.OPEN_ALBUM)
-            val album = EntityMocks.album(id = nfcInfo.linkedAlbumId!!)
+    fun `handleNfcInfo should load Album for OPEN_ALBUM`() = runTest {
+        // prepare test
+        val nfcInfo = mockNfcInfo(tagType = NfcTagType.OPEN_ALBUM)
+        val album = EntityMocks.album(id = nfcInfo.linkedAlbumId!!)
 
-            coEvery { nfcInfoService.findPerRef(eq("nfcRef")) } returns Resource.success(nfcInfo)
-            every { albumRepository.getAlbum(eq(nfcInfo.linkedAlbumId!!)) } returns
-                flowOf(Resource.success(album))
+        coEvery { nfcInfoService.findPerRef(eq("nfcRef")) } returns Resource.success(nfcInfo)
+        every { albumRepository.getAlbum(eq(nfcInfo.linkedAlbumId!!)) } returns
+            flowOf(Resource.success(album))
 
-            subject.handleNfcInfo(nfcInfo)
+        subject.handleNfcInfo(nfcInfo)
+        testScheduler.advanceUntilIdle()
 
-            verify { albumRepository.getAlbum(eq(nfcInfo.linkedAlbumId!!)) }
+        verify { albumRepository.getAlbum(eq(nfcInfo.linkedAlbumId!!)) }
 
-            subject.nfcEvent.observeForever {
-                assertEquals(OpenAlbum(album), it)
-            }
+        subject.nfcEvent.observeForever {
+            assertEquals(OpenAlbum(album), it)
         }
+    }
 
     @Test
-    fun `handleNfcInfo should load Person for CALL_PERSON`() = runBlockingTest {
+    fun `handleNfcInfo should load Person for CALL_PERSON`() = runTest {
         // prepare test
         val nfcInfo = mockNfcInfo(tagType = NfcTagType.CALL_PERSON)
         val person = EntityMocks.person(personId = nfcInfo.linkedPersonId!!, randomUUID())
@@ -93,6 +93,7 @@ internal class NfcViewModelTest {
             flowOf(Resource.success(person))
 
         subject.handleNfcInfo(nfcInfo)
+        testScheduler.advanceUntilIdle()
 
         verify { personRepository.getPerson(eq(nfcInfo.linkedPersonId!!)) }
 
@@ -112,14 +113,14 @@ internal class NfcViewModelTest {
     )
 
     @Test
-    fun `openAlbum should navigate to Album `() = runBlockingTest {
+    fun `openAlbum should navigate to Album `() = runTest {
         val mock = Album(randomUUID(), "Peter", randomUUID(), emptyList())
         subject.openAlbum(mock, navigator)
         every { navigator.toImageGallery(eq(mock)) }
     }
 
     @Test
-    fun `callPerson should navigate to Person `() = runBlockingTest {
+    fun `callPerson should navigate to Person `() = runTest {
         val mock = Person(
             randomUUID(),
             "Peter",

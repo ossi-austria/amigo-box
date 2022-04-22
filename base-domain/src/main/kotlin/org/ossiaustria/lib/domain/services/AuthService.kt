@@ -1,10 +1,5 @@
 package org.ossiaustria.lib.domain.services
 
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import org.ossiaustria.lib.domain.auth.Account
 import org.ossiaustria.lib.domain.auth.AuthApi
 import org.ossiaustria.lib.domain.auth.LoginRequest
@@ -28,7 +23,7 @@ interface AuthService {
      * In case of any error, an Effect.Failure is returned.
      * May support Effect.Loading, but Effect.Success is possible immediately as well
      */
-    fun myAccount(): Flow<Resource<Account>>
+    suspend fun myAccount(): Resource<Account>
 
     /**
      * Performs a login on the server with (email, password) and stores the result locally.
@@ -37,9 +32,9 @@ interface AuthService {
      * In case of any error, an Effect.Failure is returned.
      * May support Effect.Loading, but Effect.Success is possible immediately as well
      */
-    fun login(email: String, password: String): Flow<Resource<Account>>
+    suspend fun login(email: String, password: String): Resource<Account>
 
-    fun logout(): Flow<Resource<Boolean>>
+    suspend fun logout(): Resource<Boolean>
 
     /**
      * Registers a new users on the server with (email, password, fullname).
@@ -47,7 +42,7 @@ interface AuthService {
      * In case of any error, an Effect.Failure is returned.
      * May support Effect.Loading, but Effect.Success is possible immediately as well
      */
-    fun register(email: String, password: String, name: String): Flow<Resource<Account>>
+    suspend fun register(email: String, password: String, name: String): Resource<Account>
 
     /**
      * Refreshes the accessToken with a pre-existing freshedToken (exists after login)
@@ -56,9 +51,9 @@ interface AuthService {
      * In case of any error, an Effect.Failure is returned.
      * May support Effect.Loading, but Effect.Success is possible immediately as well
      */
-    fun refreshAccessToken(): Flow<Resource<TokenResult>>
+    suspend fun refreshAccessToken(): Resource<TokenResult>
 
-    fun setFcmToken(fcmToken: String): Flow<Resource<Boolean>>
+    suspend fun setFcmToken(fcmToken: String): Resource<Boolean>
 }
 
 interface LoginCleanupService {
@@ -66,123 +61,111 @@ interface LoginCleanupService {
 }
 
 class AuthServiceImpl(
-    private val ioDispatcher: CoroutineDispatcher,
     private val authApi: AuthApi,
     private val settingsRepository: SettingsRepository,
     private val userContext: UserContext,
     private val loginCleanupService: LoginCleanupService,
 ) : AuthService {
 
-    override fun login(email: String, password: String): Flow<Resource<Account>> {
-        return flow {
-            emit(Resource.loading())
-            settingsRepository.accessToken = null
+    override suspend fun login(email: String, password: String): Resource<Account> = try {
+        settingsRepository.accessToken = null
 
-            val result = authApi.login(LoginRequest(email = email, password = password))
+        val result = authApi.login(LoginRequest(email = email, password = password))
 
-            // delete local stored data!!
+        // delete local stored data!!
+        loginCleanupService.cleanup()
+        settingsRepository.account = result.account
+        settingsRepository.refreshToken = result.refreshToken
+        settingsRepository.accessToken = result.accessToken
+
+        result.account.persons.lastOrNull()?.let {
+            settingsRepository.currentPerson = it
+            settingsRepository.currentPersonId = it.id
+        }
+
+        userContext.initContext(
+            settingsRepository.accessToken,
+            settingsRepository.account,
+            settingsRepository.currentPerson
+        )
+
+        Resource.success(result.account)
+    } catch (e: Exception) {
+        Timber.e(e, "Could not login")
+        Resource.failure(e)
+
+    }
+
+    override suspend fun logout(): Resource<Boolean> = try {
+
+        if (userContext.available()) {
             loginCleanupService.cleanup()
-            settingsRepository.account = result.account
-            settingsRepository.refreshToken = result.refreshToken
-            settingsRepository.accessToken = result.accessToken
-
-            result.account.persons.lastOrNull()?.let {
-                settingsRepository.currentPerson = it
-                settingsRepository.currentPersonId = it.id
-            }
-
-            userContext.initContext(
-                settingsRepository.accessToken,
-                settingsRepository.account,
-                settingsRepository.currentPerson
-            )
-
-            emit(Resource.success(result.account))
-        }.catch {
-            Timber.e(it, "Could not login")
-            emit(Resource.failure(it))
-        }.flowOn(ioDispatcher)
+            settingsRepository.fcmToken = null
+            settingsRepository.account = null
+            settingsRepository.currentPerson = null
+            settingsRepository.currentPersonId = null
+            settingsRepository.refreshToken = null
+            settingsRepository.accessToken = null
+            userContext.initContext(null, null, null)
+            Resource.success(true)
+        } else {
+            Resource.success(false)
+        }
+    } catch (e: Exception) {
+        Timber.e(e, "Could not refreshAccessToken")
+        Resource.failure(e)
     }
 
-    override fun logout(): Flow<Resource<Boolean>> {
-        return flow {
-            emit(Resource.loading())
-
-            if (userContext.available()) {
-                loginCleanupService.cleanup()
-                settingsRepository.fcmToken = null
-                settingsRepository.account = null
-                settingsRepository.currentPerson = null
-                settingsRepository.currentPersonId = null
-                settingsRepository.refreshToken = null
-                settingsRepository.accessToken = null
-                userContext.initContext(null, null, null)
-                emit(Resource.success(true))
-            } else {
-                emit(Resource.success(false))
-            }
-        }.catch { e ->
-            Timber.e(e, "Could not refreshAccessToken")
-            emit(Resource.failure(e))
-        }.flowOn(ioDispatcher)
-    }
-
-    override fun register(email: String, password: String, name: String): Flow<Resource<Account>> {
-        return flow {
-            emit(Resource.loading())
+    override suspend fun register(
+        email: String,
+        password: String,
+        name: String
+    ): Resource<Account> =
+        try {
             val account = authApi.register(RegisterRequest(email, password, name))
-            emit(Resource.success(account))
-        }.catch { e ->
+            Resource.success(account)
+        } catch (e: Exception) {
             Timber.e(e, "Could not refreshAccessToken")
-            emit(Resource.failure(e))
-        }.flowOn(ioDispatcher)
+            Resource.failure(e)
+        }
+
+    override suspend fun refreshAccessToken(): Resource<TokenResult> = try {
+
+        val refreshToken = settingsRepository.refreshToken
+        if (refreshToken == null) {
+            Resource.failure("No local refreshToken found!")
+        } else {
+
+            val accessToken = authApi.refreshToken(RefreshTokenRequest(refreshToken.token))
+            settingsRepository.accessToken = accessToken
+            Resource.success(accessToken)
+        }
+    } catch (e: Exception) {
+        Timber.e(e, "Could not refreshAccessToken")
+        Resource.failure(e)
+
     }
 
-    override fun refreshAccessToken(): Flow<Resource<TokenResult>> {
-        return flow<Resource<TokenResult>> {
-            val refreshToken = settingsRepository.refreshToken
-            if (refreshToken == null) {
-                emit(Resource.failure("No local refreshToken found!"))
-            } else {
-                emit(Resource.loading())
-                val accessToken = authApi.refreshToken(RefreshTokenRequest(refreshToken.token))
-                settingsRepository.accessToken = accessToken
-                emit(Resource.success(accessToken))
-            }
-        }.catch { e ->
-            Timber.e(e, "Could not refreshAccessToken")
-            emit(Resource.failure(e))
-        }.flowOn(ioDispatcher)
+    override suspend fun myAccount(): Resource<Account> = try {
+        val account = authApi.whoami()
+        settingsRepository.account = account
+        Resource.success(account)
+    } catch (e: Exception) {
+        Timber.e(e, "Could not myAccount")
+        Resource.failure(e)
     }
 
-    override fun myAccount(): Flow<Resource<Account>> {
-        return flow {
-            emit(Resource.loading())
-            val account = authApi.whoami()
-            settingsRepository.account = account
-            emit(Resource.success(account))
-        }.catch { e ->
-            Timber.e(e, "Could not myAccount")
-            emit(Resource.failure(e))
-        }.flowOn(ioDispatcher)
-    }
-
-    override fun setFcmToken(fcmToken: String): Flow<Resource<Boolean>> {
-        return flow<Resource<Boolean>> {
-            val account = settingsRepository.account
-            if (account == null) {
-                emit(Resource.failure("No local account found!"))
-            } else {
-                emit(Resource.loading())
-                settingsRepository.fcmToken = fcmToken
-                authApi.setFcmToken(SetFcmTokenRequest(fcmToken))
-
-                emit(Resource.success(true))
-
-            }
-        }.catch { e ->
-            Timber.e(e, "Could not setFcmToken")
-            emit(Resource.failure(e))
-        }.flowOn(ioDispatcher)
+    override suspend fun setFcmToken(fcmToken: String): Resource<Boolean> = try {
+        val account = settingsRepository.account
+        if (account == null) {
+            Resource.failure("No local account found!")
+        } else {
+            settingsRepository.fcmToken = fcmToken
+            authApi.setFcmToken(SetFcmTokenRequest(fcmToken))
+            Resource.success(true)
+        }
+    } catch (e: Exception) {
+        Timber.e(e, "Could not setFcmToken")
+        Resource.failure(e)
     }
 }

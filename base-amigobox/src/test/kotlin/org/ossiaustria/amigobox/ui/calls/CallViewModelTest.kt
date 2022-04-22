@@ -8,7 +8,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -86,11 +86,12 @@ internal class CallViewModelTest {
     }
 
     @Test
-    fun `acceptIncomingCall should set Outgoing call state`() = runBlockingTest {
+    fun `acceptIncomingCall should set Outgoing call state`() = runTest {
         val call = mockIncomingCall()
 
         subject.prepareIncomingCall(call)
 
+        testScheduler.advanceUntilIdle()
         subject.state
             .test()
             .assertValue { it is CallViewState.Calling }
@@ -98,12 +99,13 @@ internal class CallViewModelTest {
     }
 
     @Test
-    fun `createNewOutgoingCall should set outgoing call state`() = runBlockingTest {
+    fun `createNewOutgoingCall should set outgoing call state`() = runTest {
         val resultingCall = mockOutgoingCall()
         coEvery { callService.createCall(eq(digitalPerson), any()) } returns
             Resource.Success(resultingCall)
 
         subject.createNewOutgoingCall(digitalPerson)
+        testScheduler.advanceUntilIdle()
 
         subject.state
             .test()
@@ -112,7 +114,7 @@ internal class CallViewModelTest {
     }
 
     @Test
-    fun `accept should accept Incoming Call`() = runBlockingTest {
+    fun `accept should accept Incoming Call`() = runTest {
         val call = mockIncomingCall()
 
         subject.prepareIncomingCall(call)
@@ -122,6 +124,7 @@ internal class CallViewModelTest {
             Resource.Success(resultingCall)
 
         subject.accept()
+        testScheduler.advanceUntilIdle()
 
         subject.state.test()
             .assertHasValue()
@@ -129,7 +132,7 @@ internal class CallViewModelTest {
     }
 
     @Test
-    fun `deny should deny Incoming Call`() = runBlockingTest {
+    fun `deny should deny Incoming Call`() = runTest {
         val call = mockIncomingCall()
         subject.prepareIncomingCall(call)
 
@@ -138,6 +141,7 @@ internal class CallViewModelTest {
             Resource.Success(resultingCall)
 
         subject.deny()
+        testScheduler.advanceUntilIdle()
 
         subject.state.test()
             .assertHasValue()
@@ -145,7 +149,7 @@ internal class CallViewModelTest {
     }
 
     @Test
-    fun `cancel should cancel Outgoing Call`() = runBlockingTest {
+    fun `cancel should cancel Outgoing Call`() = runTest {
         val call = mockOutgoingCall()
         coEvery { callService.createCall(eq(digitalPerson), any()) } returns
             Resource.Success(call)
@@ -156,6 +160,7 @@ internal class CallViewModelTest {
             Resource.Success(resultingCall)
 
         subject.cancel()
+        testScheduler.advanceUntilIdle()
 
         subject.state.test()
             .assertHasValue()

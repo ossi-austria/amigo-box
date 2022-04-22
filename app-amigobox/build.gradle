@@ -65,9 +65,7 @@ android {
                 "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi"]
     }
-    lintOptions {
-        disable "Instantiatable"
-    }
+
 }
 
 
@@ -111,6 +109,8 @@ dependencies {
     implementation(Libs.navigationUiKtx)
     implementation(Libs.navigationDynamicFeatures)
     androidTestImplementation(Libs.navigationTest)
+
+    implementation(Libs.splashscreen)
 
     implementation platform(Libs.Firebase.firebaseBom)
     implementation 'com.google.firebase:firebase-analytics'

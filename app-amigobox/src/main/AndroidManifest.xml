@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="org.ossiaustria.amigobox">
 
     <uses-feature
@@ -18,15 +17,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.OSSIAmigoBox"
-        tools:replace="android:label">
+        android:theme="@style/Theme.OSSIAmigoBox">
 
-    <activity
+        <activity
             android:name=".MainBoxActivity"
-            android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTop"
             android:screenOrientation="userLandscape"
-            android:showOnLockScreen="true">
+            android:showOnLockScreen="true"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

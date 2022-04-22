@@ -3,7 +3,6 @@ package org.ossiaustria.lib.domain.repositories
 import com.dropbox.android.external.store4.StoreResponse
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -20,7 +19,10 @@ import timber.log.Timber
 import java.util.*
 
 interface AlbumShareRepository {
+    @FlowPreview
     fun getAllAlbumShares(refresh: Boolean = false): Flow<Resource<List<AlbumShare>>>
+
+    @FlowPreview
     fun getAlbumShare(id: UUID, refresh: Boolean = false): Flow<Resource<AlbumShare>>
 }
 

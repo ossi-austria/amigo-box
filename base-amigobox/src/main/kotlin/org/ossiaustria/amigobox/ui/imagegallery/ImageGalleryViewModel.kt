@@ -13,10 +13,10 @@ class ImageGalleryViewModel(
     private val _album: MutableLiveData<Album> = MutableLiveData()
     val album: LiveData<Album> = _album
 
-    fun prepare(album: Album?) {
-        if (album != null) {
-            slideShowManager.size = album.items.size
-            _album.value = album
+    fun prepare(initialAlbum: Album?) {
+        if (initialAlbum != null) {
+            slideShowManager.size = initialAlbum.items.size
+            _album.value = initialAlbum
             startTimer()
         }
     }

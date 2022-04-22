@@ -2,6 +2,8 @@ package org.ossiaustria.amigobox.ui.loading
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import org.ossiaustria.lib.domain.common.Resource
 import org.ossiaustria.lib.domain.repositories.AlbumRepository
 import org.ossiaustria.lib.domain.repositories.AlbumShareRepository
@@ -23,13 +25,14 @@ class SynchronisationService(
 ) {
 
     suspend fun syncEverything() {
-        syncGroups()
-        syncAlbums()
-//        syncAlbumShares()
-        syncCalls()
-        syncMessages()
-        syncMultimedias()
-        syncNfcTags()
+        supervisorScope {
+            launch { syncGroups() }
+            launch { syncAlbums() }
+            launch { syncCalls() }
+            launch { syncMessages() }
+            launch { syncMultimedias() }
+            launch { syncNfcTags() }
+        }
     }
 
     suspend fun syncGroups() = syncCollection("syncGroups") {
@@ -70,7 +73,7 @@ class SynchronisationService(
         } else {
             val list = resource.valueOrNull()
             if (resource.isFailure) {
-                Timber.e(resource.throwableOrNull(),methodName)
+                Timber.e(resource.throwableOrNull(), methodName)
             } else {
                 Timber.i("$methodName: ${resource.isSuccess} ${list?.size}")
             }

@@ -125,7 +125,7 @@ class CallFragment : Fragment() {
         }
     }
 
-    @ExperimentalAnimationApi
+    @OptIn(ExperimentalAnimationApi::class, ExperimentalAnimationApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
